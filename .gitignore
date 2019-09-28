@@ -9,3 +9,9 @@
 
 # __pycache__
 __pycache__/
+
+#package-lock.json
+package-lock.json
+
+#log files
+*.log
