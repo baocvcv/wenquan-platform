@@ -1,5 +1,6 @@
 """import all models here to make models package"""
 
 from .question import Question
-from .single_choice_q import SingleChoiceQ
-from .multiple_choice_q import MultpChoiceQ
+from .choice_question import ChoiceQ
+from .choice_question import SingleChoiceQ
+from .choice_question import MultpChoiceQ
