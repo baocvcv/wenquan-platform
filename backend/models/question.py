@@ -17,8 +17,8 @@ class Question(models.Model):
     Type = Enum(
         'Type',
         (
-            'choice_one',  # single choice question
-            'choice_more',  # multiple choices question
+            'single_choice',  # single choice question
+            'multiple_choice',  # multiple choices question
             't_or_f',  # true or false question
             'fill_blank',  # fill the blank question
             'q_and_a',  # short answer question
