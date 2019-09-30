@@ -13,12 +13,6 @@ export default new Router({
       name: "home",
       component: Home
     },
-	{
-	  path: "/signup",
-	  name: "signup",
-	  component: () =>
-        import("./views/SignUp.vue")
-	},
     {
       path: "/about",
       name: "about",
@@ -27,6 +21,18 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About.vue")
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () =>
+        import("./views/AdminIndex.vue")
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: () =>
+        import("./views/SignUp.vue")
     }
   ]
 });
