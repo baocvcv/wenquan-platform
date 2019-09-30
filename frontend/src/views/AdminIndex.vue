@@ -23,6 +23,16 @@ export default {
                 {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"}
             ]
         }
+    },
+    mounted: function() {
+        axios
+            .get('api/users')
+            .then(response => {
+                this.users = response.data.users;
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 }
 </script>
