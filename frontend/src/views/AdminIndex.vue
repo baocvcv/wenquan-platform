@@ -1,0 +1,28 @@
+<template>
+    <div>
+        <user-table v-bind:users="users">
+        </user-table>
+    </div>
+</template>
+
+<script>
+import user_table from "@/components/UserTable.vue";
+
+export default {
+    name: "admin-index",
+    components: {
+        "user-table": user_table
+    },
+    data: function() {
+        return {
+            users: [
+                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
+                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
+                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
+                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
+                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"}
+            ]
+        }
+    }
+}
+</script>
