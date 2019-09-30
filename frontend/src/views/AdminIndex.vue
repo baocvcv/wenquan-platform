@@ -1,6 +1,6 @@
 <template>
     <div>
-        <user-table v-bind:users="users">
+        <user-table v-bind:users="users" v-on:create-user="create_user">
         </user-table>
     </div>
 </template>
@@ -16,14 +16,23 @@ export default {
     data: function() {
         return {
             users: [
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"}
+                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin", email: "example@example.com"},
+                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin", email: "example@example.com"},
+                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin", email: "example@example.com"},
+                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin", email: "example@example.com"},
+                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin", email: "example@example.com"}
             ]
         }
     },
+    methods: {
+        create_user(new_user) {
+            console.log("Creating a new user...");
+            console.log(new_user);
+            console.log("Successfully create a new user.");
+            this.users.push(new_user);
+        }
+    }
+    /*
     mounted: function() {
         axios
             .get('api/users')
@@ -34,5 +43,6 @@ export default {
                 console.log(error);
             })
     }
+    */
 }
 </script>
