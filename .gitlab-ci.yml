@@ -40,7 +40,7 @@ unit-test:
     - coverage xml -o coverage-reports/coverage.xml
     - coverage report
     - cd frontend/
-    - npm test
+    - npm test:unit
     - FRONTEND_RET=$?
     - if [ $FRONTEND_RET \> 0 ]; then exit $FRONTEND_RET; fi;
     - exit $BACKEND_RET
@@ -54,7 +54,7 @@ style-test:
   extends: .test
   allow_failure: true
   script:
-    - pylint --load-plugins=pylint_django app meeting
+    - pylint --load-plugins=pylint_django backend
     - BACKEND_RET=$?
     - cd frontend/
     - npm run lint
