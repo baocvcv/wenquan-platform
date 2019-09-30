@@ -21,7 +21,7 @@
       <label>我接受并同意《用户服务条款》和《隐私相关政策》</label>
     </p>
     <p>
-      <input type="submit" v-on:click="click" />
+      <input type="submit" :disabled="!accept_terms" v-on:click="click" />
     </p>
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
       user_name: "",
       password: "",
       email: "",
-      accepte_terms: false
+      accept_terms: false
     };
   },
   methods: {
@@ -48,6 +48,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #sign-up-box {
+  width: 50%;
+  margin: auto;
   border: 5px dashed grey;
 }
 </style>

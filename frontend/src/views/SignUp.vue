@@ -6,24 +6,21 @@
 </template>
 
 <script>
-import SignUpBox from "../components/SignUpBox.vue"
+import SignUpBox from "../components/SignUpBox.vue";
 
 export default {
   name: "#sign-up",
-  props: {
-  },
+  props: {},
   data: function() {
     return {
       test: "hahah"
-    }
+    };
   },
   components: {
     "sign-up-box": SignUpBox
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
-
+<style scoped></style>
