@@ -4,7 +4,7 @@
             :users="users"
             @create-user="create_user"
             @disable-user="disable_user"
-            @promote-user="promote_user"
+            @change-user-type="change_user_type"
         ></user-table>
     </div>
 </template>
@@ -20,11 +20,11 @@ export default {
     data: function() {
         return {
             users: [
-                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false}
+                {username: "XQ1", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ2", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ3", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ4", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ5", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false}
             ]
         }
     },
@@ -38,8 +38,8 @@ export default {
         disable_user(user) {
             user.disabled = !user.disabled;
         },
-        promote_user(user) {
-
+        change_user_type(params) {
+            params.user.type = params.type;
         }
     }
     /*
