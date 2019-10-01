@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     click: function() {
-      alert("shit");
+      alert("for test");
     }
   }
 };
@@ -50,6 +50,7 @@ export default {
 #sign-up-box {
   width: 50%;
   margin: auto;
+  align: left;
   border: 5px dashed grey;
 }
 </style>
