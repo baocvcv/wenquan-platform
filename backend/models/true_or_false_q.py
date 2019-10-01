@@ -5,7 +5,7 @@ from .question import Question
 
 
 class TrueOrFalseQ(Question):
-    """Inherit from Question, model of choice question
+    """Inherit from Question, model of true and false question
     Attributes:
         question_content: the main content of the question
         question_image: the image of the question
