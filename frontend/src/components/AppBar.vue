@@ -1,0 +1,52 @@
+<template>
+    <div id="app-bar">
+        <v-app-bar
+        color="white"
+        scroll-target="#scrolling-techniques-7"
+        >
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+        <v-toolbar-title>文泉考试平台</v-toolbar-title>
+
+        <div class="flex-grow-1"></div>
+
+        <!--这里根据当前用户登录状态/类别渲染出对应的路由-->
+        <router-link to="/">
+            <v-btn text>
+                <v-icon>mdi-home</v-icon>
+                Home
+            </v-btn>
+        </router-link>
+        <router-link to="/about">
+            <v-btn text>
+                <v-icon>mdi-information</v-icon>
+                About
+            </v-btn>
+        </router-link>
+        <router-link to="/admin">
+            <v-btn text>
+                <v-icon>mdi-account-supervisor</v-icon>
+                Admin
+            </v-btn>
+        </router-link>
+        <router-link to="/signup">
+            <v-btn text>
+                <v-icon>mdi-login</v-icon>
+                Sign up
+            </v-btn>
+        </router-link>
+        </v-app-bar>
+    </div>
+</template>
+
+<script>
+export default {
+    name: "app-bar",
+}
+</script>
+
+<style>
+a {
+    text-decoration: none
+}
+</style>
