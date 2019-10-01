@@ -27,6 +27,12 @@ export default new Router({
       name: "admin",
       component: () =>
         import("./views/AdminIndex.vue")
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      component: () =>
+        import("./views/SignUp.vue")
     }
   ]
 });

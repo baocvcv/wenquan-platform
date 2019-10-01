@@ -1,7 +1,11 @@
 <template>
     <div>
-        <user-table v-bind:users="users">
-        </user-table>
+        <user-table
+            :users="users"
+            @create-user="create_user"
+            @disable-user="disable_user"
+            @change-user-type="change_user_type"
+        ></user-table>
     </div>
 </template>
 
@@ -16,13 +20,39 @@ export default {
     data: function() {
         return {
             users: [
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"},
-                {name: "XQ", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "admin"}
+                {username: "XQ1", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ2", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ3", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ4", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
+                {username: "XQ5", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false}
             ]
         }
+    },
+    methods: {
+        create_user(user) {
+            console.log("Creating a new user...");
+            console.log(user);
+            console.log("Successfully create a new user.");
+            this.users.push(user);
+        },
+        disable_user(user) {
+            user.disabled = !user.disabled;
+        },
+        change_user_type(params) {
+            params.user.type = params.type;
+        }
     }
+    /*
+    mounted: function() {
+        axios
+            .get('api/users')
+            .then(response => {
+                this.users = response.data.users;
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+    */
 }
 </script>
