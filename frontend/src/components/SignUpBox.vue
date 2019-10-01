@@ -11,14 +11,15 @@
       <v-text-field
         v-model="password"
         label="password"
-        type="password"
+        :type="show_password ? 'text' : 'password'"
+        :append-icon="show_password ? 'visibility' : 'visibility_off'"
         :rules="password_rules"
-        required
+        @click:append="show_password = !show_password"
       ></v-text-field>
 
       <v-text-field
         label="re-enter password"
-        type="password"
+        :type="show_password ? 'text' : 'password'"
         :rules="re_password_rules"
         required
       ></v-text-field>
@@ -41,6 +42,12 @@
         @click="click"
         >Submit
       </v-btn>
+
+      <v-btn
+        color="error"
+        @click="reset_input"
+        >Reset
+      </v-btn>
     </v-form>
   </div>
 </template>
@@ -55,8 +62,10 @@ export default {
         v => !!v || "user name is required"
       ],
       password: "",
+      show_password: false,
       password_rules: [
-        v => !!v || "password is required"
+        v => !!v || "password is required",
+        v => v.length >= 8 || "at least 8 characters are required"
       ],
       re_password_rules: [
         v => v == this.password || "Does not consistent with former one"
@@ -72,6 +81,9 @@ export default {
   methods: {
     click: function() {
       alert("for test");
+    },
+    reset_input() {
+      this.$refs.input.reset();
     }
   }
 };
