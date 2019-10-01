@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="user-table">
     <v-dialog v-model="dialog_change_user_type" max-width="500px">
     <v-card>
     <v-card-title>

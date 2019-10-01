@@ -1,19 +1,17 @@
 <template>
   <v-app id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/admin">Admin</router-link> |
-      <router-link to="/signup">Sign up</router-link>
-    </div>
-    <router-view />
+    <app-bar></app-bar>
+    <router-view/>
   </v-app>
 </template>
 
 <script>
+import app_bar from "./components/AppBar.vue";
+
 export default {
   name: 'App',
   components: {
+    "app-bar": app_bar
   },
   data: () => ({
     //
@@ -33,12 +31,12 @@ export default {
   padding: 30px;
 }
 
-#nav a {
+#app-bar a {
   font-weight: bold;
   color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
+#app-bar a.router-link-exact-active {
   color: #42b983;
 }
 </style>

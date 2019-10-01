@@ -26,7 +26,7 @@ export default new Router({
       path: "/admin",
       name: "admin",
       component: () =>
-        import("./views/AdminIndex.vue")
+        import("./views/admin/UserManagement.vue")
     },
     {
       path: "/signup",
