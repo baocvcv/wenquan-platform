@@ -2,16 +2,14 @@
   <div class="sign-in">
     <table>
       <tr>
-        <td>用户名：</td>
-        <td><input type="input" v-model="username" /></td>
+        <td><v-text-field v-model="username" label="用户名"></v-text-field></td>
       </tr>
       <tr>
-        <td>密码：</td>
-        <td><input type="password" v-model="password" /></td>
+        <td><v-text-field v-model="password" label="密码" type="password"></v-text-field></td>
       </tr>
       <tr>
-        <td colspan="2">
-          <input type="submit" v-on:click="click" value="Sign In" />
+        <td>
+          <v-btn v-on:click="click">Sign In</v-btn>
         </td>
       </tr>
     </table>
@@ -26,8 +24,7 @@ export default {
   data: function() {
     return {
       username: "",
-      password: "",
-      userType: "Normal"
+      password: ""
     };
   },
   methods: {
