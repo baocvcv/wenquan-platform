@@ -1,13 +1,26 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
+      <router-link to="/admin">Admin</router-link> |
+      <router-link to="/signup">Sign up</router-link> |
       <router-link to="/signin">Sign in</router-link>
     </div>
     <router-view />
-  </div>
+  </v-app>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  components: {
+  },
+  data: () => ({
+    //
+  }),
+};
+</script>
 
 <style>
 #app {
