@@ -12,7 +12,7 @@
         v-model="password"
         label="password"
         :type="show_password ? 'text' : 'password'"
-        :append-icon="show_password ? 'visibility' : 'visibility_off'"
+        :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
         :rules="password_rules"
         @click:append="show_password = !show_password"
       ></v-text-field>
