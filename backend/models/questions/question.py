@@ -1,9 +1,10 @@
 """This code define the BASE model of question """
 from enum import Enum
 from django.db import models
+from polymorphic.models import PolymorphicModel
 
 
-class Question(models.Model):
+class Question(PolymorphicModel):
     """Base class of the question
     only identity infomation, NOT specific infomation of question
 
