@@ -1,18 +1,18 @@
 <template>
-  <div class="sign-in">
-    <table>
-      <tr>
-        <td><v-text-field v-model="username" label="用户名"></v-text-field></td>
-      </tr>
-      <tr>
-        <td><v-text-field v-model="password" label="密码" type="password"></v-text-field></td>
-      </tr>
-      <tr>
-        <td>
-          <v-btn v-on:click="click">Sign In</v-btn>
-        </td>
-      </tr>
-    </table>
+  <div class="sign-in-box">
+    <v-form ref="input">
+        <v-text-field
+        v-model="username"
+        label="用户名"
+        v-bind:rules="[v => !!v || 'Username cannot be empty']"></v-text-field>
+        <v-text-field
+          v-model="password"
+          label="密码"
+          v-bind:type="show_password ? 'text' : 'password'"
+          v-bind:rules="[v => !!v || 'Password cannot be empty']"
+          v-bind:append-icon="show_password ? 'visibility' : 'visibility_off'"></v-text-field>
+        <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
+    </v-form>
   </div>
 </template>
 
@@ -24,7 +24,8 @@ export default {
   data: function() {
     return {
       username: "",
-      password: ""
+      password: "",
+      show_password: false
     };
   },
   methods: {
@@ -34,9 +35,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.sign-in table {
-  margin: auto;
-}
-</style>

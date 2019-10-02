@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sign-in-view">
     <h2>Sign In</h2>
     <sign-in-box></sign-in-box>
   </div>
@@ -15,3 +15,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.sign-in-view .sign-in-box{
+  width: 30%;
+  margin: auto;
+}
+</style>
