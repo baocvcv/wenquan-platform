@@ -10,7 +10,7 @@
           label="密码"
           v-bind:type="show_password ? 'text' : 'password'"
           v-bind:rules="[v => !!v || 'Password cannot be empty']"
-          v-bind:append-icon="show_password ? 'visibility' : 'visibility_off'"
+          v-bind:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
           v-on:click:append="show_password=!show_password"></v-text-field>
         <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
     </v-form>
