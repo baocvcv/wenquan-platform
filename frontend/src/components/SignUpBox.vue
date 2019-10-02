@@ -1,6 +1,6 @@
 <template>
   <div id="sign-up-box">
-    <v-form ref="input">
+    <v-form ref="input" v-model="valid">
       <v-text-field
         v-model="user_name"
         label="user name"
@@ -37,14 +37,16 @@
       ></v-checkbox>
 
       <v-btn
-        :disabled="!accept_terms"
+        :disabled="!valid || !accept_terms"
         color="success"
+        class="mr-4"
         @click="click"
         >Submit
       </v-btn>
 
       <v-btn
         color="error"
+        class="mr-4"
         @click="reset_input"
         >Reset
       </v-btn>
@@ -53,13 +55,17 @@
 </template>
 
 <script>
+import md5 from "js-md5";
+
 export default {
   name: "sign-up-box",
   data: function() {
     return {
+      valid: false,
       user_name: "",
       user_name_rules: [
-        v => !!v || "user name is required"
+        v => !!v || "user name is required",
+        v => v.length <= 10 || "user name should be within 10 characters"
       ],
       password: "",
       show_password: false,
@@ -80,7 +86,7 @@ export default {
   },
   methods: {
     click: function() {
-      alert("for test");
+      alert(md5(this.password));
     },
     reset_input() {
       this.$refs.input.reset();
@@ -92,9 +98,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #sign-up-box {
-  width: 50%;
+  width: 40%;
   margin: auto;
-  padding: 10px;
-  border: 5px dashed grey;
+  padding: 3%;
+  border: 2px solid #d0d0d0;
 }
 </style>
