@@ -33,6 +33,11 @@ export default new Router({
       name: "signup",
       component: () =>
         import("./views/SignUp.vue")
+    },
+    {
+      path: "/signin",
+      name: "sign-in",
+      component: () => import("./views/SignIn.vue")
     }
   ]
 });

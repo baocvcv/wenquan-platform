@@ -34,7 +34,13 @@
                 <v-icon>mdi-login</v-icon>
                 Sign up
             </v-btn>
-        </router-link>
+        </router-link> |
+	<router-link to="/signin">
+	    <v-btn text>
+            <v-icon>mdi-login</v-icon>
+	        Sign in
+	    </v-btn>
+	</router-link>
         </v-app-bar>
     </div>
 </template>
