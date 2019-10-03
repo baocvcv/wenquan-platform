@@ -31,7 +31,11 @@ export default {
   },
   methods: {
     click: function() {
-      alert("usr:" + this.username + "\npsw(md5):" + md5(this.password));
+      var n=sessionStorage.getItem("user");
+      if(!n){
+        sessionStorage.setItem("user",this.username);
+        alert(this.username+" logged in");
+      }
     }
   }
 };

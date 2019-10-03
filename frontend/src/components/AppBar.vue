@@ -35,12 +35,20 @@
                 Sign up
             </v-btn>
         </router-link> |
-	<router-link to="/signin">
-	    <v-btn text>
-            <v-icon>mdi-login</v-icon>
-	        Sign in
-	    </v-btn>
-	</router-link>
+        <template v-if="!checkLoginStatus()">
+	        <router-link to="/signin">
+	            <v-btn text>
+                    <v-icon>mdi-login</v-icon>
+	                Sign in
+	            </v-btn>
+	        </router-link>
+        </template>
+        <template v-else>
+            <v-btn text v-on:click="logout">
+                <v-icon>mdi-logout</v-icon>
+                Log out
+            </v-btn>
+        </template>
         </v-app-bar>
     </div>
 </template>
@@ -48,6 +56,16 @@
 <script>
 export default {
     name: "app-bar",
+    methods: {
+        checkLoginStatus: function(){
+            if(!sessionStorage.getItem('user')) return false;
+            else return true;
+        },
+        logout: function(){
+            alert("123");
+            sessionStorage.removeItem('user');
+        }
+    }
 }
 </script>
 
