@@ -3,6 +3,11 @@ from enum import Enum
 from django.db import models
 from polymorphic.models import PolymorphicModel
 
+MAX_ID = 20
+MAX_URL = 200
+MAX_NAME = 200
+MAX_CONTENT = 20000
+
 
 class Question(PolymorphicModel):
     """Base class of the question
@@ -24,8 +29,8 @@ class Question(PolymorphicModel):
             'fill_blank',  # fill the blank question
             'q_and_a',  # short answer question
         ))
-    question_id = models.IntegerField()
-    question_name = models.CharField()
+    question_id = models.CharField(max_length=MAX_ID)
+    question_name = models.CharField(max_length=MAX_NAME)
     question_type = models.IntegerField()
     question_level = models.FloatField()
     question_change_time = models.DateTimeField()
