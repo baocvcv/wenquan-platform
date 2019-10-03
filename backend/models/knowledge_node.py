@@ -12,6 +12,9 @@ SingleChoiceQ()
 MultpChoiceQ()
 FillBlankQ()
 
+MAX_ID = 20
+MAX_NAME = 200
+
 
 class KnowledgeNode(PolymorphicModel):
     """Models for Knowledge Node
@@ -21,7 +24,7 @@ class KnowledgeNode(PolymorphicModel):
         subnodes: children nodes of node
         questions: children question of node
     """
-    node_id = models.CharField()
-    name = models.CharField()
+    node_id = models.CharField(max_length=MAX_ID)
+    name = models.CharField(max_length=MAX_NAME)
     subnodes = models.ManyToManyField("self", symmetrical=False)
     questions = models.ManyToManyField(Question)
