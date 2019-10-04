@@ -25,19 +25,22 @@ export default new Router({
     {
       path: "/admin",
       name: "admin",
-      component: () =>
-        import("./views/admin/UserManagement.vue")
+      component: () => import("./views/admin/UserManagement.vue")
     },
     {
       path: "/signup",
-      name: "signup",
-      component: () =>
-        import("./views/SignUp.vue")
+      name: "sign-up",
+      component: () => import("./views/SignUp.vue")
     },
     {
       path: "/signin",
       name: "sign-in",
       component: () => import("./views/SignIn.vue")
+    },
+    {
+      path: "/questionbanks",
+      name: "question-banks",
+      component: () => import("./views/QuestionBanks.vue")
     }
   ]
 });

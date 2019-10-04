@@ -21,7 +21,7 @@
           ></question-banks-list>
         </v-tab-item>
         <v-tab-item>
-          <h1>still in develop</h1>
+          <h1>still in developing</h1>
         </v-tab-item>
       </v-tabs>
     </v-card>

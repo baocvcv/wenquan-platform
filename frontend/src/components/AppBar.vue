@@ -41,6 +41,12 @@
 	        Sign in
 	    </v-btn>
 	</router-link>
+	<router-link to="/questionbanks">
+		<v-btn text>
+			<v-icon>mdi-bank</v-icon>
+			Question Banks
+		</v-btn>
+	</router-link>
         </v-app-bar>
     </div>
 </template>

@@ -31,16 +31,35 @@
 
     <!--detailed infomation for question banks-->
     <v-dialog v-model="detail" max-width="500">
-      <v-list subheader>
-        <v-subheader inset>details of {{ cur_qst_bank.name }}</v-subheader>
-
-        <v-list-item v-for="(value, attr) in cur_qst_bank.details" :key="attr">
-          <v-list-item-content>
-            {{ attr }}: {{ cur_qst_bank.details[attr] }}
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-btn color="primary" dark @click="detail = false">Back</v-btn>
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          Details of {{ cur_qst_bank.name }}
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item
+              v-for="(value, attr) in cur_qst_bank.details"
+              :key="attr"
+            >
+              <v-list-item-content>
+                {{ attr }}: {{ cur_qst_bank.details[attr] }}
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            color="green"
+            dark
+            @click="redirct('/questionbanks/' + cur_qst_bank.id)"
+          >
+            Goto
+          </v-btn>
+          <v-btn color="primary" dark @click="detail = false">Back</v-btn>
+          <div class="flex-grow-1"></div>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </div>
 </template>
