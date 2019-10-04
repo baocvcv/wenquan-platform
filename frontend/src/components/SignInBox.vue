@@ -19,6 +19,7 @@
 
 <script>
 import md5 from "js-md5";
+import bus from "./EventBus";
 
 export default {
   name: "sign-in",
@@ -35,6 +36,7 @@ export default {
       if(!n){
         sessionStorage.setItem("user",this.username);
         alert(this.username+" logged in");
+        bus.$emit("login-in");
       }
     }
   }

@@ -35,7 +35,7 @@
                 Sign up
             </v-btn>
         </router-link> |
-        <template v-if="!checkLoginStatus()">
+        <template v-if="!login">
 	        <router-link to="/signin">
 	            <v-btn text>
                     <v-icon>mdi-login</v-icon>
@@ -54,16 +54,25 @@
 </template>
 
 <script>
+import bus from "./EventBus";
+
 export default {
     name: "app-bar",
+    data: function(){
+        return {
+            login: false
+        };
+    },
+    mounted(){
+        if(sessionStorage.getItem('user')) this.login=true;
+        else this.login=false;
+        bus.$on("login-in",() => this.login=true)
+    },
     methods: {
-        checkLoginStatus: function(){
-            if(!sessionStorage.getItem('user')) return false;
-            else return true;
-        },
         logout: function(){
-            alert("123");
+            alert("Logged out");
             sessionStorage.removeItem('user');
+            this.login=false;
         }
     }
 }
