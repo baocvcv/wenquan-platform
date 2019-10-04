@@ -2,10 +2,10 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 
-from questions.question import Question
-from questions.brief_answer_q import BriefAnswerQ
-from questions.choice_question import SingleChoiceQ, MultpChoiceQ
-from questions.fill_blank_q import FillBlankQ
+from .questions.question import Question
+from .questions.brief_answer_q import BriefAnswerQ
+from .questions.choice_question import SingleChoiceQ, MultpChoiceQ
+from .questions.fill_blank_q import FillBlankQ
 
 BriefAnswerQ()
 SingleChoiceQ()
