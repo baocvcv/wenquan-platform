@@ -6,25 +6,43 @@
 	  <v-list-item
 	    v-for="qst_bank in question_banks"
 		:key="qst_bank.name"
-		@click="redirect(qst_bank.id)"
+		@click="redirct('/questionbanks/'+qst_bank.id)"
 	  >
 	    <v-list-item-avatar>
 		  <v-icon v-text="qst_bank.icon"
 		  ></v-icon>
 		</v-list-item-avatar>
 
-		<v-list-item-content>
+		<v-list-item-content align="left">
 		  <v-list-item-title v-text="qst_bank.name"></v-list-item-title>
 		  <v-list-item-subtitle v-text="qst_bank.brief"></v-list-item-subtitle>
 		</v-list-item-content>
 
-		<v-list-item-action @click="redirct('/about')">
-		  <v-btn icon>
+		<v-list-item-action @click.stop="">
+		  <v-btn icon @click="detail = true; test=1; cur_qst_bank = qst_bank;">
 			<v-icon color="grey lighten-1">mdi-information</v-icon>
 		  </v-btn>
+		
+		
 		</v-list-item-action>
 	  </v-list-item>
 	</v-list>
+
+	<!--detailed infomation for question banks-->
+	  <v-dialog v-model="detail">
+	    <v-list subheader>
+	      <v-subheader inset>details of {{cur_qst_bank.name}}</v-subheader>
+
+	      <v-list-item v-for="(value, attr) in cur_qst_bank.details" :key="attr">
+	  	<v-list-item-content>{{attr}}: {{cur_qst_bank.details[attr]}}</v-list-item-content>
+	  	</v-list-item>
+	    </v-list>
+	    <v-btn
+	  	color="primary"
+	  	dark
+	  	@click="detail = false"
+	    >Back</v-btn>
+	  </v-dialog>
   </div>
 </template>
 
@@ -36,7 +54,8 @@ export default {
   },
   data: function(){
 	return {
-	  
+	  detail: false,
+	  cur_qst_bank:{},
 	};
   },
   methods: {

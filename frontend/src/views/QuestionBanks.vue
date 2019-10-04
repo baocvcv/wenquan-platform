@@ -13,10 +13,11 @@ export default {
   data: function() {
 	return {
 	  question_banks: [
-	    {name: "kxz1", id: "1", icon: "mdi-folder", brief: "hahahahha"},
-		{name: "kxz2", id: "2", icon: "mdi-folder", brief: "hohohoho"},
+	    {name: "kxz1", id: "1", icon: "mdi-folder", brief: "hahahahha", details: {questions: "100", difficulty: "5", content: "this is all bullshit"}},
+		{name: "kxz2", id: "2", icon: "mdi-folder", brief: "hohohoho", details: {questions: "1", difficulty: "4", content: "get out"}},
 		{name: "kxz3", id: "3", icon: "mdi-folder", brief: "hehehehe"},
-		{name: "kxz4", id: "4", icon: "mdi-folder", brief: "hihihihi"}
+		{name: "kxz4", id: "4", icon: "mdi-folder", brief: "hihihihi"},
+		{name: "kxz5", id: "5", icon: "mdi-folder", brief: "huhuhuhu"}
 	  ]
 	};
   },
