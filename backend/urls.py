@@ -8,5 +8,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    path(r'^api-auth/', include('rest_framework.urls'))
+    path(r'^api-auth/', include('rest_framework.urls')),
+    path(r'^rest-auth/', include('rest_auth.urls')),
+    path(r'^api/users^$', views.StudentCreate.as_view(), name='student-create'),
 ]
