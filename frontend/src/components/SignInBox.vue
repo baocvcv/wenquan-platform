@@ -19,6 +19,7 @@
 
 <script>
 import md5 from "js-md5";
+import bus from "./EventBus";
 
 export default {
   name: "sign-in",
@@ -31,7 +32,12 @@ export default {
   },
   methods: {
     click: function() {
-      alert("usr:" + this.username + "\npsw(md5):" + md5(this.password));
+      var n=sessionStorage.getItem("user");
+      if(!n){
+        sessionStorage.setItem("user",this.username);
+        alert(this.username+" logged in");
+        bus.$emit("login-in");
+      }
     }
   }
 };

@@ -35,12 +35,20 @@
                 Sign up
             </v-btn>
         </router-link> |
-	<router-link to="/signin">
-	    <v-btn text>
-            <v-icon>mdi-login</v-icon>
-	        Sign in
-	    </v-btn>
-	</router-link>
+        <template v-if="!login">
+	        <router-link to="/signin">
+	            <v-btn text>
+                    <v-icon>mdi-login</v-icon>
+	                Sign in
+	            </v-btn>
+	        </router-link>
+        </template>
+        <template v-else>
+            <v-btn text v-on:click="logout">
+                <v-icon>mdi-logout</v-icon>
+                Log out
+            </v-btn>
+        </template> |
 	<router-link to="/questionbanks">
 		<v-btn text>
 			<v-icon>mdi-bank</v-icon>
@@ -52,8 +60,27 @@
 </template>
 
 <script>
+import bus from "./EventBus";
+
 export default {
     name: "app-bar",
+    data: function(){
+        return {
+            login: false
+        };
+    },
+    mounted(){
+        if(sessionStorage.getItem('user')) this.login=true;
+        else this.login=false;
+        bus.$on("login-in",() => this.login=true)
+    },
+    methods: {
+        logout: function(){
+            alert("Logged out");
+            sessionStorage.removeItem('user');
+            this.login=false;
+        }
+    }
 }
 </script>
 
