@@ -46,5 +46,7 @@ class Students(UserBase):
     """
     
     school_name = models.CharField(max_length="100")
+
+    is_activated = models.BooleanField()
     #TODO: define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
