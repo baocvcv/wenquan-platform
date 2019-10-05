@@ -8,9 +8,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('', include(router.urls)),
-    path(r'^api-auth/', include('rest_framework.urls')),
-    path(r'^rest-auth/', include('rest_auth.urls')),
-    path(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    path(r'^jwt-auth/', views.obtain_auth_token)
     path(r'^api/students^$', views.StudentList.as_view(), name='student-list'),
     path(r'^api/students/<pk: int>', views.StudentDetail.as_view(), name='student-detail'),
 ]
