@@ -10,5 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path(r'^api-auth/', include('rest_framework.urls')),
     path(r'^rest-auth/', include('rest_auth.urls')),
-    path(r'^api/users^$', views.StudentCreate.as_view(), name='student-create'),
+    path(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    path(r'^api/students^$', views.StudentCreate.as_view(), name='student-create'),
 ]

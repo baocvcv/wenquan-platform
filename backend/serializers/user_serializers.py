@@ -6,14 +6,6 @@ from backend.models.user_base import Admin, SuperAdmin, Student
 
 class StudentSerializer(serializers.ModelSerializer):
     """ Serializer for Student model """
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=Student.objects.all())]
-    )
-    username = serializers.CharField(
-        validators=[UniqueValidator(queryset=Student.objects.all())]
-    )
-    password = serializers.CharField(min_length=8)
     
     def create(self, validated_data):
         #TODO: add email authentication method
