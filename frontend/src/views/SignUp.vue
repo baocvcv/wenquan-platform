@@ -1,7 +1,9 @@
 <template>
   <div id="sign-up">
     <h1>Sign up here~</h1>
+	<br />
     <sign-up-box></sign-up-box>
+	<br />
   </div>
 </template>
 
