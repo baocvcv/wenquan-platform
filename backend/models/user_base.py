@@ -41,10 +41,17 @@ class SuperAdmin(Admin):
 
     pass
 
-class Students(UserBase):
+class Student(UserBase):
     """ Student users
+
+    Attributes:
+    school_name: name of the school
+
+    is_activated:
     """
     
     school_name = models.CharField(max_length="100")
+
+    is_activated = models.BooleanField()
     #TODO: define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
