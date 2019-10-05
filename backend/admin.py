@@ -6,11 +6,11 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import StudentChangeForm, StudentCreationForm
 from .models import Student
 
-class StudentAdmin(UserAdmin):
-    add_form = StudentCreationForm
-    form = StudentChangeForm
-    model = Student
-    list_display = ['email', 'username', 'password']
+# class StudentAdmin(UserAdmin):
+#     add_form = StudentCreationForm
+#     form = StudentChangeForm
+#     model = Student
+#     list_display = ['email', 'username', 'password']
 
-# Register your models here.
-admin.site.register(Student, StudentAdmin)
+# # Register your models here.
+# admin.site.register(Student, StudentAdmin)

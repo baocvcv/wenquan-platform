@@ -4,6 +4,11 @@ from rest_framework.validators import UniqueValidator
 
 from backend.models.user_base import Admin, SuperAdmin, Student
 
+from django.contrib.auth.models import User
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
 class StudentSerializer(serializers.ModelSerializer):
     """ Serializer for Student model """
     
