@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # This line is added temporarily to test whether Django and Vue combines well
     path('', TemplateView.as_view(template_name="index.html")),
-    path('backend/', include('backend.urls'))
+    path('', include('backend.urls'))
 ]
