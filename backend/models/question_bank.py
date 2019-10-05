@@ -22,12 +22,10 @@ class QuestionBanks(PolymorphicModel):
     Attributes:
         node_id: identity number of bank
         name: name of bank
-        tags: subject tags of bank
         subnodes: children Knowledg Node of bank
         questions: children question of bank
     """
     node_id = models.CharField(max_length=MAX_ID)
     name = models.CharField(max_length=MAX_NAME)
-    tags = models.CharField(max_length=MAX_NAME)
     subnodes = models.ManyToManyField(KnowledgeNode)
     questions = models.ManyToManyField(Question)
