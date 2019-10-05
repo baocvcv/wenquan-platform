@@ -56,6 +56,7 @@
 
 <script>
 import md5 from "js-md5";
+const axios = require("axios");
 
 export default {
   name: "sign-up-box",
@@ -86,7 +87,24 @@ export default {
   },
   methods: {
     click: function() {
-      alert(md5(this.password));
+      axios
+        .post("/api/signup", {
+          username: this.username,
+          password: md5(this.password),
+          email: this.email
+        })
+        .then(function(response) {
+          //handle success
+          alert(response.username + " successfully signed up!\nPlease sign in");
+          this.$router.replace("/signin");
+        })
+        .catch(function(error) {
+          //handle error
+          alert("Sign up failed!\n" + error);
+        })
+        .then(function() {
+          alert(this.password);
+        });
     },
     reset_input() {
       this.$refs.input.reset();
@@ -98,9 +116,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #sign-up-box {
-  width: 40%;
   margin: auto;
-  padding: 3%;
-  border: 2px solid #d0d0d0;
 }
 </style>
