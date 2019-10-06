@@ -35,8 +35,16 @@ export default {
       var n=sessionStorage.getItem("user");
       if(!n){
         sessionStorage.setItem("user",this.username);
+        var user = {
+          username: this.username,
+          type: "Admin"
+        };
+        this.$store.commit("login", {
+          user: user
+        });
         alert(this.username+" logged in");
         bus.$emit("login-in");
+        this.$router.push("home");
       }
     }
   }
