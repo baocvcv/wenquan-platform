@@ -79,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wen_quan',
         'USER': 'wen_quan',
-        'PASSWORD': 'ppnn13%',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'password',
+        'HOST': 'postgres-Never404.app.secoder.net, postgres.Never404.secoder.local',
         'PORT': '5432',
     }
 }
