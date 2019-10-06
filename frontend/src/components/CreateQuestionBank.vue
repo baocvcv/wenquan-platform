@@ -2,33 +2,44 @@
   <div>
     <br />
     <v-card id="create-form">
-      <v-form ref="form" v-model="valid">
-        <v-text-field
-          v-model="name"
-          :rules="name_rules"
-          hint="The name of the question bank"
-          label="name"
-          required
-        ></v-text-field>
+      <v-toolbar color="blue" dark>
+        <v-toolbar-title>Create a Question Bank</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        <v-form ref="form" v-model="valid">
+          <v-text-field
+            v-model="name"
+            :rules="name_rules"
+            hint="The name of the question bank"
+            label="Name"
+            outlined
+            required
+          ></v-text-field>
+          <br />
+          <v-textarea
+            v-model="brief"
+            :rules="brief_rules"
+            hint="Brief introduction of the question bank"
+            counter="200"
+            label="Brief"
+            auto-grow
+            outlined
+            required
+          ></v-textarea>
+          <br />
+          <v-select
+            :items="authorities"
+            label="Authorities"
+            outlined
+          ></v-select>
 
-        <v-textarea
-          v-model="brief"
-          :rules="brief_rules"
-          hint="Brief introduction of the question bank"
-          counter="200"
-          label="brief"
-          auto-grow
-          required
-        ></v-textarea>
+          <v-btn color="success" :disabled="!valid" class="mr-4" @click="create"
+            >Create</v-btn
+          >
 
-        <v-select :items="authorities" label="authorities" outlined></v-select>
-
-        <v-btn color="success" :disabled="!valid" class="mr-4" @click="create"
-          >Create</v-btn
-        >
-
-        <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
-      </v-form>
+          <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
+        </v-form>
+      </v-card-text>
     </v-card>
     <br />
   </div>
@@ -69,6 +80,5 @@ export default {
 #create-form {
   width: 50%;
   margin: auto;
-  padding: 2%;
 }
 </style>
