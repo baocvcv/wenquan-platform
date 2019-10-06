@@ -87,7 +87,9 @@ export default {
     },
     computed: {
         user() {
-            return this.$store.state.user;
+            var _user=this.$store.state.user;
+            if(!_user) _user=JSON.parse(sessionStorage.getItem('user'));
+            return _user;
         },
         rendered_nav_links: function() {
             console.log(this.user);
