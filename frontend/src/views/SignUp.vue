@@ -1,9 +1,13 @@
 <template>
   <div id="sign-up">
-    <h1>Sign up here~</h1>
-	<br />
-    <sign-up-box></sign-up-box>
-	<br />
+    <v-card max-width="500" class="mx-auto">
+      <v-toolbar color="indigo" dark>
+        <v-toolbar-title>Sign up here~</v-toolbar-title>
+      </v-toolbar>
+      <v-card-text>
+        <sign-up-box></sign-up-box>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -11,7 +15,7 @@
 import SignUpBox from "../components/SignUpBox.vue";
 
 export default {
-  name: "#sign-up",
+  name: "sign-up",
   props: {},
   data: function() {
     return {
@@ -25,4 +29,8 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+#sign-up {
+  margin: 2%;
+}
+</style>
