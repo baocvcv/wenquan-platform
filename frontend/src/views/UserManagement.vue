@@ -41,7 +41,7 @@ export default {
         change_user_type(params) {
             params.user.type = params.type;
         }
-    }
+    },
     /*
     mounted: function() {
         axios
@@ -54,5 +54,9 @@ export default {
             })
     }
     */
+   created() {
+       if (!this.$store.state.user || this.$store.state.user.type != "Admin")
+        this.$router.push("/");
+   }
 }
 </script>

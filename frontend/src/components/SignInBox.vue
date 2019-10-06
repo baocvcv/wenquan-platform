@@ -19,7 +19,6 @@
 
 <script>
 import md5 from "js-md5";
-import bus from "./EventBus";
 
 export default {
   name: "sign-in",
@@ -34,9 +33,15 @@ export default {
     click: function() {
       var n=sessionStorage.getItem("user");
       if(!n){
-        sessionStorage.setItem("user",this.username);
+        var user = {
+          username: this.username,
+          type: "Admin"
+        };
+        this.$store.commit("login", {
+          user: user
+        });
         alert(this.username+" logged in");
-        bus.$emit("login-in");
+        this.$router.push("/");
       }
     }
   }

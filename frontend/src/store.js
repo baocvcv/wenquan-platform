@@ -4,7 +4,14 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    user: null
+  },
+  mutations: {
+    login(state, payload) {
+      state.user = payload.user;
+      sessionStorage.setItem('user',JSON.stringify(payload.user));
+    }
+  },
   actions: {}
 });
