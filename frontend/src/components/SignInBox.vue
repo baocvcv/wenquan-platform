@@ -44,7 +44,7 @@ export default {
         });
         alert(this.username+" logged in");
         bus.$emit("login-in");
-        this.$router.push("home");
+        this.$router.push("/");
       }
     }
   }
