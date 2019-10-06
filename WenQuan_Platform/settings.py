@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend',
+    'rest_framework',
+    'rest_framework.authtoken',
     'polymorphic',
 ]
 
@@ -124,3 +126,19 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),
 ]
+
+# Email settings
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST_USER = 'baocvcv@163.com'
+EMAIL_HOST_PASSWORD = 'BaoHan828'
+EMAIL_PORT = 465 #25
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}

@@ -11,10 +11,10 @@ class UserBase(models.Model):
         @param password
         @param user_type
     """
-    user_id = models.AutoField()
-    username = models.CharField(max_length=50, primary_key=True)
+    user_id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=50)
     email = models.EmailField()
-    password = models.CharField(max_length=256)
+    password = models.CharField(max_length=1000)
     user_icon = models.CharField(max_length=254)
     register_date = models.DateTimeField(auto_now_add=True)
 
@@ -41,10 +41,17 @@ class SuperAdmin(Admin):
 
     pass
 
-class Students(UserBase):
+class Student(UserBase):
     """ Student users
+
+    Attributes:
+    school_name: name of the school
+
+    is_activated:
     """
     
-    school_name = models.CharField(max_length="100")
+    school_name = models.CharField(max_length=100)
+
+    is_activated = models.BooleanField(default=False)
     #TODO: define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
