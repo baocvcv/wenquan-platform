@@ -1,5 +1,6 @@
 """ Base model for User """
 from django.db import models
+from django.contrib.auth.models import User
 
 class UserBase(models.Model):
     """ Base class of Users
@@ -11,6 +12,10 @@ class UserBase(models.Model):
         @param password
         @param user_type
     """
+    # link to the default user model
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # additional params
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
     email = models.EmailField()
