@@ -1,9 +1,9 @@
 """ Base model for User """
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-class UserBase(models.Model):
-    """ Base class of Users
+class User(AbstractUser):
+    """ Extending AbstractUser to create custom User
 
     Attributes:
         @param user_id
@@ -12,41 +12,33 @@ class UserBase(models.Model):
         @param password
         @param user_type
     """
-    # link to the default user model
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # additional params
-    user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=50)
-    email = models.EmailField()
-    password = models.CharField(max_length=1000)
-    user_icon = models.CharField(max_length=254)
-    register_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        abstract = True
+    is_student = models.BooleanField(default=False)
 
     def __str__(self):
         "Stringify"
         return self.username + "(%s)" % self.email
 
-class Admin(UserBase):
+class Admin(models.Model):
     """ General administrators of the site
 
     Attributes:
     """
+    #link to User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     pass
 
 
-class SuperAdmin(Admin):
+class SuperAdmin(models.Model):
     """ Super admin
 
     """
+    #link to User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     pass
 
-class Student(UserBase):
+class Student(models.Model):
     """ Student users
 
     Attributes:
@@ -54,9 +46,9 @@ class Student(UserBase):
 
     is_activated:
     """
+    #link to User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     
     school_name = models.CharField(max_length=100)
-
-    is_activated = models.BooleanField(default=False)
     #TODO: define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
