@@ -120,7 +120,7 @@ export default {
         })
         .then(function() {
           that.show_dialog = true;
-          alert("test " + that.user_name);
+          alert("test sending info of " + that.user_name + " to backend");
         });
     },
     reset_input() {
