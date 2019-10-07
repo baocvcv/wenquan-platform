@@ -44,18 +44,27 @@
         >Submit
       </v-btn>
 
-      <v-btn
-        color="error"
-        class="mr-4"
-        @click="reset_input"
-        >Reset
-      </v-btn>
+      <v-btn color="error" class="mr-4" @click="reset_input">Reset</v-btn>
     </v-form>
+    <v-dialog v-model="show_dialog" max-width="300">
+      <v-card>
+        <v-toolbar color="indigo" dark>
+          <v-toolbar-title>{{ sign_up_result }}</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text align="left">{{ sign_up_response }}</v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="show_dialog = false">Close</v-btn>
+          <div class="flex-grow-1"></div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import md5 from "js-md5";
+const axios = require("axios");
 
 export default {
   name: "sign-up-box",
@@ -81,12 +90,38 @@ export default {
         v => !!v || "E-mail is required",
         v => /.+@.+/.test(v) || "E-mail must be valid"
       ],
-      accept_terms: false
+      accept_terms: false,
+      //below are parameters of response dialog after sign up info has been submitted
+      show_dialog: false,
+      sign_up_result: "",
+      sign_up_response: ""
     };
   },
   methods: {
     click: function() {
-      alert(md5(this.password));
+      let that = this; //store this in that so it can be used in callback functions of axios
+      axios
+        .post("/api/signup", {
+          username: this.user_name,
+          password: md5(this.password),
+          email: this.email
+        })
+        .then(function(response) {
+          //handle success
+          that.sign_up_result = "Success";
+          that.sign_up_result =
+            response.username + " successfully signed up! Please sign in";
+          that.$router.replace("/signin");
+        })
+        .catch(function(error) {
+          //handle error
+          that.sign_up_result = "Error";
+          that.sign_up_response = "Sign up failed! " + error;
+        })
+        .then(function() {
+          that.show_dialog = true;
+          alert("test " + that.user_name);
+        });
     },
     reset_input() {
       this.$refs.input.reset();
@@ -98,9 +133,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #sign-up-box {
-  width: 40%;
   margin: auto;
-  padding: 3%;
-  border: 2px solid #d0d0d0;
 }
 </style>

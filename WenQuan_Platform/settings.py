@@ -76,8 +76,14 @@ WSGI_APPLICATION = 'WenQuan_Platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'wen_quan',
+        'USER': 'postgres',
+        'PASSWORD': '123',
+        'HOST': 'postgres-Never404.app.secoder.net, postgres.Never404.secoder.local',
+        'PORT': '5432',
     }
 }
 
@@ -126,7 +132,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_HOST_USER = 'baocvcv@163.com'
 EMAIL_HOST_PASSWORD = 'BaoHan828'
-EMAIL_PORT = 465 #25
+EMAIL_PORT = 465  #25
 
 # Rest framework settings
 REST_FRAMEWORK = {

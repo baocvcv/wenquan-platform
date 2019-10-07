@@ -21,7 +21,7 @@
           ></question-banks-list>
         </v-tab-item>
         <v-tab-item>
-          <h1>still in developing</h1>
+          <create-question-bank></create-question-bank>
         </v-tab-item>
       </v-tabs>
     </v-card>
@@ -30,6 +30,7 @@
 
 <script>
 import QuestionBanksList from "../components/QuestionBanksList.vue";
+import CreateQuestionBank from "../components/CreateQuestionBank.vue";
 
 export default {
   name: "",
@@ -45,7 +46,8 @@ export default {
     };
   },
   components: {
-    "question-banks-list": QuestionBanksList
+    "question-banks-list": QuestionBanksList,
+    "create-question-bank": CreateQuestionBank
   }
 };
 </script>
