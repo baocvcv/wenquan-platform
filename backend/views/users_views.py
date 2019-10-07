@@ -6,11 +6,11 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.http import Http404
 
+from backend.models.user_base import User
 from backend.serializers.user_serializers import StudentSerializer
 from backend.models.user_base import Admin, SuperAdmin, Student
 
 from backend.serializers.user_serializers import UserSerializer
-from django.contrib.auth.models import User
 
 class UserList(APIView):
     def get(self, request, format=None):
@@ -47,7 +47,7 @@ class StudentList(APIView):
         if serializer.is_valid():
             student = serializer.save()
             if student:
-                token = Token.objects.create(Student=student)
+                token = Token.objects.create(user=student.user)
                 json = serializer.data
                 json['token'] = token.key
                 return Response(json, status=status.HTTP_201_CREATED)
