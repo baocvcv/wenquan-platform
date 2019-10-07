@@ -20,11 +20,11 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         #TODO: add email authentication method
         user = User(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
+            username=validated_data['user']['username'],
+            email=validated_data['user']['email'],
         )
         user.is_student = True
+        user.set_password(validated_data['user']['password'])
         user.save()
         student = Student(
             user=user,
