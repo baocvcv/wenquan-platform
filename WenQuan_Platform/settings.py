@@ -24,7 +24,9 @@ SECRET_KEY = 'hu)%(uu94fs_3tfex73@&(757_vw3^_tb$-o61%7au+d)yr$ni'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'never404-never404.app.secoder.net',
+]
 
 # Application definition
 
