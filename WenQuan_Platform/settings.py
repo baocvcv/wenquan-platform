@@ -25,7 +25,7 @@ SECRET_KEY = 'hu)%(uu94fs_3tfex73@&(757_vw3^_tb$-o61%7au+d)yr$ni'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'never404-never404.app.secoder.net',
+    '*',
 ]
 
 # Application definition
