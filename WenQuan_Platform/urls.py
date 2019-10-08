@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,3 +25,5 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html")),
     path('', include('backend.urls')),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
