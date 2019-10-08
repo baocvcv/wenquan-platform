@@ -23,5 +23,4 @@ urlpatterns = [
     # This line is added temporarily to test whether Django and Vue combines well
     path('', TemplateView.as_view(template_name="index.html")),
     path('', include('backend.urls')),
-    re_path('^.*?$', lambda request: HttpResponseRedirect('/frontend' + request.path))
 ]

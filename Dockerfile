@@ -37,5 +37,4 @@ EXPOSE 80
 
 ENV PYTHONUNBUFFERED=true
 
-CMD python3 manage.py runserver
-#CMD ["/bin/sh", "config/run.sh"]
+CMD ["/bin/sh", "config/run.sh"]
