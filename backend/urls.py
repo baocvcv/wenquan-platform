@@ -10,8 +10,6 @@ urlpatterns = [
     # path('', include(router.urls)),
     path(r'jwt-auth', auth_views.obtain_auth_token),
     # path(r'api/auth/', include('rest_framework.urls')),
-    path(r'api/students', views.UserList.as_view(), name='student-list'),
-    path(r'api/students/<int:pk>', views.UserDetail.as_view(), name='student-detail'),
     path(r'api/signup', views.StudentList.as_view()),
     path(r'accounts/students', views.StudentList.as_view(), name='student-list'),
     path(r'accounts/students/<int:pk>', views.StudentDetail.as_view(), name='student-detail'),

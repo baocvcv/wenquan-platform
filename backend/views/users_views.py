@@ -7,32 +7,13 @@ from rest_framework.authtoken.models import Token
 from django.http import Http404
 
 from backend.models.user_base import User
+from backend.models.user_base import Admin
+from backend.models.user_base import SuperAdmin
+from backend.models.user_base import Student
+
 from backend.serializers.user_serializers import StudentSerializer
-from backend.models.user_base import Admin, SuperAdmin, Student
-
-from backend.serializers.user_serializers import UserSerializer
-
-class UserList(APIView):
-    def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format='json'):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                token = Token.objects.create(user=user)
-                json = serializer.data
-                json['token'] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from backend.serializers.user_serializers import AdminSerializer 
+from backend.serializers.user_serializers import SuperAdminSerializer 
 
 class StudentList(APIView):
     """ Creates the student """
@@ -58,3 +39,28 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     """ Get, update or delete a student """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+class AdminList(APIView):
+    """ Creates the Admin """
+
+    def get(self, request, format=None):
+        admins = Admin.objects.all()
+        serializer = AdminSerializer(admins, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format='json'):
+        serializer = AdminSerializer(data=request.data)
+        if serializer.is_valid():
+            admin = serializer.save()
+            if admin:
+                token = Token.objects.create(user=admin.user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminDetail(generics.RetrieveUpdateDestroyAPIView):
+    """ Retrieve, modify or delete admin """
+    queryset = Admin.objects.all()
+    serializer_class = AdminSerializer
