@@ -14,12 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic.base import TemplateView
+from django.http import HttpResponseRedirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # This line is added temporarily to test whether Django and Vue combines well
     path('', TemplateView.as_view(template_name="index.html")),
-    path('', include('backend.urls'))
+    path('', include('backend.urls')),
+    re_path('^.*?$', lambda request: HttpResponseRedirect('/frontend' + request.path))
 ]

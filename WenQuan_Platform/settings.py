@@ -79,7 +79,7 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'wen_quan',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'postgres-Never404.app.secoder.net, postgres.Never404.secoder.local',
@@ -121,7 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/frontend/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),
