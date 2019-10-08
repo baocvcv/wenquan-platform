@@ -24,3 +24,8 @@ package-lock.json
 
 #migrations
 migrations
+
+#virtualenv
+bin/
+include/
+lib/
