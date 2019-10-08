@@ -19,6 +19,7 @@
 
 <script>
 import md5 from "js-md5";
+import axios from "axios";
 
 export default {
   name: "sign-in",
@@ -31,17 +32,24 @@ export default {
   },
   methods: {
     click: function() {
-      var n=sessionStorage.getItem("user");
-      if(!n){
+      var cur_user=sessionStorage.getItem("user");
+      if(!cur_user){
         var user = {
           username: this.username,
-          type: "Admin"
+          password: md5(this.password)
         };
-        this.$store.commit("login", {
-          user: user
+        console.log(JSON.stringify(user));
+        axios.post("/jwt-auth",user).then((response) => {
+          this.$store.commit("login", {
+            user: user
+          });
+          alert(this.username+" logged in");
+          this.$router.push("/");
+        }).catch((response) => {
+          alert(response);
+        }).then(() => {
+
         });
-        alert(this.username+" logged in");
-        this.$router.push("/");
       }
     }
   }
