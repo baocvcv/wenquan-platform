@@ -23,6 +23,7 @@ package-lock.json
 .DS_Store
 
 #migrations
-migrations
+/backend/migrations
 
 .gitignore
+docker-compose.yml
