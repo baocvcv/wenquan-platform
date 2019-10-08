@@ -35,4 +35,5 @@ COPY --from=0 /opt/frontend/dist frontend/dist
 EXPOSE 80
 
 ENV PYTHONUNBUFFERED=true
+
 CMD ["/bin/sh", "config/run.sh"]
