@@ -29,3 +29,6 @@ migrations
 bin/
 include/
 lib/
+
+# docker files
+docker-compose.yml

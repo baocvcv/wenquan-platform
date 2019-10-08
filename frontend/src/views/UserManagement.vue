@@ -31,8 +31,14 @@ export default {
     methods: {
         create_user(user) {
             console.log("Creating a new user...");
-            console.log(user);
-            console.log("Successfully create a new user.");
+            this.$axios
+                .post("http://localhost:8000/accounts/students", user)
+                .then(response => {
+                    console.log("Successfully create a new user.");
+                })
+                .catch(error => {
+                    console.log(error);
+                });
             this.users.push(user);
         },
         disable_user(user) {
@@ -42,21 +48,24 @@ export default {
             params.user.type = params.type;
         }
     },
-    /*
     mounted: function() {
-        axios
-            .get('api/users')
+        this.$axios
+            .get('http://localhost:8000/accounts/students')
             .then(response => {
-                this.users = response.data.users;
+                console.log(response);
+                this.users = response.data;
+                console.log(this.users);
             })
             .catch(error => {
                 console.log(error);
             })
-    }
-    */
+    },
    created() {
        if (!this.$store.state.user || this.$store.state.user.type != "Admin")
-        this.$router.push("/");
+       {
+            console.log("Failed to login as an Admin.");
+            this.$router.push("/");
+       }
    }
 }
 </script>
