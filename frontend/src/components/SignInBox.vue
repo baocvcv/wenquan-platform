@@ -22,7 +22,7 @@
         <v-card-text align="left">{{ sign_in_response }}</v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn @click="show_dialog = false">Close</v-btn>
+          <v-btn @click="show_dialog = false" text>Close</v-btn>
           <div class="flex-grow-1"></div>
         </v-card-actions>
       </v-card>
@@ -63,7 +63,7 @@ export default {
 
         console.log(JSON.stringify(user));
 
-        axios.post("/jwt-auth",user).then((response) => {
+        axios.post("/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
           user.is_admin = true;//for test
@@ -72,9 +72,7 @@ export default {
             user: user
           });
 
-          this.sign_in_result = "Success!";
-          this.sign_in_response = this.username + " successfully signed in!";
-          this.show_dialog=true;
+          console.log(response);
 
           this.$router.push("/");
         }).catch((response) => {
