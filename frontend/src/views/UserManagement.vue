@@ -3,7 +3,7 @@
         <user-table
             :users="users"
             @create-user="create_user"
-            @disable-user="disable_user"
+            @change-user-status="change_user_status"
             @change-user-type="change_user_type"
         ></user-table>
     </div>
@@ -41,7 +41,7 @@ export default {
                 });
             this.users.push(user);
         },
-        disable_user(user) {
+        change_user_status(user) {
             user.disabled = !user.disabled;
         },
         change_user_type(params) {

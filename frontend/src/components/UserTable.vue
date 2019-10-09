@@ -104,7 +104,7 @@
         v-if="item.disabled === false"
         small
         class="mr-2"
-        @click="disable_user(item)"
+        @click="change_user_status(item)"
         >
         mdi-cancel
         </v-icon>
@@ -112,7 +112,7 @@
         v-else
         small
         class="mr-2"
-        @click="disable_user(item)"
+        @click="change_user_status(item)"
         >
         mdi-restore
         </v-icon>
@@ -229,8 +229,8 @@ export default {
             });
             this.selected_type = "";
         },
-        disable_user(user) {
-            this.$emit("disable-user", user);
+        change_user_status(user) {
+            this.$emit("change-user-status", user);
         },
         onclick(user) {
             this.selected_user_index = this.users.indexOf(user);
