@@ -8,7 +8,7 @@ from backend import views
 
 urlpatterns = [
     # path('', include(router.urls)),
-    path(r'jwt-auth/', views.auth_views.CustomAuthToken.as_view()),
+    path(r'jwt-auth/', views.auth_views.CustomAuthToken.as_view(), name='account-auth'),
     path(r'jwt-auth2/', auth_views.obtain_auth_token),
     # path(r'api/auth/', include('rest_framework.urls')),
     path(r'api/signup/', views.StudentList.as_view()),
