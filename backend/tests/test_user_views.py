@@ -19,7 +19,7 @@ class StudentViewTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Student.objects.count(), 1)
-        self.assertEqual(Student.objects.get().name, 'Kobe Bryant')
+        self.assertEqual(Student.objects.get().user.username, 'Kobe Bryant')
 
     def test_get_students(self):
         """ test getting a list of students """
@@ -32,7 +32,7 @@ class StudentViewTest(APITestCase):
         self.client.post(url, data, format='json')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 1)
 
 
 class StudentDetailTest(APITestCase):
@@ -56,10 +56,10 @@ class StudentDetailTest(APITestCase):
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
         self.assertEqual(response1.data['token'], response2.data['token'])
 
-        url3 = reverse('student-detail')
         pk = response2.data['user_id']
-        response3 = self.client.get(url3 + '%d/' % pk)
-        self.assertEqual(response3.stats_code, status.HTTP_200_OK)
+        url3 = reverse('student-detail', args=[pk])
+        response3 = self.client.get(url3)
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['username'], response2.data['username'])
 
 class AdminListTest(APITestCase):
@@ -76,7 +76,7 @@ class AdminListTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Admin.objects.count(), 1)
-        self.assertEqual(Admin.objects.get().name, 'Kobe Bryant')
+        self.assertEqual(Admin.objects.get().user.username, 'Kobe Bryant')
 
     def test_get_admin(self):
         """ test getting a list of admins"""
@@ -89,4 +89,4 @@ class AdminListTest(APITestCase):
         self.client.post(url, data, format='json')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 1)

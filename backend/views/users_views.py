@@ -19,11 +19,13 @@ class StudentList(APIView):
     """ Creates the student """
 
     def get(self, request, format=None):
+        """ get a list of students """
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
 
     def post(self, request, format='json'):
+        """ create a user """
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
             student = serializer.save()
@@ -44,11 +46,13 @@ class AdminList(APIView):
     """ Creates the Admin """
 
     def get(self, request, format=None):
+        """ get a list of admins """
         admins = Admin.objects.all()
         serializer = AdminSerializer(admins, many=True)
         return Response(serializer.data)
 
     def post(self, request, format='json'):
+        """ create an admin """
         serializer = AdminSerializer(data=request.data)
         if serializer.is_valid():
             admin = serializer.save()
