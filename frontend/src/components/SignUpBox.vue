@@ -18,6 +18,7 @@
       ></v-text-field>
 
       <v-text-field
+        v-model="re_pswd"
         label="re-enter password"
         :type="show_password ? 'text' : 'password'"
         :rules="re_password_rules"
@@ -82,6 +83,7 @@ export default {
         v => !!v || "password is required",
         v => v.length >= 8 || "at least 8 characters are required"
       ],
+      re_pswd: "",
       re_password_rules: [
         v => v == this.password || "Does not consistent with former one"
       ],
