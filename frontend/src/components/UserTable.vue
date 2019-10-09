@@ -89,6 +89,11 @@
         </v-dialog>
       </v-toolbar>
     </template>
+    <template v-slot:item.type="{ item }">
+        {{ item.type.is_student ? "Student" : ""}}
+        {{ item.type.is_admin ? "Admin" : ""}}
+        {{ item.type.is_superadmin ? "SuperAdmin" : ""}}
+    </template>
     <template v-slot:item.disabled="{ item }">
         {{ item.disabled ? "Disabled" : "Enabled" }}
     </template>
@@ -211,16 +216,26 @@ export default {
                 username: this.edited_user.username,
                 password: this.edited_user.password,
                 email: this.edited_user.email,
-                type: this.edited_user.type,
+                type: {
+                    is_student: true,
+                    is_admin: false,
+                    is_superadmin: false
+                },
                 disabled: false
             };
+            if (this.edtied_user.type == "Student")
+                new_user.type.is_student = true;
+            else if (this.edtied_user.type == "Admin")
+                new_user.type.is_admin = true;
+            else if (this.edited_user.type == "SuperAdmin")
+                new_user.type.is_superadmin = true;
             this.$emit("create-user", new_user);
             this.dialog = false;
             this.edited_user = this.default_user;
         },
         change_user_type() {
             let user = this.users[this.selected_user_index];
-            if (this.selected_type == "" || this.selected_type == user.type)
+            if (this.selected_type == "")
                 return this.close_dialog_change_user_type();
             this.dialog_change_user_type = false;
             this.$emit("change-user-type",{

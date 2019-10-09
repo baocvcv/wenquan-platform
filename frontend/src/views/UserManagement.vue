@@ -19,13 +19,7 @@ export default {
     },
     data: function() {
         return {
-            users: [
-                {username: "XQ1", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ2", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ3", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ4", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ5", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false}
-            ]
+            users: []
         }
     },
     methods: {
@@ -45,7 +39,17 @@ export default {
             user.disabled = !user.disabled;
         },
         change_user_type(params) {
-            params.user.type = params.type;
+            if (params.type == "Student")
+                params.user.type.is_student = true;
+            else if (params.type == "Admin")
+                params.user.type.is_admin = true;
+            else if (params.type == "SuperAdmin")
+                params.user.type.is_superadmin = true;
+            this.$axios
+                .put("http://localhost:8000/accounts/students", params.user)
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     mounted: function() {
