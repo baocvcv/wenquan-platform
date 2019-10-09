@@ -22,8 +22,10 @@ package-lock.json
 # OS files
 .DS_Store
 
-#migrations
-/backend/migrations
+#virtualenv
+bin/
+include/
+lib/
 
-.gitignore
+# docker files
 docker-compose.yml
