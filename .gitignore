@@ -1,6 +1,9 @@
 # frontend libraries
 /frontend/node_modules
 
+# database migrations
+backend/migrations/
+
 # frontend build files
 /frontend/dist
 
@@ -29,3 +32,4 @@ docker-compose.yml
 bin/
 include/
 lib/
+
