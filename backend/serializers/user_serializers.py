@@ -30,7 +30,7 @@ class StudentSerializer(serializers.ModelSerializer):
         return student
     class Meta:
         model = Student
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'is_banned')
 
 class AdminSerializer(serializers.ModelSerializer):
     """ Serializer for Admin model """
@@ -52,7 +52,7 @@ class AdminSerializer(serializers.ModelSerializer):
         return admin 
     class Meta:
         model = Admin 
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'is_banned')
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     """ Serializer for SuperAdmin model """
