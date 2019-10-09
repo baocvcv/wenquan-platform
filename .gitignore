@@ -33,3 +33,5 @@ bin/
 include/
 lib/
 
+#coverage
+.coverage

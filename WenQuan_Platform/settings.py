@@ -86,9 +86,11 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wen_quan',
+        # 'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'postgres.Never404.secoder.local',
+        # 'HOST': 'localhost',
         'PORT': '5432',
     }
 }
