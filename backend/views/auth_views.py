@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from backend.models.user_base import User
 class CustomAuthToken(ObtainAuthToken):
     """ Custom auth backend"""
-
     def post(self, request, *args, **kwargs):
         """ get auth token """
         serializer = self.serializer_class(data=request.data,

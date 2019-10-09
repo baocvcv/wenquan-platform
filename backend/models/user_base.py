@@ -29,9 +29,6 @@ class Admin(models.Model):
     #link to User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    pass
-
-
 class SuperAdmin(models.Model):
     """ Super admin
 
@@ -39,7 +36,6 @@ class SuperAdmin(models.Model):
     #link to User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    pass
 
 class Student(models.Model):
     """ Student users
@@ -51,7 +47,6 @@ class Student(models.Model):
     """
     #link to User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
     school_name = models.CharField(max_length=100)
     #TODO: define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)

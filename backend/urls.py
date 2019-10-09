@@ -1,6 +1,7 @@
 """Url config for django rest framework"""
-from django.urls import include, path
-from rest_framework import routers
+# from django.urls import include
+from django.urls import path
+# from rest_framework import routers
 from rest_framework.authtoken import views as auth_views
 from backend import views
 
