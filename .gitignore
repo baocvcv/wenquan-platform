@@ -22,10 +22,5 @@ package-lock.json
 # OS files
 .DS_Store
 
-#virtualenv
-bin/
-include/
-lib/
-
-# docker files
+.gitignore
 docker-compose.yml

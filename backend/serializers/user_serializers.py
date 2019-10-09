@@ -7,10 +7,6 @@ from backend.models.user_base import Admin
 from backend.models.user_base import SuperAdmin
 from backend.models.user_base import Student
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password']
 class StudentSerializer(serializers.ModelSerializer):
     """ Serializer for Student model """
     username = serializers.CharField(source='user.username')
@@ -34,4 +30,49 @@ class StudentSerializer(serializers.ModelSerializer):
         return student
     class Meta:
         model = Student
+        fields = ('email', 'username', 'password', 'is_banned')
+
+class AdminSerializer(serializers.ModelSerializer):
+    """ Serializer for Admin model """
+    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email')
+    password = serializers.CharField(source='user.password')
+    
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['user']['username'],
+            email=validated_data['user']['email'],
+        )
+        user.is_student = True
+        user.is_staff = True
+        user.set_password(validated_data['user']['password'])
+        user.save()
+        admin = Admin(user=user)
+        admin.save()
+        return admin 
+    class Meta:
+        model = Admin 
+        fields = ('email', 'username', 'password', 'is_banned')
+
+class SuperAdminSerializer(serializers.ModelSerializer):
+    """ Serializer for SuperAdmin model """
+    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email')
+    password = serializers.CharField(source='user.password')
+    
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['user']['username'],
+            email=validated_data['user']['email'],
+        )
+        user.is_student = True
+        user.is_staff = True
+        user.is_superadmin = True
+        user.set_password(validated_data['user']['password'])
+        user.save()
+        superadmin = SuperAdmin(user=user)
+        superadmin.save()
+        return superadmin 
+    class Meta:
+        model = SuperAdmin 
         fields = ('email', 'username', 'password')
