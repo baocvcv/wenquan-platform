@@ -2,10 +2,10 @@
 
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from question_banks import QuestionBanks
+from question_bank import QuestionBanks
 
 
-class subjects(PolymorphicModel):
+class Subjects(PolymorphicModel):
     """Model for Subjects
     Attributs:
         name: name of subjects
