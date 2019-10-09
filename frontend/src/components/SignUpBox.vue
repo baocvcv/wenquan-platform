@@ -125,6 +125,7 @@ export default {
       this.$refs.input.reset();
     },
     redirect() {
+      //redirect if signup succeed
       this.show_dialog = false;
       if (this.sign_up_result == "Success") this.$router.replace("/signin");
     }
