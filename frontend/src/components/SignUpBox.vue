@@ -54,7 +54,7 @@
         <v-card-text align="left">{{ sign_up_response }}</v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn @click="show_dialog = false">Close</v-btn>
+          <v-btn @click="redirect">Close</v-btn>
           <div class="flex-grow-1"></div>
         </v-card-actions>
       </v-card>
@@ -93,15 +93,15 @@ export default {
       accept_terms: false,
       //below are parameters of response dialog after sign up info has been submitted
       show_dialog: false,
-      sign_up_result: "",
-      sign_up_response: ""
+      sign_up_result: String,
+      sign_up_response: String
     };
   },
   methods: {
     click: function() {
       let that = this; //store this in that so it can be used in callback functions of axios
       axios
-        .post("/api/signup", {
+        .post("/api/signup/", {
           username: this.user_name,
           password: md5(this.password),
           email: this.email
@@ -111,7 +111,6 @@ export default {
           that.sign_up_result = "Success";
           that.sign_up_result =
             response.username + " successfully signed up! Please sign in";
-          that.$router.replace("/signin");
         })
         .catch(function(error) {
           //handle error
@@ -120,11 +119,15 @@ export default {
         })
         .then(function() {
           that.show_dialog = true;
-          alert("test sending info of " + that.user_name + " to backend");
         });
     },
     reset_input() {
       this.$refs.input.reset();
+    },
+    redirect() {
+      //redirect if signup succeed
+      this.show_dialog = false;
+      if (this.sign_up_result == "Success") this.$router.replace("/signin");
     }
   }
 };
