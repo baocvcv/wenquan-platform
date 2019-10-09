@@ -14,4 +14,6 @@ urlpatterns = [
     path(r'api/signup/', views.StudentList.as_view()),
     path(r'accounts/students/', views.StudentList.as_view(), name='student-list'),
     path(r'accounts/students/<int:pk>/', views.StudentDetail.as_view(), name='student-detail'),
+    path(r'accounts/admins/', views.AdminList.as_view(), name='admin-list'),
+    path(r'accounts/admins/<int:pk>/', views.AdminDetail.as_view(), name='admin-detail'),
 ]

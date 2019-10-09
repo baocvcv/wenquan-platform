@@ -12,7 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    is_banned = serializers.BooleanField(source='user.is_banned')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         #TODO: add email authentication method
@@ -38,7 +38,7 @@ class AdminSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    is_banned = serializers.BooleanField(source='user.is_banned')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         user = User(
