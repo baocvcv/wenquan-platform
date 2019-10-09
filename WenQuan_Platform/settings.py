@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'wen_quan',
         'USER': 'postgres',
         'PASSWORD': '123',
-        'HOST': 'postgres-Never404.app.secoder.net, postgres.Never404.secoder.local',
+        'HOST': 'postgres.Never404.secoder.local',
         'PORT': '5432',
     }
 }
