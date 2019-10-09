@@ -21,6 +21,7 @@ RUN npm run build
 FROM python:3.7.4
 
 ENV HOME=/opt/app
+
 WORKDIR $HOME
 
 COPY requirements.txt $HOME
