@@ -27,27 +27,47 @@ describe("UserTable.vue", () => {
         const wrapper = mount(UserTable, {
             localVue,
             vuetify,
+            sync: false,
             propsData: {
                 users
             }
         });
-        expect(wrapper.contains(".v-dialog")).toBe(true);
+        const data_table = wrapper.find(".v-data-table");
+        // temporary test
+        expect(wrapper.contains(".v-data-table > .v-toolbar")).toBe(true);
     });
 
     it("emits change_user_type event after changing user type", () => {
-
+        const users = [
+            user_factory.createAnonymousStudent()
+        ];
+        const wrapper = mount(UserTable, {
+            localVue,
+            vuetify,
+            sync: false,
+            propsData: {
+                users
+            }
+        });
+        expect(wrapper.emitted('change-user-type')).toBeTruthy();
     });
 
     it("emits change_user_status event after changing user status", () => {
-
+        const users = [
+            user_factory.createAnonymousStudent()
+        ];
+        expect(wrapper.emitted('change-user-status')).toBeTruthy();
     });
 
     it("emits create_user event after clicking the CREATE button in the dialog", () => {
-
+        const users = [
+            user_factory.createAnonymousStudent()
+        ];
+        expect(wrapper.emitted('create-user')).toBeTruthy();
     });
 
     it("shows the dialog after toggling the CREATE button", () => {
-
+        
     });
 
     it("updates the user list after modifying it in the parent component", () => {
