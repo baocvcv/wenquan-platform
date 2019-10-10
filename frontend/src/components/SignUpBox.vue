@@ -103,7 +103,7 @@ export default {
     click: function() {
       let that = this; //store this in that so it can be used in callback functions of axios
       axios
-        .post("/api/signup/", {
+        .post("https://never404-never404.app.secoder.net//api/signup/", {
           username: this.user_name,
           password: md5(this.password),
           email: this.email
@@ -111,8 +111,8 @@ export default {
         .then(function(response) {
           //handle success
           that.sign_up_result = "Success";
-          that.sign_up_result =
-            response.username + " successfully signed up! Please sign in";
+          that.sign_up_response =
+            response.data.username + " successfully signed up! Please sign in";
         })
         .catch(function(error) {
           //handle error
@@ -126,7 +126,7 @@ export default {
     reset_input() {
       this.$refs.input.reset();
     },
-    redirect() {
+    redirect: function() {
       //redirect if signup succeed
       this.show_dialog = false;
       if (this.sign_up_result == "Success") this.$router.replace("/signin");

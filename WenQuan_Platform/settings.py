@@ -30,19 +30,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'backend',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'polymorphic',
-    'corsheaders'
-]
+INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'backend', 'rest_framework', 'rest_framework.authtoken', 'polymorphic', 'corsheaders']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,6 +77,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'postgres.Never404.secoder.local',
+        # 'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -151,6 +140,4 @@ REST_FRAMEWORK = {
 
 # authentication settings
 AUTH_USER_MODEL = 'backend.User'
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )

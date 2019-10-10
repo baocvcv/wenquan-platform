@@ -50,14 +50,22 @@ export default {
                     name: "User Management",
                     text: "User Management",
                     link: "/admin",
-                    type: "Admin",
+                    type: {
+                        is_student: false,
+                        is_admin: true,
+                        is_superadmin: false
+                    },
                     icon: "mdi-account-supervisor",
                 },
                 {
                     name: "Question Banks",
                     text: "Question Banks",
                     link: "/questionbanks",
-                    type: "Admin",
+                    type: {
+                        is_student: false,
+                        is_admin: true,
+                        is_superadmin: false
+                    },
                     icon: "mdi-bank"
                 },
                 {
@@ -88,7 +96,10 @@ export default {
     computed: {
         user() {
             var _user=this.$store.state.user;
-            if(!_user) _user=JSON.parse(sessionStorage.getItem('user'));
+            if(!_user){
+                _user=JSON.parse(sessionStorage.getItem('user'));
+                this.$store.state.user=_user;
+            }
             return _user;
         },
         rendered_nav_links: function() {
@@ -100,10 +111,10 @@ export default {
                     signin_required = nav_link["signin_required"];
                 if (!this.user && signin_required)
                     flag = false;
-                let type = "";
+                let type = null;
                 if ("type" in nav_link)
                     type = nav_link["type"];
-                if (this.user && type != "" && this.user.type != type)
+                if (this.user && type && this.user.type != type)
                     flag = false;
                 if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))
                     flag = false;

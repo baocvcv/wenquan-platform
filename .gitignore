@@ -4,6 +4,9 @@
 # frontend build files
 /frontend/dist
 
+# database
+backend/migrations/
+
 # database files
 *.sqlite3
 
@@ -29,3 +32,6 @@ docker-compose.yml
 bin/
 include/
 lib/
+
+#coverage
+.coverage
