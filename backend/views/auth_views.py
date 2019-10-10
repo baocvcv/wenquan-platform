@@ -13,7 +13,7 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({
+        data = {
             'token': token.key,
             'user_id': user.pk,
             'username': user.username,
@@ -22,5 +22,8 @@ class CustomAuthToken(ObtainAuthToken):
                 'is_student': user.is_student,
                 'is_admin': user.is_admin,
                 'is_superadmin': user.is_superadmin
+                }
             }
-        })
+        if user.is_student:
+            data['is_banned'] = user.student.is_banned
+        return Response(data)
