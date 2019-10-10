@@ -66,6 +66,15 @@ export default {
         axios.post("/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
+          if(response.data.is_banned){
+            this.sign_in_result="Error!";
+            this.sign_in_response="You are banned! Please contact your administrator."
+            this.show_dialog=true;
+            return;
+          }
+
+          user.type=response.data.type;
+
           this.$store.commit("login", {
             user: user
           });

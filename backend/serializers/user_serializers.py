@@ -12,7 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
+    is_banned = serializers.BooleanField(default=False)
     
     def create(self, validated_data):
         """ create student """
@@ -40,7 +40,6 @@ class AdminSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         """ create admin """
@@ -58,7 +57,7 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta """
         model = Admin 
-        fields = ('email', 'username', 'password', 'is_banned')
+        fields = ('email', 'username', 'password')
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     """ Serializer for SuperAdmin model """

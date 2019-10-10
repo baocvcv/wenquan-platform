@@ -30,19 +30,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'backend',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'polymorphic',
-    'corsheaders'
-]
+INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'backend', 'rest_framework', 'rest_framework.authtoken', 'polymorphic', 'corsheaders']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +74,6 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'wen_quan',
-        # 'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'postgres.Never404.secoder.local',
@@ -153,6 +140,4 @@ REST_FRAMEWORK = {
 
 # authentication settings
 AUTH_USER_MODEL = 'backend.User'
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
