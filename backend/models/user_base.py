@@ -48,5 +48,5 @@ class Student(models.Model):
     #link to User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     school_name = models.CharField(max_length=100)
-    #TODO: define Tiku and possible intermediaries
+    #need to define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
