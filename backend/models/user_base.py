@@ -15,7 +15,6 @@ class User(AbstractUser):
     is_student = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
-    is_banned = models.BooleanField(default=False)
 
     def __str__(self):
         "Stringify"
@@ -47,6 +46,7 @@ class Student(models.Model):
     """
     #link to User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_banned = models.BooleanField(default=False)
     school_name = models.CharField(max_length=100)
     #need to define Tiku and possible intermediaries
     #authorizations = models.ManyToManyField(Tiku)
