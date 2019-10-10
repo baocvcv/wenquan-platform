@@ -56,8 +56,8 @@ class StudentDetailTest(APITestCase):
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
         self.assertEqual(response1.data['token'], response2.data['token'])
         # get student detail
-        userId = response2.data['user_id']
-        url3 = reverse('student-detail', args=[userId])
+        user_id = response2.data['user_id']
+        url3 = reverse('student-detail', args=[user_id])
         response3 = self.client.get(url3)
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['username'], response2.data['username'])
