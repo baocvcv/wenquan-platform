@@ -12,8 +12,10 @@ class StudentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
+        """ create student """
         #TODO: add email authentication method
         user = User(
             username=validated_data['user']['username'],
@@ -29,16 +31,19 @@ class StudentSerializer(serializers.ModelSerializer):
         student.save()
         return student
     class Meta:
+        """ meta """
         model = Student
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'is_banned')
 
 class AdminSerializer(serializers.ModelSerializer):
     """ Serializer for Admin model """
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
+        """ create admin """
         user = User(
             username=validated_data['user']['username'],
             email=validated_data['user']['email'],
@@ -51,8 +56,9 @@ class AdminSerializer(serializers.ModelSerializer):
         admin.save()
         return admin 
     class Meta:
+        """ meta """
         model = Admin 
-        fields = ('email', 'username', 'password')
+        fields = ('email', 'username', 'password', 'is_banned')
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     """ Serializer for SuperAdmin model """
@@ -61,6 +67,7 @@ class SuperAdminSerializer(serializers.ModelSerializer):
     password = serializers.CharField(source='user.password')
     
     def create(self, validated_data):
+        """ create super admin """
         user = User(
             username=validated_data['user']['username'],
             email=validated_data['user']['email'],
@@ -74,5 +81,6 @@ class SuperAdminSerializer(serializers.ModelSerializer):
         superadmin.save()
         return superadmin 
     class Meta:
+        """ meta"""
         model = SuperAdmin 
         fields = ('email', 'username', 'password')

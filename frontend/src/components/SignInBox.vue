@@ -14,11 +14,25 @@
           v-on:click:append="show_password=!show_password"></v-text-field>
         <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
     </v-form>
+    <v-dialog v-model="show_dialog" max-width="300">
+      <v-card>
+        <v-toolbar color="indigo" dark>
+          <v-toolbar-title>{{ sign_in_result }}</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text align="left">{{ sign_in_response }}</v-card-text>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="show_dialog = false" text>Close</v-btn>
+          <div class="flex-grow-1"></div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import md5 from "js-md5";
+import axios from "axios";
 
 export default {
   name: "sign-in",
@@ -26,22 +40,48 @@ export default {
     return {
       username: "",
       password: "",
-      show_password: false
+      show_password: false,
+      show_dialog: false,
+      sign_in_result: "",
+      sign_in_response: ""
     };
   },
   methods: {
     click: function() {
-      var n=sessionStorage.getItem("user");
-      if(!n){
+      var cur_user=sessionStorage.getItem("user");
+      if(!cur_user){
+
         var user = {
           username: this.username,
-          type: "Admin"
+          password: md5(this.password),
+          type:{
+            is_student: false,
+            is_admin: false,
+            is_superadmin: false
+          }
         };
-        this.$store.commit("login", {
-          user: user
+
+        console.log(JSON.stringify(user));
+
+        axios.post("/jwt-auth/",user).then((response) => {
+          //Sign in successfully
+
+          user.is_admin = true;//for test
+
+          this.$store.commit("login", {
+            user: user
+          });
+
+          console.log(response);
+
+          this.$router.push("/");
+        }).catch((response) => {
+          this.sign_in_result = "Error";
+          this.sign_in_response = response;
+          this.show_dialog=true;
+        }).then(() => {
+
         });
-        alert(this.username+" logged in");
-        this.$router.push("/");
       }
     }
   }

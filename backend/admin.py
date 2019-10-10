@@ -1,9 +1,9 @@
 """define admin models for app 'backend'"""
-from django.contrib import admin
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin
+# from django.contrib import admin
+# from django.contrib.auth import get_user_model
+# from django.contrib.auth.admin import UserAdmin
 
-from .models import Student
+# from .models import Student
 
 # class StudentAdmin(UserAdmin):
 #     add_form = StudentCreationForm
