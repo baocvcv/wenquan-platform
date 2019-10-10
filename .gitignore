@@ -4,6 +4,9 @@
 # frontend build files
 /frontend/dist
 
+# database
+backend/migrations/
+
 # database files
 *.sqlite3
 
