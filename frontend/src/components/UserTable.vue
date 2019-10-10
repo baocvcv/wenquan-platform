@@ -94,8 +94,8 @@
         {{ item.type.is_admin ? "Admin" : ""}}
         {{ item.type.is_superadmin ? "SuperAdmin" : ""}}
     </template>
-    <template v-slot:item.disabled="{ item }">
-        {{ item.disabled ? "Disabled" : "Enabled" }}
+    <template v-slot:item.is_banned="{ item }">
+        {{ item.is_banned ? "BANNED" : "NORMAL" }}
     </template>
     <template v-slot:item.action="{ item }">
         <v-icon
@@ -106,7 +106,7 @@
         mdi-arrow-up
         </v-icon>
         <v-icon
-        v-if="item.disabled === false"
+        v-if="item.is_banned === false"
         small
         class="mr-2"
         @click="change_user_status(item)"
@@ -170,7 +170,7 @@ export default {
                 },
                 {
                     text: "Status",
-                    value: "disabled",
+                    value: "is_banned",
                     align: "center"
                 },
                 {
@@ -221,7 +221,7 @@ export default {
                     is_admin: false,
                     is_superadmin: false
                 },
-                disabled: false
+                is_banned: false
             };
             if (this.edtied_user.type == "Student")
                 new_user.type.is_student = true;

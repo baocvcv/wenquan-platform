@@ -26,7 +26,7 @@ export default {
         create_user(user) {
             console.log("Creating a new user...");
             this.$axios
-                .post("http://localhost:8000/accounts/students", user)
+                .post("http://Never404-Never404.app.secoder.net/accounts/students", user)
                 .then(response => {
                     console.log("Successfully create a new user.");
                 })
@@ -36,7 +36,7 @@ export default {
             this.users.push(user);
         },
         change_user_status(user) {
-            user.disabled = !user.disabled;
+            user.is_banned = !user.is_banned;
         },
         change_user_type(params) {
             if (params.type == "Student")
@@ -46,7 +46,7 @@ export default {
             else if (params.type == "SuperAdmin")
                 params.user.type.is_superadmin = true;
             this.$axios
-                .put("http://localhost:8000/accounts/students", params.user)
+                .put("http://Never404-Never404.app.secoder.net/accounts/students", params.user)
                 .catch(error => {
                     console.log(error);
                 });
@@ -54,7 +54,7 @@ export default {
     },
     mounted: function() {
         this.$axios
-            .get('http://localhost:8000/accounts/students')
+            .get('http://Never404-Never404.app.secoder.net/accounts/students')
             .then(response => {
                 console.log(response);
                 this.users = response.data;
