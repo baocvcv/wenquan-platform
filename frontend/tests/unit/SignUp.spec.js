@@ -1,61 +1,122 @@
-import { mount } from "@vue/test-utils";
+import { mount, createLocalVue } from "@vue/test-utils";
 import SignUpBox from "@/components/SignUpBox.vue";
 import SignUp from "@/views/SignUp.vue";
+import Vue from "vue";
+import Vuetify from "vuetify";
+
+const localVue = createLocalVue();
+Vue.use(Vuetify);
 
 describe("SignUp.vue", () => {
+  let vuetify;
+  beforeEach(() => {
+    vuetify = new Vuetify();
+  });
   it("renders correctly", () => {
-    const wrapper = mount(SignUp);
-    expect(wrapper.contains("v-form")).toBe(true);
-    expect(wrapper.contains("v-card")).toBe(true);
+    const wrapper = mount(SignUp, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    expect(wrapper.contains(".v-form")).toBe(true);
+    expect(wrapper.contains(".v-card")).toBe(true);
   });
 });
 
 describe("SignUpBox.vue", () => {
+  let vuetify;
+  beforeEach(() => {
+    vuetify = new Vuetify();
+  });
+
   it("correct input", () => {
-    const wrapper = mount(SignUpBox);
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
     wrapper.setData({
       user_name: "test",
       password: "11111111",
       re_pswd: "11111111",
       email: "kxz@qq.com",
-      accept_terms: "true"
+      accept_terms: true
     });
     expect(wrapper.vm.show_dialog).toBe(false);
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.valid).toBe(true);
-      done();
+      expect(wrapper.vm.$refs.input.validate()).toBe(true);
     });
   });
 
-  it("Incorrect input", () => {
-    const wrapper = mount(SignUpBox);
+  it("user name exceed 10 limits", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    wrapper.setData({
+      user_name: "exceedlimit",
+      password: "11111111",
+      re_pswd: "11111111",
+      email: "kxz@qq.com",
+      accept_terms: true
+    });
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.$refs.input.validate()).toBe(false);
+    });
+  });
+
+  it("re_password not consistent with former", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    wrapper.setData({
+      user_name: "test",
+      password: "11111111",
+      re_pswd: "1",
+      email: "kxz@qq.com",
+      accept_terms: true
+    });
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.$refs.input.validate()).toBe(false);
+    });
+  });
+
+  it("wrong email", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    wrapper.setData({
+      user_name: "test",
+      password: "11111111",
+      re_pswd: "11111111",
+      email: "wrongEmail",
+      accept_terms: true
+    });
+    wrapper.vm.$nextTick(() => {
+      expect(wrapper.vm.$refs.input.validate()).toBe(false);
+    });
+  });
+
+  it("Not check contract", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
     wrapper.setData({
       user_name: "test",
       password: "11111111",
       re_pswd: "11111111",
       email: "kxz@qq.com",
-      accept_terms: "true"
+      accept_terms: false
     });
-    //user_name exceed limits
-    wrapper.vm.user_name = "12345678901";
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.valid).toBe(false);
-      done();
+      expect(wrapper.contains(".v-btn--disabled")).toBe(true);
     });
-    wrapper.vm.user_name = "test";
-    //re_password is not consistent with former
-    wrapper.vm.re_pswd = "1";
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.valid).toBe(false);
-      done();
-    });
-    wrapper.vm.re_pswd = "11111111";
-    //wrong email
-    wrapper.vm.email = "wrongEmail";
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.vm.valid).toBe(false);
-      done();
-    });
-    wrapper.vm.email = "kxz@qq.com";
   });
 });
