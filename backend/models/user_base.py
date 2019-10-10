@@ -2,6 +2,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+class UserType(models.Model):
+    """ Type for users """
+    is_student = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    is_superadmin = models.BooleanField(default=False)
+
 class User(AbstractUser):
     """ Extending AbstractUser to create custom User
 
@@ -12,9 +18,7 @@ class User(AbstractUser):
         @param password
         @param user_type
     """
-    is_student = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
+    user_type = models.OneToOneField(UserType, on_delete=models.CASCADE)
 
     def __str__(self):
         "Stringify"
