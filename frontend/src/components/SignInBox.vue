@@ -66,6 +66,8 @@ export default {
         axios.post("/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
+          user.type=response.data.type;
+
           this.$store.commit("login", {
             user: user
           });
