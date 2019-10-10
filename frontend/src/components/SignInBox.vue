@@ -66,8 +66,6 @@ export default {
         axios.post("/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
-          user.is_admin = true;//for test
-
           this.$store.commit("login", {
             user: user
           });
