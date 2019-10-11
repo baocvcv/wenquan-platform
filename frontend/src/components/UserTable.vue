@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog_change_user_type" max-width="500px">
     <v-card>
     <v-card-title>
-        <span class="headline">Change user_type to...</span>
+        <span class="headline">Change type to...</span>
     </v-card-title>
 
     <v-card-text>
@@ -73,7 +73,7 @@
                         <v-select
                         v-model="edited_user.user_type"
                         label="Type"
-                        :items="['Student', 'Admin', 'SuperAdmin']"
+                        :items="createable_type"
                         ></v-select>
                     </v-col>
                 </v-row>
@@ -208,10 +208,16 @@ export default {
     computed: {
         changeable_type() {
             if (this.$store.state.user.user_type.is_superadmin)
-                return ["Student", "Admin"];
+                return ["Student", "Admin", "SuperAdmin"];
             else if (this.$store.state.user.user_type.is_admin)
                 return ["Student"];
         },
+        createable_type() {
+            if (this.$store.state.user.user_type.is_admin)
+                return  ["Student"];
+            else if (this.$store.state.user.user_type.is_superadmin)
+                return ["Student", "Admin", "SuperAdmin"];
+        }
     },
     methods: {
         close_dialog_create() {
@@ -236,26 +242,27 @@ export default {
                 },
                 is_banned: false
             };
-            if (this.edtied_user.user_type == "Student")
+            if (this.edited_user.user_type == "Student")
                 new_user.user_type.is_student = true;
-            else if (this.edtied_user.user_type == "Admin")
+            else if (this.edited_user.user_type == "Admin")
                 new_user.user_type.is_admin = true;
             else if (this.edited_user.user_type == "SuperAdmin")
                 new_user.user_type.is_superadmin = true;
             this.$emit("create-user", new_user);
-            this.dialog = false;
+            this.close_dialog_create();
             this.edited_user = this.default_user;
         },
         change_user_type() {
             let user = this.users[this.selected_user_index];
-            if (this.selected_type == "")
+            if (this.selected_type === "")
+            {
                 return this.close_dialog_change_user_type();
-            this.dialog_change_user_type = false;
-            this.$emit("change-user-user_type",{
+            }
+            this.$emit("change-user-type",{
                 user: user,
                 user_type: this.selected_type
             });
-            this.selected_type = "";
+            this.close_dialog_change_user_type();
         },
         change_user_status(user) {
             this.$emit("change-user-status", user);

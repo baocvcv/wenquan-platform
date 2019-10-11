@@ -24,48 +24,58 @@ export default {
     },
     methods: {
         create_user(user) {
-            console.log("Creating a new user...");
             if (user.user_type.is_student)
             {
                 this.$axios
-                    .post("/accounts/students", user)
+                    .post("/accounts/students/", user)
                     .then(response => {
-                        console.log("Successfully create a new user.");
+                        this.users.push(user);
                     })
                     .catch(error => {
                         console.log(error);
-                    });
+                    })
             }
-            else if (user.uesr_type.is_admin)
+            else if (user.user_type.is_admin)
             {
                 this.$axios
-                    .post("/accounts/admins", user)
+                    .post("/accounts/admins/", user)
                     .then(response => {
-                        console.log("Successfully create a new user.");
+                        this.users.push(user);
                     })
                     .catch(error => {
                         console.log(error);
-                    });
+                    })
             }
-            this.users.push(user);
         },
         change_user_status(user) {
-            user.is_banned = !user.is_banned;
+            let changed_user = user;
+            changed_user.is_banned = !changed_user.is_banned;
             this.$axios
-                .put("accounts/users" + user.id, user)
+                .put("/accounts/users/" + user.id + "/", changed_user)
+                .then(() => {
+                    user = changed_user;
+                })
                 .catch(error => {
                     console.log(error);
                 });
         },
         change_user_type(params) {
+            console.log(params.user_type);
+            let changed_user = params.user;
+            changed_user.user_type.is_student = false;
+            changed_user.user_type.is_admin = false;
+            changed_user.user_type.is_superadmin = false;
             if (params.user_type == "Student")
-                params.user.user_type.is_student = true;
+                changed_user.user_type.is_student = true;
             else if (params.user_type == "Admin")
-                params.user.user_type.is_admin = true;
+                changed_user.user_type.is_admin = true;
             else if (params.user_type == "SuperAdmin")
-                params.user.user_type.is_superadmin = true;
+                changed_user.user_type.is_superadmin = true;
             this.$axios
-                .put("/accounts/users/" + params.user.id, params.user)
+                .put("/accounts/users/" + params.user.id + "/", changed_user)
+                .then(response => {
+                    params.user = changed_user;
+                })
                 .catch(error => {
                     console.log(error);
                 });
@@ -73,7 +83,7 @@ export default {
     },
     mounted: function() {
         this.$axios
-            .get('/accounts/users')
+            .get('/accounts/users/')
             .then(response => {
                 console.log(response);
                 this.users = response.data;
