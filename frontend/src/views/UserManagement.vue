@@ -24,41 +24,34 @@ export default {
     },
     methods: {
         create_user(user) {
-            console.log("Creating a new user...");
             if (user.user_type.is_student)
             {
                 this.$axios
                     .post("/accounts/students", user)
                     .then(response => {
-                        console.log("Successfully create a new user.");
+                        this.users.push(user);
                     })
                     .catch(error => {
                         console.log(error);
                     })
-                    .then(() => {
-                        this.users.push(user);
-                    });
             }
             else if (user.user_type.is_admin)
             {
                 this.$axios
                     .post("/accounts/admins", user)
                     .then(response => {
-                        console.log("Successfully create a new user.");
+                        this.users.push(user);
                     })
                     .catch(error => {
                         console.log(error);
                     })
-                    .then(() => {
-                        this.users.push(user);
-                    });
             }
         },
         change_user_status(user) {
             let changed_user = user;
-            changed_user.is_banned = !changed_usr.is_banned;
+            changed_user.is_banned = !changed_user.is_banned;
             this.$axios
-                .put("accounts/users/" + user.id, user)
+                .put("/accounts/users/" + user.id, user)
                 .then(() => {
                     user = changed_user;
                 })
@@ -71,7 +64,7 @@ export default {
             let changed_user = params.user;
             changed_user.user_type.is_student = false;
             changed_user.user_type.is_admin = false;
-            changed_user.uesr_type.is_superadmin = false;
+            changed_user.user_type.is_superadmin = false;
             if (params.user_type == "Student")
                 changed_user.user_type.is_student = true;
             else if (params.user_type == "Admin")
