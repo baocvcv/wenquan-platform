@@ -36,7 +36,7 @@ export default {
                         console.log(error);
                     });
             }
-            else if (user.uesr_type.is_admin)
+            else if (user.user_type.is_admin)
             {
                 this.$axios
                     .post("/accounts/admins", user)
@@ -58,6 +58,9 @@ export default {
                 });
         },
         change_user_type(params) {
+            params.user.user_type.is_student = false;
+            params.user.user_type.is_admin = false;
+            params.user.uesr_type.is_superadmin = false;
             if (params.user_type == "Student")
                 params.user.user_type.is_student = true;
             else if (params.user_type == "Admin")

@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog_change_user_type" max-width="500px">
     <v-card>
     <v-card-title>
-        <span class="headline">Change user_type to...</span>
+        <span class="headline">Change type to...</span>
     </v-card-title>
 
     <v-card-text>
@@ -236,9 +236,9 @@ export default {
                 },
                 is_banned: false
             };
-            if (this.edtied_user.user_type == "Student")
+            if (this.edited_user.user_type == "Student")
                 new_user.user_type.is_student = true;
-            else if (this.edtied_user.user_type == "Admin")
+            else if (this.edited_user.user_type == "Admin")
                 new_user.user_type.is_admin = true;
             else if (this.edited_user.user_type == "SuperAdmin")
                 new_user.user_type.is_superadmin = true;
@@ -247,6 +247,7 @@ export default {
             this.edited_user = this.default_user;
         },
         change_user_type() {
+            console.log(this.selected_type);
             let user = this.users[this.selected_user_index];
             if (this.selected_type == "")
                 return this.close_dialog_change_user_type();
