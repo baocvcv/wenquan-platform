@@ -53,7 +53,7 @@ export default {
                     type: {
                         is_student: false,
                         is_admin: true,
-                        is_superadmin: false
+                        is_superadmin: true
                     },
                     icon: "mdi-account-supervisor",
                 },
@@ -64,7 +64,7 @@ export default {
                     type: {
                         is_student: false,
                         is_admin: true,
-                        is_superadmin: false
+                        is_superadmin: true
                     },
                     icon: "mdi-bank"
                 },
@@ -114,7 +114,11 @@ export default {
                 let type = null;
                 if ("type" in nav_link)
                     type = nav_link["type"];
-                if (this.user && type && this.user.type != type)
+                if (this.user && type && !(
+                    this.user.type.is_student == type.is_student ||
+                    this.user.type.is_admin == type.is_admin ||
+                    this.user.type.is_superadmin == type.is_superadmin
+                ))
                     flag = false;
                 if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))
                     flag = false;
