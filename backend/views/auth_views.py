@@ -19,7 +19,7 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'username': user.username,
             'password': user.password,
-            'type':{
+            'user_type':{
                 'is_student': user.user_type.is_student,
                 'is_admin': user.user_type.is_admin,
                 'is_superadmin': user.user_type.is_superadmin,
