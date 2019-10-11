@@ -51,18 +51,34 @@ class UserSerializer(serializers.ModelSerializer):
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
         instance.save()
 
-        user_type.is_student = type_data.get(
-            'is_student',
-            user_type.is_student
-        )
-        user_type.is_student = type_data.get(
-            'is_admin',
-            user_type.is_admin
-        )
-        user_type.is_superadmin = type_data.get(
-            'is_superadmin',
-            user_type.is_superadmin
-        )
+        is_student = type_data.get('is_student', user_type.is_student)
+        is_admin = type_data.get('is_admin', user_type.is_admin)
+        is_superadmin = type_data.get('is_superadmin', user_type.is_superadmin)
+        type_sum = is_student + is_admin + is_superadmin
+        if type_sum != 1:
+            return instance
+        if user_type.is_student != is_student:
+            if is_student:
+                Student.objects.create(
+                    user=instance,
+                    school_name='Tsinghua'
+                )
+            else:
+                instance.student.delete()
+        if user_type.is_admin != is_admin:
+            if is_admin:
+                Admin.objects.create(user=instance)
+            else:
+                instance.admin.delete()
+        if user_type.is_superadmin != is_superadmin:
+            if is_superadmin:
+                SuperAdmin.objects.create(user=instance)
+            else:
+                instance.superadmin.delete()
+
+        user_type.is_student = is_student
+        user_type.is_admin = is_admin
+        user_type.is_superadmin = is_superadmin
         user_type.save()
 
         return instance
@@ -70,6 +86,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'password', 'user_type', 'is_banned']
+        read_only_fields = ['id', 'password']
 
 class StudentSerializer(serializers.ModelSerializer):
     """ Serializer for Student model """
@@ -102,7 +119,8 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta """
         model = Student
-        fields = ('id', 'email', 'username', 'password', 'is_banned')
+        fields = ['id', 'email', 'username', 'password', 'is_banned']
+        read_only_fields = ['id', 'password']
 
 class AdminSerializer(serializers.ModelSerializer):
     """ Serializer for Admin model """
@@ -131,7 +149,8 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta """
         model = Admin 
-        fields = ('id', 'email', 'username', 'password', 'is_banned')
+        fields = ['id', 'email', 'username', 'password', 'is_banned']
+        read_only_fields = ['id', 'password']
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     """ Serializer for SuperAdmin model """
@@ -160,4 +179,5 @@ class SuperAdminSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta"""
         model = SuperAdmin 
-        fields = ('id', 'email', 'username', 'password', 'is_banned')
+        fields = ['id', 'email', 'username', 'password', 'is_banned']
+        read_only_fields = ['id', 'password']
