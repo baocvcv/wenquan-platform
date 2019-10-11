@@ -43,14 +43,14 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password', 'user_type']
+        fields = ['id', 'email', 'username', 'password', 'user_type', 'is_banned']
 
 class StudentSerializer(serializers.ModelSerializer):
     """ Serializer for Student model """
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
-    is_banned = serializers.BooleanField(default=False)
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         """ create student """
@@ -83,6 +83,7 @@ class AdminSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         """ create admin """
@@ -104,13 +105,14 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta """
         model = Admin 
-        fields = ('id', 'email', 'username', 'password')
+        fields = ('id', 'email', 'username', 'password', 'is_banned')
 
 class SuperAdminSerializer(serializers.ModelSerializer):
     """ Serializer for SuperAdmin model """
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
+    is_banned = serializers.BooleanField(source='user.is_banned', default=False)
     
     def create(self, validated_data):
         """ create super admin """
@@ -132,4 +134,4 @@ class SuperAdminSerializer(serializers.ModelSerializer):
     class Meta:
         """ meta"""
         model = SuperAdmin 
-        fields = ('id', 'email', 'username', 'password')
+        fields = ('id', 'email', 'username', 'password', 'is_banned')
