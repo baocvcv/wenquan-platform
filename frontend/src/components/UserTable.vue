@@ -205,6 +205,14 @@ export default {
             val || this.close()
         }
     },
+    computed: {
+        changeable_type() {
+            if (this.$store.user.is_superadmin)
+                return ["Student", "Admin"];
+            else if (this.$store.user.is_admin)
+                return ["Student"];
+        },
+    },
     methods: {
         close_dialog_create() {
             this.dialog_create = false;
@@ -265,12 +273,6 @@ export default {
             if (this.$store.state.user.user_type.is_admin && user.user_type.is_student)
                 flag = true;
             return flag;
-        },
-        changeable_type() {
-            if (this.$store.user.is_superadmin)
-                return ["Student", "Admin"];
-            else if (this.$store.user.is_admin)
-                return ["Student"];
         },
         onclick(user) {
             this.selected_user_index = this.users.indexOf(user);
