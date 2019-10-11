@@ -34,6 +34,9 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                    })
+                    .then(() => {
+                        this.users.push(user);
                     });
             }
             else if (user.user_type.is_admin)
@@ -45,9 +48,11 @@ export default {
                     })
                     .catch(error => {
                         console.log(error);
+                    })
+                    .then(() => {
+                        this.users.push(user);
                     });
             }
-            this.users.push(user);
         },
         change_user_status(user) {
             user.is_banned = !user.is_banned;
@@ -58,17 +63,22 @@ export default {
                 });
         },
         change_user_type(params) {
-            params.user.user_type.is_student = false;
-            params.user.user_type.is_admin = false;
-            params.user.uesr_type.is_superadmin = false;
+            console.log(params.user_type);
+            let changed_user = params.user;
+            changed_user.user_type.is_student = false;
+            changed_user.user_type.is_admin = false;
+            changed_user.uesr_type.is_superadmin = false;
             if (params.user_type == "Student")
-                params.user.user_type.is_student = true;
+                changed_user.user_type.is_student = true;
             else if (params.user_type == "Admin")
-                params.user.user_type.is_admin = true;
+                changed_user.user_type.is_admin = true;
             else if (params.user_type == "SuperAdmin")
-                params.user.user_type.is_superadmin = true;
+                changed_user.user_type.is_superadmin = true;
             this.$axios
-                .put("/accounts/users/" + params.user.id, params.user)
+                .put("/accounts/users/" + params.user.id, changed_user)
+                .then(response => {
+                    params.user = changed_user;
+                })
                 .catch(error => {
                     console.log(error);
                 });
