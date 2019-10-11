@@ -2,7 +2,7 @@ class UserFactory {
     constructor() {
         this.id = 0;
     }
-    _createAnonymousUser() {
+    _create_anonymous_user() {
         let user =  {
             username: this.id,
             email: "@example.org",
@@ -18,26 +18,41 @@ class UserFactory {
         this.id++;
         return user;
     }
-    createAnonymousStudent() {
-        let user = this._createAnonymousUser();
+    create_anonymous_student() {
+        let user = this._create_anonymous_user();
         user.username = "Student" + user.username;
         user.email = user.username + user.email;
         user.type.is_student = true;
         return user;
     }
 
-    createAnonymousAdmin() {
-        let user = this._createAnonymousUser();
+    create_anonymous_admin() {
+        let user = this._create_anonymous_user();
         user.username = "Admin" + user.username;
         user.email = user.username + user.email;
         user.type.is_admin = true;
         return user;
     }
 
-    createAnonymousSuperAdmin() {
-        let user = this._createAnonymousUser();
+    create_anonymous_superadmin() {
+        let user = this._create_anonymous_user();
         user.username = "SuperAdmin" + user.username;
         user.email = user.username + user.email;
+        user.type.is_superadmin = true;
+        return user;
+    }
+
+    create_user_admin() {
+        let user = this._create_anonymous_user();
+        user.username = "Admin_signed_in";
+        user.email = "Admin_signed_in" + user.email;
+        user.type.is_admin = true;
+        return user;
+    }
+
+    create_user_superadmin() {
+        let user = this._create_anonymous_user();
+        user.username = "SuperAdmin_signed_in" + user.email;
         user.type.is_superadmin = true;
         return user;
     }
