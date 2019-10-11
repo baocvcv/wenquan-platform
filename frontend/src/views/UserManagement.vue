@@ -27,7 +27,7 @@ export default {
             if (user.user_type.is_student)
             {
                 this.$axios
-                    .post("/accounts/students", user)
+                    .post("/accounts/students/", user)
                     .then(response => {
                         this.users.push(user);
                     })
@@ -38,7 +38,7 @@ export default {
             else if (user.user_type.is_admin)
             {
                 this.$axios
-                    .post("/accounts/admins", user)
+                    .post("/accounts/admins/", user)
                     .then(response => {
                         this.users.push(user);
                     })
@@ -51,7 +51,7 @@ export default {
             let changed_user = user;
             changed_user.is_banned = !changed_user.is_banned;
             this.$axios
-                .put("/accounts/users/" + user.id, user)
+                .put("/accounts/users/" + user.id + "/", changed_user)
                 .then(() => {
                     user = changed_user;
                 })
@@ -72,7 +72,7 @@ export default {
             else if (params.user_type == "SuperAdmin")
                 changed_user.user_type.is_superadmin = true;
             this.$axios
-                .put("/accounts/users/" + params.user.id, changed_user)
+                .put("/accounts/users/" + params.user.id + "/", changed_user)
                 .then(response => {
                     params.user = changed_user;
                 })
@@ -83,7 +83,7 @@ export default {
     },
     mounted: function() {
         this.$axios
-            .get('/accounts/users')
+            .get('/accounts/users/')
             .then(response => {
                 console.log(response);
                 this.users = response.data;
