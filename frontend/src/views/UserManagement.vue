@@ -25,7 +25,7 @@ export default {
     methods: {
         create_user(user) {
             console.log("Creating a new user...");
-            if (user.type.is_student)
+            if (user.user_type.is_student)
             {
                 this.$axios
                     .post("/accounts/students", user)
@@ -36,7 +36,7 @@ export default {
                         console.log(error);
                     });
             }
-            else if (user.type.is_admin)
+            else if (user.uesr_type.is_admin)
             {
                 this.$axios
                     .post("/accounts/admins", user)
@@ -58,12 +58,12 @@ export default {
                 });
         },
         change_user_type(params) {
-            if (params.type == "Student")
-                params.user.type.is_student = true;
-            else if (params.type == "Admin")
-                params.user.type.is_admin = true;
-            else if (params.type == "SuperAdmin")
-                params.user.type.is_superadmin = true;
+            if (params.user_type == "Student")
+                params.user.user_type.is_student = true;
+            else if (params.user_type == "Admin")
+                params.user.user_type.is_admin = true;
+            else if (params.user_type == "SuperAdmin")
+                params.user.user_type.is_superadmin = true;
             this.$axios
                 .put("/accounts/users/" + params.user.id, params.user)
                 .catch(error => {
@@ -84,7 +84,7 @@ export default {
             })
     },
    created() {
-       if (!this.$store.state.user || this.$store.state.user.type.is_student)
+       if (!this.$store.state.user || this.$store.state.user.user_type.is_student)
        {
             console.log("You have no access to this page.");
             this.$router.push("/");

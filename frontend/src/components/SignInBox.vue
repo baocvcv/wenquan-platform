@@ -53,8 +53,9 @@ export default {
 
         var user = {
           username: this.username,
-          password: md5(this.password),
-          type:{
+          password: this.password,
+          //password: md5(this.password),
+          user_type:{
             is_student: false,
             is_admin: false,
             is_superadmin: false
@@ -73,7 +74,7 @@ export default {
             return;
           }
 
-          user.type=response.data.type;
+          user.user_type=response.data.user_type;
 
           this.$store.commit("login", {
             user: user
