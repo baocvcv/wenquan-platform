@@ -50,7 +50,7 @@ export default {
                     name: "User Management",
                     text: "User Management",
                     link: "/admin",
-                    type: {
+                    user_type: {
                         is_student: false,
                         is_admin: true,
                         is_superadmin: true
@@ -61,7 +61,7 @@ export default {
                     name: "Question Banks",
                     text: "Question Banks",
                     link: "/questionbanks",
-                    type: {
+                    user_type: {
                         is_student: false,
                         is_admin: true,
                         is_superadmin: true
@@ -111,13 +111,13 @@ export default {
                     signin_required = nav_link["signin_required"];
                 if (!this.user && signin_required)
                     flag = false;
-                let type = null;
-                if ("type" in nav_link)
-                    type = nav_link["type"];
-                if (this.user && type && !(
-                    this.user.type.is_student == type.is_student ||
-                    this.user.type.is_admin == type.is_admin ||
-                    this.user.type.is_superadmin == type.is_superadmin
+                let user_type = null;
+                if ("user_type" in nav_link)
+                    user_type = nav_link["user_type"];
+                if (this.user && user_type && !(
+                    this.user.user_type.is_student == user_type.is_student ||
+                    this.user.user_type.is_admin == user_type.is_admin ||
+                    this.user.user_type.is_superadmin == user_type.is_superadmin
                 ))
                     flag = false;
                 if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))

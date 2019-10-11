@@ -101,9 +101,10 @@ export default {
     click: function() {
       let that = this; //store this in that so it can be used in callback functions of axios
       axios
-        .post("https://never404-never404.app.secoder.net//api/signup/", {
+        .post("/api/signup/", {
           username: this.user_name,
-          password: md5(this.password),
+          password: this.password,
+          //password: md5(this.password),
           email: this.email
         })
         .then(function(response) {
