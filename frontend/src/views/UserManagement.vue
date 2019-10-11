@@ -52,7 +52,7 @@ export default {
         change_user_status(user) {
             user.is_banned = !user.is_banned;
             this.$axios
-                .put("accounts/users" + params.user.id, params.user)
+                .put("accounts/users" + user.id, user)
                 .catch(error => {
                     console.log(error);
                 });
