@@ -12,7 +12,6 @@ from backend.models.user_base import User
 from backend.models.user_base import Admin
 from backend.models.user_base import SuperAdmin
 from backend.models.user_base import Student
-import hashlib
 
 def createUser(
     username,
@@ -21,18 +20,16 @@ def createUser(
     is_student=True,
     is_admin=False,
     is_superadmin=False):
+    """ create user"""
     user_type = UserType.objects.create(
         is_student=is_student,
         is_admin=is_admin,
         is_superadmin=is_superadmin
     )
-    """ create user"""
-    m = hashlib.md5()
-    m.update(password.encode('utf-8'))
     return User.objects.create_user(
         user_type=user_type,
         username=username,
-        password=m.hexdigest(),
+        password=password,
         email=email,
     )
 

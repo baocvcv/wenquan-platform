@@ -4,6 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 # from backend.models.user_base import User
+
 class CustomAuthToken(ObtainAuthToken):
     """ Custom auth backend"""
     def post(self, request, *args, **kwargs):
@@ -19,11 +20,11 @@ class CustomAuthToken(ObtainAuthToken):
             'username': user.username,
             'password': user.password,
             'type':{
-                'is_student': user.is_student,
-                'is_admin': user.is_admin,
-                'is_superadmin': user.is_superadmin
+                'is_student': user.user_type.is_student,
+                'is_admin': user.user_type.is_admin,
+                'is_superadmin': user.user_type.is_superadmin,
                 }
             }
-        if user.is_student:
+        if user.user_type.is_student:
             data['is_banned'] = user.student.is_banned
         return Response(data)
