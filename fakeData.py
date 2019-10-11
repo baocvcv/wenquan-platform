@@ -19,7 +19,8 @@ def createUser(
     email,
     is_student=True,
     is_admin=False,
-    is_superadmin=False):
+    is_superadmin=False,
+    is_banned=False):
     """ create user"""
     user_type = UserType.objects.create(
         is_student=is_student,
@@ -31,6 +32,7 @@ def createUser(
         username=username,
         password=password,
         email=email,
+        is_banned=is_banned,
     )
 
 
@@ -40,17 +42,21 @@ def createStudent(
     email="cyx@163.com",
     is_banned=False,):
     """ create user"""
-    user = createUser(username, password, email)
+    user = createUser(
+        username,
+        password,
+        email,
+        is_banned=is_banned)
     return Student.objects.create(
         user=user,
-        is_banned=is_banned,
         school_name='Tsinghua'
     )
 
 def createAdmin(
     username="admin",
     password="11111111",
-    email="cyx@163.com",):
+    email="cyx@163.com",
+    is_banned=False,):
     """ create user"""
     user = createUser(
         username,
@@ -58,7 +64,8 @@ def createAdmin(
         email,
         is_student=False,
         is_admin=True,
-        is_superadmin=False)
+        is_superadmin=False,
+        is_banned=is_banned)
     return Admin.objects.create(
         user=user,
     )
@@ -66,7 +73,8 @@ def createAdmin(
 def createSuperAdmin(
     username="admin",
     password="11111111",
-    email="cyx@163.com",):
+    email="cyx@163.com",
+    is_banned=False,):
     """ create user"""
     user = createUser(
         username,
@@ -74,7 +82,8 @@ def createSuperAdmin(
         email,
         is_student=False,
         is_admin=False,
-        is_superadmin=True)
+        is_superadmin=True,
+        is_banned=is_banned)
     return SuperAdmin.objects.create(
         user=user,
     )
