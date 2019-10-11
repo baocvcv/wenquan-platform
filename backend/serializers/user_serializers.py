@@ -33,11 +33,11 @@ class UserSerializer(serializers.ModelSerializer):
         type_data = validated_data.pop('user_type')
         user_type = UserType.objects.create(**type_data)
         user = User(
+            user_type=user_type,
             username=validated_data['username'],
             email=validated_data['email'],
-            user_type=user_type,
         )
-        user.set_password(validated_data['user']['password'])
+        user.set_password(validated_data['password'])
         user.save()
         return user
     
