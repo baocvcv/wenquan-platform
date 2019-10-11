@@ -13,7 +13,7 @@
                 <v-select
                 label="Type"
                 v-model="selected_type"
-                :items="['Student', 'Admin', 'SuperAdmin']"
+                :items="changeable_type"
                 ></v-select>
             </v-col>
         </v-row>
@@ -89,33 +89,43 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.disabled="{ item }">
-        {{ item.disabled ? "Disabled" : "Enabled" }}
+    <template v-slot:item.type="{ item }">
+        {{ item.type.is_student ? "Student" : ""}}
+        {{ item.type.is_admin ? "Admin" : ""}}
+        {{ item.type.is_superadmin ? "SuperAdmin" : ""}}
+    </template>
+    <template v-slot:item.is_banned="{ item }">
+        {{ item.is_banned ? "BANNED" : "NORMAL" }}
     </template>
     <template v-slot:item.action="{ item }">
         <v-icon
         small
         class="mr-2"
+        v-if="able_to_change_user_type(item)"
         v-on:click="onclick(item)"
         >
         mdi-arrow-up
         </v-icon>
-        <v-icon
-        v-if="item.disabled === false"
-        small
-        class="mr-2"
-        @click="disable_user(item)"
+        <div
+        v-if="able_to_change_user_status(item)"
         >
-        mdi-cancel
-        </v-icon>
-        <v-icon
-        v-else
-        small
-        class="mr-2"
-        @click="disable_user(item)"
-        >
-        mdi-restore
-        </v-icon>
+            <v-icon
+            v-if="item.is_banned === false"
+            small
+            class="mr-2"
+            @click="change_user_status(item)"
+            >
+            mdi-cancel
+            </v-icon>
+            <v-icon
+            v-else
+            small
+            class="mr-2"
+            @click="change_user_status(item)"
+            >
+            mdi-restore
+            </v-icon>
+        </div>
     </template>
     </v-data-table>
 </div>
@@ -165,7 +175,7 @@ export default {
                 },
                 {
                     text: "Status",
-                    value: "disabled",
+                    value: "is_banned",
                     align: "center"
                 },
                 {
@@ -211,16 +221,26 @@ export default {
                 username: this.edited_user.username,
                 password: this.edited_user.password,
                 email: this.edited_user.email,
-                type: this.edited_user.type,
-                disabled: false
+                type: {
+                    is_student: true,
+                    is_admin: false,
+                    is_superadmin: false
+                },
+                is_banned: false
             };
+            if (this.edtied_user.type == "Student")
+                new_user.type.is_student = true;
+            else if (this.edtied_user.type == "Admin")
+                new_user.type.is_admin = true;
+            else if (this.edited_user.type == "SuperAdmin")
+                new_user.type.is_superadmin = true;
             this.$emit("create-user", new_user);
             this.dialog = false;
             this.edited_user = this.default_user;
         },
         change_user_type() {
             let user = this.users[this.selected_user_index];
-            if (this.selected_type == "" || this.selected_type == user.type)
+            if (this.selected_type == "")
                 return this.close_dialog_change_user_type();
             this.dialog_change_user_type = false;
             this.$emit("change-user-type",{
@@ -229,8 +249,28 @@ export default {
             });
             this.selected_type = "";
         },
-        disable_user(user) {
-            this.$emit("disable-user", user);
+        change_user_status(user) {
+            this.$emit("change-user-status", user);
+        },
+        able_to_change_user_type(user) {
+            let flag = false;
+            if (this.$store.state.user.type.is_superadmin && !user.type.is_superadmin)
+                flag = true;
+            return flag;
+        },
+        able_to_change_user_status(user) {
+            let flag = false;
+            if (this.$store.state.user.type.is_superadmin && !user.type.is_superadmin)
+                flag = true;
+            if (this.$store.state.user.type.is_admin && user.type.is_student)
+                flag = true;
+            return flag;
+        },
+        changeable_type() {
+            if (this.$store.user.is_superadmin)
+                return ["Student", "Admin"];
+            else if (this.$store.user.is_admin)
+                return ["Student"];
         },
         onclick(user) {
             this.selected_user_index = this.users.indexOf(user);

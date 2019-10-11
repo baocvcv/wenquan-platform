@@ -3,7 +3,7 @@
         <user-table
             :users="users"
             @create-user="create_user"
-            @disable-user="disable_user"
+            @change-user-status="change_user_status"
             @change-user-type="change_user_type"
         ></user-table>
     </div>
@@ -19,38 +19,61 @@ export default {
     },
     data: function() {
         return {
-            users: [
-                {username: "XQ1", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ2", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ3", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ4", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false},
-                {username: "XQ5", last_login_time: "2019-09-29", ip: "192.168.0.1", type: "Admin", email: "example@example.com", disabled: false}
-            ]
+            users: []
         }
     },
     methods: {
         create_user(user) {
             console.log("Creating a new user...");
+            if (user.type.is_student)
+            {
+                this.$axios
+                    .post("/accounts/students", user)
+                    .then(response => {
+                        console.log("Successfully create a new user.");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+            else if (user.type.is_admin)
+            {
+                this.$axios
+                    .post("/accounts/admins", user)
+                    .then(response => {
+                        console.log("Successfully create a new user.");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+            this.users.push(user);
+        },
+        change_user_status(user) {
+            user.is_banned = !user.is_banned;
             this.$axios
-                .post("http://localhost:8000/accounts/students", user)
-                .then(response => {
-                    console.log("Successfully create a new user.");
-                })
+                .put("accounts/users" + params.user.id, params.user)
                 .catch(error => {
                     console.log(error);
                 });
-            this.users.push(user);
-        },
-        disable_user(user) {
-            user.disabled = !user.disabled;
         },
         change_user_type(params) {
-            params.user.type = params.type;
+            if (params.type == "Student")
+                params.user.type.is_student = true;
+            else if (params.type == "Admin")
+                params.user.type.is_admin = true;
+            else if (params.type == "SuperAdmin")
+                params.user.type.is_superadmin = true;
+            this.$axios
+                .put("/accounts/users/" + params.user.id, params.user)
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     mounted: function() {
         this.$axios
-            .get('http://localhost:8000/accounts/students')
+            .get('/accounts/users')
             .then(response => {
                 console.log(response);
                 this.users = response.data;
@@ -61,9 +84,9 @@ export default {
             })
     },
    created() {
-       if (!this.$store.state.user || this.$store.state.user.type != "Admin")
+       if (!this.$store.state.user || this.$store.state.user.type.is_student)
        {
-            console.log("Failed to login as an Admin.");
+            console.log("You have no access to this page.");
             this.$router.push("/");
        }
    }
