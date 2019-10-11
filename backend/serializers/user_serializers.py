@@ -40,6 +40,32 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+    def update(self, instance, validated_data):
+        """ update user """
+        type_data = validated_data.pop('user_type')
+        user_type = instance.user_type
+
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.is_banned = validated_data.get('is_banned', instance.is_banned)
+        instance.save()
+
+        user_type.is_student = type_data.get(
+            'is_student',
+            user_type.is_student
+        )
+        user_type.is_student = type_data.get(
+            'is_admin',
+            user_type.is_admin
+        )
+        user_type.is_superadmin = type_data.get(
+            'is_superadmin',
+            user_type.is_superadmin
+        )
+        user_type.save()
+
+        return instance
     
     class Meta:
         model = User
