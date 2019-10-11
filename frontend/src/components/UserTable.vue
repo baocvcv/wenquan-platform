@@ -249,7 +249,7 @@ export default {
             else if (this.edited_user.user_type == "SuperAdmin")
                 new_user.user_type.is_superadmin = true;
             this.$emit("create-user", new_user);
-            this.dialog = false;
+            this.close_dialog_create();
             this.edited_user = this.default_user;
         },
         change_user_type() {
