@@ -207,9 +207,9 @@ export default {
     },
     computed: {
         changeable_type() {
-            if (this.$store.user.is_superadmin)
+            if (this.$store.user.user_type.is_superadmin)
                 return ["Student", "Admin"];
-            else if (this.$store.user.is_admin)
+            else if (this.$store.user.user_type.is_admin)
                 return ["Student"];
         },
     },
