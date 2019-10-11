@@ -119,4 +119,47 @@ describe("SignUpBox.vue", () => {
       expect(wrapper.contains(".v-btn--disabled")).toBe(true);
     });
   });
+
+  it("Reset btn", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    wrapper.setData({
+      user_name: "test",
+      password: "11111111",
+      re_pswd: "11111111",
+      email: "kxz@qq.com",
+      accept_terms: false
+    });
+    wrapper.vm.$refs.input.validate();
+    const reset_btn = wrapper.findAll("button").at(1);
+    reset_btn.trigger("click");
+    wrapper.vm.$nextTick(() => {
+      expect(!!wrapper.vm.user_name).toBe(false);
+    });
+  });
+
+  it("sign up btn", () => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+    wrapper.setData({
+      user_name: "test",
+      password: "11111111",
+      re_pswd: "11111111",
+      email: "kxz@qq.com",
+      accept_terms: false
+    });
+    wrapper.vm.$refs.input.validate();
+    const signup_btn = wrapper.findAll(".v-btn").at(0);
+    signup_btn.trigger("click");
+    wrapper.vm.$nextTick(() => {
+	  console.log(wrapper.vm.sign_up_result);
+	  expect(!!wrapper.vm.sign_up_result).toBe(true);
+	});
+  });
 });

@@ -75,13 +75,14 @@ export default {
       user_name: "",
       user_name_rules: [
         v => !!v || "user name is required",
-        v => v.length <= 10 || "user name should be within 10 characters"
+        v =>
+          (!!v && v.length <= 10) || "user name should be within 10 characters"
       ],
       password: "",
       show_password: false,
       password_rules: [
         v => !!v || "password is required",
-        v => v.length >= 8 || "at least 8 characters are required"
+        v => (!!v && v.length >= 8) || "at least 8 characters are required"
       ],
       re_pswd: "",
       re_password_rules: [
@@ -95,8 +96,8 @@ export default {
       accept_terms: false,
       //below are parameters of response dialog after sign up info has been submitted
       show_dialog: false,
-      sign_up_result: String,
-      sign_up_response: String
+      sign_up_result: "",
+      sign_up_response: ""
     };
   },
   methods: {
