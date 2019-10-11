@@ -255,8 +255,10 @@ export default {
         change_user_type() {
             let user = this.users[this.selected_user_index];
             if (this.selected_type === "")
+            {
                 return this.close_dialog_change_user_type();
-            this.$emit("change-user-user_type",{
+            }
+            this.$emit("change-user-type",{
                 user: user,
                 user_type: this.selected_type
             });
