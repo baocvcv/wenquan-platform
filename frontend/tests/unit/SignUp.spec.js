@@ -155,6 +155,7 @@ describe("SignUpBox.vue", () => {
       email: "kxz@qq.com",
       accept_terms: true
     });
+	wrapper.element.setAttribute("data-app", true);
     await wrapper.vm.$nextTick();
     wrapper.vm.$refs.input.validate();
     await wrapper.vm.$nextTick();
@@ -181,6 +182,7 @@ describe("SignUpBox.vue", () => {
       email: "kxz@qq.com",
       accept_terms: true
     });
+	wrapper.element.setAttribute("data-app", true);
     await wrapper.vm.$nextTick();
     wrapper.vm.$refs.input.validate();
     await wrapper.vm.$nextTick();
@@ -189,7 +191,7 @@ describe("SignUpBox.vue", () => {
     await wrapper.vm.$nextTick();
     setTimeout(() => {
       expect(wrapper.vm.sign_up_result).toBe("Error");
-      done();
+	  done();
     }, 1000);
   });
 });
