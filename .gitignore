@@ -1,0 +1,36 @@
+# frontend libraries
+/frontend/node_modules
+
+# frontend build files
+/frontend/dist
+
+# database
+# backend/migrations/
+
+# database files
+*.sqlite3
+
+# __pycache__
+__pycache__/
+
+#package-lock.json
+package-lock.json
+
+#log files
+*.log
+
+# Editor directories and files
+.vscode
+
+# OS files
+.DS_Store
+
+docker-compose.yml
+
+#virtualenv
+bin/
+include/
+lib/
+
+#coverage
+.coverage
