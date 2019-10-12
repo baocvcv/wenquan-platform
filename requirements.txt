@@ -1,1 +1,13 @@
-Django==2.2.1
+coverage==4.5.4
+Django==2.2.5
+django-polymorphic==2.1.2
+djangorestframework==3.10.3
+django-cors-headers==3.1.1
+gunicorn==19.9.0
+psycopg2-binary==2.8.3
+pylint==2.3.1
+pylint-django==2.0.11
+pylint-plugin-utils==0.6
+pytest==5.0.1
+pytest-django==3.5.1
+
