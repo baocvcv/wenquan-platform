@@ -62,7 +62,7 @@
                             v-model="edited_user.password" 
                             label="Password"
                             :append-icon="edited_user.password_shown ? 'mdi-eye' : 'mdi-eye_off'"
-                            :type="edited_user.password_shown ? 'text' : 'password' "
+                            :user_type="edited_user.password_shown ? 'text' : 'password' "
                             @click:append="edited_user.password_shown = !edited_user.password_shown"
                         ></v-text-field>
                     </v-col>
@@ -71,9 +71,9 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                         <v-select
-                        v-model="edited_user.type"
+                        v-model="edited_user.user_type"
                         label="Type"
-                        :items="['Student', 'Admin', 'SuperAdmin']"
+                        :items="createable_type"
                         ></v-select>
                     </v-col>
                 </v-row>
@@ -89,10 +89,10 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.type="{ item }">
-        {{ item.type.is_student ? "Student" : ""}}
-        {{ item.type.is_admin ? "Admin" : ""}}
-        {{ item.type.is_superadmin ? "SuperAdmin" : ""}}
+    <template v-slot:item.user_type="{ item }">
+        {{ item.user_type.is_student ? "Student" : ""}}
+        {{ item.user_type.is_admin ? "Admin" : ""}}
+        {{ item.user_type.is_superadmin ? "SuperAdmin" : ""}}
     </template>
     <template v-slot:item.is_banned="{ item }">
         {{ item.is_banned ? "BANNED" : "NORMAL" }}
@@ -164,7 +164,7 @@ export default {
                 },
                 {
                     text: "Type",
-                    value: "type",
+                    value: "user_type",
                     align: "center"
                 },
                 {
@@ -189,20 +189,34 @@ export default {
                 username: "",
                 password: "",
                 email: "",
-                type: "Student",
+                user_type: "Student",
                 password_shown: false
             },
             default_user: {
                 username: "",
                 password: "",
                 email: "",
-                type: "Student"
+                user_type: "Student"
             },
         }   
     },
     watch: {
         dialog (val) {
             val || this.close()
+        }
+    },
+    computed: {
+        changeable_type() {
+            if (this.$store.state.user.user_type.is_superadmin)
+                return ["Student", "Admin", "SuperAdmin"];
+            else if (this.$store.state.user.user_type.is_admin)
+                return ["Student"];
+        },
+        createable_type() {
+            if (this.$store.state.user.user_type.is_admin)
+                return  ["Student"];
+            else if (this.$store.state.user.user_type.is_superadmin)
+                return ["Student", "Admin", "SuperAdmin"];
         }
     },
     methods: {
@@ -221,56 +235,51 @@ export default {
                 username: this.edited_user.username,
                 password: this.edited_user.password,
                 email: this.edited_user.email,
-                type: {
+                user_type: {
                     is_student: true,
                     is_admin: false,
                     is_superadmin: false
                 },
                 is_banned: false
             };
-            if (this.edtied_user.type == "Student")
-                new_user.type.is_student = true;
-            else if (this.edtied_user.type == "Admin")
-                new_user.type.is_admin = true;
-            else if (this.edited_user.type == "SuperAdmin")
-                new_user.type.is_superadmin = true;
+            if (this.edited_user.user_type == "Student")
+                new_user.user_type.is_student = true;
+            else if (this.edited_user.user_type == "Admin")
+                new_user.user_type.is_admin = true;
+            else if (this.edited_user.user_type == "SuperAdmin")
+                new_user.user_type.is_superadmin = true;
             this.$emit("create-user", new_user);
-            this.dialog = false;
+            this.close_dialog_create();
             this.edited_user = this.default_user;
         },
         change_user_type() {
             let user = this.users[this.selected_user_index];
-            if (this.selected_type == "")
+            if (this.selected_type === "")
+            {
                 return this.close_dialog_change_user_type();
-            this.dialog_change_user_type = false;
+            }
             this.$emit("change-user-type",{
                 user: user,
-                type: this.selected_type
+                user_type: this.selected_type
             });
-            this.selected_type = "";
+            this.close_dialog_change_user_type();
         },
         change_user_status(user) {
             this.$emit("change-user-status", user);
         },
         able_to_change_user_type(user) {
             let flag = false;
-            if (this.$store.state.user.type.is_superadmin && !user.type.is_superadmin)
+            if (this.$store.state.user.user_type.is_superadmin && !user.user_type.is_superadmin)
                 flag = true;
             return flag;
         },
         able_to_change_user_status(user) {
             let flag = false;
-            if (this.$store.state.user.type.is_superadmin && !user.type.is_superadmin)
+            if (this.$store.state.user.user_type.is_superadmin && !user.user_type.is_superadmin)
                 flag = true;
-            if (this.$store.state.user.type.is_admin && user.type.is_student)
+            if (this.$store.state.user.user_type.is_admin && user.user_type.is_student)
                 flag = true;
             return flag;
-        },
-        changeable_type() {
-            if (this.$store.user.is_superadmin)
-                return ["Student", "Admin"];
-            else if (this.$store.user.is_admin)
-                return ["Student"];
         },
         onclick(user) {
             this.selected_user_index = this.users.indexOf(user);
