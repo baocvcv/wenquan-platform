@@ -4,6 +4,8 @@ import SignIn from "@/views/SignIn.vue";
 import Vuetify from "vuetify";
 import Vuex from "vuex";
 import Vue from "vue";
+import "./mock/SignInMock.js";
+import bus from "../../src/components/EventBus";
 
 const localVue = createLocalVue();
 Vue.use(Vuetify);
@@ -40,6 +42,26 @@ describe("SignInBox.vue", () => {
         });
         wrapper.vm.$nextTick(() => {
             expect(wrapper.contains(".v-btn--disabled")).toBe(true);
+        });
+    });
+
+    it("Try login", async done => {
+        const wrapper=mount(SignInBox, {
+            localVue,
+            vuetify,
+            Vuex,
+            sync: false
+        });
+        wrapper.setData({
+            username: "testusr",
+            password: "testpsw"
+        });
+        await wrapper.vm.$nextTick();
+        wrapper.find("button").trigger("click");
+        await wrapper.vm.$nextTick();
+        bus.$on("error",() => {
+            console.log(wrapper.vm.sign_in_response);
+            done();
         });
     });
 });

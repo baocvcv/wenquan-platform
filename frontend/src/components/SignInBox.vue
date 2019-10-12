@@ -33,6 +33,7 @@
 <script>
 import md5 from "js-md5";
 import axios from "axios";
+import bus from "./EventBus.js";
 
 export default {
   name: "sign-in",
@@ -75,6 +76,7 @@ export default {
           }
 
           user.user_type=response.data.user_type;
+          bus.$emit("error");
 
           this.$store.commit("login", {
             user: user
@@ -87,6 +89,7 @@ export default {
           this.sign_in_result = "Error";
           this.sign_in_response = response;
           this.show_dialog=true;
+          bus.$emit("error");
         }).then(() => {
 
         });
