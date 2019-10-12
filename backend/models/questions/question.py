@@ -1,5 +1,5 @@
 """This code define the BASE model of question """
-from enum import Enum
+from enum import IntEnum
 from django.db import models
 from polymorphic.models import PolymorphicModel
 
@@ -20,7 +20,7 @@ class Question(PolymorphicModel):
         question_level: the level of difficulty
         question_change_time: the time of last change
     """
-    Type = Enum(
+    Type = IntEnum(
         'Type',
         (
             'single_choice',  # single choice question
