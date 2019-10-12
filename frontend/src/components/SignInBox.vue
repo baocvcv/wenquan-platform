@@ -48,9 +48,7 @@ export default {
   },
   methods: {
     click: function() {
-      var cur_user=this.$store.state.user;
-      if(!cur_user)
-        cur_user=sessionStorage.getItem("user");
+      var cur_user=sessionStorage.getItem("user");
       if(!cur_user){
 
         var user = {
