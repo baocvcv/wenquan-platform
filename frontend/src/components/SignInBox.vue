@@ -14,7 +14,7 @@
           v-on:click:append="show_password=!show_password"></v-text-field>
         <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
     </v-form>
-    <v-dialog v-model="show_dialog" max-width="300">
+    <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
         <v-toolbar color="indigo" dark>
           <v-toolbar-title>{{ sign_in_result }}</v-toolbar-title>
@@ -33,7 +33,6 @@
 <script>
 import md5 from "js-md5";
 import axios from "axios";
-import bus from "./EventBus.js";
 
 export default {
   name: "sign-in",
@@ -49,7 +48,9 @@ export default {
   },
   methods: {
     click: function() {
-      var cur_user=sessionStorage.getItem("user");
+      var cur_user=this.$store.state.user;
+      if(!cur_user)
+        cur_user=sessionStorage.getItem("user");
       if(!cur_user){
 
         var user = {
@@ -69,27 +70,28 @@ export default {
           //Sign in successfully
 
           if(response.data.is_banned){
-            this.sign_in_result="Error!";
+            this.sign_in_result="Error";
             this.sign_in_response="You are banned! Please contact your administrator."
             this.show_dialog=true;
             return;
           }
 
           user.user_type=response.data.user_type;
-          bus.$emit("error");
 
           this.$store.commit("login", {
             user: user
           });
 
+          this.sign_in_result="Success";
+
           console.log(response);
 
-          this.$router.push("/");
+          this.$router.push("/").catch(err => {});
         }).catch((response) => {
+          console.log("Error");
           this.sign_in_result = "Error";
           this.sign_in_response = response;
           this.show_dialog=true;
-          bus.$emit("error");
         }).then(() => {
 
         });
