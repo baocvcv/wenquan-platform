@@ -13,7 +13,7 @@ class ChoiceQ(Question):
         question_solution: the specific solution of the question
     """
     question_content = models.CharField(max_length=MAX_CONTENT)
-    question_image = ArrayField(ArrayField(models.URLField(max_length=MAX_URL)))
+    question_image = ArrayField(models.URLField(max_length=MAX_URL))
     question_choice = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_solution = models.CharField(max_length=MAX_CONTENT)
 
