@@ -65,6 +65,7 @@
 
 <script>
 import md5 from "js-md5";
+import bus from "./EventBus";
 const axios = require("axios");
 
 export default {
@@ -104,7 +105,7 @@ export default {
     click: function() {
       let that = this; //store this in that so it can be used in callback functions of axios
       axios
-        .post("https://never404-never404.app.secoder.net//api/signup/", {
+        .post("/api/signup/", {
           username: this.user_name,
           password: md5(this.password),
           email: this.email
@@ -121,6 +122,7 @@ export default {
           that.sign_up_response = "Sign up failed! " + error;
         })
         .then(function() {
+		  bus.$emit("ok");
           that.show_dialog = true;
         });
     },
