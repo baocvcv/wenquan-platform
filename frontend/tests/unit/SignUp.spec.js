@@ -3,9 +3,7 @@ import SignUpBox from "@/components/SignUpBox.vue";
 import SignUp from "@/views/SignUp.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import axios from "axios";
 import "./mock/SignUpMock";
-import bus from "../../src/components/EventBus";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 
@@ -143,36 +141,55 @@ describe("SignUpBox.vue", () => {
     });
   });
 
-  it("sign up btn", async (done) => {
-    
-	const wrapper = mount(SignUpBox, {
+  it("sign up success", async done => {
+    const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
       sync: false,
+      attachToDocument: true
     });
     wrapper.setData({
       user_name: "test",
       password: "11111111",
       re_pswd: "11111111",
       email: "kxz@qq.com",
-      accept_terms: true,
+      accept_terms: true
     });
-	await wrapper.vm.$nextTick();
-	wrapper.vm.$refs.input.validate();
-	await wrapper.vm.$nextTick();
-	const signup_btn = wrapper.findAll(".v-btn").at(0);
-	signup_btn.trigger("click");
-	wrapper.vm.sign_up_result = "Success";
-	wrapper.vm.sign_up_response = "hha";
-	await wrapper.vm.$nextTick();
-	setTimeout(()=>{},10000);	
-	bus.$on("ok",() => {
-	  
-	  console.log(wrapper.vm.show_dialog);
-	  console.log(wrapper.vm.sign_up_response);
-	  
-	  expect(!!wrapper.vm.sign_up_result).toBe(true);
-	  done();
-	});
+    await wrapper.vm.$nextTick();
+    wrapper.vm.$refs.input.validate();
+    await wrapper.vm.$nextTick();
+    const signup_btn = wrapper.findAll(".v-btn").at(0);
+    signup_btn.trigger("click");
+    await wrapper.vm.$nextTick();
+    setTimeout(() => {
+      expect(wrapper.vm.sign_up_result).toBe("Success");
+      done();
+    }, 1000);
+  });
+
+  it("sign up failed", async done => {
+    const wrapper = mount(SignUpBox, {
+      vuetify,
+      localVue,
+      sync: false,
+      attachToDocument: true
+    });
+    wrapper.setData({
+      user_name: "fail",
+      password: "11111111",
+      re_pswd: "11111111",
+      email: "kxz@qq.com",
+      accept_terms: true
+    });
+    await wrapper.vm.$nextTick();
+    wrapper.vm.$refs.input.validate();
+    await wrapper.vm.$nextTick();
+    const signup_btn = wrapper.findAll(".v-btn").at(0);
+    signup_btn.trigger("click");
+    await wrapper.vm.$nextTick();
+    setTimeout(() => {
+      expect(wrapper.vm.sign_up_result).toBe("Error");
+      done();
+    }, 1000);
   });
 });

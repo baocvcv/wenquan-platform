@@ -47,7 +47,7 @@
 
       <v-btn color="error" class="mr-4" @click="reset_input">Reset</v-btn>
     </v-form>
-    <v-dialog v-model="show_dialog" max-width="300">
+    <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
         <v-toolbar color="indigo" dark>
           <v-toolbar-title>{{ sign_up_result }}</v-toolbar-title>
