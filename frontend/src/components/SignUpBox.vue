@@ -47,7 +47,7 @@
 
       <v-btn color="error" class="mr-4" @click="reset_input">Reset</v-btn>
     </v-form>
-    <v-dialog v-model="show_dialog" max-width="300">
+    <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
         <v-toolbar color="indigo" dark>
           <v-toolbar-title>{{ sign_up_result }}</v-toolbar-title>
@@ -65,6 +65,7 @@
 
 <script>
 import md5 from "js-md5";
+import bus from "./EventBus";
 const axios = require("axios");
 
 export default {
@@ -122,6 +123,7 @@ export default {
           that.sign_up_response = "Sign up failed! " + error;
         })
         .then(function() {
+		  bus.$emit("ok");
           that.show_dialog = true;
         });
     },
