@@ -41,6 +41,11 @@ export default new Router({
       path: "/questionbanks",
       name: "question-banks",
       component: () => import("./views/QuestionBanks.vue")
+    },
+    {
+      path: "/questionbank",
+      name: "question-bank",
+      component: () => import("./views/QuestionBank.vue")
     }
   ]
 });

@@ -1,11 +1,13 @@
 <template>
     <div class="tree-view">
-        <tree
-        :data="treeData"
-        :onDrag="onTreeDataChange"
-        :fixed="true"
-        :height="300"
-        :isdraggable="true"></tree>
+        <v-container>
+            <tree
+            :data="treeData"
+            :onDrag="onTreeDataChange"
+            :fixed="true"
+            :height="300"
+            :isdraggable="true"></tree>
+        </v-container>
     </div>
 </template>
 
