@@ -94,6 +94,7 @@ class StudentSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email')
     password = serializers.CharField(source='user.password')
     is_banned = serializers.BooleanField(source='user.is_banned', default=False)
+    school_name = serializers.CharField(required=False)
     
     def create(self, validated_data):
         """ create student """
@@ -116,10 +117,24 @@ class StudentSerializer(serializers.ModelSerializer):
         )
         student.save()
         return student
+
+    def update(self, instance, validated_data):
+        """ update student """
+        user_data = validated_data.pop('user')
+        user = instance.user
+        # update user
+        user.username = user_data.get('username', user.username)
+        user.email = user_data.get('email', user.email)
+        user.is_banned = user_data.get('is_banned', user.is_banned)
+        user.save()
+        # update student
+        instance.school_name = validated_data.get('school_name', instance.school_name)
+        instance.save()
+        return instance
     class Meta:
         """ meta """
         model = Student
-        fields = ['id', 'email', 'username', 'password', 'is_banned']
+        fields = ['id', 'email', 'username', 'password', 'is_banned', 'school_name']
         read_only_fields = ['id', 'password']
 
 class AdminSerializer(serializers.ModelSerializer):
@@ -146,6 +161,20 @@ class AdminSerializer(serializers.ModelSerializer):
         admin = Admin(user=user)
         admin.save()
         return admin 
+
+    def update(self, instance, validated_data):
+        """ update student """
+        user_data = validated_data.pop('user')
+        user = instance.user
+        # update user
+        user.username = user_data.get('username', user.username)
+        user.email = user_data.get('email', user.email)
+        user.is_banned = user_data.get('is_banned', user.is_banned)
+        user.save()
+        # update admin
+        instance.save()
+        return instance
+
     class Meta:
         """ meta """
         model = Admin 
@@ -176,6 +205,20 @@ class SuperAdminSerializer(serializers.ModelSerializer):
         superadmin = SuperAdmin(user=user)
         superadmin.save()
         return superadmin 
+
+    def update(self, instance, validated_data):
+        """ update student """
+        user_data = validated_data.pop('user')
+        user = instance.user
+        # update user
+        user.username = user_data.get('username', user.username)
+        user.email = user_data.get('email', user.email)
+        user.is_banned = user_data.get('is_banned', user.is_banned)
+        user.save()
+        # update superadmin
+        instance.save()
+        return instance
+
     class Meta:
         """ meta"""
         model = SuperAdmin 
