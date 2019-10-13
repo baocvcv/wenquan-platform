@@ -1,3 +1,4 @@
+"""import all models here to make questions package"""
 from .question import Question
 from .choice_question import ChoiceQ
 from .choice_question import SingleChoiceQ
