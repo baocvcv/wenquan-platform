@@ -2,6 +2,7 @@
 from enum import IntEnum
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from .question_group import QuestionGroup
 
 MAX_ID = 20
 MAX_URL = 200
@@ -14,6 +15,7 @@ class Question(PolymorphicModel):
     only identity infomation, NOT specific infomation of question
 
     Attributes:
+        history_version: QuestionGroup record a question's change history
         question_id: each question has a unique id
         question_name: names of the questions
         qustion_type: there are 5 type, more info in enum Type
@@ -29,6 +31,7 @@ class Question(PolymorphicModel):
             'fill_blank',  # fill the blank question
             'q_and_a',  # short answer question
         ))
+    history_version = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_id = models.CharField(max_length=MAX_ID)
     question_name = models.CharField(max_length=MAX_NAME)
     question_type = models.IntegerField()
