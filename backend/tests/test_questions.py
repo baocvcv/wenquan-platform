@@ -8,7 +8,7 @@ from backend.models.questions.fill_blank_q import FillBlankQ
 # from backend.models.questions.true_or_false_q import TrueOrFalseQ
 # from backend.models.questions.brief_answer_q import BriefAnswerQ
 
-NOW = datetime.datetime.NOW(tz=timezone.utc)
+NOW = datetime.datetime.now(tz=timezone.utc)
 
 
 class QuestionTest(TestCase):
