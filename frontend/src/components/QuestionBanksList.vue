@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "question-banks-list",
   props: {
     question_banks: {}
   },
