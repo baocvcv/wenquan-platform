@@ -9,6 +9,32 @@
     </div>
 </template>
 
+<style>
+.tree-row:before{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: #eeeeee;
+    border-radius: 10%;
+    transform: scaleX(0);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition:transform 0.3s ease-out;
+}
+.tree-row:hover:before{
+    transform: scaleX(2);
+}
+.tree-row{
+    transform: perspective(1px) translateZ(0);
+    overflow: hidden;
+}
+.tree-row:hover{
+    background: none !important;
+}
+</style>
+
 <script>
 import tree from "drag-tree-table"
 //https://github.com/mafengwo/vue-drag-tree-table
@@ -28,7 +54,7 @@ export default {
                         width: 200,
                         align: 'center',
                         formatter: (item) => {
-                            return '<a>'+item.name+'</a>'
+                            return item.name
                         }
                     },
                     {
