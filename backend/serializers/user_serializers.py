@@ -4,50 +4,68 @@ from rest_framework.validators import UniqueValidator
 
 from backend.models import User
 from backend.models import UserPermissions
+from backend.models import Profile
 
 class UserPermissionsSerializer(serializers.ModelSerializer):
     """ Serializer for usertype """
-    is_student = serializers.BooleanField(default=True)
-    is_admin = serializers.BooleanField(default=False)
-    is_superadmin = serializers.BooleanField(default=False)
-    can_view_students = serializers.BooleanField(default=False)
-    can_edit_students = serializers.BooleanField(default=False)
-    can_view_admins = serializers.BooleanField(default=False)
-    can_edit_admins = serializers.BooleanField(default=False)
-
     class Meta:
         model = UserPermissions
-        fields = ['is_student', 'is_admin', 'is_superadmin',
-                  'can_view_students', 'can_edit_students',
-                  'can_view_admins', 'can_edit_admins',]
+        # fields = ['edit_students', 'view_students', 'create_students', 'ban_students',
+        #           'promote_students', 'view_admins', 'create_admins', 'edit_admins',
+        #           'ban_admins', ]
+        exclude = ['group_name']
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """ Serializer for user profile """
+    class Meta:
+        model = Profile
+        fields = ['school_name']
 
 class UserSerializer(serializers.ModelSerializer):
     """ Serializer for User model """
-    user_permissions = UserPermissionsSerializer(
-        # default={
-        #     'is_student':True,
-        #     'is_admin': False,
-        #     'is_superadmin': False,
-        # }
-    )
+    user_permissions = UserPermissionsSerializer(read_only=True)
+    profile = ProfileSerializer(required=False)
 
     def create(self, validated_data):
         """ create user """
-        type_data = validated_data.pop('user_permissions')
-        user_type = UserPermissions.objects.create(**type_data)
+        user_group = validated_data['user_group']
+        user_permissions = UserPermissions.objects.get(group_name=user_group)
+        profile = Profile.objects.create()
         user = User(
             username=validated_data['username'],
             email=validated_data['email'],
-            user_type=user_type,
+            user_group=user_group,
+            profile=profile,
         )
-        user.set_password(validated_data['user']['password'])
+        user.set_password(validated_data['password'])
         user.save()
         return user
+
+    def update(self, instance, validated_data):
+        """ update user """
+        user_group = validated_data['user_group']
+        if user_group != instance.user_group:
+            instance.user_group = user_group
+            permissions = UserPermissions.objects.get(group_name=user_group)
+            instance.user_permissions = permissions
+
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.is_banned = validated_data.get('is_banned', instance.is_banned)
+        instance.save()
+
+        profile_data = validated_data.pop('profile')
+        profile = instance.profile
+        profile.update(**profile_data)
+
+        return instance
     
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password', 'user_permissions']
-        read_only_fields = ['password']
+        fields = ['id', 'email', 'username', 'password',
+                  'last_login_time', 'last_login_ip', 'is_banned',
+                  'user_type', 'user_permissions', 'profile']
+        read_only_fields = ['password', 'last_login_time', 'last_login_ip']
 
 # class StudentSerializer(serializers.ModelSerializer):
 #     """ Serializer for Student model """

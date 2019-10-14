@@ -15,22 +15,26 @@ for group in groups:
     group.delete()
 
 UserPermissions.objects.create(
-    group_name="ST",
-    is_student=True,
+    group_name="Student",
 )
 
 UserPermissions.objects.create(
-    group_name="AD",
-    is_admin=True,
-    can_view_students=True,
-    can_edit_students=True,
+    group_name="Admin",
+    view_students=True,
+    create_students=True,
+    edit_students=True,
+    ban_students=True,
 )
 
 UserPermissions.objects.create(
-    group_name="SA",
-    is_superadmin=True,
-    can_view_students=True,
-    can_edit_students=True,
-    can_view_admins=True,
-    can_edit_admins=True,
+    group_name="SuperAdmin",
+    view_students=True,
+    create_students=True,
+    edit_students=True,
+    ban_students=True,
+    promote_students=True,
+    view_admins=True,
+    create_admins=True,
+    edit_admins=True,
+    ban_admins=True,
 )

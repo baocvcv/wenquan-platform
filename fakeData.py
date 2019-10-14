@@ -29,6 +29,7 @@ def createUser(
         user_group=user_group,
         user_permissions=permission,
         profile=profile,
+        is_banned=is_banned,
     )
     return user
 
