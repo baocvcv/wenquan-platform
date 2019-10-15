@@ -35,5 +35,5 @@ class Question(PolymorphicModel):
     question_id = models.CharField(max_length=MAX_ID)
     question_name = models.CharField(max_length=MAX_NAME)
     question_type = models.IntegerField()
-    question_level = models.FloatField()
+    question_level = models.FloatField(default=0)
     question_change_time = models.DateTimeField()

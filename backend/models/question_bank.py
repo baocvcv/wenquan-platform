@@ -4,16 +4,9 @@ from polymorphic.models import PolymorphicModel
 
 from .knowledge_node import KnowledgeNode
 from .questions.question import Question
-from .questions.brief_answer_q import BriefAnswerQ
-from .questions.choice_question import SingleChoiceQ, MultpChoiceQ
-from .questions.fill_blank_q import FillBlankQ
 
 MAX_ID = 20
 MAX_NAME = 200
-BriefAnswerQ()
-SingleChoiceQ()
-MultpChoiceQ()
-FillBlankQ()
 
 
 class QuestionBanks(PolymorphicModel):

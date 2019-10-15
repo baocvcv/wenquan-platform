@@ -11,5 +11,4 @@ class QuestionGroup(PolymorphicModel):
         group_id: the identity of a QuestionGroup
         current_version: the latest version of this list of questions
     '''
-    group_id = models.IntegerField()
     current_version = models.DateTimeField()
