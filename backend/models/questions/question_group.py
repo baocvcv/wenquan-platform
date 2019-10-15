@@ -1,6 +1,7 @@
 '''code for QuestionGroup'''
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from backend.models import KnowledgeNode
 
 
 class QuestionGroup(PolymorphicModel):
@@ -12,3 +13,4 @@ class QuestionGroup(PolymorphicModel):
         current_version: the latest version of this list of questions
     '''
     current_version = models.DateTimeField()
+    parents_node = models.ManyToManyField(KnowledgeNode)
