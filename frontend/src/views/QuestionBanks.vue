@@ -18,6 +18,7 @@
         <v-tab-item>
           <question-banks-list
             :question_banks="question_banks"
+            read_only="true"
           ></question-banks-list>
         </v-tab-item>
         <v-tab-item>
