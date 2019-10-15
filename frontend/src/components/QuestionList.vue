@@ -3,7 +3,7 @@
         <v-card app>
             <v-card-title>Question List</v-card-title>
             <v-app-bar flat clipped-left>
-                <v-app-bar-nav-icon v-if="!$vuetify.breakpoint.lgAndUp" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <div class="flex-grow-1"></div>
                     <v-menu open-on-hover top offset-y>
                         <template v-slot:activator="{ on }">
@@ -25,14 +25,26 @@
                     >Create</v-btn>
             </v-app-bar>
             <v-card-text>
-                <v-sheet height="500px">
-                    <v-navigation-drawer
-                        v-model="drawer"
-                        overflow
-                    >
+                <v-row>
+                    <v-col
+                        v-show="drawer" 
+                        cols="12"
+                        md="4"
+                        sm="6"
+                        >
                         <tree-view></tree-view>
-                    </v-navigation-drawer>
-                </v-sheet>
+                    </v-col>
+                    <v-col
+                        :cols="drawer ? 6 : 12"
+                        :md="drawer ? 8 : 12"
+                        :xs="12"
+                    >
+                        <v-card>
+                            <v-card-title>This is a Title</v-card-title>
+                            <v-card-text>This is the text.</v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
     </div>
@@ -50,7 +62,11 @@ export default {
         "tree-view": tree_view
     },
     data: () => ({
-        drawer: null
-    })
+        drawer: null,
+        question_list: []
+    }),
+    mounted() {
+        question_list.push();
+    }
 }
 </script>
