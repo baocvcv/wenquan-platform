@@ -25,17 +25,24 @@ class UserSerializer(serializers.ModelSerializer):
     """ Serializer for User model """
     user_permissions = UserPermissionsSerializer(read_only=True)
     profile = ProfileSerializer(required=False)
+    is_banned = serializers.BooleanField(default=False)
 
     def create(self, validated_data):
         """ create user """
         user_group = validated_data['user_group']
         user_permissions = UserPermissions.objects.get(group_name=user_group)
-        profile = Profile.objects.create()
+        
+        if 'profile' in validated_data:
+            profile_data = validated_data.pop('profile')
+            profile = Profile.objects.create(**profile_data)
+        else:
+            profile = Profile.objects.create()
         user = User(
             username=validated_data['username'],
             email=validated_data['email'],
             user_group=user_group,
             profile=profile,
+            user_permissions=user_permissions,
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -56,7 +63,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         profile_data = validated_data.pop('profile')
         profile = instance.profile
-        profile.update(**profile_data)
+        profile_serializer = ProfileSerializer(data=profile_data)
+        profile_serializer.update(profile, profile_data)
+        # profile.update(**profile_data)
 
         return instance
     
@@ -64,8 +73,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'username', 'password',
                   'last_login_time', 'last_login_ip', 'is_banned',
-                  'user_type', 'user_permissions', 'profile']
-        read_only_fields = ['password', 'last_login_time', 'last_login_ip']
+                  'user_group', 'user_permissions', 'profile']
+        read_only_fields = ['last_login_time', 'last_login_ip']
 
 # class StudentSerializer(serializers.ModelSerializer):
 #     """ Serializer for Student model """

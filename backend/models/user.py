@@ -28,7 +28,7 @@ class User(AbstractUser):
 
     is_banned = models.BooleanField(default=False)
 
-    user_permissions = models.ForeignKey(UserPermissions, on_delete=models.CASCADE)
+    user_permissions = models.ForeignKey('UserPermissions', on_delete=models.CASCADE)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
