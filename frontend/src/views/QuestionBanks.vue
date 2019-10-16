@@ -10,7 +10,7 @@
           <v-icon>mdi-book-open</v-icon>
           Browse
         </v-tab>
-        <v-tab align="left">
+        <v-tab align="left" :disabled="read_only">
           <v-icon>mdi-folder-plus</v-icon>
           Create
         </v-tab>
@@ -18,6 +18,7 @@
         <v-tab-item>
           <question-banks-list
             :question_banks="question_banks"
+            :read_only="read_only"
           ></question-banks-list>
         </v-tab-item>
         <v-tab-item>
@@ -36,6 +37,7 @@ export default {
   name: "",
   data: function() {
     return {
+	  read_only: false,
       question_banks: [
         {name: "kxz1", id: "1", icon: "mdi-library", brief: "hahahahha", details: {questions: "100", difficulty: "5", content: "this is all bullshit"}},
         {name: "kxz2", id: "2", icon: "mdi-folder", brief: "hohohoho", details: {questions: "1", difficulty: "4", content: "get out"}},

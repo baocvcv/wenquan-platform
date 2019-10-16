@@ -7,15 +7,48 @@
       </v-toolbar>
       <v-card-text>
         <v-form ref="form" v-model="valid">
-          <v-text-field
-            v-model="name"
-            :rules="name_rules"
-            hint="The name of the question bank"
-            label="Name"
-            outlined
-            required
-          ></v-text-field>
-          <br />
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="name"
+                :rules="name_rules"
+                hint="The name of the question bank"
+                label="Name"
+                outlined
+                required
+              ></v-text-field>
+              <br />
+              <v-select
+                :items="authorities"
+                label="Authorities"
+                outlined
+              ></v-select>
+              <v-file-input
+                label="Avatar"
+                chips
+                @change="preview_image($event)"
+                accept="image/png image/jpg image/jpeg image/bmp"
+                placeholder="Pick an avatar (optional)"
+                prepend-icon="mdi-camera"
+              >
+              </v-file-input>
+            </v-col>
+            <v-col>
+              <v-card>
+                <v-toolbar>
+                  <v-toolbar-title>Avatar preview</v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                  <v-img
+                    width="230px"
+                    min-aspect-ratio="1"
+                    :src="image ? image : none_preview"
+                  ></v-img>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+
           <v-textarea
             v-model="brief"
             :rules="brief_rules"
@@ -26,12 +59,6 @@
             outlined
             required
           ></v-textarea>
-          <br />
-          <v-select
-            :items="authorities"
-            label="Authorities"
-            outlined
-          ></v-select>
 
           <v-btn color="success" :disabled="!valid" class="mr-4" @click="create"
             >Create</v-btn
@@ -61,7 +88,10 @@ export default {
         v => !!v || "brief introduction is required",
         v => v.length <= 200 || "Max 200 characters!"
       ],
-      authorities: ["private", "public"]
+      authorities: ["private", "public"],
+      image: undefined,
+      none_preview:
+        "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="
     };
   },
   methods: {
@@ -70,6 +100,19 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+    //deal with image input
+    preview_image(event) {
+      var file = event;
+      let that = this;
+      let reader = new FileReader();
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+
+      reader.onload = function() {
+        that.image = this.result;
+      };
     }
   }
 };
