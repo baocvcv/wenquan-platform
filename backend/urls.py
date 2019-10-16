@@ -12,5 +12,5 @@ urlpatterns = [
     path(r'api/jwt-auth/', views.auth_views.CustomAuthToken.as_view(), name='account-auth'),
     path(r'jwt-auth2/', auth_views.obtain_auth_token),
     path(r'api/accounts/users/', views.UserList.as_view(), name='user-list'),
-    path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view, name='user-detail'),
+    path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
 ]
