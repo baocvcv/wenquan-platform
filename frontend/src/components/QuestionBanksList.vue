@@ -30,6 +30,7 @@
         </v-list-item-action>
 
         <v-list-item-action
+          v-bind:style="read_only ? 'display:none' : ''"
           @click.stop="
             show_del_dialog = true;
             cur_qst_bank = qst_bank;
@@ -117,7 +118,8 @@ import axios from "axios";
 export default {
   name: "question-banks-list",
   props: {
-    question_banks: {}
+    question_banks: {},
+    read_only: Boolean(true)
   },
   data: function() {
     return {
