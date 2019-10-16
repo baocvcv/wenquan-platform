@@ -16,6 +16,6 @@ class KnowledgeNode(PolymorphicModel):
         questions: children question of node
     """
     node_id = models.CharField(max_length=MAX_ID)
-    question_bank = models.ForeignKey(QuestionBanks)
+    question_bank = models.ForeignKey(QuestionBanks, on_delete=models.CASCADE)
     name = models.CharField(max_length=MAX_NAME)
     subnodes = models.ManyToManyField("self", symmetrical=False)

@@ -1,7 +1,9 @@
 '''code for QuestionGroup'''
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from backend.models import KnowledgeNode
+
+from backend.models.knowledge_node import KnowledgeNode
+from backend.models.question_bank import QuestionBanks
 
 
 class QuestionGroup(PolymorphicModel):
@@ -14,3 +16,4 @@ class QuestionGroup(PolymorphicModel):
     '''
     current_version = models.DateTimeField()
     parents_node = models.ManyToManyField(KnowledgeNode)
+    belong_bank = models.ForeignKey(QuestionBanks, on_delete=models.CASCADE)
