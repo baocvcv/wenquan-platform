@@ -2,6 +2,9 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 
+from backend.models.knowledge_node import KnowledgeNode
+from backend.models.question_bank import QuestionBanks
+
 
 class QuestionGroup(PolymorphicModel):
     '''Model of QuestionGroup
@@ -11,5 +14,6 @@ class QuestionGroup(PolymorphicModel):
         group_id: the identity of a QuestionGroup
         current_version: the latest version of this list of questions
     '''
-    group_id = models.IntegerField()
     current_version = models.DateTimeField()
+    parents_node = models.ManyToManyField(KnowledgeNode)
+    belong_bank = models.ForeignKey(QuestionBanks, on_delete=models.CASCADE)

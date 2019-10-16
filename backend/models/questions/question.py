@@ -25,6 +25,7 @@ class Question(PolymorphicModel):
     Type = IntEnum(
         'Type',
         (
+            'null'  # no_type
             'single_choice',  # single choice question
             'multiple_choice',  # multiple choices question
             't_or_f',  # true or false question
@@ -32,8 +33,7 @@ class Question(PolymorphicModel):
             'q_and_a',  # short answer question
         ))
     history_version = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
-    question_id = models.CharField(max_length=MAX_ID)
     question_name = models.CharField(max_length=MAX_NAME)
     question_type = models.IntegerField()
-    question_level = models.FloatField()
+    question_level = models.FloatField(default=0)
     question_change_time = models.DateTimeField()
