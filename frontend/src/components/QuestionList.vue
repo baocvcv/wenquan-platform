@@ -1,6 +1,6 @@
 <template>
     <div id="question-list">
-        <v-card app>
+        <v-card>
             <v-card-title>Question List</v-card-title>
             <v-app-bar flat clipped-left>
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -39,10 +39,15 @@
                         :md="drawer ? 8 : 12"
                         :xs="12"
                     >
-                        <v-card>
-                            <v-card-title>This is a Title</v-card-title>
-                            <v-card-text>This is the text.</v-card-text>
-                        </v-card>
+                        <v-row dense>
+                            <v-col 
+                            cols="12"
+                            v-for="question in question_list"
+                            :key="question.id"
+                            >
+                                <question-list-item v-bind="question"></question-list-item>
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -52,6 +57,7 @@
 
 <script>
 import tree_view from "@/components/TreeView.vue";
+import question_list_item from "@/components/QuestionListItem.vue"
 
 export default {
     name: "question-list",
@@ -59,14 +65,30 @@ export default {
         editable: Boolean
     },
     components: {
-        "tree-view": tree_view
+        "tree-view": tree_view,
+        "question-list-item": question_list_item
     },
     data: () => ({
         drawer: null,
         question_list: []
     }),
     mounted() {
-        question_list.push();
+        let question_1 = {
+            id: 1,
+            tags: ["Animal", "Insect"],
+            difficulty: 2,
+            type: "Single Choice",
+            content: "Which of the following choice comes from part of an insect?\nasdasdasdasd adaasdasd\nasdaqrwnnfsfr\nasdasdasas\nwfweofibweofibweofibweofibweofibwe;oifbw;eofibwe;ofibwe;oifbw;eoifbw;eoifbw;eoifbw;eofibw;eoifbw;oeibf;wofibw;eoibfw;ofib"
+        }
+        let question_2 = {
+            id: 2,
+            tags: ["Math"],
+            difficulty: 5,
+            type: "Blank Filling",
+            content: "TEST"
+        }
+        this.question_list.push(question_1);
+        //this.question_list.push(question_2);
     }
 }
 </script>
