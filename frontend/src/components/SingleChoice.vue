@@ -14,14 +14,16 @@
         outlined
         required
       ></v-textarea>
+      <image-uploader
+        v-model="question_image"
+        width="50%"
+        label="picture"
+        placeholder="Upload an image if necessary"
+      ></image-uploader>
       <v-list>
         <v-subheader>Choices</v-subheader>
         <v-list-item-group color="primary">
-          <v-list-item
-            v-for="(choice, i) in question_choice"
-            :key="i"
-            :style="question_ans == choice ? 'background-color: #B3E5FC;' : ''"
-          >
+          <v-list-item v-for="(choice, i) in question_choice" :key="i">
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
             <v-text-field
               v-model="choice.content"
@@ -30,8 +32,8 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn icon small @click="check_ans(choice)" v-on="on"
-                  ><v-icon :color="question_ans == choice ? 'green' : ''" dark
-                    >mdi-check</v-icon
+                  ><v-icon :color="question_ans == choice ? 'green' : 'red'" dark
+                    >{{ question_ans == choice ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon
                   ></v-btn
                 >
               </template>
@@ -40,7 +42,7 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn icon small @click="delete_choice(i)" v-on="on"
-                  ><v-icon dark>mdi-minus</v-icon></v-btn
+                  ><v-icon color="red" dark>mdi-minus</v-icon></v-btn
                 >
               </template>
               <span>remove</span>
@@ -51,7 +53,6 @@
           class="mx-2"
           block
           tile
-          flat
           dark
           color="green"
           @click="choice_num_up()"
@@ -72,9 +73,13 @@
 </template>
 
 <script>
+import ImageUploader from "./ImageUploader.vue";
 export default {
   name: "",
   props: {},
+  components: {
+    "image-uploader": ImageUploader
+  },
   data: function() {
     return {
       valid: false,
