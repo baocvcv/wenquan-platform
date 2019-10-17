@@ -9,6 +9,14 @@ MAX_URL = 200
 MAX_NAME = 200
 MAX_CONTENT = 20000
 
+TYPEDIC = {
+    'single': 1,
+    'multiple': 2,
+    'TorF': 3,
+    'fill_blank': 4,
+    'brief_ans': 5,
+}
+
 
 class Question(PolymorphicModel):
     """Base class of the question
