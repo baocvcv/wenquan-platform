@@ -34,6 +34,7 @@
                         >
                         <tree-view></tree-view>
                     </v-col>
+                    <!--TODO: responsive error here-->
                     <v-col
                         :cols="drawer ? 6 : 12"
                         :md="drawer ? 8 : 12"

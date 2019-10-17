@@ -16,26 +16,34 @@
                     dense
                 ></v-rating>
             </v-card-title>
-            <v-card-text
-                class="question-content" 
-                ref="content"
-                v-bind:style="{'max-height': max_height + 'px'}"
-            >
-                <span>{{ content }}</span>
-                <div 
-                    class="read-more" 
-                    v-if="content_too_long && hide_content"
+            <v-expand-transition>
+                <v-card-text
+                    class="question-content" 
+                    ref="content"
+                    v-bind:style="{'max-height': max_height + 'px'}"
                 >
-                    <v-btn icon v-on:click="read_more">
-                        <v-icon>mdi-chevron-down</v-icon>
+                    <span>{{ content }}</span>
+                    <div 
+                        class="read-more" 
+                        v-if="content_too_long && hide_content"
+                    >
+                        <v-btn icon v-on:click="read_more">
+                            <v-icon>mdi-chevron-down</v-icon>
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-expand-transition>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <div 
+                    class="collapse" 
+                    v-if="content_too_long && !hide_content"
+                >
+                    <v-btn text v-on:click="collapse">
+                        Collapse
                     </v-btn>
                 </div>
-                <div class="collapse" v-if="content_too_long && !hide_content">
-                    <v-btn icon v-on:click="collapse">
-                        <v-icon>mdi-chevron-up</v-icon>
-                    </v-btn>
-                </div>
-            </v-card-text>
+            </v-card-actions>
         </v-card>
     </div>
 </template>
@@ -84,11 +92,11 @@ export default {
         },
         read_more() {
             this.max_height = 1000000000;
-            this.hide_content = true;
+            this.hide_content = false;
         },
         collapse() {
             this.max_height = this.max_height_cache;
-            this.hide_content = false;
+            this.hide_content = true;
         }
     }
 }
@@ -116,7 +124,7 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+    width: 100%;
     text-align: center;
-    margin-top: 10px;
 }
 </style>
