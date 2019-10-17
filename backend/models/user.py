@@ -1,7 +1,7 @@
 """ Base model for User """
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .permissions import UserPermissions
+# from .permissions import UserPermissions
 from .profile import Profile
 
 class User(AbstractUser):

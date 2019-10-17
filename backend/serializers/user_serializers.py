@@ -1,6 +1,5 @@
 """ Serializers for users """
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from backend.models import User
 from backend.models import UserPermissions
@@ -31,7 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
         """ create user """
         user_group = validated_data['user_group']
         user_permissions = UserPermissions.objects.get(group_name=user_group)
-        
         if 'profile' in validated_data:
             profile_data = validated_data.pop('profile')
             profile = Profile.objects.create(**profile_data)
@@ -68,7 +66,7 @@ class UserSerializer(serializers.ModelSerializer):
         # profile.update(**profile_data)
 
         return instance
-    
+
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'password',
