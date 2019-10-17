@@ -1,17 +1,39 @@
 <template>
     <div class="tree-view">
-        <tree
-        :data="treeData"
-        :onDrag="onTreeDataChange"
-        :fixed="true"
-        :height="300"
-        :isdraggable="true"></tree>
+        <tree :items="testData" v-model="selection"></tree>
     </div>
 </template>
 
+<style>
+.tree-row:before{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: #eeeeee;
+    border-radius: 10%;
+    transform: scaleX(0);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition:transform 0.3s ease-out;
+}
+.tree-row:hover:before{
+    transform: scaleX(2);
+}
+.tree-row{
+    transform: perspective(1px) translateZ(0);
+    overflow: hidden;
+}
+.tree-row:hover{
+    background: none !important;
+}
+</style>
+
 <script>
-import tree from "drag-tree-table"
+//import tree from "drag-tree-table"
 //https://github.com/mafengwo/vue-drag-tree-table
+import tree from "@/components/tree/TreeView";
 export default {
     name: "tree-view",
     components: {
@@ -19,6 +41,18 @@ export default {
     },
     data: function(){
         return {
+            testData: {
+                name: "Root",
+                children: [
+                    {
+                        name:"1"
+                    },
+                    {
+                        name:"2"
+                    }
+                ]
+            },
+            selection: [],
             treeData: {
                 columns: [
                     {
@@ -28,7 +62,7 @@ export default {
                         width: 200,
                         align: 'center',
                         formatter: (item) => {
-                            return '<a>'+item.name+'</a>'
+                            return item.name
                         }
                     },
                     {
