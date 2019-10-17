@@ -14,7 +14,14 @@
                         v-for="(item,index) in choices"
                         :key="item.name"
                     >
-                        <v-list-item-icon>{{ item.name }}</v-list-item-icon>
+                        <v-list-item-icon @click="changeRightStatus(item)">
+                            <span v-if="item.right">
+                                [ {{ item.name }} ]
+                            </span>
+                            <span v-else>
+                                {{ item.name }}
+                            </span>
+                        </v-list-item-icon>
                         <v-text-field
                             placeholder="Enter choice"
                             v-model="item.content"
@@ -43,7 +50,43 @@
 export default {
     name: "multiple-choice",
     props: {
-
+        title: {
+            type: String,
+            default: "",
+        },
+        content: {
+            type: String,
+            default: "",
+        },
+        choices: {
+            type: Array,
+            default: () => [
+            {
+                name: "A",
+                content: "",
+                right: false
+            },
+            {
+                name: "B",
+                content: "",
+                right: false
+            },
+            {
+                name: "C",
+                content: "",
+                right: false
+            },
+            {
+                name: "D",
+                content: "",
+                right: false
+            },
+            ],
+        },
+        rightAnswer: {
+            type: Array,
+            default: () => [],
+        },
     },
     methods: {
         addChoice() {
@@ -54,34 +97,22 @@ export default {
             });
         },
         removeChoice(index) {
+            if(this.choices[index].right)
+                this.rightAnswer.splice(this.rightAnswer.indexOf(this.choices[index]));
             this.choices.splice(index,1);
             for(var i=0;i<this.choices.length;i++)
                 this.choices[i].name=String.fromCharCode(65+i);
+        },
+        changeRightStatus(item) {
+            item.right=!item.right;
+            if(item.right) this.rightAnswer.push(item);
+            else this.rightAnswer.splice(this.rightAnswer.indexOf(item),1);
+            console.log(JSON.stringify(this.rightAnswer))
         }
     },
     data: function() {
         return {
             valid: false,
-            title: "",
-            content: "",
-            choices: [
-                {
-                    name: "A",
-                    content: "",
-                },
-                {
-                    name: "B",
-                    content: "",
-                },
-                {
-                    name: "C",
-                    content: "",
-                },
-                {
-                    name: "D",
-                    content: "",
-                },
-            ]
         };
     }
 }
