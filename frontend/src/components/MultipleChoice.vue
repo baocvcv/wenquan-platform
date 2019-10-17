@@ -53,6 +53,14 @@
                 outlined
                 auto-grow
             ></v-textarea>
+                <v-btn
+                    class="mr-4"
+                    color="success"
+                    @click="submit()"
+                    :disabled="!canSubmit"
+                >
+                    Submit
+                </v-btn>
         </v-form>
     </div>
 </template>
@@ -101,6 +109,9 @@ export default {
             this.data.rightAnswer.every(item => ans.push(item.name));
             if(ans.length<1) return "none";
             else return ans.join("");
+        },
+        canSubmit() {
+            return this.valid && this.answer!="none";
         }
     },
     methods: {
@@ -126,7 +137,10 @@ export default {
             this.data.rightAnswer.sort((a,b) => a.name>b.name);
             console.log(JSON.stringify(this.data.rightAnswer))
             this.$forceUpdate(); //Deal with update bug when selected > 4
-        }
+        },
+        submit() {
+            console.log(JSON.stringify(this.data));
+        },
     },
     data: function() {
         return {
