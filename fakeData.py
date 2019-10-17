@@ -7,89 +7,34 @@ settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS,DATABASES=app_sett
 import django
 django.setup()
 
-from backend.models.user_base import UserType
-from backend.models.user_base import User
-from backend.models.user_base import Admin
-from backend.models.user_base import SuperAdmin
-from backend.models.user_base import Student
+from backend.models import UserPermissions
+from backend.models import User
+from backend.models import Profile
 
 def createUser(
     username,
-    password,
-    email,
-    is_student=True,
-    is_admin=False,
-    is_superadmin=False,
-    is_banned=False):
+    password="11111111",
+    email="a@b.com",
+    user_group=User.STUDENT,
+    is_banned=False,):
     """ create user"""
-    user_type = UserType.objects.create(
-        is_student=is_student,
-        is_admin=is_admin,
-        is_superadmin=is_superadmin
+    permission = UserPermissions.objects.get(group_name=user_group)
+    profile = Profile.objects.create(
+        school_name='THU',
     )
-    return User.objects.create_user(
-        user_type=user_type,
+    user = User.objects.create_user(
         username=username,
         password=password,
         email=email,
+        user_group=user_group,
+        user_permissions=permission,
+        profile=profile,
         is_banned=is_banned,
     )
+    return user
 
-
-def createStudent(
-    username="student",
-    password="11111111",
-    email="cyx@163.com",
-    is_banned=False,):
-    """ create user"""
-    user = createUser(
-        username,
-        password,
-        email,
-        is_banned=is_banned)
-    return Student.objects.create(
-        user=user,
-        school_name='Tsinghua'
-    )
-
-def createAdmin(
-    username="admin",
-    password="11111111",
-    email="cyx@163.com",
-    is_banned=False,):
-    """ create user"""
-    user = createUser(
-        username,
-        password,
-        email,
-        is_student=False,
-        is_admin=True,
-        is_superadmin=False,
-        is_banned=is_banned)
-    return Admin.objects.create(
-        user=user,
-    )
-
-def createSuperAdmin(
-    username="admin",
-    password="11111111",
-    email="cyx@163.com",
-    is_banned=False,):
-    """ create user"""
-    user = createUser(
-        username,
-        password,
-        email,
-        is_student=False,
-        is_admin=False,
-        is_superadmin=True,
-        is_banned=is_banned)
-    return SuperAdmin.objects.create(
-        user=user,
-    )
-
-createStudent(username="cyx")
-createStudent(username="bh", is_banned=True)
-createAdmin(username="ydf")
-createAdmin(username='kxz')
-createSuperAdmin(username='xq')
+createUser(username="cyx")
+createUser(username="bh", is_banned=True)
+createUser(username="ydf", user_group=User.ADMIN)
+createUser(username='kxz', user_group=User.ADMIN)
+createUser(username='xq', user_group=User.SUPER_ADMIN)
