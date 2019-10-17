@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from rest_framework import serializers
 
-from backend.models import QuestionGroup
+from backend.models.questions import QuestionGroup
 from backend.models.questions import BriefAnswerQ
 from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
