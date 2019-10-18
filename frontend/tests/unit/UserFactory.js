@@ -41,7 +41,7 @@ class UserFactory {
     }
     _create_anonymous_user() {
         let user = {
-            id: 5,
+            id: this.id,
             email: "@example.org",
             username: this.id,
             password: "11111111",
