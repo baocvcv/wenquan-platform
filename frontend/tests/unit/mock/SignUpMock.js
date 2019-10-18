@@ -1,7 +1,7 @@
 import nock from "nock";
 
 nock(/.*?/)
-  .post("/api/signup/", content => content.username != "fail")
+  .post("/api/accounts/users/", content => content.username != "fail")
   .reply(200, {
     data: { username: "yes" }
   });
