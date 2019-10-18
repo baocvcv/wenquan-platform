@@ -7,34 +7,14 @@ settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS,DATABASES=app_sett
 import django
 django.setup()
 
-from backend.models import UserPermissions
 from backend.models import User
+from backend.models import UserPermissions
+from backend.tests.utils import create_permission
 
 groups = UserPermissions.objects.all()
 for group in groups:
     group.delete()
 
-UserPermissions.objects.create(
-    group_name="Student",
-)
-
-UserPermissions.objects.create(
-    group_name="Admin",
-    view_students=True,
-    create_students=True,
-    edit_students=True,
-    ban_students=True,
-)
-
-UserPermissions.objects.create(
-    group_name="SuperAdmin",
-    view_students=True,
-    create_students=True,
-    edit_students=True,
-    ban_students=True,
-    promote_students=True,
-    view_admins=True,
-    create_admins=True,
-    edit_admins=True,
-    ban_admins=True,
-)
+create_permission().save()
+create_permission("Admin").save()
+create_permission("SuperAdmin").save()
