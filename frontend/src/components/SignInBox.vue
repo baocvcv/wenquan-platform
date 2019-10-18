@@ -64,7 +64,7 @@ export default {
 
         console.log(JSON.stringify(user));
 
-        axios.post("/jwt-auth/",user).then((response) => {
+        axios.post("/api/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
           if(response.data.is_banned){
