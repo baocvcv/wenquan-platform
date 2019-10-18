@@ -39,10 +39,10 @@ describe("AppBar.vue", () => {
     });
 
     it("not renders Sign in/Sign up button if signed in", () => {
-        const user = user_factory.create_user_admin();
+        const user_logged_in = user_factory.create_anonymous_admin();
         const store = new Vuex.Store({
             state: {
-                user: user
+                user: user_logged_in
             }
         });
         const router = new Router();
