@@ -38,7 +38,7 @@ export default {
             changed_user.is_banned = !changed_user.is_banned;
             this.$axios
                 .put("api/accounts/users/" + user.id + "/", changed_user)
-                .then(() => {
+                .then(response => {
                     user = changed_user;
                 })
                 .catch(error => {

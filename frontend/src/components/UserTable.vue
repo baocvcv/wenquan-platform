@@ -69,14 +69,24 @@
         {{ item.is_banned ? "BANNED" : "NORMAL" }}
     </template>
     <template v-slot:item.action="{ item }">
-        <v-icon
-        small
-        class="mr-2"
-        v-if="able_to_change_user_group(item)"
-        v-on:click="change_user_group(item)"
-        >
-        {{ item.user_group == "Student"? mdi-arrow-up : mdi-arrow-down }}
-        </v-icon>
+        <div v-if="able_to_change_user_group(item)">
+            <v-icon
+            v-if="item.user_group === 'Student'"
+            small
+            class="mr-2"
+            v-on:click="change_user_group(item)"
+            >
+                mdi-arrow-up
+            </v-icon>
+            <v-icon
+                v-if="item.user_group === 'Admin'"
+                small
+                class="mr-2"
+                v-on:click="change_user_group(item)"
+            >
+                mdi-arrow-down
+            </v-icon>
+        </div>
         <div
         v-if="able_to_change_user_status(item)"
         >
