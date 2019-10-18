@@ -6,7 +6,7 @@ MAX_ID = 20
 MAX_NAME = 200
 
 
-class QuestionBanks(PolymorphicModel):
+class QuestionBank(PolymorphicModel):
     """Models for Question Banks
     Attributes:
         name: name of bank

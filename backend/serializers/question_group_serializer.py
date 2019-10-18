@@ -2,15 +2,17 @@
 from rest_framework import serializers
 
 from backend.models.questions import QuestionGroup
+from .knowledge_node_serializer import KnowlegdeNodeSerializer
 
 
 class QuestionGroupSerializer(serializers.ModelSerializer):
-    parents_node = serializers.RelatedField(many=true)
-    belong_bank = serializers.RelatedField()
+    parents_node = KnowlegdeNodeSerializer(many=True)
+    belong_bank = QuestionBankSerializer()
 
     class Meta:
         model = QuestionGroup
         fields = [
+            'id',
             'current_version',
             'parents_node',
             'belong_bank',
