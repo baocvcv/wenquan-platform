@@ -1,9 +1,9 @@
 <template>
     <div id="question-list">
-        <v-card app>
+        <v-card>
             <v-card-title>Question List</v-card-title>
             <v-app-bar flat clipped-left>
-                <v-app-bar-nav-icon v-if="!$vuetify.breakpoint.lgAndUp" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <div class="flex-grow-1"></div>
                     <v-menu open-on-hover top offset-y>
                         <template v-slot:activator="{ on }">
@@ -25,14 +25,32 @@
                     >Create</v-btn>
             </v-app-bar>
             <v-card-text>
-                <v-sheet height="500px">
-                    <v-navigation-drawer
-                        v-model="drawer"
-                        overflow
-                    >
+                <v-row>
+                    <v-col
+                        v-show="drawer" 
+                        cols="12"
+                        md="4"
+                        sm="6"
+                        >
                         <tree-view></tree-view>
-                    </v-navigation-drawer>
-                </v-sheet>
+                    </v-col>
+                    <!--TODO: responsive error here-->
+                    <v-col
+                        :cols="drawer ? 6 : 12"
+                        :md="drawer ? 8 : 12"
+                        :xs="12"
+                    >
+                        <v-row dense>
+                            <v-col 
+                            cols="12"
+                            v-for="question in question_list"
+                            :key="question.id"
+                            >
+                                <question-list-item v-bind="question"></question-list-item>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                </v-row>
             </v-card-text>
         </v-card>
     </div>
@@ -40,6 +58,7 @@
 
 <script>
 import tree_view from "@/components/TreeView.vue";
+import question_list_item from "@/components/QuestionListItem.vue"
 
 export default {
     name: "question-list",
@@ -47,10 +66,30 @@ export default {
         editable: Boolean
     },
     components: {
-        "tree-view": tree_view
+        "tree-view": tree_view,
+        "question-list-item": question_list_item
     },
     data: () => ({
-        drawer: null
-    })
+        drawer: null,
+        question_list: []
+    }),
+    mounted() {
+        let question_1 = {
+            id: 1,
+            tags: ["Animal", "Insect"],
+            difficulty: 2,
+            type: "Single Choice",
+            content: "Which of the following choice comes from part of an insect?\nasdasdasdasd adaasdasd\nasdaqrwnnfsfr\nasdasdasas\nwfweofibweofibweofibweofibweofibwe;oifbw;eofibwe;ofibwe;oifbw;eoifbw;eoifbw;eoifbw;eofibw;eoifbw;oeibf;wofibw;eoibfw;ofib"
+        }
+        let question_2 = {
+            id: 2,
+            tags: ["Math"],
+            difficulty: 5,
+            type: "Blank Filling",
+            content: "TEST"
+        }
+        this.question_list.push(question_1);
+        //this.question_list.push(question_2);
+    }
 }
 </script>
