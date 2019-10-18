@@ -1,19 +1,60 @@
+const user_permissions = {
+    "Student": {
+        view_students: false,
+        create_students: false,
+        ban_students: false,
+
+        view_admins: false,
+        create_admins: false,
+        ban_admins: false,
+
+        change_user_group: false
+    },
+    "Admin": {
+        view_students: true,
+        create_students: true,
+        ban_students: true,
+
+        view_admins: false,
+        create_admins: false,
+        ban_admins: false,
+
+        change_user_group: false
+    },
+    "SuperAdmin": {
+        view_students: true,
+        create_students: true,
+        ban_students: true,
+
+        view_admins: true,
+        create_admins: true,
+        ban_admins: true,
+
+        change_user_group: true
+    },
+}
+
+
 class UserFactory {
     constructor() {
         this.id = 0;
     }
     _create_anonymous_user() {
-        let user =  {
-            username: this.id,
+        let user = {
+            id: this.id,
             email: "@example.org",
-            is_disabled: false,
-            last_login_time: "2019-10-10",
-            ip: "127.0.0.1",
-            type: {
-                is_student: false,
-                is_admin: false,
-                is_superadmin: false
-            }
+            username: this.id,
+            password: "11111111",
+            last_login_time: "2019-10-15T01:11:21.754312Z",
+            last_login_ip: "127.0.0.1",
+            is_banned: false,
+            user_group: "",
+            profile: {
+                school_name: "THU",
+            },
+            
+            // Only used when authenticating
+            token: "blablabla",
         };
         this.id++;
         return user;
@@ -22,7 +63,8 @@ class UserFactory {
         let user = this._create_anonymous_user();
         user.username = "Student" + user.username;
         user.email = user.username + user.email;
-        user.type.is_student = true;
+        user.user_group = "Student";
+        user.user_permissions = user_permissions["Student"];
         return user;
     }
 
@@ -30,7 +72,8 @@ class UserFactory {
         let user = this._create_anonymous_user();
         user.username = "Admin" + user.username;
         user.email = user.username + user.email;
-        user.type.is_admin = true;
+        user.user_group = "Admin";
+        user.user_permissions = user_permissions["Admin"];
         return user;
     }
 
@@ -38,22 +81,8 @@ class UserFactory {
         let user = this._create_anonymous_user();
         user.username = "SuperAdmin" + user.username;
         user.email = user.username + user.email;
-        user.type.is_superadmin = true;
-        return user;
-    }
-
-    create_user_admin() {
-        let user = this._create_anonymous_user();
-        user.username = "Admin_signed_in";
-        user.email = "Admin_signed_in" + user.email;
-        user.type.is_admin = true;
-        return user;
-    }
-
-    create_user_superadmin() {
-        let user = this._create_anonymous_user();
-        user.username = "SuperAdmin_signed_in" + user.email;
-        user.type.is_superadmin = true;
+        user.user_group = "SuperAdmin";
+        user.user_permissions = user_permissions["SuperAdmin"];
         return user;
     }
 };
