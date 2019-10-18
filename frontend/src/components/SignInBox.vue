@@ -68,6 +68,7 @@ export default {
           }
 
           user.user_permissions=response.data.user_permissions;
+          user.user_group=response.data.user_group;
           user.token=response.data.token;
 
           this.$store.commit("login", {
