@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import md5 from "js-md5";
+//import md5 from "js-md5";
 const axios = require("axios");
 
 export default {
@@ -104,7 +104,7 @@ export default {
     click: function() {
       let that = this; //store this in that so it can be used in callback functions of axios
       axios
-        .post("/api/signup/", {
+        .post("/api/accounts/users/", {
           username: this.user_name,
           password: this.password,
           //password: md5(this.password),
