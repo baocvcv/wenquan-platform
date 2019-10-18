@@ -55,14 +55,7 @@ export default {
           username: this.username,
           password: this.password,
           //password: md5(this.password),
-          user_type:{
-            is_student: false,
-            is_admin: false,
-            is_superadmin: false
-          }
         };
-
-        console.log(JSON.stringify(user));
 
         axios.post("/api/jwt-auth/",user).then((response) => {
           //Sign in successfully
@@ -74,7 +67,8 @@ export default {
             return;
           }
 
-          user.user_type=response.data.user_type;
+          user.user_permissions=response.data.user_permissions;
+          user.token=response.data.token;
 
           this.$store.commit("login", {
             user: user
@@ -84,9 +78,8 @@ export default {
 
           console.log(response);
 
-          this.$router.push("/").catch(err => {});
+          this.$router.push("/").catch(err => console.log(err));
         }).catch((response) => {
-          console.log("Error");
           this.sign_in_result = "Error";
           this.sign_in_response = response;
           this.show_dialog=true;

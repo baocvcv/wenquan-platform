@@ -50,22 +50,14 @@ export default {
                     name: "User Management",
                     text: "User Management",
                     link: "/admin",
-                    user_type: {
-                        is_student: false,
-                        is_admin: true,
-                        is_superadmin: true
-                    },
+                    auth_required: "view_admins",
                     icon: "mdi-account-supervisor",
                 },
                 {
                     name: "Question Banks",
                     text: "Question Banks",
                     link: "/questionbanks",
-                    user_type: {
-                        is_student: false,
-                        is_admin: true,
-                        is_superadmin: true
-                    },
+                    auth_required: "view_students",
                     icon: "mdi-bank"
                 },
                 {
@@ -111,14 +103,10 @@ export default {
                     signin_required = nav_link["signin_required"];
                 if (!this.user && signin_required)
                     flag = false;
-                let user_type = null;
-                if ("user_type" in nav_link)
-                    user_type = nav_link["user_type"];
-                if (this.user && user_type && !(
-                    this.user.user_type.is_student == user_type.is_student ||
-                    this.user.user_type.is_admin == user_type.is_admin ||
-                    this.user.user_type.is_superadmin == user_type.is_superadmin
-                ))
+                let auth_required = null;
+                if ("auth_required" in nav_link)
+                    auth_required = nav_link["user_type"];
+                if (this.user && auth_required && !this.user.user_permissions[auth_required])
                     flag = false;
                 if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))
                     flag = false;
