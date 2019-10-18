@@ -10,6 +10,7 @@ from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
+from backend.models.knowledge_node import KnowledgeNode
 
 
 def create_pre_task(validated_data):
@@ -22,8 +23,8 @@ def create_pre_task(validated_data):
     for i in node_id:
         node = KnowledgeNode.objects.get(id=i)
         new_group.parents_node.add(node)
+    new_group.belong_bank = node.question_bank
     new_group.save()
-    node.question_bank.questions.add(new_group)
     return new_group
 
 
@@ -63,15 +64,13 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create single choice question"""
-        create_pre_task(validated_data)
+        new_group = create_pre_task(validated_data)
         question = SingleChoiceQ.objects.create(
             history_version=new_group,
-            question_change_time=timezone.now(),
-            **new_q,
+            question_change_time=new_group.current_version,
+            **validated_data,
         )
         question.save()
-        new_group.save()
-        node.question_bank.questions.add(question)
 
     def update(self, instance, validated_data):
         """
@@ -81,7 +80,7 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
         update_pre_task(instance, validated_data)
         question = SingleChoiceQ.objects.create(
             history_version=instance.history_version,
-            question_change_time=this_group.current_version,
+            question_change_time=instance.history_version.get().current_version,
             **validated_data,
         )
         question.save()
@@ -109,15 +108,13 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create multiple choices question"""
-        create_pre_task(validated_data)
+        new_group = create_pre_task(validated_data)
         question = MultpChoiceQ.objects.create(
             history_version=new_group,
-            question_change_time=timezone.now(),
-            **new_q,
+            question_change_time=new_group.current_version,
+            **validated_data,
         )
         question.save()
-        new_group.save()
-        node.question_bank.questions.add(question)
 
     def update(self, instance, validated_data):
         """
@@ -127,7 +124,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
         update_pre_task(instance, validated_data)
         question = MultpChoiceQ.objects.create(
             history_version=instance.history_version,
-            question_change_time=this_group.current_version,
+            question_change_time=instance.history_version.get().current_version,
             **validated_data,
         )
         question.save()
@@ -153,15 +150,13 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create true or false choices question"""
-        create_pre_task(validated_data)
+        new_group = create_pre_task(validated_data)
         question = TrueOrFalseQ.objects.create(
             history_version=new_group,
-            question_change_time=timezone.now(),
-            **new_q,
+            question_change_time=new_group.current_version,
+            **validated_data,
         )
         question.save()
-        new_group.save()
-        node.question_bank.questions.add(question)
 
     def update(self, instance, validated_data):
         """
@@ -171,7 +166,7 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
         update_pre_task(instance, validated_data)
         question = TrueOrFalseQ.objects.create(
             history_version=instance.history_version,
-            question_change_time=this_group.current_version,
+            question_change_time=instance.history_version.get().current_version,
             **validated_data,
         )
         question.save()
@@ -201,8 +196,8 @@ class FillBlankQSerializer(serializers.ModelSerializer):
         new_group = create_pre_task(validated_data)
         question = FillBlankQ.objects.create(
             history_version=new_group,
-            question_change_time=timezone.now(),
-            **new_q,
+            question_change_time=new_group.current_version,
+            **validated_data,
         )
         question.save()
 
@@ -243,8 +238,8 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
         new_group = create_pre_task(validated_data)
         question = BriefAnswerQ.objects.create(
             history_version=new_group,
-            question_change_time=timezone.now(),
-            **new_q,
+            question_change_time=new_group.current_version,
+            **validated_data,
         )
         question.save()
 
