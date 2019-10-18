@@ -25,11 +25,11 @@ class UserSerializer(serializers.ModelSerializer):
     user_permissions = UserPermissionsSerializer(read_only=True)
     profile = ProfileSerializer(required=False)
     is_banned = serializers.BooleanField(default=False)
+    user_group = serializers.CharField(default="Student")
 
     def create(self, validated_data):
         """ create user """
-        user_group = validated_data['user_group']
-        user_permissions = UserPermissions.objects.get(group_name=user_group)
+        user_permissions = UserPermissions.objects.get(group_name="Student")
         if 'profile' in validated_data:
             profile_data = validated_data.pop('profile')
             profile = Profile.objects.create(**profile_data)
@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User(
             username=validated_data['username'],
             email=validated_data['email'],
-            user_group=user_group,
+            user_group="Student",
             profile=profile,
             user_permissions=user_permissions,
         )
