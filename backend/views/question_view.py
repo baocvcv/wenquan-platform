@@ -34,29 +34,56 @@ class QuestionList(APIView):
             elif qtype == TYPEDIC['brief_ans']:
                 serializer = BriefAnswerQSerializer(question)
 
-            serializer.parents_node = []
+            nodes = []
             for j in i.parents_node.all():
-                serializer.parents_node += j.id
-            response += serializer.data
+                nodes += j.id
+            if serializer.is_valid():
+                question_info = serializers.data
+                question_info['id'] = question.id
+                question_info.pop('history_version')
+                question_info['parents_node'] = nodes
+                response += question_info
         return Response(response)
 
     def post(self, request):
         """Create a question"""
-        question = JSONParser().parse(request)
-        qtype = question['question_type']
+        post_data = JSONParser().parse(request)[0]
+        post_data.pop('id')
+        parents_id = post_data.pop('parents_node')
+        post_data['question_change_time'] = timezone.now()
+        parents = []
+        for i in parents_id:
+            node = KnowledgeNode.objects.get(id=i)
+            parents += node
+        bank = node.question_bank
+        q_group = QuestionGroupSerializer(
+            current_version=post_data['question_change_time'],
+            belong_bank=bank,
+            parents_node=parents,
+        )
+        if q_group.is_valid():
+            q_group.save()
 
-        if qtype == TYPEDIC['single']:
-            serializer = SingleChoiceQSerializer(question)
-        elif qtype == TYPEDIC['multiple']:
-            serializer = MultpChoiceQSerializer(question)
-        elif qtype == TYPEDIC['TorF']:
-            serializer = TrueOrFalseQSerializer(question)
-        elif qtype == TYPEDIC['fill_blank']:
-            serializer = FillBlankQSerializer(question)
-        elif qtype == TYPEDIC['brief_ans']:
-            serializer = BriefAnswerQSerializer(question)
+        post_data['history_version'] = q_group
+        post_data['question_type'] = TYPEDIC[post_data['question_type']]
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
+        if post_data['question_type'] == TYPEDIC['single']:
+            question = SingleChoiceQSerializer(**post_data)
+        elif post_data['question_type'] == TYPEDIC['multiple']:
+            question = MultpChoiceQSerializer(**post_data)
+        elif post_data['question_type'] == TYPEDIC['TorF']:
+            question = TrueOrFalseQSerializer(**post_data)
+        elif post_data['question_type'] == TYPEDIC['fill_blank']:
+            question = FillBlankQSerializer(**post_data)
+        elif post_data['question_type'] == TYPEDIC['brief_ans']:
+            question = BriefAnswerQSerializer(**post_data)
+
+        if question.is_valid():
+            question.save()
+
+        if q_group.is_valid() and question.is_valid:
+            response = question.data
+            response['id'] = question.id
+            response['parents_node'] = post_data['parents_node']
+            return Response(response, status=201)
         return Response(serializer.errors, status=400)
