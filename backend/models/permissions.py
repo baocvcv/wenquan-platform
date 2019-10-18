@@ -7,11 +7,10 @@ class UserPermissions(models.Model):
 
     view_students = models.BooleanField(default=False)
     create_students = models.BooleanField(default=False)
-    edit_students = models.BooleanField(default=False)
     ban_students = models.BooleanField(default=False)
-    promote_students = models.BooleanField(default=False)
 
     view_admins = models.BooleanField(default=False)
     create_admins = models.BooleanField(default=False)
-    edit_admins = models.BooleanField(default=False)
     ban_admins = models.BooleanField(default=False)
+
+    change_user_group = models.BooleanField(default=False)
