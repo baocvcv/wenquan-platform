@@ -105,7 +105,7 @@ export default {
                     flag = false;
                 let auth_required = null;
                 if ("auth_required" in nav_link)
-                    auth_required = nav_link["user_type"];
+                    auth_required = nav_link.auth_required;
                 if (this.user && auth_required && !this.user.user_permissions[auth_required])
                     flag = false;
                 if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))
