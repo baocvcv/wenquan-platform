@@ -5,7 +5,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 # from backend.models import User
-from backend.models import UserPermissions
+# from backend.models import UserPermissions
+
+from backend.tests.utils import create_permission
 
 class TestAuthview(APITestCase):
     """ test for user detail views """
@@ -21,28 +23,9 @@ class TestAuthview(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        UserPermissions.objects.create(
-            group_name="Student",
-        )
-        UserPermissions.objects.create(
-            group_name="Admin",
-            view_students=True,
-            create_students=True,
-            edit_students=True,
-            ban_students=True,
-        )
-        UserPermissions.objects.create(
-            group_name="SuperAdmin",
-            view_students=True,
-            create_students=True,
-            edit_students=True,
-            ban_students=True,
-            promote_students=True,
-            view_admins=True,
-            create_admins=True,
-            edit_admins=True,
-            ban_admins=True,
-        )
+        create_permission("Admin").save()
+        create_permission().save()
+        create_permission("SuperAdmin").save()
 
     def test_authentication(self):
         """ test authentication """

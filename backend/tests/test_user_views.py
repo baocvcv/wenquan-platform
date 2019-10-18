@@ -7,7 +7,9 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from backend.models import User
-from backend.models import UserPermissions
+# from backend.models import UserPermissions
+
+from backend.tests.utils import create_permission
 
 class UserListViewTest(APITestCase):
     """ test for user views """
@@ -23,28 +25,9 @@ class UserListViewTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        UserPermissions.objects.create(
-            group_name="SuperAdmin",
-            edit_students=True,
-            view_students=True,
-            create_students=True,
-            create_admins=True,
-            promote_students=True,
-            view_admins=True,
-            edit_admins=True,
-            ban_admins=True,
-            ban_students=True,
-        )
-        UserPermissions.objects.create(
-            group_name="Student",
-        )
-        UserPermissions.objects.create(
-            group_name="Admin",
-            create_students=True,
-            view_students=True,
-            edit_students=True,
-            ban_students=True,
-        )
+        create_permission().save()
+        create_permission("Admin").save()
+        create_permission("SuperAdmin").save()
 
     def test_create_student_without_profile(self):
         """ test creating an user account"""
@@ -93,28 +76,9 @@ class UserDetailTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        UserPermissions.objects.create(
-            group_name="Admin",
-            edit_students=True,
-            ban_students=True,
-            view_students=True,
-            create_students=True,
-        )
-        UserPermissions.objects.create(
-            group_name="Student",
-        )
-        UserPermissions.objects.create(
-            group_name="SuperAdmin",
-            view_students=True,
-            view_admins=True,
-            create_students=True,
-            ban_admins=True,
-            ban_students=True,
-            promote_students=True,
-            create_admins=True,
-            edit_admins=True,
-            edit_students=True,
-        )
+        create_permission("SuperAdmin").save()
+        create_permission("Admin").save()
+        create_permission().save()
 
     def test_retrieve(self):
         """ test retrieve user """
