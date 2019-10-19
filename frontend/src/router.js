@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store";
 import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -23,8 +24,8 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./components/TreeView.vue")
     },
     {
-      path: "/admin",
-      name: "admin",
+      path: "/admin/usermanagement",
+      name: "user-management",
       component: () => import("./views/UserManagement.vue")
     },
     {
@@ -38,14 +39,41 @@ export default new Router({
       component: () => import("./views/SignIn.vue")
     },
     {
-      path: "/questionbanks",
+      path: "/admin/questionbanks",
       name: "question-banks",
       component: () => import("./views/QuestionBanks.vue")
     },
     {
-      path: "/questionbanks/:id",
+      path: "/admin/questionbanks/:id",
       name: "question-bank",
       component: () => import("./views/QuestionBank.vue")
     }
   ]
-});
+})
+
+router.beforeEach((to, from, next) => {
+  if (!store.state.user)
+  {
+    if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
+    {
+      next("/signin");
+    }
+    else
+    {
+      next();
+    }
+  }
+  else
+  {
+    if (to.path.split('/')[0] === 'admin' && store.state.user.user_group === "Student")
+    {
+      next("/");
+    }
+    else
+    {
+      next();
+    }
+  }
+})
+
+export default router;
