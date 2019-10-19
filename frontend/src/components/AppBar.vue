@@ -49,14 +49,14 @@ export default {
                 {
                     name: "User Management",
                     text: "User Management",
-                    link: "/admin",
+                    link: "/admin/usermanagement",
                     group_required: ["Admin","SuperAdmin"],
                     icon: "mdi-account-supervisor",
                 },
                 {
                     name: "Question Banks",
                     text: "Question Banks",
-                    link: "/questionbanks",
+                    link: "/admin/questionbanks",
                     group_required: ["Student","Admin","SuperAdmin"],
                     icon: "mdi-bank"
                 },
