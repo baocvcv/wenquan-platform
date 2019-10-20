@@ -6,11 +6,12 @@ from backend.models import KnowledgeNode
 
 class KnowlegdeNodeSerializer(serializers.ModelSerializer):
     question_bank = QuestionBankSerializer(readonly=True)
-    subnodes = KnowlegdeNodeSerializer(readonly=True)
+    subnodes = KnowlegdeNodeSerializer(readonly=True, many=True)
 
     class Meta:
         model = KnowledgeNode
         fields = [
+            'id',
             'question_bank',
             'name',
             'subnodes',

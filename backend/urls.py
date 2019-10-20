@@ -14,4 +14,5 @@ urlpatterns = [
     path(r'api/accounts/users/', views.UserList.as_view(), name='user-list'),
     path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
     path(r'api/questions/', views.QuestionList.as_view(), name='questions_list'),
+    path(r'api/nodes_list/<int:pk>', views.KnowledgeNodeList.as_view(), name='nodes_list'),
 ]
