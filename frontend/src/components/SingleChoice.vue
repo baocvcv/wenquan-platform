@@ -76,7 +76,16 @@
 import ImageUploader from "./ImageUploader.vue";
 export default {
   name: "",
-  props: {},
+  props: {
+    readonly: {
+      type: Boolean,
+      default: true
+    },
+    originData: {
+      type: Object,
+      default: null
+    }
+  },
   components: {
     "image-uploader": ImageUploader
   },
