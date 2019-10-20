@@ -69,7 +69,7 @@
 export default {
     name: "multiple-choice",
     props: {
-        data: {
+        initData: {
             type: Object,
             default: () => {
                 return {
@@ -144,7 +144,7 @@ export default {
     },
     data: function() {
         return {
-            valid: false,
+            data: this.initData
         };
     }
 }
