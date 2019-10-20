@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form ref="single-choice" v-model="valid">
+    <v-form ref="input" v-model="valid">
       <v-text-field
         label="Title"
         v-model="question_name"
@@ -68,6 +68,17 @@
         outlined
         required
       ></v-textarea>
+      <v-btn
+        v-if="!readonly"
+        :disabled="!valid"
+        color="success"
+        class="mr-4"
+        @click="submit()"
+        >Submit</v-btn
+      >
+      <v-btn v-if="!readonly" color="error" class="mr-4" @click="reset()"
+        >Reset</v-btn
+      >
     </v-form>
   </div>
 </template>
@@ -76,14 +87,27 @@
 import ImageUploader from "./ImageUploader.vue";
 export default {
   name: "",
+  model: {
+    prop: "initData",
+    event: "submit"
+  },
   props: {
     readonly: {
       type: Boolean,
-      default: true
+      default: false
     },
-    originData: {
+    initData: {
       type: Object,
-      default: null
+      default: () => {
+        return {
+          question_name: "",
+          question_content: "",
+          question_image: "",
+          question_choice: [],
+          question_ans: "",
+          question_solution: ""
+        };
+      }
     }
   },
   components: {
@@ -92,12 +116,12 @@ export default {
   data: function() {
     return {
       valid: false,
-      question_name: "",
-      question_content: "",
-      question_image: [],
-      question_choice: [],
-      question_ans: "",
-      question_solution: ""
+      question_name: this.initData.question_name,
+      question_content: this.initData.question_content,
+      question_image: this.initData.question_image,
+      question_choice: this.initData.question_choice,
+      question_ans: this.initData.question_ans,
+      question_solution: this.initData.question_solution
     };
   },
   methods: {
@@ -119,6 +143,13 @@ export default {
     },
     check_ans(choice) {
       this.question_ans = this.question_ans == choice ? undefined : choice;
+    },
+    reset() {
+      this.$refs.input.reset();
+      this.question_choice.splice(0, this.question_choice.length);
+    },
+    submit() {
+      this.$emit("submit", this.initData);
     }
   }
 };
