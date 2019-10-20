@@ -70,14 +70,6 @@ export default {
             .catch(error => {
                 console.log(error);
             })
-    },
-   created() {
-       if (!this.$store.state.user || this.$store.state.user.user_group === "Student")
-       {
-            console.log("You have no access to this page.");
-            this.$router.push("/");
-       }
-       console.log(this.$store.state.user);
-   }
+    }
 }
 </script>
