@@ -1,6 +1,6 @@
 <template>
     <div class="multiple-choice-component">
-        <v-form ref="multi-choice-form" v-model="valid">
+        <v-form ref="form" v-model="valid">
             <v-text-field label="Title" v-model="data.title" outlined></v-text-field>
             <v-textarea 
                 label="Content"
@@ -10,6 +10,14 @@
                 auto-grow
             ></v-textarea>
             <v-list flat>
+                <v-list-item two-line>
+                    <v-list-item-content align="left">
+                    <v-list-item-title>Choices</v-list-item-title>
+                    <v-list-item-subtitle :style="answer=='none' ? 'color:red' : 'color:green'">
+                    You have chosen {{ answer }}
+                    </v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item-group color="primary">
                     <v-list-item
                         v-for="(item,index) in data.choices"
@@ -21,6 +29,7 @@
                         <v-text-field
                             placeholder="Enter choice"
                             v-model="item.content"
+                            :rules="[v => !!v || 'Choice content is required!']"
                         ></v-text-field>
                         <v-btn icon small
                             @click="changeRightStatus(item)">
@@ -33,19 +42,18 @@
                         </v-btn>
                     </v-list-item>
                 </v-list-item-group>
+                <v-btn
+                    class="mx-2"
+                    block
+                    tile
+                    dark
+                    color="green"
+                    @click="addChoice()"
+                >
+                    Create New
+                </v-btn>
             </v-list>
-            <v-btn
-                class="mx-2"
-                fab
-                dark
-                color="indigo"
-                @click="addChoice()"
-            >
-                <v-icon dark>mdi-plus</v-icon>
-            </v-btn>
-            <div>
-                You have chose {{ answer }}
-            </div>
+            <br/>
             <v-textarea 
                 label="Analyse"
                 v-model="data.analyse" 
@@ -61,6 +69,13 @@
                 >
                     Submit
                 </v-btn>
+                <v-btn
+                    class="mr-4"
+                    color="error"
+                    @click="reset()"
+                >
+                    Reset
+                </v-btn>
         </v-form>
     </div>
 </template>
@@ -68,41 +83,6 @@
 <script>
 export default {
     name: "multiple-choice",
-    props: {
-        initData: {
-            type: Object,
-            default: () => {
-                return {
-                    title: "",
-                    content: "",
-                    choices: [
-                        {
-                            name: "A",
-                            content: "",
-                            right: false
-                        },
-                        {
-                            name: "B",
-                            content: "",
-                            right: false
-                        },
-                        {
-                            name: "C",
-                            content: "",
-                            right: false
-                        },
-                        {
-                            name: "D",
-                            content: "",
-                            right: false
-                        },
-                    ],
-                    rightAnswer: [],
-                    analyse: "",
-                };
-            }
-        }
-    },
     computed: {
         answer() {
             let ans=[];
@@ -136,15 +116,118 @@ export default {
             else this.data.rightAnswer.splice(this.data.rightAnswer.indexOf(item),1);
             this.data.rightAnswer.sort((a,b) => a.name>b.name);
             console.log(JSON.stringify(this.data.rightAnswer))
-            this.$forceUpdate(); //Deal with update bug when selected > 4
         },
         submit() {
-            console.log(JSON.stringify(this.data));
+            this.parse();
         },
+        reset() {
+            this.$refs.form.reset();
+            this.data.rightAnswer=[];
+            this.data.choices= [
+                {
+                    name: "A",
+                    content: "",
+                    right: false
+                },
+                {
+                    name: "B",
+                    content: "",
+                    right: false
+                },
+                {
+                    name: "C",
+                    content: "",
+                    right: false
+                },
+                {
+                    name: "D",
+                    content: "",
+                    right: false
+                },
+            ];
+        },
+        updateData(input) {
+            //parse data input from backend
+            this.data.id = input.id;
+            this.data.parents = input.parents_node;
+            this.data.change_time = item.question_change_time;
+            this.data.title = input.question_name;
+            this.data.content = input.question_content;
+            this.data.analyse = input.question_solution;
+
+            let choices = [];
+            input.question_choice.forEach(item => {
+                let choiceName = String.fromCharCode(65 + choices.length);
+                choices.push({
+                    name: choiceName,
+                    content: choiceName,
+                    right: input.question_ans.indexOf(choiceName)!=-1 ? true : false
+                });
+            });
+            this.data.choices = choices;
+
+            let rightAns = [];
+            choices.forEach(item => {
+                if(item.right)
+                    rightAns.push(item);
+            });
+            this.data.rightAnswer = rightAns;
+        },
+        parse() {
+            let result = {
+                id: this.data.id,
+                parents_node: this.data.parents,
+                question_change_time: this.data.change_time,
+                question_name: this.data.title,
+                question_type: "multiple",
+                question_level: 0.5,
+                question_content: this.data.content,
+                question_image: [""],
+                question_choice: [],
+                question_ans: [], 
+                question_ans_num: this.data.rightAnswer.length,
+                question_solution: this.data.analyse
+            };
+            this.data.rightAnswer.forEach(item => result.question_ans.push(item.name));
+            this.data.choices.forEach(item => result.question_choice.push(item.content));
+            console.log(JSON.stringify(result));
+            return result;
+        }
     },
     data: function() {
         return {
-            data: this.initData
+            data: {
+                id: -1,
+                parents: [0],
+                change_time: "",
+                title: "",
+                content: "",
+                choices: [
+                    {
+                        name: "A",
+                        content: "",
+                        right: false
+                    },
+                    {
+                        name: "B",
+                        content: "",
+                        right: false
+                    },
+                    {
+                        name: "C",
+                        content: "",
+                        right: false
+                    },
+                    {
+                        name: "D",
+                        content: "",
+                        right: false
+                    },
+                ],
+                rightAnswer: [],
+                analyse: "",
+            },
+            valid: false
         };
     }
 }
