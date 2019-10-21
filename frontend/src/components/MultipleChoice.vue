@@ -1,20 +1,21 @@
 <template>
     <div class="multiple-choice-component">
         <v-form ref="form" v-model="valid">
-            <v-text-field label="Title" v-model="data.title" outlined></v-text-field>
+            <v-text-field label="Title" v-model="data.title" outlined :readonly="readonly"></v-text-field>
             <v-textarea 
                 label="Content"
                 v-model="data.content" 
                 :rules="[v => !!v || 'Question content is required!']"
                 outlined
                 auto-grow
+                :readonly="readonly"
             ></v-textarea>
             <v-list flat>
                 <v-list-item two-line>
                     <v-list-item-content align="left">
                     <v-list-item-title>Choices</v-list-item-title>
                     <v-list-item-subtitle :style="answer=='none' ? 'color:red' : 'color:green'">
-                    You have chosen {{ answer }}
+                        You have chosen {{ answer }}
                     </v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
@@ -30,14 +31,16 @@
                             placeholder="Enter choice"
                             v-model="item.content"
                             :rules="[v => !!v || 'Choice content is required!']"
+                            :readonly="readonly"
                         ></v-text-field>
                         <v-btn icon small
-                            @click="changeRightStatus(item)">
+                            @click="readonly ? ()=>{} : changeRightStatus(item)"
+                            >
                             <v-icon color="green" v-if="item.right">mdi-check-circle</v-icon>
                             <v-icon color="red" v-else>mdi-close-circle</v-icon>
                         </v-btn>
                         <v-btn icon small
-                            @click="removeChoice(index)">
+                            @click="removeChoice(index)" v-if="!readonly">
                             <v-icon color="red">mdi-minus</v-icon>
                         </v-btn>
                     </v-list-item>
@@ -49,6 +52,7 @@
                     dark
                     color="green"
                     @click="addChoice()"
+                    v-if="!readonly"
                 >
                     Create New
                 </v-btn>
@@ -60,12 +64,14 @@
                 :rules="[v => !!v || 'Analyse is required!']"
                 outlined
                 auto-grow
+                :readonly="readonly"
             ></v-textarea>
                 <v-btn
                     class="mr-4"
                     color="success"
                     @click="submit()"
                     :disabled="!canSubmit"
+                    v-if="!readonly"
                 >
                     Submit
                 </v-btn>
@@ -73,6 +79,7 @@
                     class="mr-4"
                     color="error"
                     @click="reset()"
+                    v-if="!readonly"
                 >
                     Reset
                 </v-btn>
@@ -83,6 +90,12 @@
 <script>
 export default {
     name: "multiple-choice",
+    props: {
+        readonly: {
+            type: Boolean,
+            default: false
+        },
+    },
     computed: {
         answer() {
             let ans=[];
