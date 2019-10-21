@@ -150,7 +150,7 @@ export default {
             //parse data input from backend
             this.data.id = input.id;
             this.data.parents = input.parents_node;
-            this.data.change_time = item.question_change_time;
+            this.data.change_time = input.question_change_time;
             this.data.title = input.question_name;
             this.data.content = input.question_content;
             this.data.analyse = input.question_solution;
@@ -160,7 +160,7 @@ export default {
                 let choiceName = String.fromCharCode(65 + choices.length);
                 choices.push({
                     name: choiceName,
-                    content: choiceName,
+                    content: item,
                     right: input.question_ans.indexOf(choiceName)!=-1 ? true : false
                 });
             });
