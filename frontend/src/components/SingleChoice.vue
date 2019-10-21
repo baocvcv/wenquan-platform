@@ -4,12 +4,14 @@
       <v-text-field
         label="Title"
         v-model="question_name"
+        :readonly="readonly"
         outlined
       ></v-text-field>
       <v-textarea
         label="Content"
         v-model="question_content"
         :rules="[v => !!v || 'Question content is required!']"
+        :readonly="readonly"
         auto-grow
         outlined
         required
@@ -18,6 +20,8 @@
         v-model="question_image"
         width="50%"
         label="picture"
+        :readonly="readonly"
+        style="margin: 0px;"
         placeholder="Upload an image if necessary"
       ></image-uploader>
       <v-list flat>
@@ -25,6 +29,7 @@
           <v-list-item-content align="left">
             <v-list-item-title>Choices</v-list-item-title>
             <v-list-item-subtitle
+              v-if="!readonly"
               :style="!!question_ans ? 'color: green;' : 'color: red;'"
               >You have chosen
               {{ !!question_ans ? question_ans.name : "none" }}
@@ -32,28 +37,40 @@
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item-group color="primary">
+        <v-list-item-group v-if="!TF" color="primary">
           <v-list-item v-for="(choice, i) in question_choice" :key="i">
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
             <v-text-field
               v-model="choice.content"
               placeholder="Enter content"
               :rules="[v => !!v || 'Choice content is required!']"
+              :readonly="readonly"
               required
             ></v-text-field>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn icon small @click="check_ans(choice)" v-on="on"
-                  ><v-icon :color="question_ans == choice ? 'green' : 'red'" dark
-                    >{{ question_ans == choice ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon
-                  ></v-btn
+                  ><v-icon
+                    :color="question_ans == choice ? 'green' : 'red'"
+                    dark
+                    >{{
+                      question_ans == choice
+                        ? "mdi-check-circle"
+                        : "mdi-close-circle"
+                    }}
+                  </v-icon></v-btn
                 >
               </template>
               <span>select as right answer</span>
             </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon small @click="delete_choice(i)" v-on="on"
+                <v-btn
+                  v-if="!readonly"
+                  icon
+                  small
+                  @click="delete_choice(i)"
+                  v-on="on"
                   ><v-icon color="red" dark>mdi-minus</v-icon></v-btn
                 >
               </template>
@@ -62,6 +79,7 @@
           </v-list-item>
         </v-list-item-group>
         <v-btn
+          v-if="!readonly"
           class="mx-2"
           block
           tile
@@ -76,6 +94,7 @@
         label="Analyse"
         v-model="question_solution"
         :rules="[v => !!v || 'Analyse is required!']"
+        :readonly="readonly"
         auto-grow
         outlined
         required
@@ -101,6 +120,10 @@ export default {
   name: "",
   props: {
     readonly: {
+      type: Boolean,
+      default: false
+    },
+    TF: {
       type: Boolean,
       default: false
     }
@@ -188,9 +211,10 @@ export default {
     reset() {
       this.$refs.input.reset();
       this.question_choice.splice(0, this.question_choice.length);
+      this.question_ans = undefined;
     },
     submit() {
-      console.log(this.parse());
+      //console.log(this.parse());
     }
   }
 };
