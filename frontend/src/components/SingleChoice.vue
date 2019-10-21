@@ -107,6 +107,17 @@
         outlined
         required
       ></v-textarea>
+      <v-list-item>
+        <span>Difficulty:</span>
+        <v-rating
+          v-model="question_level"
+          color="yellow darken-3"
+          background-color="grey darken-1"
+          :readonly="readonly"
+          half-increments
+          hover
+        ></v-rating>
+      </v-list-item>
       <v-btn
         v-if="!readonly"
         :disabled="!valid || !question_ans"
@@ -148,7 +159,7 @@ export default {
       question_change_time: "",
       question_name: "",
       question_content: "",
-      question_image: "",
+      question_image: [],
       question_choice: [],
       question_ans: undefined,
       question_solution: "",
