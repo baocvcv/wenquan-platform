@@ -3,35 +3,38 @@
         <v-btn @click="test()">test</v-btn>
         <v-select :items="typeSelection" v-model="typeSelected" label="Choose Type"></v-select>
         <multiple-choice ref="multi" v-if="typeSelected=='Multiple Choice'"></multiple-choice>
+        <single-choice ref="single" v-if="typeSelected=='Single Choice'"></single-choice>
+        <single-choice ref="TorF" v-if="typeSelected=='T or F'" TF></single-choice>
     </div>
 </template>
 
 <script>
 import MultipleChoice from "../components/MultipleChoice.vue";
+import SingleChoice from "../components/SingleChoice.vue"
 
 export default {
     name: "question-view",
     components: {
-        "multiple-choice": MultipleChoice
+        "multiple-choice": MultipleChoice,
+        "single-choice": SingleChoice,
     },
     props: {
 
     },
     methods: {
         test() {
-            this.$refs.multi.readonly=true;
-            this.$refs.multi.updateData({
-                "id": 12,
-                "parents_node": [0,1],
+            this.$refs.single.readonly=true;
+            this.$refs.single.updateData({
+                "id": 1,
+                "parents_node": [0],
                 "question_change_time": "2019-10-15T01:11:21.754312Z",
-                "question_name": "quesion2",
-                "question_type": "multiple",
+                "question_name": "quesion1",
+                "question_type": "single",
                 "question_level": 0.5,
                 "question_content": "人类的本质是?",
                 "question_image": [""],
-                "question_choice": ["A.复读机", "B.鸽子", "C.真香", "D.草履虫"],
-                "question_ans": ["A","B","C"], 
-                "question_ans_num": 3,
+                "question_choice": ["A.复读机", "B.鸽子", "C.真香", "D.以上选项均正确"],
+                "question_ans": "D", 
                 "question_solution": "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况"
             });
         }
