@@ -20,14 +20,26 @@
         label="picture"
         placeholder="Upload an image if necessary"
       ></image-uploader>
-      <v-list>
-        <v-subheader>Choices</v-subheader>
+      <v-list flat>
+        <v-list-item two-line>
+          <v-list-item-content align="left">
+            <v-list-item-title>Choices</v-list-item-title>
+            <v-list-item-subtitle
+              :style="!!question_ans ? 'color: green;' : 'color: red;'"
+              >You have chosen
+              {{ !!question_ans ? question_ans.name : "none" }}
+              as the right answer
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item-group color="primary">
           <v-list-item v-for="(choice, i) in question_choice" :key="i">
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
             <v-text-field
               v-model="choice.content"
               placeholder="Enter content"
+              :rules="[v => !!v || 'Choice content is required!']"
+              required
             ></v-text-field>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -70,7 +82,7 @@
       ></v-textarea>
       <v-btn
         v-if="!readonly"
-        :disabled="!valid"
+        :disabled="!valid || !question_ans"
         color="success"
         class="mr-4"
         @click="submit()"
@@ -87,27 +99,10 @@
 import ImageUploader from "./ImageUploader.vue";
 export default {
   name: "",
-  model: {
-    prop: "initData",
-    event: "submit"
-  },
   props: {
     readonly: {
       type: Boolean,
       default: false
-    },
-    initData: {
-      type: Object,
-      default: () => {
-        return {
-          question_name: "",
-          question_content: "",
-          question_image: "",
-          question_choice: [],
-          question_ans: "",
-          question_solution: ""
-        };
-      }
     }
   },
   components: {
@@ -116,12 +111,16 @@ export default {
   data: function() {
     return {
       valid: false,
-      question_name: this.initData.question_name,
-      question_content: this.initData.question_content,
-      question_image: this.initData.question_image,
-      question_choice: this.initData.question_choice,
-      question_ans: this.initData.question_ans,
-      question_solution: this.initData.question_solution
+      id: -1,
+      parents_node: [],
+      question_level: 0,
+      question_change_time: "",
+      question_name: "",
+      question_content: "",
+      question_image: "",
+      question_choice: [],
+      question_ans: undefined,
+      question_solution: ""
     };
   },
   methods: {
@@ -144,12 +143,54 @@ export default {
     check_ans(choice) {
       this.question_ans = this.question_ans == choice ? undefined : choice;
     },
+    updateData(input) {
+      var parsed = [];
+      var origin = input.question_choice;
+      for (var i = 0; i < origin.length; i++) {
+        var id = String.fromCharCode(i + 65);
+        var choice = {
+          name: id,
+          content: origin[i]
+        };
+        if (input.question_ans == id) this.question_ans = choice;
+        parsed.push(choice);
+      }
+      this.id = input.id;
+      this.parents_node = input.parents_node;
+      this.question_level = input.question_level;
+      this.question_change_time = input.question_change_time;
+      this.question_name = input.question_name;
+      this.question_image = input.question_image;
+      this.question_choice = parsed;
+      this.question_solution = input.question_solution;
+      this.question_content = input.question_content;
+    },
+    parse() {
+      var parsedChoice = [];
+      var localChoice = this.question_choice;
+      for (var i = 0; i < localChoice.length; i++) {
+        parsedChoice.push(localChoice[i].content);
+      }
+      return {
+        id: this.id,
+        parents_node: this.parents_node,
+        question_change_time: this.question_change_time,
+        question_type: "single",
+        question_level: this.question_level,
+        question_name: this.question_name,
+        question_image: this.question_image,
+        question_content: this.question_content,
+        question_choice: parsedChoice,
+        question_ans: this.question_ans.name,
+        question_solution: this.question_solution
+      };
+    },
     reset() {
       this.$refs.input.reset();
       this.question_choice.splice(0, this.question_choice.length);
     },
     submit() {
-      this.$emit("submit", this.initData);
+      console.log(this.parse());
     }
   }
 };
