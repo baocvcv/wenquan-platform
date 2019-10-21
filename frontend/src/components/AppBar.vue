@@ -20,6 +20,18 @@
                 {{ nav_link.text }}
             </v-btn>
         </router-link>
+        <router-link to="/admin" v-if="render_admin_entry">
+            <v-btn text>
+                <v-icon>mdi-account-supervisor-circle</v-icon>
+                Admin
+            </v-btn>
+        </router-link>
+        <router-link to="/" v-if="render_exit">
+            <v-btn text>
+                <v-icon>mdi-location-exit</v-icon>
+                Exit
+            </v-btn>
+        </router-link>
         </v-app-bar>
     </div>
 </template>
@@ -97,10 +109,23 @@ export default {
         rendered_nav_links: function() {
             if (!this.user)
                 return this.nav_link_groups.not_signed_in;
-            else if (this.user.user_group === "Student")
-                return this.nav_link_groups.student;
-            else if (this.user.user_group === "Admin" || this.user.user_group === "SuperAdmin")
+            else if (this.render_exit)
                 return this.nav_link_groups.admin;
+            else
+                return this.nav_link_groups.student;
+        },
+        render_admin_entry: function() {
+            console.log("Testing....");
+            if (!this.user)
+                return false;
+            return this.$router.currentRoute.path.split('/')[1] != "admin"
+            && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
+        },
+        render_exit: function() {
+            if (!this.user)
+                return false;
+            return this.$router.currentRoute.path.split('/')[1] === "admin"
+            && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         }
     },
     methods: {
