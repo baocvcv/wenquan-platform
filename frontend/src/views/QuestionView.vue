@@ -1,5 +1,6 @@
 <template>
     <div class="question-view">
+        <v-btn @click="test()">test</v-btn>
         <v-select :items="typeSelection" v-model="typeSelected" label="Choose Type"></v-select>
         <multiple-choice ref="multi" v-if="typeSelected=='Multiple Choice'"></multiple-choice>
     </div>
@@ -18,6 +19,7 @@ export default {
     },
     methods: {
         test() {
+            this.$refs.multi.readonly=true;
             this.$refs.multi.updateData({
                 "id": 12,
                 "parents_node": [0,1],
