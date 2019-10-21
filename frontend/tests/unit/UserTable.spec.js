@@ -19,15 +19,15 @@ describe("UserTable.vue", () => {
     });
 
     it("renders props.users according to their types", () => {
+        const user_logged_in = user_factory.create_anonymous_superadmin();
         const users = [
             user_factory.create_anonymous_student(),
             user_factory.create_anonymous_admin(),
-            user_factory.create_anonymous_superadmin()
+            user_logged_in
         ];
-        const user = user_factory.create_user_admin();
         const store = new Vuex.Store({
             state: {
-                user: user
+                user: user_logged_in
             }
         });
         const wrapper = mount(UserTable, {
@@ -49,13 +49,14 @@ describe("UserTable.vue", () => {
     });
 
     it("emits change_user_type event after changing user type", () => {
+        const user_logged_in = user_factory.create_anonymous_superadmin();
         const users = [
-            user_factory.create_anonymous_student()
+            user_factory.create_anonymous_student(),
+            user_logged_in
         ];
-        const user = user_factory.create_user_superadmin();
         const store = new Vuex.Store({
             state: {
-                user: user
+                user: user_logged_in
             }
         });
         const wrapper = mount(UserTable, {
@@ -63,26 +64,22 @@ describe("UserTable.vue", () => {
             vuetify,
             store,
             sync: false,
+            attachToDocument: true,
             propsData: {
                 users
             }
         });
-        //expect(wrapper.vm.$store.state.user.username).toBe("Admin_signed_in");
-        let change_user_type_button = wrapper.find('.v-icon--link.mdi-arrow-up');
-        change_user_type_button.trigger("click");
-        //expect(wrapper.vm.dialog_change_user_type).toBe(true);
-        console.log(wrapper.html());
-        //expect(wrapper.emitted("change-user-type")).toBeTruthy();
     });
 
     it("emits change_user_status event after changing user status", () => {
+        const user_logged_in = user_factory.create_anonymous_superadmin();
         const users = [
-            user_factory.create_anonymous_student()
+            user_factory.create_anonymous_student(),
+            user_logged_in
         ];
-        const user = user_factory.create_user_admin();
         const store = new Vuex.Store({
             state: {
-                user: user
+                user: user_logged_in
             }
         });
         const wrapper = mount(UserTable, {
@@ -94,17 +91,19 @@ describe("UserTable.vue", () => {
                 users
             }
         });
-        //expect(wrapper.emitted('change-user-status')).toBeTruthy();
+        let change_user_status_button = wrapper.find('.v-icon--link.mdi-cancel');
+        change_user_status_button.trigger("click");
+        expect(wrapper.emitted('change-user-status')).toBeTruthy();
     });
 
     it("emits create_user event after clicking the CREATE button in the dialog", () => {
+        const user_logged_in = user_factory.create_anonymous_superadmin();
         const users = [
-            user_factory.create_anonymous_student()
+            user_logged_in
         ];
-        const user = user_factory.create_user_admin();
         const store = new Vuex.Store({
             state: {
-                user: user
+                user: user_logged_in
             }
         });
         const wrapper = mount(UserTable, {
@@ -116,14 +115,8 @@ describe("UserTable.vue", () => {
                 users
             }
         });
+        let create_user_button = wrapper.find(".v-toolbar__content .v-btn.v-btn--contained");
+        create_user_button.trigger("click");
         //expect(wrapper.emitted('create-user')).toBeTruthy();
-    });
-
-    it("shows the dialog after toggling the CREATE button", () => {
-        
-    });
-
-    it("updates the user list after modifying it in the parent component", () => {
-
     });
 });

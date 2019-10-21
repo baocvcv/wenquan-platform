@@ -14,7 +14,7 @@
           v-on:click:append="show_password=!show_password"></v-text-field>
         <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
     </v-form>
-    <v-dialog v-model="show_dialog" max-width="300">
+    <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
         <v-toolbar color="indigo" dark>
           <v-toolbar-title>{{ sign_in_result }}</v-toolbar-title>
@@ -55,34 +55,31 @@ export default {
           username: this.username,
           password: this.password,
           //password: md5(this.password),
-          user_type:{
-            is_student: false,
-            is_admin: false,
-            is_superadmin: false
-          }
         };
 
-        console.log(JSON.stringify(user));
-
-        axios.post("/jwt-auth/",user).then((response) => {
+        axios.post("/api/jwt-auth/",user).then((response) => {
           //Sign in successfully
 
           if(response.data.is_banned){
-            this.sign_in_result="Error!";
+            this.sign_in_result="Error";
             this.sign_in_response="You are banned! Please contact your administrator."
             this.show_dialog=true;
             return;
           }
 
-          user.user_type=response.data.user_type;
+          user.user_permissions=response.data.user_permissions;
+          user.user_group=response.data.user_group;
+          user.token=response.data.token;
 
           this.$store.commit("login", {
             user: user
           });
 
+          this.sign_in_result="Success";
+
           console.log(response);
 
-          this.$router.push("/");
+          this.$router.push("/").catch(err => console.log(err));
         }).catch((response) => {
           this.sign_in_result = "Error";
           this.sign_in_response = response;

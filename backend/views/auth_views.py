@@ -3,7 +3,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-# from backend.models.user_base import User
+from django.utils import timezone
+
+from backend.serializers import UserSerializer
 
 class CustomAuthToken(ObtainAuthToken):
     """ Custom auth backend"""
@@ -13,18 +15,12 @@ class CustomAuthToken(ObtainAuthToken):
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        user.last_login_time = timezone.now()
+        # user.save(update_fields='last_login_time')
+        user.save()
+
+        user_serializer = UserSerializer(user)
+        data = user_serializer.data
         token, _ = Token.objects.get_or_create(user=user)
-        # return Response({'token': token.key})
-        data = {
-            'token': token.key,
-            'user_id': user.pk,
-            'username': user.username,
-            'password': user.password,
-            'is_banned': user.is_banned,
-            'user_type':{
-                'is_student': user.user_type.is_student,
-                'is_admin': user.user_type.is_admin,
-                'is_superadmin': user.user_type.is_superadmin,
-                }
-            }
+        data['token'] = token.key
         return Response(data)
