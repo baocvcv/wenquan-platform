@@ -37,10 +37,14 @@
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item-group v-if="!TF" color="primary">
-          <v-list-item v-for="(choice, i) in question_choice" :key="i">
+        <v-list-item-group color="primary">
+          <v-list-item
+            v-for="(choice, i) in TF ? tf_choice : question_choice"
+            :key="i"
+          >
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
             <v-text-field
+              v-if="!TF"
               v-model="choice.content"
               placeholder="Enter content"
               :rules="[v => !!v || 'Choice content is required!']"
@@ -49,7 +53,11 @@
             ></v-text-field>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-btn icon small @click="check_ans(choice)" v-on="on"
+                <v-btn
+                  icon
+                  small
+                  @click="readonly ? () => {} : check_ans(choice)"
+                  v-on="on"
                   ><v-icon
                     :color="question_ans == choice ? 'green' : 'red'"
                     dark
@@ -66,7 +74,7 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  v-if="!readonly"
+                  v-if="!readonly && !TF"
                   icon
                   small
                   @click="delete_choice(i)"
@@ -79,7 +87,7 @@
           </v-list-item>
         </v-list-item-group>
         <v-btn
-          v-if="!readonly"
+          v-if="!readonly && !TF"
           class="mx-2"
           block
           tile
@@ -143,7 +151,8 @@ export default {
       question_image: "",
       question_choice: [],
       question_ans: undefined,
-      question_solution: ""
+      question_solution: "",
+      tf_choice: [{ name: "T", content: true }, { name: "F", content: false }]
     };
   },
   methods: {
@@ -189,24 +198,29 @@ export default {
       this.question_content = input.question_content;
     },
     parse() {
-      var parsedChoice = [];
-      var localChoice = this.question_choice;
-      for (var i = 0; i < localChoice.length; i++) {
-        parsedChoice.push(localChoice[i].content);
-      }
-      return {
+      var result = {
         id: this.id,
         parents_node: this.parents_node,
         question_change_time: this.question_change_time,
-        question_type: "single",
+        question_type: this.TF ? "TorF" : "single",
         question_level: this.question_level,
         question_name: this.question_name,
         question_image: this.question_image,
         question_content: this.question_content,
-        question_choice: parsedChoice,
-        question_ans: this.question_ans.name,
         question_solution: this.question_solution
       };
+      if (this.TF) {
+        result["question_ans"] = this.question_ans.content;
+      } else {
+        var parsedChoice = [];
+        var localChoice = this.question_choice;
+        for (var i = 0; i < localChoice.length; i++) {
+          parsedChoice.push(localChoice[i].content);
+        }
+        result["question_ans"] = this.question_ans.name;
+        result["question_choice"] = parsedChoice;
+      }
+      return result;
     },
     reset() {
       this.$refs.input.reset();
