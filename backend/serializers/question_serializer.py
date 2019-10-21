@@ -1,5 +1,7 @@
 """ Serializers for Questions """
-import datetime
+from django.utils import timezone
+from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from rest_framework import serializers
 
 from backend.models import QuestionGroup
@@ -15,7 +17,7 @@ def create_pre_task(validated_data):
     tasks related to QuestionBanks
     should be done before creating
     """
-    new_group = QuestionGroup.objects.create(current_version=datetime.datetime.now())
+    new_group = QuestionGroup.objects.create(current_version=timezone.now())
     node_id = validated_data.pop("parents_node")
     for i in node_id:
         node = KnowledgeNode.objects.get(id=i)
@@ -32,20 +34,22 @@ def update_pre_task(instance, validated_data):
     """
     this_group = instance.history_version
     now_parents_node = this_group.parents_node
-    new_node_id = validated_data.pop("knowledge_node")
+    new_node_id = validated_data.pop("parents_node")
     now_parents_node.clear()
     for i in new_node_id:
         node = KnowledgeNode.objects.get(id=i)
         now_parents_node.add(node)
-    this_group.current_version = datetime.datetime.now()
+    this_group.current_version = timezone.now()
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
+    """Serializer for SingleChoiceQ"""
+    parents_node = ArrayField(models.IntegerField())
+
     class Meta:
         """Meta class"""
         model = SingleChoiceQ
         fields = [
-            'history_version',
             'question_name',
             'question_type',
             'question_level',
@@ -62,7 +66,7 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
         create_pre_task(validated_data)
         question = SingleChoiceQ.objects.create(
             history_version=new_group,
-            question_change_time=datetime.datetime.now(),
+            question_change_time=timezone.now(),
             **new_q,
         )
         question.save()
@@ -84,11 +88,13 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
 
 class MultpChoiceQSerializer(serializers.ModelSerializer):
+    """Serializer for MultpChoiceQ"""
+    parents_node = ArrayField(models.IntegerField())
+
     class Meta:
         """Meta class"""
         model = MultpChoiceQ
         fields = [
-            'history_version',
             'question_name',
             'question_type',
             'question_level',
@@ -106,7 +112,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
         create_pre_task(validated_data)
         question = MultpChoiceQ.objects.create(
             history_version=new_group,
-            question_change_time=datetime.datetime.now(),
+            question_change_time=timezone.now(),
             **new_q,
         )
         question.save()
@@ -128,11 +134,13 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
 
 
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
+    """Serializer for TrueOrFalseQ"""
+    parents_node = ArrayField(models.IntegerField())
+
     class Meta:
         """Meta class"""
         model = TrueOrFalseQ
         fields = [
-            'history_version',
             'question_name',
             'question_type',
             'question_level',
@@ -148,7 +156,7 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
         create_pre_task(validated_data)
         question = TrueOrFalseQ.objects.create(
             history_version=new_group,
-            question_change_time=datetime.datetime.now(),
+            question_change_time=timezone.now(),
             **new_q,
         )
         question.save()
@@ -171,11 +179,12 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
 class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
+    parents_node = ArrayField(models.IntegerField())
+
     class Meta:
         """meta class"""
         model = FillBlankQ
         fields = [
-            'history_version',
             'question_name',
             'question_type',
             'question_level',
@@ -192,7 +201,7 @@ class FillBlankQSerializer(serializers.ModelSerializer):
         new_group = create_pre_task(validated_data)
         question = FillBlankQ.objects.create(
             history_version=new_group,
-            question_change_time=datetime.datetime.now(),
+            question_change_time=timezone.now(),
             **new_q,
         )
         question.save()
@@ -213,11 +222,12 @@ class FillBlankQSerializer(serializers.ModelSerializer):
 
 class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
+    parents_node = ArrayField(models.IntegerField())
+
     class Meta:
         """meta class"""
         model = BriefAnswerQ
         fields = [
-            'history_version',
             'question_name',
             'question_type',
             'question_level',
@@ -233,7 +243,7 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
         new_group = create_pre_task(validated_data)
         question = BriefAnswerQ.objects.create(
             history_version=new_group,
-            question_change_time=datetime.datetime.now(),
+            question_change_time=timezone.now(),
             **new_q,
         )
         question.save()
