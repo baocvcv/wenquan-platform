@@ -1,24 +1,27 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-toolbar>
+    <v-toolbar v-if="!!label">
       <v-toolbar-title>
         {{ label }}
       </v-toolbar-title>
     </v-toolbar>
     <v-container fluid align="center">
-      <v-row align="center">
-        <v-col v-for="(image, i) in img" :key="i" cols="6" sm="4">
+      <v-row justify="center" align="center">
+        <v-col
+          v-for="(image, i) in img"
+          :key="i"
+          cols="12"
+          :lg="Math.max(12 / ((check_create() ? 1 : 0) + img.length), 4)"
+          md="6"
+          xs="12"
+        >
           <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" />
           <v-btn v-if="!readonly" icon @click="delete_image(i)">
             <v-icon color="red">mdi-delete</v-icon>
           </v-btn>
         </v-col>
-        <v-col
-          v-if="!readonly && !(img.length >= 1 && !multiple)"
-          cols="6"
-          sm="4"
-        >
-          <v-btn style="margin: auto" icon large @click="upload()">
+        <v-col v-if="check_create()" align-self>
+          <v-btn icon large @click="upload()">
             <v-icon color="green">mdi-plus</v-icon>
           </v-btn>
           <br />
@@ -46,7 +49,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: "picture"
+      default: ""
     },
     placeholder: {
       type: String,
@@ -88,9 +91,6 @@ export default {
 
       if (file) {
         reader.readAsDataURL(file);
-      } else {
-        this.img = undefined;
-        this.$emit("change", this.img);
       }
 
       reader.onload = function() {
@@ -101,6 +101,9 @@ export default {
     delete_image(index) {
       this.img.splice(index, 1);
       this.$emit("change", this.img);
+    },
+    check_create() {
+      return !this.readonly && !(this.img.length >= 1 && !this.multiple);
     },
     upload() {
       let btn = this.$refs.upload;
