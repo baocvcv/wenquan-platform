@@ -20,7 +20,7 @@
               <v-select
                 :items="authorities"
                 label="Authorities"
-                v-model = "authority"
+                v-model="authority"
                 outlined
               ></v-select>
               <v-text-field
@@ -35,6 +35,7 @@
             <v-col>
               <v-card>
                 <image-uploader
+                  ref="uploader"
                   v-model="image"
                   label="Avatar"
                   placeholder="Pick an avatar(optional)"
@@ -54,7 +55,11 @@
             required
           ></v-textarea>
 
-          <v-btn color="success" :disabled="!valid" class="mr-4" @click="create()"
+          <v-btn
+            color="success"
+            :disabled="!valid"
+            class="mr-4"
+            @click="create()"
             >Create</v-btn
           >
 
@@ -90,35 +95,33 @@ export default {
       authorities: ["private", "public"],
       authority: "",
       invitation_code_count: 0,
-      invite_code_rules: [ v => this.isInt(v) || "You should enter an integer!" ],
+      invite_code_rules: [v => this.isInt(v) || "You should enter an integer!"],
       image: []
     };
   },
   methods: {
     create() {
-      alert("test send to backend");
-      console.log(this.image);
       let that = this;
       axios
-        .post("api/question_banks/",{
-            id: -1,
-            name: this.name,
-            picture: this.img.length == 0 ? "" : this.img[0],
-            brief: this.brief,
-            authorities: this.authority,
-            invitation_code_count: this.invitation_code_count
+        .post("/api/question_banks/", {
+          id: -1,
+          name: this.name,
+          picture: this.image.length == 0 ? "" : this.image[0],
+          brief: this.brief,
+          authority: this.authority,
+          invitation_code_count: this.invitation_code_count
         })
         .then(response => {
           alert("Success!");
-          that.$route.push('questionbank/'+response.id);
+          that.$route.push("questionbank/" + response.id);
         })
         .catch(error => {
           alert(error);
-        })
+        });
     },
     reset() {
       this.$refs.form.reset();
-      this.image = [];
+      this.$refs.uploader.reset();
     },
     isInt(target) {
       var regInt = /^[0-9]+$/;

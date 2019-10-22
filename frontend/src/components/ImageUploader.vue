@@ -109,6 +109,10 @@ export default {
     upload() {
       let btn = this.$refs.upload;
       btn.click();
+    },
+    reset() {
+      this.img.splice(0, this.img.length);
+      this.$emit("change", this.img);
     }
   }
 };
