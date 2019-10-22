@@ -1,6 +1,5 @@
 <template>
 <div id="question-bank">
-    <h1>{{ edited_question_bank.name }}</h1>
     <v-card>
         <v-card-title>Profile        
             <v-btn
@@ -13,6 +12,12 @@
         <v-card-text>
             <v-row>
                 <v-col cols="12" md="9" sm="9">
+                    <v-text-field
+                        label="Name"
+                        :readonly="!edit_mode"
+                        outlined
+                        v-model="edited_question_bank.name"
+                    ></v-text-field>
                     <v-row>
                         <v-col>
                             <v-text-field
@@ -57,11 +62,13 @@
                 </v-col>
             </v-row>
         </v-card-text>
-        <v-card-actions v-if="edit_mode">
-            <div class="flex-grow-1"></div>
-            <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-        </v-card-actions>
+        <v-expand-transition>
+            <v-card-actions v-show="edit_mode">
+                <div class="flex-grow-1"></div>
+                <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
+        </v-expand-transition>
     </v-card>
     <question-list :editable="true"></question-list>
 </div>

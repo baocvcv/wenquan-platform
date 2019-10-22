@@ -34,15 +34,12 @@
                         >
                         <tree-view></tree-view>
                     </v-col>
-                    <!--TODO: responsive error here-->
                     <v-col
-                        :cols="drawer ? 6 : 12"
+                        :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
                         :md="drawer ? 8 : 12"
-                        :xs="12"
                     >
                         <v-row dense>
                             <v-col 
-                            cols="12"
                             v-for="question in question_list"
                             :key="question.id"
                             >
