@@ -104,11 +104,33 @@ export default {
             this.edited_question_bank = Object.assign({}, this.question_bank);
         },
         save() {
+            /*
+            this.$axios
+                .put('api/questionbanks/' + id + '/', this.edited_question_bank)
+                .then((response) => {
+                    this.edit_mode = false;
+                    this.quesion_bank = Object.assign({}, this.edited_question_bank);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            */
             this.edit_mode = false;
             this.question_bank = Object.assign({}, this.edited_question_bank);
         }
     },
     created() {
+        let id = this.$route.params.id;
+        /*
+        this.$axios
+            .get('api/questionbanks/' + id + '/')
+            .then((response) => {
+                this.question_bank = response.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        */
         this.edited_question_bank = Object.assign({}, this.question_bank);
     }
 }
