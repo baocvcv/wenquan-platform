@@ -1,6 +1,6 @@
 <template>
     <div id="app-bar">
-        <v-navigation-drawer v-model="drawer" app clipped>
+        <v-navigation-drawer v-model="drawer" app clipped v-if="$vuetify.breakpoint.xsOnly">
             <v-list dense>
                 <template 
                     v-for="nav_link in rendered_nav_links"
@@ -189,8 +189,7 @@ export default {
             if (!show_drawer)
                 drawer = false;
         }
-    }
-    /*
+    },
     mounted() {
         window.addEventListener('resize', () => {
             console.log("Resizing...");
@@ -198,7 +197,6 @@ export default {
                 this.drawer = false;
         })
     }
-    */
 }
 </script>
 
