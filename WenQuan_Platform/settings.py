@@ -76,8 +76,8 @@ DATABASES = {
         'NAME': 'wen_quan',
         'USER': 'postgres',
         'PASSWORD': '123',
-        'HOST': 'postgres.Never404.secoder.local',
-        # 'HOST': 'localhost',
+        # 'HOST': 'postgres.Never404.secoder.local',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -125,8 +125,6 @@ STATICFILES_DIRS = [
 # Email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.163.com'
-EMAIL_HOST_USER = 'baocvcv@163.com'
-EMAIL_HOST_PASSWORD = 'BaoHan828'
 EMAIL_PORT = 465  #25
 
 # Rest framework settings
