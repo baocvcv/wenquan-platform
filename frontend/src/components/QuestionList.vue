@@ -5,24 +5,73 @@
             <v-app-bar flat clipped-left>
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <div class="flex-grow-1"></div>
-                    <v-menu open-on-hover top offset-y>
+                    <v-text-field
+                        flat
+                        hide-details
+                        label="Search"
+                        prepend-inner-icon="mdi-magnify"
+                        clearable
+                    ></v-text-field>
+                    <v-menu 
+                        bottom 
+                        offset-y 
+                        transition="slide-y-transition"
+                        :close-on-content-click="false"
+                    >
                         <template v-slot:activator="{ on }">
-                            <v-btn icon>
+                            <v-btn icon v-on="on">
                                 <v-icon>mdi-filter</v-icon>
                             </v-btn>
                         </template>
+                        <v-sheet>
+                            <v-container>
+                                <v-select
+                                    v-model="type_filter"
+                                    :items="question_types"
+                                    chips
+                                    label="Type"
+                                    multiple
+                                >
+                                    <template v-slot:selection="{ item, index }">
+                                        <v-chip v-if="index === 0">
+                                            <span>{{ item }}</span>
+                                        </v-chip>
+                                        <span
+                                            v-if="index === 1"
+                                            class="grey--text caption"
+                                        >(+{{ type_filter.length - 1}} others)</span>
+                                    </template>
+                                </v-select>
+                            </v-container>
+                        </v-sheet>
                     </v-menu>
-                    <v-menu open-on-hover top offset-y>
+                    <v-menu offset-y transition="slide-y-transition">
                         <template v-slot:activator="{ on }">
-                            <v-btn icon>
+                            <v-btn icon v-on="on">
                                 <v-icon>mdi-sort</v-icon>
                             </v-btn>
                         </template>
+                        <v-list>
+                            <v-list-item
+                                v-for="(item, index) in sort_menu"
+                                :key="index"
+                            >
+                                <v-list-item-title>{{ item }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
                     </v-menu>
                     <v-btn
-                    v-if="editable"
-                    text
+                        v-if="editable && $vuetify.breakpoint.mdAndUp"
+                        color="primary"
+                        elevation="0"
                     >Create</v-btn>
+                    <v-btn
+                        v-if="editable && !$vuetify.breakpoint.mdAndUp"
+                        color="primary"
+                        elevation="0"
+                    >
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
             </v-app-bar>
             <v-card-text>
                 <v-row>
@@ -68,12 +117,26 @@ export default {
         "question-list-item": question_list_item
     },
     data: () => ({
+        type_filter: [],
         drawer: null,
-        question_list: []
+        question_list: [],
+        sort_menu: [
+            "Popularity",
+            "Level"
+        ],
+        keyword: "",
+        question_types: [
+            "Single",
+            "Multiple",
+            "T/F",
+            "Blank Filling",
+            "Brief Answer"
+        ]
     }),
     mounted() {
         let question_1 = {
             id: 1,
+            parents_node: [0, 1],
             question_change_time: "2019-10-22",
             question_name: "Name 1",
             question_type: "single",

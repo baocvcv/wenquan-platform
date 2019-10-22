@@ -1,10 +1,11 @@
 <template>
     <div id="question-list-item">
         <v-card outlined>
-            <v-card-title @click="click">
+            <v-card-title>
                 <v-chip color="primary">
                     {{ question.question_type }}
                 </v-chip>
+                <!--TODO: Change here into computed-->
                 <v-chip
                     v-for="tag in question.question_tags"
                     :key="tag"
@@ -95,6 +96,23 @@ export default {
                 this.content_too_long = false;
                 this.hide_content = false;
             }
+        }
+    },
+    computed: {
+        tags() {
+            let tags = [];
+            for (node in this.question.parents_node)
+            {
+                this.$axios
+                    .get("/api/nodes_list/" + node + "/")
+                    .then((response) => {
+                        tags.push(response.data.name);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+            return tags;
         }
     },
     methods: {
