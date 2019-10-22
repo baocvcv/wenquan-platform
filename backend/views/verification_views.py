@@ -40,6 +40,7 @@ class EmailVerificationView(APIView):
                 user.set_password(request.data['password'])
             elif record.send_type == "register":
                 user.is_active = True
+            user.save()
             record.is_valid = False
             serializer = UserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)

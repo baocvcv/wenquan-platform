@@ -25,7 +25,6 @@ class UserSerializer(serializers.ModelSerializer):
     user_permissions = UserPermissionsSerializer(read_only=True)
     profile = ProfileSerializer(required=False)
     is_banned = serializers.BooleanField(default=False)
-    is_active = serializers.BooleanField(default=False)
     user_group = serializers.CharField(default="Student")
 
     def create(self, validated_data):
@@ -42,6 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_group="Student",
             profile=profile,
             user_permissions=user_permissions,
+            is_active=False,
         )
         user.set_password(validated_data['password'])
         user.save()

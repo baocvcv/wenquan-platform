@@ -8,7 +8,7 @@ class EmailVerificationRecord(models.Model):
     """ Email verification for user """
     email_type = (("register",u"Register"), ("forget",u"Reset password"))
 
-    token = models.CharField(max_length=20, verbose_name=u"Code")
+    token = models.CharField(max_length=50, verbose_name=u"Code")
     email = models.EmailField(max_length=50, verbose_name=u"Email")
     send_type = models.CharField(verbose_name=u"Verification type", max_length=10, choices=email_type)
     send_time = models.DateTimeField(verbose_name=u"Send time")
@@ -31,10 +31,11 @@ class EmailVerificationRecord(models.Model):
         email_title = ""
         email_body = ""
         # 如果为注册类型
-        if send_type == "register":
+        if self.send_type == "register":
             email_title = "注册激活链接"
-            email_body = "请点击下面的链接激活你的账号:http://127.0.0.1:8000/active/{0}".format(code)
+            email_body = "请点击下面的链接激活你的账号:http://127.0.0.1:8000/active/{0}".format(self.token)
             # 发送邮件
-            send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+            send_status = self.user.email_user(email_title, email_body)
+            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         if send_status:
             pass
