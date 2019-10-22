@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
     user_permissions = UserPermissionsSerializer(read_only=True)
     profile = ProfileSerializer(required=False)
     is_banned = serializers.BooleanField(default=False)
+    is_active = serializers.BooleanField(default=False)
     user_group = serializers.CharField(default="Student")
 
     def create(self, validated_data):
@@ -70,6 +71,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'username', 'password',
-                  'last_login_time', 'last_login_ip', 'is_banned',
+                  'last_login_time', 'last_login_ip', 'is_banned', 'is_active',
                   'user_group', 'user_permissions', 'profile']
         read_only_fields = ['last_login_time', 'last_login_ip']
