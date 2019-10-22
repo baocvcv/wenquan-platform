@@ -7,6 +7,16 @@ from backend.serializers.knowledge_node_serializer import KnowlegdeNodeSerialize
 from backend.models.knowledge_node import KnowledgeNode
 
 
+class KnowledgeNodeName(APIView):
+    """Only get nodes' names and ids"""
+    def get(self, request, pk):
+        node = KnowledgeNode.objects.get('id=pk')
+        response = {}
+        response['id'] = node.id
+        response['name'] = node.name
+        return Response(response)
+
+
 class KnowledgeNodeList(APIView):
     """Get all Node info or create a question"""
     tree = []
@@ -30,7 +40,6 @@ class KnowledgeNodeList(APIView):
     def post(self, request):
         """Create a KnowledgeNode"""
         post_data = JSONParser().parse(request)[0]
-        post_data.pop('id')
         subnodes = []
         parent = KnowledgeNode.get(id=post_data.pop('parent'))
 

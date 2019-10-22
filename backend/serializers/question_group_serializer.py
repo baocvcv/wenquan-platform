@@ -20,6 +20,7 @@ class QuestionGroupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create question group"""
+        validated_data.pop('id')
         question_group = QuestionGroup.objects.create(**validated_data)
         question_group.save()
         return question_group
