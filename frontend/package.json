@@ -10,6 +10,10 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@bosket/core": "^0.4.4",
+    "@bosket/tools": "^0.4.4",
+    "@bosket/vue": "^0.4.4",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "core-js": "^2.6.5",
     "js-md5": "^0.7.3",
     "register-service-worker": "^1.6.2",
