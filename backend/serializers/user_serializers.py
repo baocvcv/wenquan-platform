@@ -5,6 +5,7 @@ from backend.models import User
 from backend.models import UserPermissions
 from backend.models import Profile
 
+
 class UserPermissionsSerializer(serializers.ModelSerializer):
     """ Serializer for usertype """
     class Meta:
@@ -14,11 +15,13 @@ class UserPermissionsSerializer(serializers.ModelSerializer):
         #           'ban_admins', ]
         exclude = ['group_name']
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     """ Serializer for user profile """
     class Meta:
         model = Profile
         fields = ['school_name']
+
 
 class UserSerializer(serializers.ModelSerializer):
     """ Serializer for User model """
@@ -69,7 +72,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password',
-                  'last_login_time', 'last_login_ip', 'is_banned',
-                  'user_group', 'user_permissions', 'profile']
+        fields = ['id', 'email', 'username', 'password', 'last_login_time', 'last_login_ip', 'is_banned', 'user_group', 'user_permissions', 'profile']
         read_only_fields = ['last_login_time', 'last_login_ip']
