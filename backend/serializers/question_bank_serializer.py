@@ -52,5 +52,12 @@ class QuestionBankSerializer(serializers.ModelSerializer):
         """update question group"""
         instance.root_id = validated_data.get('root_id', instance.root_id)
         instance.name = validated_data.get('name', instance.name)
+        instance.picture = validated_data.get('picture', instance.picture)
+        instance.brief = validated_data.get('brief', instance.brief)
+        instance.lastUpdate = timezone.now()
+        instance.authority = validated_data.get('authority', instance.authority)
+        instance.question_count = validated_data.get('question_count', instance.question_count)
+        instance.invitation_code_count = validated_data.get('invitation_code_count', instance.invitation_code_count)
+        instance.activated_code_count = validated_data.get('activated_code_count', instance.activated_code_count)
         instance.save()
         return instance

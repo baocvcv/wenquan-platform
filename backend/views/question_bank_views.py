@@ -30,3 +30,24 @@ class QuestionBankList(APIView):
             serializer.id = new_bank.id
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+
+
+class QuestionBankDetial(APIView):
+    def get(self, request, pk):
+        bank = QuestionBank.objects.get(id=pk)
+        serializer = QuestionBankSerializer(bank)
+        response = serializer.data
+        questions = []
+        for i in bank.questiongroup_set.all():
+            questions += i
+        response['questions'] = questions
+        return Response(response)
+
+    def put(self, request, pk):
+        bank = QuestionBank.objects.get(id=pk)
+        put_data = JSONParser().parse(request)
+        serializer = QuestionBankSerializer(bank, put_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)

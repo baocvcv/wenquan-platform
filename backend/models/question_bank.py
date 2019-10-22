@@ -6,6 +6,7 @@ MAX_CONTENT = 20000
 MAX_ID = 20
 MAX_NAME = 200
 MAX_URL = 200
+IMAGE = 10000000
 
 
 class QuestionBank(PolymorphicModel):
@@ -17,7 +18,7 @@ class QuestionBank(PolymorphicModel):
     """
     root_id = models.IntegerField()
     name = models.CharField(max_length=MAX_NAME)
-    picture = models.CharField(max_length=MAX_URL)
+    picture = models.CharField(max_length=IMAGE)
     brief = models.CharField(max_length=MAX_CONTENT)
     createTime = models.DateTimeField()
     lastUpdate = models.DateTimeField()
