@@ -25,7 +25,7 @@ export default {
     methods: {
         create_user(user) {
             this.$axios
-                .post("api/accounts/users/", user)
+                .post("/api/accounts/users/", user)
                 .then(response => {
                     this.users.push(user);
                 })
@@ -37,7 +37,7 @@ export default {
             let changed_user = user;
             changed_user.is_banned = !changed_user.is_banned;
             this.$axios
-                .put("api/accounts/users/" + user.id + "/", changed_user)
+                .put("/api/accounts/users/" + user.id + "/", changed_user)
                 .then(response => {
                     user = changed_user;
                 })
@@ -52,7 +52,7 @@ export default {
             else if (changed_user.user_group === "Admin")
                 changed_user.user_group = "Student";
             this.$axios
-                .put("api/accounts/users/" + user.id + "/", user)
+                .put("/api/accounts/users/" + user.id + "/", user)
                 .then(response => {
                     user = changed_user;
                 })
@@ -63,21 +63,13 @@ export default {
     },
     mounted: function() {
         this.$axios
-            .get('api/accounts/users/')
+            .get('/api/accounts/users/')
             .then(response => {
                 this.users = response.data;
             })
             .catch(error => {
                 console.log(error);
             })
-    },
-   created() {
-       if (!this.$store.state.user || this.$store.state.user.user_group === "Student")
-       {
-            console.log("You have no access to this page.");
-            this.$router.push("/");
-       }
-       console.log(this.$store.state.user);
-   }
+    }
 }
 </script>

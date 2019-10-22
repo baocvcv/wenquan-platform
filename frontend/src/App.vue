@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <app-bar></app-bar>
+    <app-bar :key="$route.fullPath"></app-bar>
     <v-content>
       <v-container fluid>
         <router-view/>

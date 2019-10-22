@@ -4,7 +4,7 @@
       <v-list-item
         v-for="qst_bank in question_banks"
         :key="qst_bank.name"
-        @click="$router.push('/questionbanks/' + qst_bank.id)"
+        @click="$router.push('questionbanks/' + qst_bank.id)"
       >
         <v-list-item-avatar>
           <v-icon v-text="qst_bank.icon"></v-icon>
@@ -69,7 +69,7 @@
           <v-btn
             color="green"
             dark
-            @click="$router.push('/questionbanks/' + cur_qst_bank.id)"
+            @click="$router.push('questionbanks/'+ cur_qst_bank.id)"
           >
             Goto
           </v-btn>
