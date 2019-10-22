@@ -15,7 +15,6 @@ class QuestionBankList(APIView):
 
     def post(self, request):
         post_data = JSONParser().parse(request)[0]
-        post_data.pop('id')
 
         root = KnowledgeNode.objects.create()
         post_data['root_id'] = root.id

@@ -19,6 +19,7 @@ class KnowlegdeNodeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create question group"""
+        validated_data.pop('id')
         node = KnowledgeNode(**validated_data)
         node.save()
         return node
