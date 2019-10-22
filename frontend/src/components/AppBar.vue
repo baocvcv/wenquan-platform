@@ -192,7 +192,6 @@ export default {
     },
     mounted() {
         window.addEventListener('resize', () => {
-            console.log("Resizing...");
             if (this.$vuetify.breakpoint.smAndUp)
                 this.drawer = false;
         })
