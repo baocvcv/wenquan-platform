@@ -66,23 +66,34 @@
                 auto-grow
                 :readonly="readonly"
             ></v-textarea>
-                <v-btn
-                    class="mr-4"
-                    color="success"
-                    @click="submit()"
-                    :disabled="!canSubmit"
-                    v-if="!readonly"
-                >
-                    Submit
-                </v-btn>
-                <v-btn
-                    class="mr-4"
-                    color="error"
-                    @click="reset()"
-                    v-if="!readonly"
-                >
-                    Reset
-                </v-btn>
+            <v-list-item>
+                <span>Difficulty:</span>
+                <v-rating
+                    v-model="data.difficulty"
+                    color="yellow darken-3"
+                    background-color="grey darken-1"
+                    :readonly="readonly"
+                    half-increments
+                    hover
+                ></v-rating>
+            </v-list-item>
+            <v-btn
+                class="mr-4"
+                color="success"
+                @click="submit()"
+                :disabled="!canSubmit"
+                v-if="!readonly"
+            >
+                Submit
+            </v-btn>
+            <v-btn
+                class="mr-4"
+                color="error"
+                @click="reset()"
+                v-if="!readonly"
+            >
+                Reset
+            </v-btn>
         </v-form>
     </div>
 </template>
@@ -167,6 +178,7 @@ export default {
             this.data.title = input.question_name;
             this.data.content = input.question_content;
             this.data.analyse = input.question_solution;
+            this.data.difficulty = input.question_level;
 
             let choices = [];
             input.question_choice.forEach(item => {
@@ -193,7 +205,7 @@ export default {
                 question_change_time: this.data.change_time,
                 question_name: this.data.title,
                 question_type: "multiple",
-                question_level: 0.5,
+                question_level: this.data.difficulty,
                 question_content: this.data.content,
                 question_image: [""],
                 question_choice: [],
@@ -239,6 +251,7 @@ export default {
                 ],
                 rightAnswer: [],
                 analyse: "",
+                difficulty: 0,
             },
             valid: false
         };
