@@ -1,38 +1,53 @@
 <template>
     <div id="question-list-item">
-        <v-card>
-            <v-card-title>
+        <v-card outlined>
+            <v-card-title @click="click">
+                <v-chip color="primary">
+                    {{ question.question_type }}
+                </v-chip>
                 <v-chip
-                    v-for="tag in tags"
+                    v-for="tag in question.question_tags"
                     :key="tag"
                 >
                     {{ tag }}
                 </v-chip>
                 <div class="flex-grow-1"></div>
                 <v-rating
-                    v-model="difficulty"
+                    v-model="question.question_level"
                     readonly
                     small
                     dense
                 ></v-rating>
             </v-card-title>
-            <v-expand-transition>
-                <v-card-text
-                    class="question-content" 
-                    ref="content"
-                    v-bind:style="{'max-height': max_height + 'px'}"
+            <v-spacer></v-spacer>
+            <v-card-text
+                class="question-content" 
+                ref="content"
+                v-bind:style="{'max-height': max_height + 'px'}"
+            >
+                <v-textarea
+                    outlined
+                    readonly
+                    label="Question"
+                    v-model="question.question_content"
                 >
-                    <span>{{ content }}</span>
-                    <div 
-                        class="read-more" 
-                        v-if="content_too_long && hide_content"
-                    >
-                        <v-btn icon v-on:click="read_more">
-                            <v-icon>mdi-chevron-down</v-icon>
-                        </v-btn>
-                    </div>
-                </v-card-text>
-            </v-expand-transition>
+                </v-textarea>
+                <v-textarea
+                    outlined
+                    readonly
+                    label="Answer"
+                    v-model="question.question_ans"
+                >
+                </v-textarea>
+                <div 
+                    class="read-more" 
+                    v-if="content_too_long && hide_content"
+                >
+                    <v-btn icon v-on:click="read_more">
+                        <v-icon>mdi-chevron-down</v-icon>
+                    </v-btn>
+                </div>
+            </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <div 
@@ -52,11 +67,7 @@
 export default {
     name: "question-list-item",
     props: {
-        tags: Array,
-        difficulty: Number,
-        type: String,
-        content: String,
-        id: Number
+        question: Object
     },
     data: () => ({
         hide_content: false,
@@ -97,6 +108,9 @@ export default {
         collapse() {
             this.max_height = this.max_height_cache;
             this.hide_content = true;
+        },
+        click() {
+            this.$router.push("/admin/questions/" + this.question.id + "/");
         }
     }
 }
