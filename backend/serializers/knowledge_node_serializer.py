@@ -1,7 +1,7 @@
 """ Serializers for KnoledgeNode """
 from rest_framework import serializers
 
-from backend.models import KnowledgeNode
+from backend.models.knowledge_node import KnowledgeNode
 
 
 class KnowlegdeNodeSerializer(serializers.ModelSerializer):

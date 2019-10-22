@@ -10,7 +10,7 @@ class QuestionBank(PolymorphicModel):
     """Models for Question Banks
     Attributes:
         name: name of bank
-        subnodes: children Knowledg Node of bank
+        subnodes: children Knowledge Node of bank
         questions: children question of bank
     """
     root_id = models.IntegerField()
