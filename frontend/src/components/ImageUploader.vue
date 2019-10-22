@@ -14,13 +14,14 @@
           :lg="Math.max(12 / ((check_create() ? 1 : 0) + img.length), 4)"
           md="6"
           xs="12"
+          align="center"
         >
           <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" />
           <v-btn v-if="!readonly" icon @click="delete_image(i)">
             <v-icon color="red">mdi-delete</v-icon>
           </v-btn>
         </v-col>
-        <v-col v-if="check_create()" align-self>
+        <v-col v-if="check_create()" align="center">
           <v-btn icon large @click="upload()">
             <v-icon color="green">mdi-plus</v-icon>
           </v-btn>
