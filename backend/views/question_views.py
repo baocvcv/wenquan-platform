@@ -61,8 +61,6 @@ class QuestionList(APIView):
             belong_bank=bank,
             parents_node=parents,
         )
-        if q_group.is_valid():
-            q_group.save()
 
         post_data['history_version'] = q_group
         post_data['question_type'] = TYPEDIC[post_data['question_type']]
@@ -78,12 +76,10 @@ class QuestionList(APIView):
         elif post_data['question_type'] == TYPEDIC['brief_ans']:
             question = BriefAnswerQSerializer(**post_data)
 
-        if question.is_valid():
-            question.save()
-
         if q_group.is_valid() and question.is_valid:
+            new_q = question.save()
             response = question.data
-            response['id'] = question.id
+            response['id'] = new_q.id
             response['parents_node'] = post_data['parents_node']
             return Response(response, status=201)
-        return Response(serializer.errors, status=400)
+        return Response(question.errors, status=400)

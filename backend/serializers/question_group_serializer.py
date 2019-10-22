@@ -22,6 +22,7 @@ class QuestionGroupSerializer(serializers.ModelSerializer):
         """create question group"""
         question_group = QuestionGroup.objects.create(**validated_data)
         question_group.save()
+        return question_group
 
     def update(self, instance, validated_data):
         """create question group"""
@@ -29,4 +30,5 @@ class QuestionGroupSerializer(serializers.ModelSerializer):
         instance.belong_bank = validated_data.get('belong_bank', instance.current_version)
         instance.parents_node = validated_data.get('parents_node', instance.current_version)
         instance.question_set = validated_data.get('question_set', instance.current_version)
-        question_group.save()
+        instance.save()
+        return instance

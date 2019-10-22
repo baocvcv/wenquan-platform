@@ -33,6 +33,7 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
         """create single choice question"""
         question = SingleChoiceQ.objects.create(**validated_data)
         question.save()
+        return question
 
 
 class MultpChoiceQSerializer(serializers.ModelSerializer):
@@ -60,6 +61,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
         """create multiple choices question"""
         question = MultpChoiceQ.objects.create(**validated_data)
         question.save()
+        return question
 
 
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
@@ -86,6 +88,7 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
         question = TrueOrFalseQ.objects.create(**validated_data)
         question.save()
+        return question
 
 
 class FillBlankQSerializer(serializers.ModelSerializer):
@@ -112,6 +115,7 @@ class FillBlankQSerializer(serializers.ModelSerializer):
         """create fill blank question"""
         question = FillBlankQ.objects.create(**validated_data)
         question.save()
+        return question
 
 
 class BriefAnswerQSerializer(serializers.ModelSerializer):
@@ -137,3 +141,4 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
         """create brief answer question"""
         question = BriefAnswerQ.objects.create(**validated_data)
         question.save()
+        return question

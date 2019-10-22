@@ -17,9 +17,11 @@ class QuestionBankSerializer(serializers.ModelSerializer):
         """create a question bank"""
         question_bank = QuestionBank.objects.create(**validated_data)
         question_bank.save()
+        return question_bank
 
     def update(self, instance, validated_data):
-        """create question group"""
+        """update question group"""
         instance.root_id = validated_data.get('root_id', instance.root_id)
         instance.name = validated_data.get('name', instance.name)
-        question_bank.save()
+        instance.save()
+        return instance
