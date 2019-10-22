@@ -11,7 +11,9 @@ class EmailVerificationRecord(models.Model):
     token = models.CharField(max_length=20, verbose_name=u"Code")
     email = models.EmailField(max_length=50, verbose_name=u"Email")
     send_type = models.CharField(verbose_name=u"Verification type", max_length=10, choices=email_type)
-    send_time = models.DateTimeField(verbose_name=u"Send time", default=timezone.now())
+    send_time = models.DateTimeField(verbose_name=u"Send time")
+
+    is_valid = models.BooleanField(default=True)
 
     user = models.ForeignKey("backend.User", verbose_name=u"User", on_delete=models.CASCADE)
 

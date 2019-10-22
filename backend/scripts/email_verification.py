@@ -17,12 +17,13 @@ def generate_token(len=30):
 
 def create_email_verification_record(user: User, send_type="register"):
     ''' generate verification record '''
-    token = random_str()
+    token = generate_token()
     record = EmailVerificationRecord(
         user=user,
         token=token,
         email=user.email,
-        send_type=send_type
+        send_type=send_type,
+        send_time=timezone.now(),
     )
     record.save()
     record.send_email()
