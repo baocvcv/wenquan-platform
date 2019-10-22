@@ -25,6 +25,15 @@
                         </template>
                         <v-sheet>
                             <v-container>
+                                <v-btn
+                                    absolute
+                                    right
+                                    icon
+                                    @click="reset_filter"
+                                >
+                                    <v-icon>mdi-autorenew</v-icon>
+                                </v-btn>
+                                <span class="grey--text caption">Type</span>
                                 <v-select
                                     v-model="type_filter"
                                     :items="question_types"
@@ -42,6 +51,25 @@
                                         >(+{{ type_filter.length - 1}} others)</span>
                                     </template>
                                 </v-select>
+                                <span class="grey--text caption">Level</span>
+                                <v-row>
+                                    <v-col>
+                                        <v-select
+                                            v-model="level_min_filter"
+                                            :items="[1, 2, 3, 4, 5]"
+                                            label="Low Bound"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                    <v-col>
+                                        <v-select
+                                            v-model="level_max_filter"
+                                            :items="[1, 2, 3, 4, 5]"
+                                            label="Up Bound"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
                             </v-container>
                         </v-sheet>
                     </v-menu>
@@ -118,6 +146,8 @@ export default {
     },
     data: () => ({
         type_filter: [],
+        level_min_filter: 0,
+        level_max_fileter: 5,
         drawer: null,
         question_list: [],
         sort_menu: [
@@ -165,6 +195,13 @@ export default {
         }
         this.question_list.push(question_1);
         this.question_list.push(question_2);
+    },
+    methods: {
+        reset_filter() {
+            this.type_filter = [];
+            this.level_min_filter = 0;
+            this.level_max_fileter = 5;
+        }
     }
 }
 </script>
