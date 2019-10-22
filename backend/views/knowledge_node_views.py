@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 
+from backend.serializers.knowledge_node_serializer import KnowlegdeNodeSerializer
 from backend.models.knowledge_node import KnowledgeNode
 
 
@@ -29,6 +30,7 @@ class KnowledgeNodeList(APIView):
     def post(self, request):
         """Create a KnowledgeNode"""
         post_data = JSONParser().parse(request)[0]
+        post_data.pop('id')
         subnodes = []
         parent = KnowledgeNode.get(id=post_data.pop('parent'))
 
@@ -37,10 +39,11 @@ class KnowledgeNodeList(APIView):
         post_data['subnodes'] = subnodes
         serializer = KnowlegdeNodeSerializer(post_data)
 
-        new_node = KnowledgeNode.get(id=serializer.id)
-        parent.subnodes.add(new_node)
-        parent.save()
-
         if serializer.is_valid:
+            new_node = serializer.save()
+            parent.subnodes.add(new_node)
+            parent.save()
+            serializer.id = new_node.id
+
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
