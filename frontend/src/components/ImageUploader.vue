@@ -1,22 +1,38 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-container fluid>
-    <v-img v-if="!!img" :src="img ? img : ''" />
-	</v-container>
-	<v-btn @click="upload()">hhaha</v-btn>
-    <!--v-file-input
-	  ref="upload"
-	  v-if="!readonly"
-      :label="label"
-	  :multiple="multiple"
-      chips
+    <v-toolbar>
+      <v-toolbar-title>
+        {{ label }}
+      </v-toolbar-title>
+    </v-toolbar>
+    <v-container fluid align="center">
+      <v-row align="center">
+        <v-col v-for="(image, i) in img" :key="i" cols="6" sm="4">
+          <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" />
+          <v-btn v-if="!readonly" icon @click="delete_image(i)">
+            <v-icon color="red">mdi-delete</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col
+          v-if="!readonly && !(img.length >= 1 && !multiple)"
+          cols="6"
+          sm="4"
+        >
+          <v-btn style="margin: auto" icon large @click="upload()">
+            <v-icon color="green">mdi-plus</v-icon>
+          </v-btn>
+          <br />
+          <v-label>{{ placeholder }}</v-label>
+        </v-col>
+      </v-row>
+    </v-container>
+    <input
+      ref="upload"
+      type="file"
       @change="preview_image($event)"
-      accept="image/png image/jpg image/jpeg image/bmp"
-      :placeholder="placeholder"
-      :prepend-icon="icon"
-    >
-    </v-file-input-->
-	<input ref="upload" type="file" @change="preview_image($event)" accept="image/*" style="display: none"/>
+      accept="image/*"
+      style="display: none"
+    />
   </div>
 </template>
 
@@ -40,21 +56,24 @@ export default {
       type: String,
       default: "mdi-camera"
     },
-	readonly: {
-	  type: Boolean,
-	  default: false
-	},
-	multiple: {
-	  type: Boolean,
-	  default: false
+    readonly: {
+      type: Boolean,
+      default: false
     },
-    image: undefined,
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    aspectRatio: {
+      type: String,
+      default: "1.78"
+    },
     width: String,
     height: String
   },
   data: function() {
     return {
-      img: this.image,
+      img: [],
       img_style: {
         width: this.width,
         height: this.height
@@ -63,7 +82,7 @@ export default {
   },
   methods: {
     preview_image(src) {
-	  var file = src.target.files[0];
+      var file = src.target.files[0];
       let that = this;
       let reader = new FileReader();
 
@@ -75,14 +94,18 @@ export default {
       }
 
       reader.onload = function() {
-        that.img = this.result;
+        that.img.push(this.result);
         that.$emit("change", that.img);
       };
     },
-	upload() {
-	  let btn = this.$refs.upload;
-	  btn.click();
-	}
+    delete_image(index) {
+      this.img.splice(index, 1);
+      this.$emit("change", this.img);
+    },
+    upload() {
+      let btn = this.$refs.upload;
+      btn.click();
+    }
   }
 };
 </script>
@@ -91,5 +114,10 @@ export default {
 <style scoped>
 .image-uploader {
   margin: auto;
+}
+.create {
+  margin: auto;
+  padding: auto;
+  border: 2px dashed green;
 }
 </style>
