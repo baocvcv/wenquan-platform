@@ -164,7 +164,6 @@ export default {
                 return this.nav_link_groups.student;
         },
         render_admin_entry: function() {
-            console.log("Testing....");
             if (!this.user)
                 return false;
             return this.$router.currentRoute.path.split('/')[1] != "admin"

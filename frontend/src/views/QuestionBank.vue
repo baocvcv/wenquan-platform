@@ -1,13 +1,13 @@
 <template>
 <div id="question-bank">
-    <h1>{{ question_bank.name }}</h1>
+    <h1>{{ edited_question_bank.name }}</h1>
     <v-card>
         <v-card-title>Profile        
             <v-btn
                 absolute
                 right
                 icon
-                @click="edit_mode = true"
+                @click="edit_mode = !edit_mode"
             ><v-icon>mdi-pencil</v-icon></v-btn>
         </v-card-title>
         <v-card-text>
@@ -19,7 +19,7 @@
                                 label="Created Time"
                                 :readonly="true"
                                 outlined
-                                v-model="question_bank.created_time"
+                                v-model="edited_question_bank.created_time"
                             >
                             </v-text-field>
                         </v-col>
@@ -28,7 +28,7 @@
                                 label="Last Update"
                                 :readonly="true"
                                 outlined
-                                v-model="question_bank.last_update"
+                                v-model="edited_question_bank.last_update"
                             >
                             </v-text-field>
                         </v-col>
@@ -38,17 +38,17 @@
                                 :readonly="true"
                                 outlined
                                 hint="How many questions there are in this question bank"
-                                v-model="question_bank.question_count"
+                                v-model="edited_question_bank.question_count"
                             >
                             </v-text-field>
                         </v-col>
                     </v-row>
                     <v-textarea
                         label="Brief"
-                        :readonly="edit_mode"
+                        :readonly="!edit_mode"
                         outlined
                         hint="A short brief for this question bank to help others identify it more easily"
-                        v-model="question_bank.brief"
+                        v-model="edited_question_bank.brief"
                     >
                     </v-textarea>
                 </v-col>
@@ -57,6 +57,11 @@
                 </v-col>
             </v-row>
         </v-card-text>
+        <v-card-actions v-if="edit_mode">
+            <div class="flex-grow-1"></div>
+            <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+            <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+        </v-card-actions>
     </v-card>
     <question-list :editable="true"></question-list>
 </div>
@@ -78,13 +83,33 @@ export default {
             question_count: 1000,
             brief: "It is impossible to master CALCULUS."
         },
+        edited_question_bank: {
+            name: "",
+            created_time: "",
+            last_update: "",
+            question_count: 0,
+            brief: ""
+        },
         edit_mode: false,
     }),
     beforeRouteLeave (to, from, next) {
-        if (edit_mode === true)
+        if (this.edit_mode === true)
         {
             confirm("You have changes that are not saved. Are you sure you want to leave the web page?");
         }
+    },
+    methods: {
+        cancel() {
+            this.edit_mode = false;
+            this.edited_question_bank = Object.assign({}, this.question_bank);
+        },
+        save() {
+            this.edit_mode = false;
+            this.question_bank = Object.assign({}, this.edited_question_bank);
+        }
+    },
+    created() {
+        this.edited_question_bank = Object.assign({}, this.question_bank);
     }
 }
 </script>
