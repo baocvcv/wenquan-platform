@@ -17,12 +17,20 @@
                 outlined
                 required
               ></v-text-field>
-              <br />
               <v-select
                 :items="authorities"
                 label="Authorities"
+                v-model = "authority"
                 outlined
               ></v-select>
+              <v-text-field
+                v-if="authority == 'private'"
+                v-model="invitation_code_count"
+                label="Invite code number"
+                :rules="invite_code_rules"
+                hint="Number of invite code you want create(can be changed later)"
+                outlined
+              ></v-text-field>
             </v-col>
             <v-col>
               <v-card>
@@ -60,6 +68,7 @@
 
 <script>
 import ImageUploader from "../components/ImageUploader.vue";
+import axios from "axios";
 export default {
   name: "create-question-bank",
   components: {
@@ -79,6 +88,9 @@ export default {
         v => v.length <= 200 || "Max 200 characters!"
       ],
       authorities: ["private", "public"],
+      authority: "",
+      invitation_code_count: 0,
+      invite_code_rules: [ v => this.isInt(v) || "You should enter an integer!" ],
       image: []
     };
   },
@@ -86,11 +98,32 @@ export default {
     create() {
       alert("test send to backend");
       console.log(this.image);
+      let that = this;
+      axios
+        .post("api/question_banks/",{
+            id: -1,
+            name: this.name,
+            picture: this.img.length == 0 ? "" : this.img[0],
+            brief: this.brief,
+            authorities: this.authority,
+            invitation_code_count: this.invitation_code_count
+        })
+        .then(response => {
+          alert("Success!");
+          that.$route.push('questionbank/'+response.id);
+        })
+        .catch(error => {
+          alert(error);
+        })
     },
     reset() {
       this.$refs.form.reset();
       this.image = [];
     },
+    isInt(target) {
+      var regInt = /^[0-9]+$/;
+      return regInt.test(target);
+    }
   }
 };
 </script>
