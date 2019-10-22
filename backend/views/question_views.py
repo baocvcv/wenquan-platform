@@ -2,6 +2,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from django.utils import timezone
 
 from backend.serializers.question_serializer import SingleChoiceQSerializer
 from backend.serializers.question_serializer import MultpChoiceQSerializer
@@ -10,6 +11,7 @@ from backend.serializers.question_serializer import FillBlankQSerializer
 from backend.serializers.question_serializer import BriefAnswerQSerializer
 
 from backend.models.questions import QuestionGroup
+from backend.models.knowledge_node import KnowledgeNode
 from backend.models.questions.question import TYPEDIC
 
 

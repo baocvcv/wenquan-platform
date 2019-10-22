@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from backend.models.questions import QuestionGroup
 from .knowledge_node_serializer import KnowlegdeNodeSerializer
+from .question_bank_serializer import QuestionBankSerializer
 
 
 class QuestionGroupSerializer(serializers.ModelSerializer):

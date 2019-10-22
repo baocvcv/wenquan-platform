@@ -2,11 +2,11 @@
 from rest_framework import serializers
 
 from backend.models.knowledge_node import KnowledgeNode
+from .question_bank_serializer import QuestionBankSerializer
 
 
 class KnowlegdeNodeSerializer(serializers.ModelSerializer):
-    question_bank = QuestionBankSerializer(readonly=True)
-    subnodes = KnowlegdeNodeSerializer(readonly=True, many=True)
+    question_bank = QuestionBankSerializer(read_only=True)
 
     class Meta:
         model = KnowledgeNode
