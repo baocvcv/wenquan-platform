@@ -6,11 +6,12 @@ from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
+from .question_group_serializer import QuestionGroupSerializer
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
-    history_version = serializers.RelatedField()
+    history_version = QuestionGroupSerializer(read_only=True)
 
     class Meta:
         """Meta class"""
@@ -32,19 +33,12 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
         """create single choice question"""
         question = SingleChoiceQ.objects.create(**validated_data)
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        question = SingleChoiceQ.objects.create(**validated_data)
-        question.save()
+        return question
 
 
 class MultpChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for MultpChoiceQ"""
-    history_version = serializers.RelatedField()
+    history_version = QuestionGroupSerializer(read_only=True)
 
     class Meta:
         """Meta class"""
@@ -63,23 +57,16 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
             'question_solution',
         ]
 
-    def create(self, validated_data):
+    def create(self, validated_d):
         """create multiple choices question"""
         question = MultpChoiceQ.objects.create(**validated_data)
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        question = MultpChoiceQ.objects.create(**validated_data)
-        question.save()
+        return question
 
 
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
     """Serializer for TrueOrFalseQ"""
-    history_version = serializers.RelatedField()
+    history_version = QuestionGroupSerializer(read_only=True)
 
     class Meta:
         """Meta class"""
@@ -98,21 +85,15 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create true or false choices question"""
-        question = TrueOrFalseQ.objects.create(**validated_data)
-        question.save()
 
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
         question = TrueOrFalseQ.objects.create(**validated_data)
         question.save()
+        return question
 
 
 class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
-    history_version = serializers.RelatedField()
+    history_version = QuestionGroupSerializer(read_only=True)
 
     class Meta:
         """meta class"""
@@ -134,19 +115,12 @@ class FillBlankQSerializer(serializers.ModelSerializer):
         """create fill blank question"""
         question = FillBlankQ.objects.create(**validated_data)
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        question = FillBlankQ.objects.create(**validated_data)
-        question.save()
+        return question
 
 
 class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
-    history_version = serializers.RelatedField()
+    history_version = QuestionGroupSerializer(read_only=True)
 
     class Meta:
         """meta class"""
@@ -167,11 +141,4 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
         """create brief answer question"""
         question = BriefAnswerQ.objects.create(**validated_data)
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        question = BriefAnswerQ.objects.create(**validated_data)
-        question.save()
+        return question

@@ -2,7 +2,7 @@
 from . import questions
 from .paper import Paper, QuestionVersion
 from .knowledge_node import KnowledgeNode
-from .question_bank import QuestionBanks
+from .question_bank import QuestionBank
 
 from .user import User
 from .permissions import UserPermissions
