@@ -102,7 +102,7 @@
             "
             >Confirm
           </v-btn>
-          <v-btn color="primary" dark @click="show_del_dialog = false">
+          <v-btn color="grey" dark @click="show_del_dialog = false">
             Cancel
           </v-btn>
           <div class="flex-grow-1"></div>
@@ -132,14 +132,12 @@ export default {
     delete_qst_bank() {
       let that = this;
       axios
-        .post("/api/question/", that.cur_qst_bank)
-        .then(response => {
-          alert(response);
+        .post("/api/question_banks/" + that.cur_qst_bank.id + "/", {
+          id: that.cur_qst_bank.id
         })
         .catch(error => {
           alert(error);
         });
-      alert("test delete");
     }
   }
 };
