@@ -10,6 +10,15 @@
                 auto-grow
                 :readonly="readonly"
             ></v-textarea>
+            <image-uploader
+              v-model="data.image"
+              width="50%"
+              label="picture"
+              :readonly="readonly"
+              multiple
+              style="margin: 0px"
+              placeholder="Upload an image if necessary"
+            ></image-uploader>
             <v-list flat>
                 <v-list-item two-line>
                     <v-list-item-content align="left">
@@ -99,8 +108,12 @@
 </template>
 
 <script>
+import ImageUploader from "./ImageUploader.vue";
 export default {
     name: "multiple-choice",
+    components: {
+      "image-uploader": ImageUploader
+    },
     props: {
         readonly: {
             type: Boolean,
@@ -207,7 +220,7 @@ export default {
                 question_type: "multiple",
                 question_level: this.data.difficulty,
                 question_content: this.data.content,
-                question_image: [""],
+                question_image: this.data.image,
                 question_choice: [],
                 question_ans: [], 
                 question_ans_num: this.data.rightAnswer.length,
@@ -227,6 +240,7 @@ export default {
                 change_time: "",
                 title: "",
                 content: "",
+                image: [],
                 choices: [
                     {
                         name: "A",

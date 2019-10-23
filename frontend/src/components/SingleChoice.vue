@@ -21,6 +21,7 @@
         width="50%"
         label="picture"
         :readonly="readonly"
+        multiple
         style="margin: 0px;"
         placeholder="Upload an image if necessary"
       ></image-uploader>
