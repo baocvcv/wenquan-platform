@@ -6,10 +6,21 @@
                 label="Content"
                 v-model="data.content" 
                 :rules="[v => !!v || 'Question content is required!']"
+				placeholder="Use '_' to represent blanks"
                 outlined
                 auto-grow
                 :readonly="readonly"
             ></v-textarea>
+			<image-uploader
+			  ref="uploader"
+			  v-model="data.image"
+			  width="50%"
+			  label="picture"
+			  :readonly="readonly"
+			  multiple
+			  style="margin: 0px;"
+			  placeholder="Upload an image if necessary"
+			></image-uploader>
             <v-list flat>
                 <v-list-item >
                     <v-list-item-content align="left">
@@ -72,8 +83,12 @@
 </template>
 
 <script>
+import ImageUploader from "./ImageUploader.vue";
 export default {
     name: "fill-in-blank",
+    components: {
+	  "image-uploader": ImageUploader
+	},
     props: {
         readonly: {
             type: Boolean,
@@ -82,7 +97,9 @@ export default {
     },
     computed: {
         blankNum() {
-            return this.data.content.split(/_+/).length-1;
+			if(this.data.content)
+              return this.data.content.split(/_+/).length-1;
+			else return 0;
         },
         canSubmit() {
             return this.valid;
@@ -92,9 +109,10 @@ export default {
         submit() {
             this.parse();
         },
-        async reset() {
+        reset() {
             this.$refs.form.reset();
             this.data.answers = [];
+			this.data.image = [];
         },
         updateData(input) {
             //parse data input from backend
@@ -103,6 +121,7 @@ export default {
             this.data.change_time = input.question_change_time;
             this.data.title = input.question_name;
             this.data.content = input.question_content.join("______");
+			this.data.image = input.question_image;
             this.data.analyse = input.question_solution;
             this.data.difficulty = input.question_level;
             this.data.answers = input.question_ans;            
@@ -117,7 +136,7 @@ export default {
                 question_level: this.data.difficulty,
                 question_content: this.data.content.split(/_+/),
                 question_blank_num: this.blankNum,
-                question_image: [""],
+                question_image: this.data.image,
                 question_ans: this.data.answers,
                 question_solution: this.data.analyse
             };
@@ -136,6 +155,7 @@ export default {
                 change_time: "",
                 title: "",
                 content: "",
+				image: [],
                 answers: [],
                 analyse: "",
                 difficulty: 0,

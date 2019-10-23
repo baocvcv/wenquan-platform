@@ -17,6 +17,7 @@
         required
       ></v-textarea>
       <image-uploader
+        ref="uploader"
         v-model="question_image"
         width="50%"
         label="picture"
@@ -238,6 +239,7 @@ export default {
       this.$refs.input.reset();
       this.question_choice.splice(0, this.question_choice.length);
       this.question_ans = undefined;
+      this.$refs.uploader.reset();
     },
     submit() {
       //console.log(this.parse());

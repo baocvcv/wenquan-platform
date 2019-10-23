@@ -72,12 +72,13 @@ export default {
       type: String,
       default: "1.78"
     },
+    img: Array,
     width: String,
     height: String
   },
   data: function() {
     return {
-      img: [],
+      //img: [],
       img_style: {
         width: this.width,
         height: this.height
@@ -113,7 +114,11 @@ export default {
     reset() {
       this.img.splice(0, this.img.length);
       this.$emit("change", this.img);
-    }
+    },
+	test() {
+	  console.log("here test image uploader");
+	  console.log(this.img);
+	}
   }
 };
 </script>

@@ -11,6 +11,17 @@
                 :readonly="readonly"
             ></v-textarea>
             <br/>
+			<image-uploader
+			  ref="uploader"
+			  v-model="data.image"
+			  width="50%"
+			  label="picture"
+			  :readonly="readonly"
+			  multiple
+			  style="margin: 0px;"
+			  placeholder="Upload an image if necessary"
+			></image-uploader>
+			<br/>
             <v-textarea 
                 label="Answer"
                 v-model="data.answer" 
@@ -61,8 +72,12 @@
 </template>
 
 <script>
+import ImageUploader from "./ImageUploader.vue";
 export default {
     name: "brief-answer",
+	components: {
+	  "image-uploader": ImageUploader
+	},
     props: {
         readonly: {
             type: Boolean,
@@ -80,6 +95,7 @@ export default {
         },
         reset() {
             this.$refs.form.reset();
+			this.$refs.uploader.reset();
         },
         updateData(input) {
             //parse data input from backend
@@ -88,6 +104,7 @@ export default {
             this.data.change_time = input.question_change_time;
             this.data.title = input.question_name;
             this.data.content = input.question_content;
+			this.data.image = input.question_image;
             this.data.analyse = input.question_solution;
             this.data.difficulty = input.question_level;
             this.data.answer = input.question_ans;
@@ -101,7 +118,7 @@ export default {
                 question_type: "brief_ans",
                 question_level: this.data.difficulty,
                 question_content: this.data.content,
-                question_image: [""],
+                question_image: this.data.image,
                 question_choice: [],
                 question_ans: this.data.answer, 
                 question_solution: this.data.analyse
@@ -118,6 +135,7 @@ export default {
                 change_time: "",
                 title: "",
                 content: "",
+				image: [],
                 answer: "",
                 analyse: "",
                 difficulty: 0,

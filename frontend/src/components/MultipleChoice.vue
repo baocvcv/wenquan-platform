@@ -11,6 +11,7 @@
                 :readonly="readonly"
             ></v-textarea>
             <image-uploader
+			  ref="uploader"
               v-model="data.image"
               width="50%"
               label="picture"
@@ -159,6 +160,7 @@ export default {
         },
         reset() {
             this.$refs.form.reset();
+			this.$refs.uploader.reset();
             this.data.rightAnswer=[];
             this.data.choices= [
                 {
@@ -190,6 +192,7 @@ export default {
             this.data.change_time = input.question_change_time;
             this.data.title = input.question_name;
             this.data.content = input.question_content;
+			this.data.image = input.question_image;
             this.data.analyse = input.question_solution;
             this.data.difficulty = input.question_level;
 
