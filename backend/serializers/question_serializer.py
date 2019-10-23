@@ -6,18 +6,20 @@ from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
+from backend.models.questions import QuestionGroup
+
 from .question_group_serializer import QuestionGroupSerializer
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
 
     class Meta:
         """Meta class"""
         model = SingleChoiceQ
         fields = [
-            'history_version',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -31,7 +33,12 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create single choice question"""
-        question = SingleChoiceQ.objects.create(**validated_data)
+        print(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = SingleChoiceQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question
 
@@ -57,7 +64,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
             'question_solution',
         ]
 
-    def create(self, validated_d):
+    def create(self, validated_data):
         """create multiple choices question"""
         question = MultpChoiceQ.objects.create(**validated_data)
         question.save()

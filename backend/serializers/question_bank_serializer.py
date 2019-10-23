@@ -6,10 +6,12 @@ from backend.models.question_bank import QuestionBank
 
 
 class QuestionBankSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = QuestionBank
         fields = [
-            'id',
+            "id",
             "root_id",
             "name",
             "picture",
@@ -38,7 +40,6 @@ class QuestionBankSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create a question bank"""
-
         post_data = validated_data
         post_data['createTime'] = timezone.now()
         post_data['lastUpdate'] = post_data['createTime']

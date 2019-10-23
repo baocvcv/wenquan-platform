@@ -3,7 +3,7 @@ from .user_serializers import UserPermissionsSerializer
 from .user_serializers import ProfileSerializer
 from .user_serializers import UserSerializer
 
-from .question_serializer import QuestionGroupSerializer
+from .question_group_serializer import QuestionGroupSerializer
 from .question_serializer import SingleChoiceQSerializer
 from .question_serializer import MultpChoiceQSerializer
 from .question_serializer import TrueOrFalseQSerializer
