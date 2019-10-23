@@ -1,5 +1,4 @@
 """This code define the BASE model of question """
-from enum import IntEnum
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from .question_group import QuestionGroup
@@ -30,18 +29,8 @@ class Question(PolymorphicModel):
         question_level: the level of difficulty
         question_change_time: the time of last change
     """
-    Type = IntEnum(
-        'Type',
-        (
-            'null'  # no_type
-            'single_choice',  # single choice question
-            'multiple_choice',  # multiple choices question
-            't_or_f',  # true or false question
-            'fill_blank',  # fill the blank question
-            'q_and_a',  # short answer question
-        ))
     history_version = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_name = models.CharField(max_length=MAX_NAME)
     question_type = models.IntegerField()
-    question_level = models.FloatField(default=0)
+    question_level = models.IntegerField(default=0)
     question_change_time = models.DateTimeField()
