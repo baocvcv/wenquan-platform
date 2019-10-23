@@ -1,5 +1,5 @@
 <template>
-    <div class="brief-answer-component">
+    <div class="fill-in-blank-component">
         <v-form ref="form" v-model="valid">
             <v-text-field label="Title" v-model="data.title" outlined :readonly="readonly"></v-text-field>
             <v-textarea 
@@ -10,15 +10,26 @@
                 auto-grow
                 :readonly="readonly"
             ></v-textarea>
-            <br/>
-            <v-textarea 
-                label="Answer"
-                v-model="data.answer" 
-                :rules="[v => !!v || 'Answer is required!']"
-                outlined
-                auto-grow
-                :readonly="readonly"
-            ></v-textarea>
+            <v-list flat>
+                <v-list-item >
+                    <v-list-item-content align="left">
+                    <v-list-item-title>Answers</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item-group color="primary">
+                    <v-list-item
+                        v-for="index in blankNum"
+                        :key="index"
+                    >
+                        <v-text-field
+                            placeholder="Enter answer"
+                            v-model="data.answers[index-1]"
+                            :rules="[v => !!v || 'Answer content is required!']"
+                            :readonly="readonly"
+                        ></v-text-field>
+                    </v-list-item>
+                </v-list-item-group>
+            </v-list>
             <br/>
             <v-textarea 
                 label="Analyse"
@@ -62,7 +73,7 @@
 
 <script>
 export default {
-    name: "brief-answer",
+    name: "fill-in-blank",
     props: {
         readonly: {
             type: Boolean,
@@ -70,6 +81,9 @@ export default {
         },
     },
     computed: {
+        blankNum() {
+            return this.data.content.split(/_+/).length-1;
+        },
         canSubmit() {
             return this.valid;
         }
@@ -78,8 +92,9 @@ export default {
         submit() {
             this.parse();
         },
-        reset() {
+        async reset() {
             this.$refs.form.reset();
+            this.data.answers = [];
         },
         updateData(input) {
             //parse data input from backend
@@ -87,10 +102,10 @@ export default {
             this.data.parents = input.parents_node;
             this.data.change_time = input.question_change_time;
             this.data.title = input.question_name;
-            this.data.content = input.question_content;
+            this.data.content = input.question_content.join("______");
             this.data.analyse = input.question_solution;
             this.data.difficulty = input.question_level;
-            this.data.answer = input.question_ans;
+            this.data.answers = input.question_ans;            
         },
         parse() {
             let result = {
@@ -98,14 +113,17 @@ export default {
                 parents_node: this.data.parents,
                 question_change_time: this.data.change_time,
                 question_name: this.data.title,
-                question_type: "brief_ans",
+                question_type: "fill_blank",
                 question_level: this.data.difficulty,
-                question_content: this.data.content,
+                question_content: this.data.content.split(/_+/),
+                question_blank_num: this.blankNum,
                 question_image: [""],
-                question_choice: [],
-                question_ans: this.data.answer, 
+                question_ans: this.data.answers,
                 question_solution: this.data.analyse
             };
+            if(result.question_ans.length>result.question_blank_num)
+                result.question_ans.splice(result.question_blank_num,
+                    result.question_ans.length-result.question_blank_num);
             console.log(JSON.stringify(result));
             return result;
         }
@@ -118,7 +136,7 @@ export default {
                 change_time: "",
                 title: "",
                 content: "",
-                answer: "",
+                answers: [],
                 analyse: "",
                 difficulty: 0,
             },
