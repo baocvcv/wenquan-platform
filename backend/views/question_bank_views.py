@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
+from backend.serializers.knowledge_node_serializer import KnowlegdeNodeSerializer
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
 
@@ -24,9 +25,8 @@ class QuestionBankList(APIView):
 
         if serializer.is_valid():
             new_bank = serializer.save()
-            root.belong_bank = new_bank
+            root.question_bank = new_bank
             root.save()
-
             serializer.id = new_bank.id
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
