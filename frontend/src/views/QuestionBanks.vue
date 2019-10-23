@@ -32,24 +32,52 @@
 <script>
 import QuestionBanksList from "../components/QuestionBanksList.vue";
 import CreateQuestionBank from "../components/CreateQuestionBank.vue";
+import axios from "axios";
 
 export default {
   name: "",
   data: function() {
     return {
-	  read_only: false,
-      question_banks: [
-        {name: "kxz1", id: "1", icon: "mdi-library", brief: "hahahahha", details: {questions: "100", difficulty: "5", content: "this is all bullshit"}},
-        {name: "kxz2", id: "2", icon: "mdi-folder", brief: "hohohoho", details: {questions: "1", difficulty: "4", content: "get out"}},
-        {name: "kxz3", id: "3", icon: "mdi-folder", brief: "hehehehe"},
-        {name: "kxz4", id: "4", icon: "mdi-folder", brief: "hihihihi"},
-        {name: "kxz5", id: "5", icon: "mdi-folder", brief: "huhuhuhu"}
-      ]
+      read_only: false,
+      question_banks: []
     };
   },
   components: {
     "question-banks-list": QuestionBanksList,
     "create-question-bank": CreateQuestionBank
+  },
+  methods: {
+    parse(input) {
+      var result = {
+        id: input.id,
+        name: input.name,
+        brief: input.brief,
+        icon: input.picture,
+        details: {
+          Authority: input.authority,
+          "Create Time": input.createTime,
+          "Last Updated Time": input.lastUpdate,
+          Brief: input.brief,
+          "Total Question Number": input.question_count,
+          "Total Invite Code number": input.invitation_code_count,
+          "Total Activated Code number": input.activated_code_count
+        }
+      };
+      return result;
+    }
+  },
+  created: function() {
+    let that = this;
+    axios
+      .get("/api/question_banks/")
+      .then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          that.question_banks.push(that.parse(response.data[i]));
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 };
 </script>

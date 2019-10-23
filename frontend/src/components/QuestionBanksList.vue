@@ -7,7 +7,7 @@
         @click="$router.push('questionbanks/' + qst_bank.id)"
       >
         <v-list-item-avatar>
-          <v-icon v-text="qst_bank.icon"></v-icon>
+          <v-img :src="qst_bank.icon"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content align="left">
@@ -69,7 +69,7 @@
           <v-btn
             color="green"
             dark
-            @click="$router.push('questionbanks/'+ cur_qst_bank.id)"
+            @click="$router.push('questionbanks/' + cur_qst_bank.id)"
           >
             Goto
           </v-btn>
