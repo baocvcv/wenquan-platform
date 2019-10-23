@@ -138,7 +138,8 @@ import question_list_item from "@/components/QuestionListItem.vue"
 export default {
     name: "question-list",
     props: {
-        editable: Boolean
+        editable: Boolean,
+        "question-bank-id": Number,
     },
     components: {
         "tree-view": tree_view,
@@ -195,6 +196,17 @@ export default {
         }
         this.question_list.push(question_1);
         this.question_list.push(question_2);
+
+        /*
+        this.$axios
+            .get("/api/question_banks/" + this["question-bank-id"] + "/")
+            .then((response) => {
+                this.question_list = response.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        */
     },
     methods: {
         reset_filter() {

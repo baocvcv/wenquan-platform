@@ -70,7 +70,7 @@
             </v-card-actions>
         </v-expand-transition>
     </v-card>
-    <question-list :editable="true"></question-list>
+    <question-list :editable="true" :question-bank-id="$router.params.id"></question-list>
 </div>
 </template>
 
@@ -113,7 +113,7 @@ export default {
         save() {
             /*
             this.$axios
-                .put('api/questionbanks/' + id + '/', this.edited_question_bank)
+                .put('api/question_banks/' + id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
                     this.quesion_bank = Object.assign({}, this.edited_question_bank);
@@ -130,7 +130,7 @@ export default {
         let id = this.$route.params.id;
         /*
         this.$axios
-            .get('api/questionbanks/' + id + '/')
+            .get('api/question_banks/' + id + '/')
             .then((response) => {
                 this.question_bank = response.data;
             })
