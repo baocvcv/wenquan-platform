@@ -16,7 +16,7 @@
           xs="12"
           align="center"
         >
-          <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" />
+          <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" contain />
           <v-btn v-if="!readonly" icon @click="delete_image(i)">
             <v-icon color="red">mdi-delete</v-icon>
           </v-btn>

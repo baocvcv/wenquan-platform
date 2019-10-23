@@ -1,12 +1,37 @@
 <template>
     <div class="question-view">
-        <v-btn @click="test()">test</v-btn>
-        <v-select :items="typeSelection" v-model="typeSelected" label="Choose Type"></v-select>
-        <multiple-choice ref="multi" v-if="typeSelected=='Multiple Choice'"></multiple-choice>
-        <single-choice ref="single" v-if="typeSelected=='Single Choice'"></single-choice>
-        <single-choice ref="TorF" v-if="typeSelected=='T or F'" TF></single-choice>
-        <brief-answer ref="brief" v-if="typeSelected=='Brief Answer'"></brief-answer>
-        <fill-in-blank ref="fill" v-if="typeSelected=='Fill in Blank'"></fill-in-blank>
+        <v-select
+            :items="typeSelection"
+            v-model="typeSelected"
+            label="Choose Type"
+            v-if="!readonly">
+        </v-select>
+        <multiple-choice
+            ref="multiple"
+            v-if="typeSelected=='multiple'"
+            :readonly="readonly"
+        ></multiple-choice>
+        <single-choice
+            ref="single"
+            v-if="typeSelected=='single'"
+            :readonly="readonly"
+        ></single-choice>
+        <single-choice
+            ref="TorF"
+            v-if="typeSelected=='TorF'"
+            TF
+            :readonly="readonly"
+        ></single-choice>
+        <brief-answer
+            ref="brief_ans"
+            v-if="typeSelected=='brief_ans'"
+            :readonly="readonly"
+        ></brief-answer>
+        <fill-in-blank
+            ref="fill_blank"
+            v-if="typeSelected=='fill_blank'"
+            :readonly="readonly"
+        ></fill-in-blank>
     </div>
 </template>
 
@@ -25,7 +50,22 @@ export default {
 		"fill-in-blank": FillInBlank
     },
     props: {
-
+        readonly: {
+            type: Boolean,
+            default: false
+        },
+        initData: {
+            type: Object,
+            default: null
+        }
+    },
+    mounted() {
+        if(this.initData)
+            this.typeSelected = this.initData.question_type;
+    },
+    updated() {
+        if(this.initData)
+            this.$refs[this.initData.question_type].updateData(this.initData);
     },
     methods: {
         test() {
@@ -35,7 +75,7 @@ export default {
                 "parents_node": [0],
                 "question_change_time": "2019-10-15T01:11:21.754312Z",
                 "question_name": "quesion1",
-                "question_type": "single",
+                "question_type": "brief_ans",
                 "question_level": 0.5,
                 "question_content": "人类的本质是?",
                 "question_image": [""],
@@ -46,7 +86,13 @@ export default {
     },
     data: function() {
         return {
-            typeSelection: ["Single Choice","Multiple Choice","T or F","Brief Answer", "Fill in Blank"],
+            typeSelection: [
+                {text:"Single Choice", value:"single"},
+                {text:"Multiple Choice", value:"multiple"},
+                {text:"T or F", value:"TorF"},
+                {text:"Brief Answer", value:"brief_ans"},
+                {text:"Fill in Blank", value:"fill_blank"}
+            ],
             typeSelected: null,
         };
     }
