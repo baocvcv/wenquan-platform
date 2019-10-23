@@ -113,8 +113,7 @@ export default {
         })
         .then(response => {
           alert("Success!");
-		  console.log(response);
-          that.$router.push("questionbank/" + response.data.id);
+          that.$router.push("questionbanks/" + response.data.id);
         })
         .catch(error => {
           alert(error);
