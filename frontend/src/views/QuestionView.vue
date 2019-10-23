@@ -6,6 +6,7 @@
         <single-choice ref="single" v-if="typeSelected=='Single Choice'"></single-choice>
         <single-choice ref="TorF" v-if="typeSelected=='T or F'" TF></single-choice>
         <brief-answer ref="brief" v-if="typeSelected=='Brief Answer'"></brief-answer>
+        <fill-in-blank ref="fill" v-if="typeSelected=='Fill in Blank'"></fill-in-blank>
     </div>
 </template>
 
@@ -13,6 +14,7 @@
 import MultipleChoice from "../components/MultipleChoice.vue";
 import SingleChoice from "../components/SingleChoice.vue"
 import BriefAnswer from "../components/BriefAnswer.vue"
+import FillInBlank from "../components/FillInBlank.vue";
 
 export default {
     name: "question-view",
@@ -20,6 +22,7 @@ export default {
         "multiple-choice": MultipleChoice,
         "single-choice": SingleChoice,
         "brief-answer": BriefAnswer,
+		"fill-in-blank": FillInBlank
     },
     props: {
 
@@ -43,7 +46,7 @@ export default {
     },
     data: function() {
         return {
-            typeSelection: ["Single Choice","Multiple Choice","T or F","Brief Answer"],
+            typeSelection: ["Single Choice","Multiple Choice","T or F","Brief Answer", "Fill in Blank"],
             typeSelected: null,
         };
     }
