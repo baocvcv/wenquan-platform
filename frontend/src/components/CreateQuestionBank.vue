@@ -17,34 +17,29 @@
                 outlined
                 required
               ></v-text-field>
-              <br />
               <v-select
                 :items="authorities"
                 label="Authorities"
+                v-model="authority"
                 outlined
               ></v-select>
-              <v-file-input
-                label="Avatar"
-                chips
-                @change="preview_image($event)"
-                accept="image/png image/jpg image/jpeg image/bmp"
-                placeholder="Pick an avatar (optional)"
-                prepend-icon="mdi-camera"
-              >
-              </v-file-input>
+              <v-text-field
+                v-if="authority == 'private'"
+                v-model="invitation_code_count"
+                label="Invite code number"
+                :rules="invite_code_rules"
+                hint="Number of invite code you want create(can be changed later)"
+                outlined
+              ></v-text-field>
             </v-col>
             <v-col>
               <v-card>
-                <v-toolbar>
-                  <v-toolbar-title>Avatar preview</v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                  <v-img
-                    width="230px"
-                    min-aspect-ratio="1"
-                    :src="image ? image : none_preview"
-                  ></v-img>
-                </v-card-text>
+                <image-uploader
+                  ref="uploader"
+                  v-model="image"
+                  label="Avatar"
+                  placeholder="Pick an avatar(optional)"
+                />
               </v-card>
             </v-col>
           </v-row>
@@ -60,11 +55,15 @@
             required
           ></v-textarea>
 
-          <v-btn color="success" :disabled="!valid" class="mr-4" @click="create"
+          <v-btn
+            color="success"
+            :disabled="!valid"
+            class="mr-4"
+            @click="create()"
             >Create</v-btn
           >
 
-          <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
+          <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -73,8 +72,13 @@
 </template>
 
 <script>
+import ImageUploader from "../components/ImageUploader.vue";
+import axios from "axios";
 export default {
   name: "create-question-bank",
+  components: {
+    "image-uploader": ImageUploader
+  },
   data: function() {
     return {
       valid: false,
@@ -89,30 +93,40 @@ export default {
         v => v.length <= 200 || "Max 200 characters!"
       ],
       authorities: ["private", "public"],
-      image: undefined,
-      none_preview:
-        "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="
+      authority: "",
+      invitation_code_count: 0,
+      invite_code_rules: [v => this.isInt(v) || "You should enter an integer!"],
+      image: []
     };
   },
   methods: {
     create() {
-      alert("test send to backend");
+      let that = this;
+      axios
+        .post("/api/question_banks/", {
+          id: -1,
+          name: this.name,
+          picture: this.image.length == 0 ? "" : this.image[0],
+          brief: this.brief,
+          authority: this.authority,
+          invitation_code_count: this.invitation_code_count
+        })
+        .then(response => {
+          alert("Success!");
+		  console.log(response);
+          that.$router.push("questionbank/" + response.data.id);
+        })
+        .catch(error => {
+          alert(error);
+        });
     },
     reset() {
       this.$refs.form.reset();
+      this.$refs.uploader.reset();
     },
-    //deal with image input
-    preview_image(event) {
-      var file = event;
-      let that = this;
-      let reader = new FileReader();
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-
-      reader.onload = function() {
-        that.image = this.result;
-      };
+    isInt(target) {
+      var regInt = /^[0-9]+$/;
+      return regInt.test(target);
     }
   }
 };
