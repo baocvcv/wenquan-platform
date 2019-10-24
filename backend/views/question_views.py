@@ -8,13 +8,14 @@ from backend.serializers.question_serializer import SingleChoiceQSerializer
 from backend.serializers.question_serializer import MultpChoiceQSerializer
 from backend.serializers.question_serializer import TrueOrFalseQSerializer
 from backend.serializers.question_serializer import FillBlankQSerializer
+
 from backend.serializers.question_serializer import BriefAnswerQSerializer
-from backend.serializers.question_bank_serializer import QuestionBankSerializer
 
 from backend.models.questions import QuestionGroup
 from backend.models.questions import Question
 from backend.models.knowledge_node import KnowledgeNode
 from backend.models.questions.question import TYPEDIC
+from backend.models.questions.question import INT2TYPE
 
 
 class QuestionList(APIView):
@@ -53,6 +54,7 @@ class QuestionList(APIView):
             question_info = serializer.data
             question_info['id'] = question.id
             question_info['parents_node'] = nodes
+            question_info['question_type'] = INT2TYPE[(str)(question_info['question_type'])]
             response.append(question_info)
         return Response(response)
 
@@ -98,6 +100,7 @@ class QuestionList(APIView):
             response = question.data
             response['id'] = new_q.id
             bank.question_count = len(bank.questiongroup_set.all())
+            response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             return Response(response, status=201)
         return Response(question.errors, status=400)
 
@@ -106,7 +109,9 @@ class QuestionDetail(APIView):
     def get(self, request, pk):
         question = Question.objects.get(id=pk)
         serializer = QuestionList.question_to_serializer(question)
-        return Response(serializer.data)
+        response = serializer.data
+        response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+        return Response(response)
 
     def put(self, request, pk):
         put_data = JSONParser().parse(request)[0]
@@ -125,6 +130,8 @@ class QuestionDetail(APIView):
             serializer = BriefAnswerQSerializer(question, put_data)
 
         if serializer.is_valid():
-            serializer.save
-            return Response(serializer.data, status=200)
+            serializer.save()
+            response = serializer.data
+            response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+            return Response(response, status=200)
         return Response(serializer.erorrs, status=400)

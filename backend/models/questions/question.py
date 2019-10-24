@@ -16,6 +16,14 @@ TYPEDIC = {
     'brief_ans': 5,
 }
 
+INT2TYPE = {
+    '1': 'single',
+    '2': 'multiple',
+    '3': 'TorF',
+    '4': 'fill_blank',
+    '5': 'brief_ans',
+}
+
 
 class Question(PolymorphicModel):
     """Base class of the question
