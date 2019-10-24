@@ -13,6 +13,7 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
     history_version_id = serializers.IntegerField()
     id = serializers.IntegerField(required=False)
+    question_image = serializers.ListField(child=serializers.CharField(allow_blank=True))
 
     class Meta:
         """Meta class"""
@@ -46,6 +47,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for MultpChoiceQ"""
     history_version_id = serializers.IntegerField()
     id = serializers.IntegerField(required=False)
+    question_image = serializers.ListField(child=serializers.CharField(allow_blank=True))
 
     class Meta:
         """Meta class"""
@@ -80,6 +82,7 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
     """Serializer for TrueOrFalseQ"""
     history_version_id = serializers.IntegerField()
     id = serializers.IntegerField(required=False)
+    question_image = serializers.ListField(child=serializers.CharField(allow_blank=True))
 
     class Meta:
         """Meta class"""
@@ -112,6 +115,8 @@ class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
     history_version_id = serializers.IntegerField()
     id = serializers.IntegerField(required=False)
+    question_image = serializers.ListField(child=serializers.CharField(allow_blank=True))
+    question_content = serializers.ListField(child=serializers.CharField(allow_blank=True))
 
     class Meta:
         """meta class"""
@@ -129,6 +134,11 @@ class FillBlankQSerializer(serializers.ModelSerializer):
             'question_ans',
             'question_solution',
         ]
+        extra_kwargs = {
+            "question_image": {
+                "allow_blank": True
+            },
+        }
 
     def create(self, validated_data):
         """create fill blank question"""
@@ -145,6 +155,7 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
     history_version_id = serializers.IntegerField()
     id = serializers.IntegerField(required=False)
+    question_image = serializers.ListField(child=serializers.CharField(allow_blank=True))
 
     class Meta:
         """meta class"""

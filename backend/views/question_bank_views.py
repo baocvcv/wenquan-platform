@@ -46,8 +46,6 @@ class QuestionBankDetail(APIView):
         response = serializer.data
         questions = []
 
-        print(bank.questiongroup_set.all())
-
         for i in bank.questiongroup_set.all():
             if (len(i.question_set.all()) == 0):
                 continue
