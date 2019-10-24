@@ -201,7 +201,7 @@ export default {
         this.question_list.push(question_2);
         */
         this.$axios
-            .get("http://localhost:8000/api/question_banks/" + this.id + "/")
+            .get("/api/question_banks/" + this.id + "/")
             .then((response) => {
                 this.question_list = response.data.questions;
             })

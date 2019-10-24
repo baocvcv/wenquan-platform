@@ -56,9 +56,38 @@
                         v-model="edited_question_bank.brief"
                     >
                     </v-textarea>
+                    <v-row>
+                        <v-col>
+                            <v-text-field
+                                label="Invitation Code Count"
+                                v-model="question_bank.invitation_code_count"
+                                :readonly="true"
+                                outlined
+                                hint="The total count of the invitation code"
+                            >
+                            </v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-text-field
+                                label="Invitation Code Count"
+                                v-model="question_bank.activated_code_count"
+                                :readonly="true"
+                                outlined
+                                hint="The total count of the invitation code"
+                            >
+                            </v-text-field>
+                        </v-col>
+                    </v-row>
                 </v-col>
                 <v-col>
-                    <v-img></v-img>
+                    <image-uploader
+                        v-model="question_bank.image"
+                        label="Picture"
+                        :readonly="edit_mode"
+                        multiple
+                        placeholder="No picture"
+                    >
+                    </image-uploader>
                 </v-col>
             </v-row>
         </v-card-text>
@@ -76,11 +105,13 @@
 
 <script>
 import question_list from "@/components/QuestionList.vue";
+import image_uploader from "@/components/ImageUploader.vue";
 
 export default {
     name: "question-bank",
     components: {
         "question-list": question_list,
+        "image-uploader": image_uploader
     },
     data: () => ({
         question_bank: {},
@@ -100,7 +131,7 @@ export default {
         },
         save() {
             this.$axios
-                .put('http://localhost:8000/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
+                .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
                     this.quesion_bank = Object.assign({}, this.edited_question_bank);
@@ -113,7 +144,7 @@ export default {
     created() {
         let id = this.$route.params.id;
         this.$axios
-            .get('http://localhost:8000/api/question_banks/' + id + '/')
+            .get('/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
                 this.edited_question_bank = response.data;

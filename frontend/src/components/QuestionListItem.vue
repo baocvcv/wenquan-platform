@@ -108,7 +108,7 @@ export default {
             {
                 /*
                 this.$axios
-                    .get("http://localhost:8000/api/nodes_list/" + node + "/")
+                    .get("/api/nodes_list/" + node + "/")
                     .then((response) => {
                         nodes.push(response.data.name);
                     })
