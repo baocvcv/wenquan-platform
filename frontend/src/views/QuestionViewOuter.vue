@@ -17,7 +17,7 @@ export default {
         if(this.$route.params.id && this.$route.fullPath.search("/question/")!=-1){
             let url="/api/questions/"+this.$route.params.id+"/";
             axios.get(url).then(response => {
-                this.questionData = JSON.parse(response.data);
+                this.questionData = response.data;
                 this.readonly = false;
             }).catch(err => {
                 console.log(err);
