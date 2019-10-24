@@ -57,6 +57,8 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  if (sessionStorage.getItem("user"))
+	store.state.user=JSON.parse(sessionStorage.getItem("user"));
   if (!store.state.user)
   {
     if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
