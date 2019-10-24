@@ -62,6 +62,10 @@ export default {
         initData: {
             type: Object,
             default: null
+        },
+        bankID: {
+            type: Array,
+            default: null
         }
     },
     watch: {
@@ -84,6 +88,7 @@ export default {
     },
     methods: {
         submit(info) {
+            if(info.parents_node==[] && this.bankID) info.parents_node=this.bankID;
             axios.post("/api/questions/",[info]).catch(err => {
                 console.log(err);
             });

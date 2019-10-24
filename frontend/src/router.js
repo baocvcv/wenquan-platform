@@ -52,6 +52,11 @@ const router = new Router({
       path: "/question/:id",
       name: "question-view",
       component: () => import("./views/QuestionViewOuter.vue")
+    },
+    {
+      path: "/create_question/:id",
+      name: "question-create",
+      component: () => import("./views/QuestionViewOuter.vue")
     }
   ]
 })
