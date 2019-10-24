@@ -34,7 +34,7 @@ class KnowledgeNodeList(APIView):
         return json
 
     def get(self, request, pk):
-        response = go_through_tree(pk)
+        response = self.go_through_tree(pk)
         return Response(response)
 
     def post(self, request):
