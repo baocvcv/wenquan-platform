@@ -9,6 +9,7 @@ from backend.serializers.question_serializer import MultpChoiceQSerializer
 from backend.serializers.question_serializer import TrueOrFalseQSerializer
 from backend.serializers.question_serializer import FillBlankQSerializer
 from backend.serializers.question_serializer import BriefAnswerQSerializer
+from backend.serializers.question_bank_serializer import QuestionBankSerializer
 
 from backend.models.questions import QuestionGroup
 from backend.models.questions import Question
