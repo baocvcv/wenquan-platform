@@ -4,15 +4,13 @@ import WenQuan_Platform.settings as app_settings
 from django.conf import settings
 from django.utils import timezone
 
+settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
+django.setup()
+
 from backend.models import UserPermissions
 from backend.models import User
 from backend.models import Profile
-
 from backend.models.question_bank import QuestionBank
-
-settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
-
-django.setup()
 
 
 def createUser(
@@ -47,7 +45,7 @@ createUser(username='xq', user_group=User.SUPER_ADMIN)
 def createBank(
         name,
         root_id=1,
-        picture="",
+        picture="nothinghere",
         brief="",
         createTime=timezone.now(),
         lastUpdate=timezone.now(),
@@ -68,7 +66,8 @@ def createBank(
         invitation_code_count=invitation_code_count,
         activated_code_count=activated_code_count,
     )
+    bank.save()
     return bank
 
 
-createBank("test_bank")
+createBank(name="test_bank")
