@@ -139,7 +139,7 @@ export default {
     name: "question-list",
     props: {
         editable: Boolean,
-        "question-bank-id": Number,
+        id: Number,
     },
     components: {
         "tree-view": tree_view,
@@ -167,6 +167,7 @@ export default {
         }
     },
     mounted() {
+        /*
         let question_1 = {
             id: 1,
             parents_node: [0, 1],
@@ -198,18 +199,15 @@ export default {
         }
         this.question_list.push(question_1);
         this.question_list.push(question_2);
-
-        console.log(this["question-bank-id"]);
-        /*
+        */
         this.$axios
-            .get("http://localhost:8000/api/question_banks/" + this["question-bank-id"] + "/")
+            .get("http://localhost:8000/api/question_banks/" + this.id + "/")
             .then((response) => {
-                this.question_list = response.data;
+                this.question_list = response.data.questions;
             })
             .catch((error) => {
                 console.log(error);
             })
-        */
     },
     methods: {
         reset_filter() {

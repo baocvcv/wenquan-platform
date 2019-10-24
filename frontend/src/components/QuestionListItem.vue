@@ -103,7 +103,7 @@ export default {
     computed: {
         nodes() {
             let nodes = [];
-            let node = -1;
+            let node;
             for (node in this.question.parents_node)
             {
                 /*

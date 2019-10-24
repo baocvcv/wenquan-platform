@@ -70,7 +70,7 @@
             </v-card-actions>
         </v-expand-transition>
     </v-card>
-    <question-list :editable="true" :question-bank-id="Number($route.params.id)"></question-list>
+    <question-list v-if="question_bank.id" :id="question_bank.id" :editable="true"></question-list>
 </div>
 </template>
 
