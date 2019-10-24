@@ -88,11 +88,20 @@ export default {
     },
     methods: {
         submit(info) {
-            if(info.parents_node.length==0 && this.bankID) info.parents_node=this.bankID;
-            console.log(info);
-            axios.post("/api/questions/",[info]).catch(err => {
-                console.log(err);
-            });
+            if(info.parents_node.length==0 && this.bankID){
+                //New question
+                info.parents_node=this.bankID;
+                axios.post("/api/questions/",[info]).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                });
+            }else{
+                //Edit question
+                axios.put("/api/questions/"+info.id.toString()+"/",info).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                })
+            }
         },
         test() {
             this.$refs.brief.readonly=true;
