@@ -23,7 +23,9 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="grey--text">
-                            Admin
+                            <div v-if="$vuetify.breakpoint.mdAndUp">
+                                Admin
+                            </div>
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -33,7 +35,9 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="grey--text">
-                            Exit
+                            <div v-if="$vuetify.breakpoint.mdAndUp">
+                                Exit
+                            </div>
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
