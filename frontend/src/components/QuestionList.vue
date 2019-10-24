@@ -94,16 +94,23 @@
                                 v-if="editable && $vuetify.breakpoint.mdAndUp"
                                 color="primary"
                                 elevation="0"
+                                v-on="on"
                             >Create</v-btn>
                             <v-btn
                                 v-if="editable && !$vuetify.breakpoint.mdAndUp"
                                 color="primary"
                                 elevation="0"
+                                v-on="on"
                             >
                                 <v-icon>mdi-plus</v-icon>
                             </v-btn>
                         </template>
-                        <question-view :readonly="false" :initData="null" :bankID="id"></question-view>
+                        <v-card>
+                            <v-card-title>Create A Question</v-card-title>
+                            <v-card-text>
+                                <question-view :readonly="false" :initData="null" :bankID="id"></question-view>
+                            </v-card-text>
+                        </v-card>
                     </v-dialog>
             </v-app-bar>
             <v-card-text>
@@ -139,7 +146,7 @@
 <script>
 import tree_view from "@/components/TreeView.vue";
 import question_list_item from "@/components/QuestionListItem.vue"
-import question_view from "@/components/QuesionView.vue";
+import question_view from "@/components/QuestionView.vue";
 
 export default {
     name: "question-list",

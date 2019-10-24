@@ -81,7 +81,6 @@
                 </v-col>
                 <v-col>
                     <image-uploader
-                        v-model="question_bank.image"
                         label="Picture"
                         :readonly="edit_mode"
                         multiple
