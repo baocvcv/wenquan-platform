@@ -24,7 +24,7 @@
                                 label="Created Time"
                                 :readonly="true"
                                 outlined
-                                v-model="edited_question_bank.created_time"
+                                v-model="edited_question_bank.createTime"
                             >
                             </v-text-field>
                         </v-col>
@@ -33,7 +33,7 @@
                                 label="Last Update"
                                 :readonly="true"
                                 outlined
-                                v-model="edited_question_bank.last_update"
+                                v-model="edited_question_bank.lastUpdate"
                             >
                             </v-text-field>
                         </v-col>
@@ -70,7 +70,7 @@
             </v-card-actions>
         </v-expand-transition>
     </v-card>
-    <question-list :editable="true" :question-bank-id="$router.params.id"></question-list>
+    <question-list :editable="true" :question-bank-id="Number($route.params.id)"></question-list>
 </div>
 </template>
 
@@ -83,20 +83,8 @@ export default {
         "question-list": question_list,
     },
     data: () => ({
-        question_bank: {
-            name: "Calclus",
-            created_time: "2019-10-22",
-            last_update: "2019-10-22",
-            question_count: 1000,
-            brief: "It is impossible to master CALCULUS."
-        },
-        edited_question_bank: {
-            name: "",
-            created_time: "",
-            last_update: "",
-            question_count: 0,
-            brief: ""
-        },
+        question_bank: {},
+        edited_question_bank: {},
         edit_mode: false,
     }),
     beforeRouteLeave (to, from, next) {
@@ -111,9 +99,8 @@ export default {
             this.edited_question_bank = Object.assign({}, this.question_bank);
         },
         save() {
-            /*
             this.$axios
-                .put('api/question_banks/' + id + '/', this.edited_question_bank)
+                .put('http://localhost:8000/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
                     this.quesion_bank = Object.assign({}, this.edited_question_bank);
@@ -121,24 +108,19 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 })
-            */
-            this.edit_mode = false;
-            this.question_bank = Object.assign({}, this.edited_question_bank);
         }
     },
     created() {
         let id = this.$route.params.id;
-        /*
         this.$axios
-            .get('api/question_banks/' + id + '/')
-            .then((response) => {
+            .get('http://localhost:8000/api/question_banks/' + id + '/')
+            .then(response => {
                 this.question_bank = response.data;
+                this.edited_question_bank = response.data;
             })
             .catch((error) => {
                 console.log(error);
             })
-        */
-        this.edited_question_bank = Object.assign({}, this.question_bank);
     }
 }
 </script>

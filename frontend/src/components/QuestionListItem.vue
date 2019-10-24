@@ -7,10 +7,10 @@
                 </v-chip>
                 <!--TODO: Change here into computed-->
                 <v-chip
-                    v-for="tag in question.question_tags"
-                    :key="tag"
+                    v-for="node in nodes"
+                    :key="node"
                 >
-                    {{ tag }}
+                    {{ node }}
                 </v-chip>
                 <div class="flex-grow-1"></div>
                 <v-rating
@@ -86,6 +86,8 @@ export default {
     watch: {
         width: function() {
             let content = this.$refs.content;
+            if (!content)
+                return;
             if (content.offsetHeight >= this.max_height)
             {
                 this.content_too_long = true;
@@ -99,20 +101,24 @@ export default {
         }
     },
     computed: {
-        tags() {
-            let tags = [];
+        nodes() {
+            let nodes = [];
+            let node = -1;
             for (node in this.question.parents_node)
             {
+                /*
                 this.$axios
-                    .get("/api/nodes_list/" + node + "/")
+                    .get("http://localhost:8000/api/nodes_list/" + node + "/")
                     .then((response) => {
-                        tags.push(response.data.name);
+                        nodes.push(response.data.name);
                     })
                     .catch((error) => {
                         console.log(error);
                     });
+                    */
+                nodes.push(node);
             }
-            return tags;
+            return nodes;
         }
     },
     methods: {

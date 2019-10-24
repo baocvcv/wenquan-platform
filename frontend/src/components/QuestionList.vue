@@ -145,25 +145,27 @@ export default {
         "tree-view": tree_view,
         "question-list-item": question_list_item
     },
-    data: () => ({
-        type_filter: [],
-        level_min_filter: 0,
-        level_max_fileter: 5,
-        drawer: null,
-        question_list: [],
-        sort_menu: [
-            "Popularity",
-            "Level"
-        ],
-        keyword: "",
-        question_types: [
-            "Single",
-            "Multiple",
-            "T/F",
-            "Blank Filling",
-            "Brief Answer"
-        ]
-    }),
+    data: function() {
+        return {
+            type_filter: [],
+            level_min_filter: 0,
+            level_max_filter: 5,
+            drawer: null,
+            question_list: [],
+            sort_menu: [
+                "Popularity",
+                "Level"
+            ],
+            keyword: "",
+            question_types: [
+                "Single",
+                "Multiple",
+                "T/F",
+                "Blank Filling",
+                "Brief Answer"
+            ]
+        }
+    },
     mounted() {
         let question_1 = {
             id: 1,
@@ -197,9 +199,10 @@ export default {
         this.question_list.push(question_1);
         this.question_list.push(question_2);
 
+        console.log(this["question-bank-id"]);
         /*
         this.$axios
-            .get("/api/question_banks/" + this["question-bank-id"] + "/")
+            .get("http://localhost:8000/api/question_banks/" + this["question-bank-id"] + "/")
             .then((response) => {
                 this.question_list = response.data;
             })
