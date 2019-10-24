@@ -12,11 +12,13 @@ from backend.models.questions import QuestionGroup
 class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
     history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = SingleChoiceQ
         fields = [
+            'id',
             'history_version_id',
             'question_name',
             'question_type',
@@ -43,11 +45,13 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 class MultpChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for MultpChoiceQ"""
     history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = MultpChoiceQ
         fields = [
+            'id',
             'history_version_id',
             'question_name',
             'question_type',
@@ -75,11 +79,13 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
     """Serializer for TrueOrFalseQ"""
     history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = TrueOrFalseQ
         fields = [
+            'id',
             'history_version_id',
             'question_name',
             'question_type',
@@ -105,11 +111,13 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
     history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = FillBlankQ
         fields = [
+            'id',
             'history_version_id',
             'question_name',
             'question_type',
@@ -136,11 +144,13 @@ class FillBlankQSerializer(serializers.ModelSerializer):
 class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
     history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = BriefAnswerQ
         fields = [
+            'id',
             'history_version_id',
             'question_name',
             'question_type',

@@ -29,16 +29,3 @@ class KnowlegdeNodeSerializer(serializers.ModelSerializer):
                 "required": False
             },
         }
-
-    def create(self, validated_data):
-        """create question group"""
-        node = KnowledgeNode(**validated_data)
-        node.save()
-        return node
-
-    def update(self, instance, validated_data):
-        instance.question_bank = validated_data.get('question_bank', instance.question_bank)
-        instance.name = validated_data.get('name', instance.name)
-        instance.subnodes = validated_data.get('subnodes', instance.subnodes)
-        instance.save()
-        return instance
