@@ -130,7 +130,7 @@ export default {
         return {
             data: {
                 id: -1,
-                parents: [0],
+                parents: [],
                 change_time: "",
                 title: "",
                 content: "",
