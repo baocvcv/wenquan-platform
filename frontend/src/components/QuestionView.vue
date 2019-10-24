@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import MultipleChoice from "../components/MultipleChoice.vue";
-import SingleChoice from "../components/SingleChoice.vue"
-import BriefAnswer from "../components/BriefAnswer.vue"
-import FillInBlank from "../components/FillInBlank.vue";
+import MultipleChoice from "./MultipleChoice.vue";
+import SingleChoice from "./SingleChoice.vue"
+import BriefAnswer from "./BriefAnswer.vue"
+import FillInBlank from "./FillInBlank.vue";
 
 export default {
     name: "question-view",

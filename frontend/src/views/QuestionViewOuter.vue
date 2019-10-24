@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import View from "./QuestionView.vue";
+import View from "../components/QuestionView.vue";
 
 export default {
     name: "question-outer",
