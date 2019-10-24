@@ -109,6 +109,7 @@ class QuestionList(APIView):
             bank.lastUpdate = q_group.current_version
             bank.save()
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+            response['parents_node'] = parents_id
             return Response(response, status=201)
         return Response(question.errors, status=400)
 
@@ -119,6 +120,11 @@ class QuestionDetail(APIView):
         serializer = QuestionList.question_to_serializer(question)
         response = serializer.data
         response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+        q_group = question.history_version
+        nodes = []
+        for i in q_group.parents_node.all():
+            nodes.append(i.id)
+        response['parents_node'] = nodes
         return Response(response)
 
     def put(self, request, pk):
@@ -139,5 +145,11 @@ class QuestionDetail(APIView):
             response = question.data
             response['id'] = new_q.id
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+            new_parents = []
+            for i in post_data['parents_node']:
+                new_parents.append(KnowledgeNode.objects.get(id=i))
+            q_group.parents_node.set(new_parents)
+
+            response['parents_node'] = post_data['parents_node']
             return Response(response, status=201)
         return Response(question.errors, status=400)
