@@ -6,7 +6,7 @@ from backend.models.question_bank import QuestionBank
 
 
 class QuestionBankSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = QuestionBank

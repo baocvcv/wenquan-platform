@@ -29,10 +29,12 @@ class QuestionGroupSerializer(serializers.ModelSerializer):
         nodes = []
         for i in validated_data['parents_node']:
             nodes.append(KnowledgeNode.objects.get(id=i['id']))
+
         new_group = QuestionGroup.objects.create(
             current_version=validated_data['current_version'],
             belong_bank=bank,
         )
+
         new_group.parents_node.set(nodes)
         new_group.belong_bank = bank
         new_group.save()
