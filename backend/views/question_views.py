@@ -21,6 +21,21 @@ from backend.models.questions.question import INT2TYPE
 class QuestionList(APIView):
     """Get all questions info or create a question"""
     @staticmethod
+    def create_question_from_data(post_data):
+        post_data['question_type'] = TYPEDIC[post_data['question_type']]
+        if post_data['question_type'] == TYPEDIC['single']:
+            question = SingleChoiceQSerializer(data=post_data)
+        elif post_data['question_type'] == TYPEDIC['multiple']:
+            question = MultpChoiceQSerializer(data=post_data)
+        elif post_data['question_type'] == TYPEDIC['TorF']:
+            question = TrueOrFalseQSerializer(data=post_data)
+        elif post_data['question_type'] == TYPEDIC['fill_blank']:
+            question = FillBlankQSerializer(data=post_data)
+        elif post_data['question_type'] == TYPEDIC['brief_ans']:
+            question = BriefAnswerQSerializer(data=post_data)
+        return question
+
+    @staticmethod
     def question_to_serializer(question):
         qtype = question.question_type
         if qtype == TYPEDIC['single']:
@@ -83,17 +98,8 @@ class QuestionList(APIView):
 
         post_data['question_change_time'] = q_group.current_version
         post_data['history_version_id'] = q_group.id
-        post_data['question_type'] = TYPEDIC[post_data['question_type']]
-        if post_data['question_type'] == TYPEDIC['single']:
-            question = SingleChoiceQSerializer(data=post_data)
-        elif post_data['question_type'] == TYPEDIC['multiple']:
-            question = MultpChoiceQSerializer(data=post_data)
-        elif post_data['question_type'] == TYPEDIC['TorF']:
-            question = TrueOrFalseQSerializer(data=post_data)
-        elif post_data['question_type'] == TYPEDIC['fill_blank']:
-            question = FillBlankQSerializer(data=post_data)
-        elif post_data['question_type'] == TYPEDIC['brief_ans']:
-            question = BriefAnswerQSerializer(data=post_data)
+
+        question = self.create_question_from_data(post_data)
 
         if question.is_valid():
             new_q = question.save()
@@ -114,24 +120,22 @@ class QuestionDetail(APIView):
         return Response(response)
 
     def put(self, request, pk):
-        put_data = JSONParser().parse(request)[0]
-        put_data.pop('id')
-        question = Question.objects.get(id=pk)
-        qtype = question.question_type
-        if qtype == TYPEDIC['single']:
-            serializer = SingleChoiceQSerializer(question, put_data)
-        elif qtype == TYPEDIC['multiple']:
-            serializer = MultpChoiceQSerializer(question, put_data)
-        elif qtype == TYPEDIC['TorF']:
-            serializer = TrueOrFalseQSerializer(question, put_data)
-        elif qtype == TYPEDIC['fill_blank']:
-            serializer = FillBlankQSerializer(question, put_data)
-        elif qtype == TYPEDIC['brief_ans']:
-            serializer = BriefAnswerQSerializer(question, put_data)
+        post_data = JSONParser().parse(request)[0]
+        old_q = Question.objects.get(id=post_data.pop('id'))
 
-        if serializer.is_valid():
-            serializer.save()
-            response = serializer.data
+        q_group = old_q.history_version
+        q_group.current_version = timezone.now()
+        q_group.save()
+
+        post_data['question_change_time'] = q_group.current_version
+        post_data['history_version_id'] = q_group.id
+
+        question = QuestionList.create_question_from_data(post_data)
+
+        if question.is_valid():
+            new_q = question.save()
+            response = question.data
+            response['id'] = new_q.id
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
-            return Response(response, status=200)
-        return Response(serializer.erorrs, status=400)
+            return Response(response, status=201)
+        return Response(question.errors, status=400)
