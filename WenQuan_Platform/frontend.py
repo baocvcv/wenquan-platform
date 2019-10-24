@@ -15,6 +15,6 @@ def index(request, url):
     keywords = ("static", "img", "manifest")
     for keyword in keywords:
         pos = url.find(keyword)
-        if pos != -1:
+        if pos != -1 :
             return redirect("/frontend/"+url[pos:])
     return render(request, "index.html")
