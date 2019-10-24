@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h4 v-if="process != 'End'" align="center" style="color: grey;">
+      {{ process }}
+    </h4>
     <v-list two-line>
       <v-list-item
         v-for="qst_bank in question_banks"
@@ -119,7 +122,11 @@ export default {
   name: "question-banks-list",
   props: {
     question_banks: {},
-    read_only: Boolean(true)
+    read_only: Boolean(true),
+    process: {
+      type: String,
+      default: "End"
+    }
   },
   data: function() {
     return {
