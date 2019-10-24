@@ -137,7 +137,7 @@ export default {
             this.hide_content = true;
         },
         click() {
-            this.$router.push("/admin/questions/" + this.question.id + "/");
+            this.$router.push("/question/" + this.question.id + "/");
         }
     }
 }
