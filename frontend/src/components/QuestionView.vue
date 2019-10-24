@@ -89,6 +89,7 @@ export default {
     methods: {
         submit(info) {
             if(info.parents_node==[] && this.bankID) info.parents_node=this.bankID;
+            console.log(info);
             axios.post("/api/questions/",[info]).catch(err => {
                 console.log(err);
             });
