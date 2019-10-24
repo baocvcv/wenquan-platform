@@ -24,9 +24,8 @@ class QuestionBankList(APIView):
 
         if serializer.is_valid():
             new_bank = serializer.save()
-            root.belong_bank = new_bank
+            root.question_bank = new_bank
             root.save()
-
             serializer.id = new_bank.id
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
@@ -38,9 +37,11 @@ class QuestionBankDetial(APIView):
         serializer = QuestionBankSerializer(bank)
         response = serializer.data
         questions = []
+
         for i in bank.questiongroup_set.all():
             questions += i
         response['questions'] = questions
+
         return Response(response)
 
     def put(self, request, pk):

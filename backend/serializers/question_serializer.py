@@ -6,18 +6,20 @@ from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
-from .question_group_serializer import QuestionGroupSerializer
+from backend.models.questions import QuestionGroup
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = SingleChoiceQ
         fields = [
-            'history_version',
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -31,20 +33,26 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create single choice question"""
-        question = SingleChoiceQ.objects.create(**validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = SingleChoiceQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question
 
 
 class MultpChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for MultpChoiceQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = MultpChoiceQ
         fields = [
-            'history_version',
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -57,22 +65,28 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
             'question_solution',
         ]
 
-    def create(self, validated_d):
+    def create(self, validated_data):
         """create multiple choices question"""
-        question = MultpChoiceQ.objects.create(**validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = MultpChoiceQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question
 
 
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
     """Serializer for TrueOrFalseQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = TrueOrFalseQ
         fields = [
-            'history_version',
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -85,21 +99,26 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create true or false choices question"""
-
-        question = TrueOrFalseQ.objects.create(**validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = TrueOrFalseQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question
 
 
 class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = FillBlankQ
         fields = [
-            'history_version',
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -113,20 +132,26 @@ class FillBlankQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create fill blank question"""
-        question = FillBlankQ.objects.create(**validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = FillBlankQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question
 
 
 class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
-    history_version = QuestionGroupSerializer(read_only=True)
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = BriefAnswerQ
         fields = [
-            'history_version',
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -139,6 +164,10 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create brief answer question"""
-        question = BriefAnswerQ.objects.create(**validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        question = BriefAnswerQ.objects.create(
+            **validated_data,
+            history_version=group,
+        )
         question.save()
         return question

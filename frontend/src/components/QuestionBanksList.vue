@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h4 v-if="process != 'End'" align="center" style="color: grey;">
+      {{ process }}
+    </h4>
     <v-list two-line>
       <v-list-item
         v-for="qst_bank in question_banks"
@@ -7,7 +10,7 @@
         @click="$router.push('questionbanks/' + qst_bank.id)"
       >
         <v-list-item-avatar>
-          <v-icon v-text="qst_bank.icon"></v-icon>
+          <v-img :src="qst_bank.icon"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content align="left">
@@ -69,7 +72,7 @@
           <v-btn
             color="green"
             dark
-            @click="$router.push('questionbanks/'+ cur_qst_bank.id)"
+            @click="$router.push('questionbanks/' + cur_qst_bank.id)"
           >
             Goto
           </v-btn>
@@ -102,7 +105,7 @@
             "
             >Confirm
           </v-btn>
-          <v-btn color="primary" dark @click="show_del_dialog = false">
+          <v-btn color="grey" dark @click="show_del_dialog = false">
             Cancel
           </v-btn>
           <div class="flex-grow-1"></div>
@@ -119,7 +122,11 @@ export default {
   name: "question-banks-list",
   props: {
     question_banks: {},
-    read_only: Boolean(true)
+    read_only: Boolean(true),
+    process: {
+      type: String,
+      default: "End"
+    }
   },
   data: function() {
     return {
@@ -132,14 +139,12 @@ export default {
     delete_qst_bank() {
       let that = this;
       axios
-        .post("/api/question/", that.cur_qst_bank)
-        .then(response => {
-          alert(response);
+        .post("/api/question_banks/" + that.cur_qst_bank.id + "/", {
+          id: that.cur_qst_bank.id
         })
         .catch(error => {
           alert(error);
         });
-      alert("test delete");
     }
   }
 };

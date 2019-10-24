@@ -15,6 +15,6 @@ class FillBlankQ(Question):
     """
     question_content = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_blank_num = models.IntegerField()
-    question_image = ArrayField(models.URLField(max_length=MAX_URL))
+    question_image = ArrayField(models.CharField(max_length=MAX_URL))
     question_ans = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_solution = models.CharField(max_length=MAX_CONTENT)

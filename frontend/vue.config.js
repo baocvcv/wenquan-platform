@@ -1,7 +1,7 @@
 module.exports = {
   outputDir: "dist",
   assetsDir: "static",
-  publicPath: "frontend",
+  publicPath: "",
   devServer: {
     port: 80, //port
     disableHostCheck: true //disable host headers check

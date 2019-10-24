@@ -21,7 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/TreeView.vue")
+        import(/* webpackChunkName: "about" */ "./views/QuestionViewOuter.vue")
     },
     {
       path: "/admin/usermanagement",
@@ -47,6 +47,11 @@ const router = new Router({
       path: "/admin/questionbanks/:id",
       name: "question-bank",
       component: () => import("./views/QuestionBank.vue")
+    },
+    {
+      path: "/question/:id",
+      name: "question-view",
+      component: () => import("./views/QuestionViewOuter.vue")
     }
   ]
 })

@@ -17,11 +17,12 @@
         required
       ></v-textarea>
       <image-uploader
+        ref="uploader"
         v-model="question_image"
         width="50%"
         label="picture"
         :readonly="readonly"
-        style="margin: 0px;"
+        multiple
         placeholder="Upload an image if necessary"
       ></image-uploader>
       <v-list flat>
@@ -237,9 +238,10 @@ export default {
       this.$refs.input.reset();
       this.question_choice.splice(0, this.question_choice.length);
       this.question_ans = undefined;
+      this.$refs.uploader.reset();
     },
     submit() {
-      //console.log(this.parse());
+      this.$emit("submit",this.parse());
     }
   }
 };
