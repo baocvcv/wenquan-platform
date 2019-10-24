@@ -175,7 +175,6 @@ export default {
 				this.$router.currentRoute.path == "/";
 		},
         render_admin_entry: function() {
-            console.log("Testing....");
             if (!this.user)
                 return false;
             return this.$router.currentRoute.path.split('/')[1] != "admin"
@@ -204,7 +203,6 @@ export default {
     },
     mounted() {
         window.addEventListener('resize', () => {
-            console.log("Resizing...");
             if (this.$vuetify.breakpoint.smAndUp)
                 this.drawer = false;
         })
