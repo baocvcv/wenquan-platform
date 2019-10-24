@@ -7,3 +7,4 @@ from .question_bank import QuestionBank
 from .user import User
 from .permissions import UserPermissions
 from .profile import Profile
+from .email import EmailVerificationRecord

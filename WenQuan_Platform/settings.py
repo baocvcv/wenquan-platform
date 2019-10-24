@@ -123,11 +123,12 @@ STATICFILES_DIRS = [
 ]
 
 # Email settings
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_HOST_USER = 'baocvcv@163.com'
 EMAIL_HOST_PASSWORD = 'BaoHan828'
-EMAIL_PORT = 465  #25
+EMAIL_PORT = 25
+DEFAULT_FROM_EMAIL = 'baocvcv@163.com'
 
 # Rest framework settings
 REST_FRAMEWORK = {

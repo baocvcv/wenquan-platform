@@ -44,6 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_group="Student",
             profile=profile,
             user_permissions=user_permissions,
+            is_active=False,
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -72,5 +73,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password', 'last_login_time', 'last_login_ip', 'is_banned', 'user_group', 'user_permissions', 'profile']
+        fields = ['id', 'email', 'username', 'password',
+                  'last_login_time', 'last_login_ip', 'is_banned', 'is_active',
+                  'user_group', 'user_permissions', 'profile']
         read_only_fields = ['last_login_time', 'last_login_ip']
