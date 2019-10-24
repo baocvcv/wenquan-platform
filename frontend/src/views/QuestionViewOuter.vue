@@ -15,7 +15,7 @@ export default {
     },
     created() {
         if(this.$route.params.id){
-            let url="/api/question/"+this.$route.params.id;
+            let url="/api/questions/"+this.$route.params.id+"/";
             axios.get(url).then(response => {
                 this.questionData = JSON.parse(response);
                 this.readonly = false;
