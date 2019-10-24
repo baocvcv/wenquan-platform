@@ -14,7 +14,6 @@ from backend.serializers.knowledge_node_serializer import KnowlegdeNodeSerialize
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
 
 from backend.models.questions import QuestionGroup
-from backend.models.questions import Question
 from backend.models.knowledge_node import KnowledgeNode
 from backend.models.questions.question import TYPEDIC
 
@@ -23,8 +22,10 @@ class QuestionList(APIView):
     """Get all questions info or create a question"""
     def get(self, request):
         """get all questions, only get the latest version"""
+
         question_groups = QuestionGroup.objects.all()
         response = []
+
         for i in question_groups:
             if len(i.question_set.all()) == 0:
                 continue

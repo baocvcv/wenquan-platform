@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
-from backend.serializers.knowledge_node_serializer import KnowlegdeNodeSerializer
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
 
