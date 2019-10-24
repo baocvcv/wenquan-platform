@@ -88,18 +88,23 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
-                    <v-btn
-                        v-if="editable && $vuetify.breakpoint.mdAndUp"
-                        color="primary"
-                        elevation="0"
-                    >Create</v-btn>
-                    <v-btn
-                        v-if="editable && !$vuetify.breakpoint.mdAndUp"
-                        color="primary"
-                        elevation="0"
-                    >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
+                    <v-dialog v-model="create_question_dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-if="editable && $vuetify.breakpoint.mdAndUp"
+                                color="primary"
+                                elevation="0"
+                            >Create</v-btn>
+                            <v-btn
+                                v-if="editable && !$vuetify.breakpoint.mdAndUp"
+                                color="primary"
+                                elevation="0"
+                            >
+                                <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <question-view :readonly="false" :initData="null" :bankID="id"></question-view>
+                    </v-dialog>
             </v-app-bar>
             <v-card-text>
                 <v-row>
@@ -134,6 +139,7 @@
 <script>
 import tree_view from "@/components/TreeView.vue";
 import question_list_item from "@/components/QuestionListItem.vue"
+import question_view from "@/components/QuesionView.vue";
 
 export default {
     name: "question-list",
@@ -143,10 +149,12 @@ export default {
     },
     components: {
         "tree-view": tree_view,
-        "question-list-item": question_list_item
+        "question-list-item": question_list_item,
+        "question-view": question_view
     },
     data: function() {
         return {
+            create_question_dialog: false,
             type_filter: [],
             level_min_filter: 0,
             level_max_filter: 5,
