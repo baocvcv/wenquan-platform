@@ -5,6 +5,18 @@
                 <template 
                     v-for="nav_link in rendered_nav_links"
                 >
+					<v-list-group v-if="nav_link.name == 'Account'"> 
+						<template v-slot:activator>
+							<v-list-item-title>
+								{{ nav_link.name }}
+							</v-list-item-title>
+						</template>
+						<v-list-item>
+							<v-list-item-title>
+								Log out
+							</v-list-item-title>
+						</v-list-item>
+					</v-list-group>
                     <v-list-item :key="nav_link.name" @click="$router.push(nav_link.link)">
                         <v-list-item-action>
                             <v-icon>{{ nav_link.icon }}</v-icon>
@@ -66,6 +78,12 @@
                     </div>
                 </v-btn>
             </router-link>
+			<router-link to="/" v-if="render_logout_entry">
+			    <v-btn text @click="logout">
+					<v-icon>mdi-logout</v-icon>
+					Log out
+				</v-btn>
+			</router-link>
             <router-link to="/admin" v-if="render_admin_entry">
                 <v-btn text>
                     <v-icon>mdi-account-supervisor-circle</v-icon>
@@ -163,6 +181,10 @@ export default {
             else
                 return this.nav_link_groups.student;
         },
+		render_logout_entry: function() {
+			return this.user && 
+				this.$router.currentRoute.path == "/";
+		},
         render_admin_entry: function() {
             console.log("Testing....");
             if (!this.user)
@@ -182,6 +204,7 @@ export default {
             alert("Logged out");
             sessionStorage.removeItem('user');
             this.login=false;
+			this.$store.state.user = null;
         }
     },
     watch: {
