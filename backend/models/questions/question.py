@@ -4,7 +4,7 @@ from polymorphic.models import PolymorphicModel
 from .question_group import QuestionGroup
 
 MAX_ID = 20
-MAX_URL = 200
+MAX_URL = 10000000
 MAX_NAME = 200
 MAX_CONTENT = 20000
 

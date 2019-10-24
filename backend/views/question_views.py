@@ -106,6 +106,7 @@ class QuestionList(APIView):
             response = question.data
             response['id'] = new_q.id
             bank.question_count = len(bank.questiongroup_set.all())
+            bank.save()
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             return Response(response, status=201)
         return Response(question.errors, status=400)
