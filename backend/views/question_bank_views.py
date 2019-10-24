@@ -25,7 +25,9 @@ class QuestionBankList(APIView):
         post_data.pop("id")
 
         root = KnowledgeNode.objects.create()
+
         post_data['root_id'] = root.id
+
         serializer = QuestionBankSerializer(data=post_data)
 
         if serializer.is_valid():
