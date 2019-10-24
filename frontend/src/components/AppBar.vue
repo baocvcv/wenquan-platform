@@ -1,37 +1,84 @@
 <template>
     <div id="app-bar">
+        <v-navigation-drawer v-model="drawer" app clipped v-if="$vuetify.breakpoint.xsOnly">
+            <v-list dense>
+                <template 
+                    v-for="nav_link in rendered_nav_links"
+                >
+                    <v-list-item :key="nav_link.name" @click="$router.push(nav_link.link)">
+                        <v-list-item-action>
+                            <v-icon>{{ nav_link.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title class="grey--text">
+                                {{ nav_link.text }}
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+                <v-list-item v-if="render_admin_entry" @click="$router.push('/admin')">
+                    <v-list-item-action>
+                        <v-icon>mdi-account-supervisor-circle</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class="grey--text">
+                            Admin
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item v-if="render_exit" @click="$router.push('/')">
+                    <v-list-item-action>
+                        <v-icon>mdi-location-exit</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class="grey--text">
+                            Exit
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
         <v-app-bar
         color="white"
         scroll-target="#scrolling-techniques-7"
+        app
+        clipped-left
         >
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon 
+            v-if="!$vuetify.breakpoint.smAndUp"
+            @click="drawer = !drawer"
+        ></v-app-bar-nav-icon>
 
         <v-toolbar-title>文泉考试平台</v-toolbar-title>
 
         <div class="flex-grow-1"></div>
 
         <!--这里根据当前用户登录状态/类别渲染出对应的路由-->
-        <router-link 
-        v-for="nav_link in rendered_nav_links"
-        :key="nav_link.name"
-        :to="nav_link.link">
-            <v-btn text>
-                <v-icon>{{ nav_link.icon }}</v-icon>
-                {{ nav_link.text }}
-            </v-btn>
-        </router-link>
-        <router-link to="/admin" v-if="render_admin_entry">
-            <v-btn text>
-                <v-icon>mdi-account-supervisor-circle</v-icon>
-                Admin
-            </v-btn>
-        </router-link>
-        <router-link to="/" v-if="render_exit">
-            <v-btn text>
-                <v-icon>mdi-location-exit</v-icon>
-                Exit
-            </v-btn>
-        </router-link>
+        <div id="nav-links" v-if="$vuetify.breakpoint.smAndUp">
+            <router-link 
+            v-for="nav_link in rendered_nav_links"
+            :key="nav_link.name"
+            :to="nav_link.link">
+                <v-btn text>
+                    <v-icon>{{ nav_link.icon }}</v-icon>
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        {{ nav_link.text }}
+                    </div>
+                </v-btn>
+            </router-link>
+            <router-link to="/admin" v-if="render_admin_entry">
+                <v-btn text>
+                    <v-icon>mdi-account-supervisor-circle</v-icon>
+                    Admin
+                </v-btn>
+            </router-link>
+            <router-link to="/" v-if="render_exit">
+                <v-btn text>
+                    <v-icon>mdi-location-exit</v-icon>
+                    Exit
+                </v-btn>
+            </router-link>
+        </div>
         </v-app-bar>
     </div>
 </template>
@@ -43,6 +90,8 @@ export default {
     name: "app-bar",
     data: function(){
         return {
+            drawer: false,
+            show_drawer: !this.$vuetify.breakpoint.smAndUp,
             nav_link_groups: {
                 not_signed_in: [
                     {
@@ -134,6 +183,19 @@ export default {
             sessionStorage.removeItem('user');
             this.login=false;
         }
+    },
+    watch: {
+        show_drawer: function() {
+            if (!show_drawer)
+                drawer = false;
+        }
+    },
+    mounted() {
+        window.addEventListener('resize', () => {
+            console.log("Resizing...");
+            if (this.$vuetify.breakpoint.smAndUp)
+                this.drawer = false;
+        })
     }
 }
 </script>

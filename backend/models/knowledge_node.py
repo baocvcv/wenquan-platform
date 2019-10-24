@@ -1,7 +1,7 @@
 """Define the model of Knowledge Node"""
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from .question_bank import QuestionBanks
+from .question_bank import QuestionBank
 
 MAX_ID = 20
 MAX_NAME = 200
@@ -15,7 +15,6 @@ class KnowledgeNode(PolymorphicModel):
         subnodes: children nodes of node
         questions: children question of node
     """
-    node_id = models.CharField(max_length=MAX_ID)
-    question_bank = models.ForeignKey(QuestionBanks, on_delete=models.CASCADE)
-    name = models.CharField(max_length=MAX_NAME)
+    question_bank = models.ForeignKey(QuestionBank, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=MAX_NAME, default="unnamed node")
     subnodes = models.ManyToManyField("self", symmetrical=False)

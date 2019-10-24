@@ -13,6 +13,6 @@ class BriefAnswerQ(Question):
         question_solution: the specific solution of the question
     """
     question_content = models.CharField(default='', max_length=MAX_CONTENT)
-    question_image = ArrayField(models.URLField(default='', max_length=MAX_URL))
+    question_image = ArrayField(models.CharField(default='', max_length=MAX_URL))
     question_ans = models.CharField(default='', max_length=MAX_CONTENT)
     question_solution = models.CharField(default='', max_length=MAX_CONTENT)

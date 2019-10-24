@@ -10,9 +10,9 @@ from backend.models import User
 from backend.serializers.user_serializers import UserSerializer
 from backend.scripts.email_verification import create_email_verification_record
 
+
 class UserList(APIView):
     """ Create and get Users """
-
     def get(self, request):
         """ get a list of users """
         users = User.objects.all()
@@ -33,7 +33,8 @@ class UserList(APIView):
                 return Response(json, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView): # pylint: disable=too-many-ancestors
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):  # pylint: disable=too-many-ancestors
     """ Get, update or delete a student """
     queryset = User.objects.all()
     serializer_class = UserSerializer

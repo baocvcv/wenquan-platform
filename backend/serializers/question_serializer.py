@@ -1,56 +1,25 @@
 """ Serializers for Questions """
-from django.utils import timezone
-from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from rest_framework import serializers
 
-from backend.models.questions import QuestionGroup
 from backend.models.questions import BriefAnswerQ
 from backend.models.questions import SingleChoiceQ
 from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
-from backend.models.knowledge_node import KnowledgeNode
-
-
-def create_pre_task(validated_data):
-    """
-    tasks related to QuestionBanks
-    should be done before creating
-    """
-    new_group = QuestionGroup.objects.create(current_version=timezone.now())
-    node_id = validated_data.pop("parents_node")
-    for i in node_id:
-        node = KnowledgeNode.objects.get(id=i)
-        new_group.parents_node.add(node)
-    new_group.belong_bank = node.question_bank
-    new_group.save()
-    return new_group
-
-
-def update_pre_task(instance, validated_data):
-    """
-    tasks related to QuestionBanks
-    should be done before upadating
-    """
-    this_group = instance.history_version
-    now_parents_node = this_group.parents_node
-    new_node_id = validated_data.pop("parents_node")
-    now_parents_node.clear()
-    for i in new_node_id:
-        node = KnowledgeNode.objects.get(id=i)
-        now_parents_node.add(node)
-    this_group.current_version = timezone.now()
+from backend.models.questions import QuestionGroup
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for SingleChoiceQ"""
-    parents_node = ArrayField(models.IntegerField())
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = SingleChoiceQ
         fields = [
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -64,36 +33,26 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create single choice question"""
-        new_group = create_pre_task(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
         question = SingleChoiceQ.objects.create(
-            history_version=new_group,
-            question_change_time=new_group.current_version,
             **validated_data,
+            history_version=group,
         )
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        update_pre_task(instance, validated_data)
-        question = SingleChoiceQ.objects.create(
-            history_version=instance.history_version,
-            question_change_time=instance.history_version.get().current_version,
-            **validated_data,
-        )
-        question.save()
+        return question
 
 
 class MultpChoiceQSerializer(serializers.ModelSerializer):
     """Serializer for MultpChoiceQ"""
-    parents_node = ArrayField(models.IntegerField())
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = MultpChoiceQ
         fields = [
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -108,36 +67,26 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create multiple choices question"""
-        new_group = create_pre_task(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
         question = MultpChoiceQ.objects.create(
-            history_version=new_group,
-            question_change_time=new_group.current_version,
             **validated_data,
+            history_version=group,
         )
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        update_pre_task(instance, validated_data)
-        question = MultpChoiceQ.objects.create(
-            history_version=instance.history_version,
-            question_change_time=instance.history_version.get().current_version,
-            **validated_data,
-        )
-        question.save()
+        return question
 
 
 class TrueOrFalseQSerializer(serializers.ModelSerializer):
     """Serializer for TrueOrFalseQ"""
-    parents_node = ArrayField(models.IntegerField())
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """Meta class"""
         model = TrueOrFalseQ
         fields = [
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -150,36 +99,26 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create true or false choices question"""
-        new_group = create_pre_task(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
         question = TrueOrFalseQ.objects.create(
-            history_version=new_group,
-            question_change_time=new_group.current_version,
             **validated_data,
+            history_version=group,
         )
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        update_pre_task(instance, validated_data)
-        question = TrueOrFalseQ.objects.create(
-            history_version=instance.history_version,
-            question_change_time=instance.history_version.get().current_version,
-            **validated_data,
-        )
-        question.save()
+        return question
 
 
 class FillBlankQSerializer(serializers.ModelSerializer):
     """Serializer for FillBlankQ"""
-    parents_node = ArrayField(models.IntegerField())
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = FillBlankQ
         fields = [
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -193,36 +132,26 @@ class FillBlankQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create fill blank question"""
-        new_group = create_pre_task(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
         question = FillBlankQ.objects.create(
-            history_version=new_group,
-            question_change_time=new_group.current_version,
             **validated_data,
+            history_version=group,
         )
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        update_pre_task(instance, validated_data)
-        question = FillBlankQ.objects.create(
-            history_version=instance.history_version,
-            question_change_time=instance.history_version.get().current_version,
-            **validated_data,
-        )
-        question.save()
+        return question
 
 
 class BriefAnswerQSerializer(serializers.ModelSerializer):
     """Serializer for BriefAnswerQ"""
-    parents_node = ArrayField(models.IntegerField())
+    history_version_id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         """meta class"""
         model = BriefAnswerQ
         fields = [
+            'id',
+            'history_version_id',
             'question_name',
             'question_type',
             'question_level',
@@ -235,23 +164,10 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create brief answer question"""
-        new_group = create_pre_task(validated_data)
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
         question = BriefAnswerQ.objects.create(
-            history_version=new_group,
-            question_change_time=new_group.current_version,
             **validated_data,
+            history_version=group,
         )
         question.save()
-
-    def update(self, instance, validated_data):
-        """
-        update a question,
-        create a new instance related to same QuestionGroup
-        """
-        update_pre_task(instance, validated_data)
-        question = BriefAnswerQ.objects.create(
-            history_version=instance.history_version,
-            question_change_time=instance.history_version.get().current_version,
-            **validated_data,
-        )
-        question.save()
+        return question

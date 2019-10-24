@@ -21,7 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/TreeView.vue")
+        import(/* webpackChunkName: "about" */ "./views/QuestionViewOuter.vue")
     },
     {
       path: "/admin/usermanagement",
@@ -47,11 +47,23 @@ const router = new Router({
       path: "/admin/questionbanks/:id",
       name: "question-bank",
       component: () => import("./views/QuestionBank.vue")
+    },
+    {
+      path: "/question/:id",
+      name: "question-view",
+      component: () => import("./views/QuestionViewOuter.vue")
+    },
+    {
+      path: "/create_question/:id",
+      name: "question-create",
+      component: () => import("./views/QuestionViewOuter.vue")
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  if (sessionStorage.getItem("user"))
+	store.state.user=JSON.parse(sessionStorage.getItem("user"));
   if (!store.state.user)
   {
     if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
