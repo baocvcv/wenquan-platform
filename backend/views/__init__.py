@@ -7,4 +7,4 @@ from .auth_views import CustomAuthToken
 from .question_views import QuestionList
 from .knowledge_node_views import KnowledgeNodeList
 from .question_bank_views import QuestionBankList
-from .question_bank_views import QuestionBankDetial
+from .question_bank_views import QuestionBankDetail
