@@ -37,9 +37,11 @@ class QuestionBankDetial(APIView):
         serializer = QuestionBankSerializer(bank)
         response = serializer.data
         questions = []
+
         for i in bank.questiongroup_set.all():
             questions += i
         response['questions'] = questions
+
         return Response(response)
 
     def put(self, request, pk):

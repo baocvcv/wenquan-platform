@@ -35,24 +35,8 @@ class KnowledgeNodeList(APIView):
 
     def get(self, request, pk):
         response = go_through_tree(pk)
-        return response
+        return Response(response)
 
     def post(self, request):
         """Create a KnowledgeNode"""
         post_data = JSONParser().parse(request)[0]
-        subnodes = []
-        parent = KnowledgeNode.get(id=post_data.pop('parent'))
-
-        for i in post_data['subnodes']:
-            subnodes += KnowledgeNode.get(id=i)
-        post_data['subnodes'] = subnodes
-        serializer = KnowlegdeNodeSerializer(post_data)
-
-        if serializer.is_valid:
-            new_node = serializer.save()
-            parent.subnodes.add(new_node)
-            parent.save()
-            serializer.id = new_node.id
-
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
