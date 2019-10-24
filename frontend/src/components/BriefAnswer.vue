@@ -90,7 +90,7 @@ export default {
     },
     methods: {
         submit() {
-            this.parse();
+            this.$emit("submit",this.parse());
         },
         reset() {
             this.$refs.form.reset();

@@ -241,7 +241,7 @@ export default {
       this.$refs.uploader.reset();
     },
     submit() {
-      //console.log(this.parse());
+      this.$emit("submit",this.parse());
     }
   }
 };

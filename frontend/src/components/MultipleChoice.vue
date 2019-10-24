@@ -152,10 +152,9 @@ export default {
             if(item.right) this.data.rightAnswer.push(item);
             else this.data.rightAnswer.splice(this.data.rightAnswer.indexOf(item),1);
             this.data.rightAnswer.sort((a,b) => a.name>b.name);
-            console.log(JSON.stringify(this.data.rightAnswer))
         },
         submit() {
-            this.parse();
+            this.$emit("submit",this.parse());
         },
         reset() {
             this.$refs.form.reset();
@@ -230,7 +229,6 @@ export default {
             };
             this.data.rightAnswer.forEach(item => result.question_ans.push(item.name));
             this.data.choices.forEach(item => result.question_choice.push(item.content));
-            console.log(JSON.stringify(result));
             return result;
         }
     },
