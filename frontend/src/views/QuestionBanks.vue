@@ -17,6 +17,7 @@
 
         <v-tab-item>
           <question-banks-list
+            :process="process"
             :question_banks="question_banks"
             :read_only="read_only"
           ></question-banks-list>
@@ -39,7 +40,8 @@ export default {
   data: function() {
     return {
       read_only: false,
-      question_banks: []
+      question_banks: [],
+      process: "Loading"
     };
   },
   components: {
@@ -68,15 +70,17 @@ export default {
   },
   created: function() {
     let that = this;
+    this.loading = "Loading";
     axios
       .get("/api/question_banks/")
       .then(response => {
         for (var i = 0; i < response.data.length; i++) {
           that.question_banks.push(that.parse(response.data[i]));
         }
+        that.process = "End";
       })
       .catch(error => {
-        alert(error);
+        that.process = "Failed to access data: " + error;
       });
   }
 };
