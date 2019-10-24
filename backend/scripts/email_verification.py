@@ -13,7 +13,7 @@ def generate_token(token_len=30):
     random = Random()
     random.seed(timezone.now())
     token = ''
-    for _ in rangedjango rest 邮箱注册验证码(token_len):
+    for _ in range(token_len):
         token += chars[random.randint(0, length)]
     return token
 

@@ -34,9 +34,9 @@ class EmailVerificationRecord(models.Model):
         if self.send_type == "register":
             email_title = "[Wen Quan Platform] Activate your account"
             # local test
-            # email_body = "Please click this link to activate your account:http://127.0.0.1:8000/active/{0}".format(self.token)
-            # remote test
-            email_body = "Please click this link to activate your account:http://https://never404-never404.app.secoder.net:8000/active/{0}".format(self.token)
+            # email_body = "Please click this link to activate your account: http://127.0.0.1:8000/active/{0}".format(self.token)
+            # remote deploy
+            email_body = "Please click this link to activate your account: http://https://never404-never404.app.secoder.net:8000/active/{0}".format(self.token)
             # 发送邮件
             send_status = self.user.email_user(email_title, email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
