@@ -13,6 +13,9 @@
                     {{ node }}
                 </v-chip>
                 <div class="flex-grow-1"></div>
+                <v-btn text @click="click">
+                    View<v-icon>mdi-arrow-right</v-icon>
+                </v-btn>
                 <v-rating
                     v-model="question.question_level"
                     readonly
