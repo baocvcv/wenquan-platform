@@ -9,27 +9,32 @@
         <multiple-choice
             ref="multiple"
             v-if="typeSelected=='multiple'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></multiple-choice>
         <single-choice
             ref="single"
             v-if="typeSelected=='single'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></single-choice>
         <single-choice
             ref="TorF"
             v-if="typeSelected=='TorF'"
+            v-on:submit="submit"
             TF
             :readonly="readonly"
         ></single-choice>
         <brief-answer
             ref="brief_ans"
             v-if="typeSelected=='brief_ans'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></brief-answer>
         <fill-in-blank
             ref="fill_blank"
             v-if="typeSelected=='fill_blank'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></fill-in-blank>
     </div>
@@ -78,6 +83,11 @@ export default {
             this.$refs[this.initData.question_type].updateData(this.initData);
     },
     methods: {
+        submit(info) {
+            axios.post("/api/questions/",[info]).catch(err => {
+                console.log(err);
+            });
+        },
         test() {
             this.$refs.brief.readonly=true;
             this.$refs.brief.updateData({
