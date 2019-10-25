@@ -1,4 +1,4 @@
-ttributes for app 'backend'"""
+""" attributes for app 'backend'"""
 from django.apps import AppConfig
 
 

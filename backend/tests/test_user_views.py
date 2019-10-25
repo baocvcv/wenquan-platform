@@ -9,7 +9,8 @@ from rest_framework.test import APITestCase
 from backend.models import User
 # from backend.models import UserPermissions
 
-from backend.tests.utils import create_permission
+from backend.tests.utils import reset_database_permissions
+from backend.tests.utils import activate_all_users
 
 class UserListViewTest(APITestCase):
     """ test for user views """
@@ -25,9 +26,7 @@ class UserListViewTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        create_permission().save()
-        create_permission("Admin").save()
-        create_permission("SuperAdmin").save()
+        reset_database_permissions()
 
     def test_create_student_without_profile(self):
         """ test creating an user account"""
@@ -76,15 +75,15 @@ class UserDetailTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        create_permission("SuperAdmin").save()
-        create_permission("Admin").save()
-        create_permission().save()
+        reset_database_permissions()
 
     def test_retrieve(self):
         """ test retrieve user """
         # add user
         url1 = reverse('user-list')
         self.client.post(url1, self.user_data, format='json')
+        # set user to be active
+        activate_all_users()
         # auth
         url2 = reverse('account-auth')
         data = {
