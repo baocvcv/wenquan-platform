@@ -69,11 +69,11 @@
                         </v-col>
                         <v-col>
                             <v-text-field
-                                label="Invitation Code Count"
+                                label="Activated Code Count"
                                 v-model="question_bank.activated_code_count"
                                 :readonly="true"
                                 outlined
-                                hint="The total count of the invitation code"
+                                hint="The total count of the activated invitation code"
                             >
                             </v-text-field>
                         </v-col>
@@ -143,7 +143,7 @@ export default {
         save() {
             this.edited_question_bank.picture = this.edited_question_bank_image[0];
             this.$axios
-                .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
+                .put('http://localhost:8000/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
                     this.quesion_bank = Object.assign({}, this.edited_question_bank);
@@ -156,7 +156,7 @@ export default {
     created() {
         let id = this.$route.params.id;
         this.$axios
-            .get('/api/question_banks/' + id + '/')
+            .get('http://localhost:8000/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
                 this.edited_question_bank = response.data;
