@@ -1,25 +1,89 @@
 <template>
     <div id="app-bar">
+        <v-navigation-drawer v-model="drawer" app clipped v-if="$vuetify.breakpoint.xsOnly">
+            <v-list dense>
+                <template 
+                    v-for="nav_link in rendered_nav_links"
+                >
+                    <v-list-item :key="nav_link.name" @click="nav_link.name == 'Log out' ? logout() : $router.push(nav_link.link)">
+                        <v-list-item-action>
+                            <v-icon>{{ nav_link.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title class="grey--text">
+                                {{ nav_link.text }}
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+
+                <v-list-item v-if="render_admin_entry" @click="$router.push('/admin')">
+                    <v-list-item-action>
+                        <v-icon>mdi-account-supervisor-circle</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class="grey--text">
+                            Admin
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item v-if="render_exit" @click="$router.push('/')">
+                    <v-list-item-action>
+                        <v-icon>mdi-location-exit</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title class="grey--text">
+                            Exit
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
         <v-app-bar
         color="white"
         scroll-target="#scrolling-techniques-7"
+        app
+        clipped-left
         >
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon 
+            v-if="!$vuetify.breakpoint.smAndUp"
+            @click="drawer = !drawer"
+        ></v-app-bar-nav-icon>
 
         <v-toolbar-title>文泉考试平台</v-toolbar-title>
 
         <div class="flex-grow-1"></div>
 
         <!--这里根据当前用户登录状态/类别渲染出对应的路由-->
-        <router-link 
-        v-for="nav_link in rendered_nav_links"
-        :key="nav_link.name"
-        :to="nav_link.link">
-            <v-btn text>
-                <v-icon>{{ nav_link.icon }}</v-icon>
-                {{ nav_link.text }}
-            </v-btn>
-        </router-link>
+        <div id="nav-links" v-if="$vuetify.breakpoint.smAndUp">
+            <router-link 
+            v-for="nav_link in rendered_nav_links"
+            :key="nav_link.name"
+            :to="nav_link.link">
+                <v-btn text @click="nav_link.name == 'Log out' ? logout() : ''">
+                    <v-icon>{{ nav_link.icon }}</v-icon>
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        {{ nav_link.text }}
+                    </div>
+                </v-btn>
+            </router-link>
+            <router-link to="/admin" v-if="render_admin_entry">
+                <v-btn text>
+                    <v-icon>mdi-account-supervisor-circle</v-icon>
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Admin
+                    </div>
+                </v-btn>
+            </router-link>
+            <router-link to="/" v-if="render_exit">
+                <v-btn text>
+                    <v-icon>mdi-location-exit</v-icon>
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Exit
+                    </div>
+                </v-btn>
+            </router-link>
+        </div>
         </v-app-bar>
     </div>
 </template>
@@ -31,64 +95,64 @@ export default {
     name: "app-bar",
     data: function(){
         return {
-            nav_links: [
-                {
-                    name: "Home",
-                    text: "Home",
-                    link: "/",
-                    icon: "mdi-home",
-                    signin_required: false
-                },
-                {
-                    name: "About",
-                    text: "About",
-                    link: "/about",
-                    icon: "mdi-information",
-                    signin_required: false
-                },
-                {
-                    name: "User Management",
-                    text: "User Management",
-                    link: "/admin",
-                    user_type: {
-                        is_student: false,
-                        is_admin: true,
-                        is_superadmin: true
+            drawer: false,
+            show_drawer: !this.$vuetify.breakpoint.smAndUp,
+            nav_link_groups: {
+                not_signed_in: [
+                    {
+                        name: "Home",
+                        text: "Home",
+                        link: "/",
+                        icon: "mdi-home",
                     },
-                    icon: "mdi-account-supervisor",
-                },
-                {
-                    name: "Question Banks",
-                    text: "Question Banks",
-                    link: "/questionbanks",
-                    user_type: {
-                        is_student: false,
-                        is_admin: true,
-                        is_superadmin: true
+                    {
+                        name: "About",
+                        text: "About",
+                        link: "/about",
+                        icon: "mdi-information"
                     },
-                    icon: "mdi-bank"
-                },
-                {
-                    name: "Sign up",
-                    text: "Sign up",
-                    link: "/signup",
-                    icon: "mdi-login",
-                    signin_required: false
-                },
-                {
-                    name: "Sign in",
-                    text: "Sign in",
-                    link: "/signin",
-                    icon: "mdi-login",
-                    signin_required: false
-                },
-                {
-                    name: "User",
-                    text: "Account",
-                    link: "/account",
-                    icon: "mdi-account"
-                }
-            ]
+                    {
+                        name: "Sign in",
+                        text: "Sign in",
+                        link: "/signin",
+                        icon: "mdi-login"
+                    },
+                    {
+                        name: "Sign up",
+                        text: "Sign up",
+                        link: "/signup",
+                        icon: "mdi-login"
+                    }
+                ],
+                student: [
+                    {
+                        name: "Account",
+                        text: "Account",
+                        link: "/account",
+                        icon: "mdi-account-circle"
+                    },
+					{
+						name: "Log out",
+						text: "Log out",
+						link: "/",
+						icon: "mdi-logout"
+					}
+                ],
+                admin: [
+                    {
+                        name: "User Management",
+                        text: "User Management",
+                        link: "/admin/usermanagement",
+                        icon: "mdi-account-supervisor"
+                    },
+                    {
+                        name: "Question Banks",
+                        text: "Question Banks",
+                        link: "/admin/questionbanks",
+                        icon: "mdi-bank"
+                    }
+                ]
+            }
         };
     },
     mounted(){
@@ -103,27 +167,28 @@ export default {
             return _user;
         },
         rendered_nav_links: function() {
-            console.log(this.user);
-            return this.nav_links.filter(nav_link => {
-                let flag = true;
-                let signin_required = true;
-                if ("signin_required" in nav_link)
-                    signin_required = nav_link["signin_required"];
-                if (!this.user && signin_required)
-                    flag = false;
-                let user_type = null;
-                if ("user_type" in nav_link)
-                    user_type = nav_link["user_type"];
-                if (this.user && user_type && !(
-                    this.user.user_type.is_student == user_type.is_student ||
-                    this.user.user_type.is_admin == user_type.is_admin ||
-                    this.user.user_type.is_superadmin == user_type.is_superadmin
-                ))
-                    flag = false;
-                if (this.user && (nav_link["name"] === "Sign up" || nav_link["name"] === "Sign in"))
-                    flag = false;
-                return flag;
-            });
+            if (!this.user)
+                return this.nav_link_groups.not_signed_in;
+            else if (this.render_exit)
+                return this.nav_link_groups.admin;
+            else
+                return this.nav_link_groups.student;
+        },
+		render_logout_entry: function() {
+			return this.user && 
+				this.$router.currentRoute.path == "/";
+		},
+        render_admin_entry: function() {
+            if (!this.user)
+                return false;
+            return this.$router.currentRoute.path.split('/')[1] != "admin"
+            && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
+        },
+        render_exit: function() {
+            if (!this.user)
+                return false;
+            return this.$router.currentRoute.path.split('/')[1] === "admin"
+            && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         }
     },
     methods: {
@@ -131,7 +196,20 @@ export default {
             alert("Logged out");
             sessionStorage.removeItem('user');
             this.login=false;
+			this.$store.state.user = null;
         }
+    },
+    watch: {
+        show_drawer: function() {
+            if (!show_drawer)
+                this.drawer = false;
+        }
+    },
+    mounted() {
+        window.addEventListener('resize', () => {
+            if (this.$vuetify.breakpoint.smAndUp)
+                this.drawer = false;
+        })
     }
 }
 </script>

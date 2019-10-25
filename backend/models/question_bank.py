@@ -2,29 +2,26 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 
-from .knowledge_node import KnowledgeNode
-from .questions.question import Question
-from .questions.brief_answer_q import BriefAnswerQ
-from .questions.choice_question import SingleChoiceQ, MultpChoiceQ
-from .questions.fill_blank_q import FillBlankQ
-
+MAX_CONTENT = 20000
 MAX_ID = 20
 MAX_NAME = 200
-BriefAnswerQ()
-SingleChoiceQ()
-MultpChoiceQ()
-FillBlankQ()
+MAX_URL = 10000000
 
 
-class QuestionBanks(PolymorphicModel):
+class QuestionBank(PolymorphicModel):
     """Models for Question Banks
     Attributes:
-        node_id: identity number of bank
         name: name of bank
-        subnodes: children Knowledg Node of bank
+        subnodes: children Knowledge Node of bank
         questions: children question of bank
     """
-    node_id = models.CharField(max_length=MAX_ID)
+    root_id = models.IntegerField()
     name = models.CharField(max_length=MAX_NAME)
-    subnodes = models.ManyToManyField(KnowledgeNode)
-    questions = models.ManyToManyField(Question)
+    picture = models.CharField(max_length=MAX_URL)
+    brief = models.CharField(max_length=MAX_CONTENT)
+    createTime = models.DateTimeField()
+    lastUpdate = models.DateTimeField()
+    authority = models.CharField(max_length=MAX_NAME)
+    question_count = models.IntegerField()
+    invitation_code_count = models.IntegerField()
+    activated_code_count = models.IntegerField()

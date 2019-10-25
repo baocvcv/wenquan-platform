@@ -2,7 +2,7 @@
 
 from django.db import models
 from polymorphic.models import PolymorphicModel
-from question_bank import QuestionBanks
+from question_bank import QuestionBank
 
 
 class Subjects(PolymorphicModel):
@@ -12,4 +12,4 @@ class Subjects(PolymorphicModel):
         question_banks: child question banks of subjects
     """
     name = models.CharField(max_length=30)
-    question_banks = models.ManyToManyField(QuestionBanks)
+    question_banks = models.ManyToManyField(QuestionBank)

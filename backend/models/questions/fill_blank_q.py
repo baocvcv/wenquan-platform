@@ -13,8 +13,8 @@ class FillBlankQ(Question):
         qusetion_ans: the correct answer of the question
         question_solution: the specific solution of the question
     """
-    question_content = ArrayField(ArrayField(models.CharField(max_length=MAX_CONTENT)))
+    question_content = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_blank_num = models.IntegerField()
-    question_image = ArrayField(ArrayField(models.URLField(max_length=MAX_URL)))
+    question_image = ArrayField(models.CharField(max_length=MAX_URL))
     question_ans = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_solution = models.CharField(max_length=MAX_CONTENT)

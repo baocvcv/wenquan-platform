@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store";
 import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -20,11 +21,11 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/TreeView.vue")
+        import(/* webpackChunkName: "about" */ "./views/QuestionViewOuter.vue")
     },
     {
-      path: "/admin",
-      name: "admin",
+      path: "/admin/usermanagement",
+      name: "user-management",
       component: () => import("./views/UserManagement.vue")
     },
     {
@@ -38,9 +39,58 @@ export default new Router({
       component: () => import("./views/SignIn.vue")
     },
     {
-      path: "/questionbanks",
+      path: "/admin/questionbanks",
       name: "question-banks",
       component: () => import("./views/QuestionBanks.vue")
+    },
+    {
+      path: "/admin/questionbanks/:id",
+      name: "question-bank",
+      component: () => import("./views/QuestionBank.vue")
+    },
+    {
+      path: "/question/:id",
+      name: "question-view",
+      component: () => import("./views/QuestionViewOuter.vue")
+    },
+    {
+      path: "/create_question/:id",
+      name: "question-create",
+      component: () => import("./views/QuestionViewOuter.vue")
+    },
+    {
+      path: "/edit_question/:id",
+      name: "question-edit",
+      component: () => import("./views/QuestionViewOuter.vue")
     }
   ]
-});
+})
+
+router.beforeEach((to, from, next) => {
+  if (sessionStorage.getItem("user"))
+	store.state.user=JSON.parse(sessionStorage.getItem("user"));
+  if (!store.state.user)
+  {
+    if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
+    {
+      next("/signin");
+    }
+    else
+    {
+      next();
+    }
+  }
+  else
+  {
+    if (to.path.split('/')[0] === 'admin' && store.state.user.user_group === "Student")
+    {
+      next("/");
+    }
+    else
+    {
+      next();
+    }
+  }
+})
+
+export default router;

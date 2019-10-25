@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div id="user-management">
         <user-table
             :users="users"
             @create-user="create_user"
             @change-user-status="change_user_status"
-            @change-user-type="change_user_type"
+            @change-user-group="change_user_group"
         ></user-table>
     </div>
 </template>
@@ -13,7 +13,7 @@
 import user_table from "@/components/UserTable.vue";
 
 export default {
-    name: "admin-index",
+    name: "user-management",
     components: {
         "user-table": user_table
     },
@@ -24,57 +24,37 @@ export default {
     },
     methods: {
         create_user(user) {
-            if (user.user_type.is_student)
-            {
-                this.$axios
-                    .post("/accounts/students/", user)
-                    .then(response => {
-                        this.users.push(user);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            }
-            else if (user.user_type.is_admin)
-            {
-                this.$axios
-                    .post("/accounts/admins/", user)
-                    .then(response => {
-                        this.users.push(user);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            }
+            this.$axios
+                .post("/api/accounts/users/", user)
+                .then(response => {
+                    this.users.push(user);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
         change_user_status(user) {
             let changed_user = user;
             changed_user.is_banned = !changed_user.is_banned;
             this.$axios
-                .put("/accounts/users/" + user.id + "/", changed_user)
-                .then(() => {
+                .put("/api/accounts/users/" + user.id + "/", changed_user)
+                .then(response => {
                     user = changed_user;
                 })
                 .catch(error => {
                     console.log(error);
                 });
         },
-        change_user_type(params) {
-            console.log(params.user_type);
-            let changed_user = params.user;
-            changed_user.user_type.is_student = false;
-            changed_user.user_type.is_admin = false;
-            changed_user.user_type.is_superadmin = false;
-            if (params.user_type == "Student")
-                changed_user.user_type.is_student = true;
-            else if (params.user_type == "Admin")
-                changed_user.user_type.is_admin = true;
-            else if (params.user_type == "SuperAdmin")
-                changed_user.user_type.is_superadmin = true;
+        change_user_group(user) {
+            let changed_user = user;
+            if (changed_user.user_group === "Student")
+                changed_user.user_group = "Admin";
+            else if (changed_user.user_group === "Admin")
+                changed_user.user_group = "Student";
             this.$axios
-                .put("/accounts/users/" + params.user.id + "/", changed_user)
+                .put("/api/accounts/users/" + user.id + "/", user)
                 .then(response => {
-                    params.user = changed_user;
+                    user = changed_user;
                 })
                 .catch(error => {
                     console.log(error);
@@ -83,22 +63,13 @@ export default {
     },
     mounted: function() {
         this.$axios
-            .get('/accounts/users/')
+            .get('/api/accounts/users/')
             .then(response => {
-                console.log(response);
                 this.users = response.data;
-                console.log(this.users);
             })
             .catch(error => {
                 console.log(error);
             })
-    },
-   created() {
-       if (!this.$store.state.user || this.$store.state.user.user_type.is_student)
-       {
-            console.log("You have no access to this page.");
-            this.$router.push("/");
-       }
-   }
+    }
 }
 </script>

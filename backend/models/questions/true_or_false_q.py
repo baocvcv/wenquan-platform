@@ -13,6 +13,6 @@ class TrueOrFalseQ(Question):
         question_solution: the specific solution of the question
     """
     question_content = models.CharField(max_length=MAX_CONTENT)
-    question_image = ArrayField(ArrayField(models.URLField(max_length=MAX_URL)))
-    question_ans = models.CharField(max_length=10)
+    question_image = ArrayField(models.CharField(max_length=MAX_URL))
+    question_ans = models.BooleanField()
     question_solution = models.CharField(max_length=MAX_CONTENT)
