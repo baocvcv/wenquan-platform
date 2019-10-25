@@ -45,7 +45,6 @@
                     color="yellow darken-3"
                     background-color="grey darken-1"
                     :readonly="readonly"
-                    half-increments
                     hover
                 ></v-rating>
             </v-list-item>

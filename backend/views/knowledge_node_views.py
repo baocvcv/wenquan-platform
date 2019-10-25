@@ -21,7 +21,7 @@ class KnowledgeNodeList(APIView):
     """Get all Node info or create a question"""
     tree = []
 
-    def go_through_tree(root_id):
+    def go_through_tree(self, root_id):
         root = KnowledgeNode.objects.get(id=root_id)
         json = {}
         child_json = []
@@ -35,8 +35,9 @@ class KnowledgeNodeList(APIView):
 
     def get(self, request, pk):
         response = self.go_through_tree(pk)
+        response['bank_id'] = KnowledgeNode.objects.get(id=pk).question_bank.id
         return Response(response)
 
-    def post(self, request):
+    def post(self, request, pk):
         """Create a KnowledgeNode"""
         post_data = JSONParser().parse(request)[0]

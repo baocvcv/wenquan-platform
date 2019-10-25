@@ -115,7 +115,6 @@
           color="yellow darken-3"
           background-color="grey darken-1"
           :readonly="readonly"
-          half-increments
           hover
         ></v-rating>
       </v-list-item>
@@ -188,16 +187,23 @@ export default {
       this.question_ans = this.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
-      var parsed = [];
-      var origin = input.question_choice;
-      for (var i = 0; i < origin.length; i++) {
-        var id = String.fromCharCode(i + 65);
-        var choice = {
-          name: id,
-          content: origin[i]
-        };
-        if (input.question_ans == id) this.question_ans = choice;
-        parsed.push(choice);
+      if (!this.TF) {
+        var parsed = [];
+        var origin = input.question_choice;
+        for (var i = 0; i < origin.length; i++) {
+          var id = String.fromCharCode(i + 65);
+          var choice = {
+            name: id,
+            content: origin[i]
+          };
+          if (input.question_ans == id) this.question_ans = choice;
+          parsed.push(choice);
+        }
+        this.question_choice = parsed;
+      } else {
+        this.question_ans = input.question_ans
+          ? this.tf_choice[0]
+          : this.tf_choice[1];
       }
       this.id = input.id;
       this.parents_node = input.parents_node;
@@ -205,7 +211,6 @@ export default {
       this.question_change_time = input.question_change_time;
       this.question_name = input.question_name;
       this.question_image = input.question_image;
-      this.question_choice = parsed;
       this.question_solution = input.question_solution;
       this.question_content = input.question_content;
     },
@@ -241,7 +246,7 @@ export default {
       this.$refs.uploader.reset();
     },
     submit() {
-      this.$emit("submit",this.parse());
+      this.$emit("submit", this.parse());
     }
   }
 };

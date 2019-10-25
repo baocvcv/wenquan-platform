@@ -4,7 +4,7 @@ from polymorphic.models import PolymorphicModel
 from .question_group import QuestionGroup
 
 MAX_ID = 20
-MAX_URL = 200
+MAX_URL = 10000000
 MAX_NAME = 200
 MAX_CONTENT = 20000
 
@@ -14,6 +14,14 @@ TYPEDIC = {
     'TorF': 3,
     'fill_blank': 4,
     'brief_ans': 5,
+}
+
+INT2TYPE = {
+    '1': 'single',
+    '2': 'multiple',
+    '3': 'TorF',
+    '4': 'fill_blank',
+    '5': 'brief_ans',
 }
 
 

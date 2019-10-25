@@ -74,7 +74,7 @@ export default {
                 this.typeSelected = null;
             else {
                 this.typeSelected = this.initData.question_type;
-                this.$refs[this.initData.question_type].updateData(this.initData);
+                //then updated will be called
             }
         }
     },
@@ -88,10 +88,24 @@ export default {
     },
     methods: {
         submit(info) {
-            if(info.parents_node==[] && this.bankID) info.parents_node=this.bankID;
-            axios.post("/api/questions/",[info]).catch(err => {
-                console.log(err);
-            });
+            if(info.parents_node.length==0 && this.bankID){
+                //New question
+                info.parents_node=this.bankID;
+                axios.post("/api/questions/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                });
+            }else{
+                //Edit question
+                axios.put("/api/questions/"+info.id.toString()+"/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                })
+            }
         },
         test() {
             this.$refs.brief.readonly=true;
