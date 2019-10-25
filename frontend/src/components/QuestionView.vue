@@ -74,7 +74,7 @@ export default {
                 this.typeSelected = null;
             else {
                 this.typeSelected = this.initData.question_type;
-                this.$refs[this.initData.question_type].updateData(this.initData);
+                //then updated will be called
             }
         }
     },
