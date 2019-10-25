@@ -1,5 +1,5 @@
 import axios from "axios";
-
+axios.defaults.withCredentials = false;
 export default function (base64Images) {
   console.log("converting")
   var resultUrls = [];
