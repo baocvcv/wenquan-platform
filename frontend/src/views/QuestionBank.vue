@@ -129,6 +129,10 @@ export default {
                 next(false)
             }
         }
+        else
+        {
+            next();
+        }
     },
     methods: {
         cancel() {
