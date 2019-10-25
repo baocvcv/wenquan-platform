@@ -33,7 +33,8 @@
                     outlined
                     readonly
                     label="Question"
-                    v-model="question.question_content"
+                    v-model="content"
+                    auto-grow
                 >
                 </v-textarea>
                 <v-textarea
@@ -41,6 +42,7 @@
                     readonly
                     label="Answer"
                     v-model="question.question_ans"
+                    auto-grow
                 >
                 </v-textarea>
                 <div 
@@ -78,13 +80,18 @@ export default {
         content_too_long: false,
         width: 0,
         max_height: 120,
-        max_height_cache: 0
+        max_height_cache: 0,
+        content: ""
     }),
     computed: {},
     mounted() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
         this.max_height_cache = this.max_height;
+        console.log(this.question.question_type);
+        content += this.question.question_content;
+        if (this.question.question_choice)
+            content += "\n" + this.question.question_choice;
     },
     watch: {
         width: function() {
