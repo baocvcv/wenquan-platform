@@ -108,7 +108,7 @@
                         <v-card>
                             <v-card-title>Create A Question</v-card-title>
                             <v-card-text>
-                                <question-view :readonly="false" :initData="null" :bankID="id"></question-view>
+                                <question-view :readonly="false" :initData="null" :bankID="[id]"></question-view>
                             </v-card-text>
                         </v-card>
                     </v-dialog>

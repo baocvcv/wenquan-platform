@@ -91,13 +91,17 @@ export default {
             if(info.parents_node.length==0 && this.bankID){
                 //New question
                 info.parents_node=this.bankID;
-                axios.post("/api/questions/",[info]).catch(err => {
+                axios.post("/api/questions/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
                     console.log(info);
                     console.log(err);
                 });
             }else{
                 //Edit question
-                axios.put("/api/questions/"+info.id.toString()+"/",[info]).catch(err => {
+                axios.put("/api/questions/"+info.id.toString()+"/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
                     console.log(info);
                     console.log(err);
                 })
