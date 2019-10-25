@@ -97,7 +97,7 @@ export default {
                 });
             }else{
                 //Edit question
-                axios.put("/api/questions/"+info.id.toString()+"/",info).catch(err => {
+                axios.put("/api/questions/"+info.id.toString()+"/",[info]).catch(err => {
                     console.log(info);
                     console.log(err);
                 })
