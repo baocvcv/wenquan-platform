@@ -1,6 +1,6 @@
 """ Utils for email verification """
 from random import Random
-from django.core.mail import send_mail 
+from django.core.mail import send_mail
 from django.utils import timezone
 
 from backend.models import EmailVerificationRecord
@@ -26,7 +26,6 @@ def create_email_verification_record(user: User, send_type="register"):
         token=token,
         email=user.email,
         send_type=send_type,
-        send_time=timezone.now(),
     )
     record.save()
     record.send_email()

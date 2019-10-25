@@ -5,6 +5,7 @@ from copy import copy
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework.test import APIClient
 
 from backend.models import User
 # from backend.models import UserPermissions
@@ -97,3 +98,33 @@ class UserDetailTest(APITestCase):
         response3 = self.client.get(url3)
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['username'], response2.data['username'])
+
+    def test_update(self):
+        """ test update user """
+        # add user
+        url1 = reverse('user-list')
+        self.client.post(url1, self.user_data, format='json')
+        # set user to be active
+        activate_all_users()
+        user = User.objects.get()
+        # update user
+        user_id = user.id
+        url2 = reverse('user-detail', args=[user_id])
+        data = {
+            'username': 'Bryant',
+            'email': 'c@d.com',
+            'is_banned': True,
+            'user_group': 'Admin',
+            'profile': {
+                'school_name': 'PKU',
+            }
+        }
+        # response = self.client.put(url2, data, format='json')
+        response = self.client.put(url2, data, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], 'Bryant')
+        self.assertEqual(response.data['email'], 'c@d.com')
+        self.assertEqual(response.data['is_banned'], True)
+        self.assertEqual(response.data['user_group'], 'Admin')
+        self.assertEqual(response.data['profile']['school_name'], 'PKU')

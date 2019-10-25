@@ -1,10 +1,11 @@
 """ Email verification model """
 from django.db import models
-# from django.utils import timezone
+from django.utils import timezone
 # from .user import User
 
 class EmailVerificationRecord(models.Model):
     """ Email verification for user """
+    expiration_time = 24 # hours
     email_type = (("register", u"Register"), ("forget", u"Reset password"))
 
     token = models.CharField(max_length=50, verbose_name=u"Code")
@@ -12,7 +13,7 @@ class EmailVerificationRecord(models.Model):
     send_type = models.CharField(
         verbose_name=u"Veification type",
         max_length=10, choices=email_type)
-    send_time = models.DateTimeField(verbose_name=u"Send time")
+    send_time = models.DateTimeField(verbose_name=u"Send time", auto_now=True)
 
     is_valid = models.BooleanField(default=True)
 
@@ -41,3 +42,16 @@ class EmailVerificationRecord(models.Model):
             # send email
             self.user.email_user(email_title, email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+        elif self.send_type == "forget":
+            email_title = "[Wen Quan Platform] Change your password"
+            # local test
+            # url = "https://127.0.0.1:8000/forgetpassword/{0}".format(self.token)
+            # remote deploy
+            url = "https://never404-never404.app.secoder.net:8000/forgetpassword/{0}".format(self.token)
+            email_body = "Please click this link to change your password: " + url
+            # send email
+            self.user.email_user(email_title, email_body)
+            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+
+    def is_time_valid(self, time):
+        return (time - self.send_time).seconds < self.expiration_time * 3600
