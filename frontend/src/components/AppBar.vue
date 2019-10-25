@@ -23,9 +23,7 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="grey--text">
-                            <div v-if="$vuetify.breakpoint.mdAndUp">
-                                Admin
-                            </div>
+                            Admin
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -35,9 +33,7 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title class="grey--text">
-                            <div v-if="$vuetify.breakpoint.mdAndUp">
-                                Exit
-                            </div>
+                            Exit
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -74,13 +70,17 @@
             <router-link to="/admin" v-if="render_admin_entry">
                 <v-btn text>
                     <v-icon>mdi-account-supervisor-circle</v-icon>
-                    Admin
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Admin
+                    </div>
                 </v-btn>
             </router-link>
             <router-link to="/" v-if="render_exit">
                 <v-btn text>
                     <v-icon>mdi-location-exit</v-icon>
-                    Exit
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Exit
+                    </div>
                 </v-btn>
             </router-link>
         </div>
