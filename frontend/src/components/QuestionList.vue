@@ -108,7 +108,7 @@
                         <v-card>
                             <v-card-title>Create A Question</v-card-title>
                             <v-card-text>
-                                <question-view :readonly="false" :initData="null" :bankID="[id]"></question-view>
+                                <question-view :readonly="false" :initData="null" :bankID="[id]" @submit="create"></question-view>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -229,6 +229,17 @@ export default {
             this.type_filter = [];
             this.level_min_filter = 0;
             this.level_max_fileter = 5;
+        },
+        create() {
+            this.create_question_dialog = false;
+            this.$axios
+                .get("/api/question_banks" + this.id + "/")
+                .then((response) => {
+                    this.question_list = response.data.questions;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
     }
 }
