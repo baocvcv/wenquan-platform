@@ -85,7 +85,6 @@ export default {
         max_height_cache: 0,
         content: ""
     }),
-    computed: {},
     mounted() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();

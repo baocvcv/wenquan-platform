@@ -202,7 +202,7 @@ export default {
     watch: {
         show_drawer: function() {
             if (!show_drawer)
-                drawer = false;
+                this.drawer = false;
         }
     },
     mounted() {
