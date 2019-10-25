@@ -14,13 +14,9 @@ export default function (base64Images) {
 	console.log("Here " + i);
 	console.log(file);
     axios
-      .post("https://sm.ms/api/upload", {
+      .post("/smmsImageUpload", {
         smfile: file
-      }, {
-		headers: {
-			"Access-Control-Allow-Origin": "*"
-		}
-	  })
+      })
       .then(response => {
 		console.log("success")
 		console.log(response);
