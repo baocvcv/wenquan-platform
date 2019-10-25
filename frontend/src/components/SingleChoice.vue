@@ -201,9 +201,7 @@ export default {
         }
         this.question_choice = parsed;
       } else {
-        this.question_ans = input.question_ans
-          ? { name: "T", content: true }
-          : { name: "F", content: false };
+        input.question_ans ? this.tf_choice[0] : this.tf_choice[1];
       }
       this.id = input.id;
       this.parents_node = input.parents_node;
@@ -246,7 +244,7 @@ export default {
       this.$refs.uploader.reset();
     },
     submit() {
-      this.$emit("submit",this.parse());
+      this.$emit("submit", this.parse());
     }
   }
 };
