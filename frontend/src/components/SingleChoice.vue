@@ -201,7 +201,9 @@ export default {
         }
         this.question_choice = parsed;
       } else {
-        input.question_ans ? this.tf_choice[0] : this.tf_choice[1];
+        this.question_ans = input.question_ans
+          ? this.tf_choice[0]
+          : this.tf_choice[1];
       }
       this.id = input.id;
       this.parents_node = input.parents_node;
