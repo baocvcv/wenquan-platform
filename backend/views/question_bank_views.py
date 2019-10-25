@@ -12,6 +12,7 @@ from backend.serializers.question_serializer import BriefAnswerQSerializer
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
 from backend.models.questions.question import TYPEDIC
+from backend.models.questions.question import INT2TYPE
 
 
 class QuestionBankList(APIView):
@@ -63,7 +64,9 @@ class QuestionBankDetail(APIView):
             elif qtype == TYPEDIC['brief_ans']:
                 serializer = BriefAnswerQSerializer(question)
 
-            questions.append(serializer.data)
+            question_data = serializer.data
+            question_data['question_type'] = INT2TYPE[(str)(question_data['question_type'])]
+            questions.append(question_data)
 
         response['questions'] = questions
         return Response(response)
