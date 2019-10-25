@@ -91,13 +91,13 @@
                     <v-dialog v-model="create_question_dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                         <template v-slot:activator="{ on }">
                             <v-btn
-                                v-if="editable && $vuetify.breakpoint.mdAndUp"
+                                v-show="editable && $vuetify.breakpoint.mdAndUp"
                                 color="primary"
                                 elevation="0"
                                 v-on="on"
                             >Create</v-btn>
                             <v-btn
-                                v-if="editable && !$vuetify.breakpoint.mdAndUp"
+                                v-show="editable && !$vuetify.breakpoint.mdAndUp"
                                 color="primary"
                                 elevation="0"
                                 v-on="on"
