@@ -105,6 +105,7 @@ export default {
       let that = this;
 	  console.log("start uploading");
 	  this.image = uploadImage(this.image);
+	  console.log("Image is:")
 	  console.log(this.image);
       axios
         .post("/api/question_banks/", {

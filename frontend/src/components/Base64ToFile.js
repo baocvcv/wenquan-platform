@@ -1,6 +1,7 @@
-import axios from "axios"
+import axios from "axios";
 
-export default function UploadImages(base64Images) {
+export default function (base64Images) {
+  console.log("converting")
   var resultUrls = [];
   for(var i = 0; i < base64Images.length; i++) {
     var dataurl = base64Images[i];
