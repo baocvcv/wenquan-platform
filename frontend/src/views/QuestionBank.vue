@@ -143,7 +143,7 @@ export default {
         save() {
             this.edited_question_bank.picture = this.edited_question_bank_image[0];
             this.$axios
-                .put('http://localhost:8000/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
+                .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
                     this.quesion_bank = Object.assign({}, this.edited_question_bank);
@@ -156,7 +156,7 @@ export default {
     created() {
         let id = this.$route.params.id;
         this.$axios
-            .get('http://localhost:8000/api/question_banks/' + id + '/')
+            .get('/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
                 this.edited_question_bank = response.data;
