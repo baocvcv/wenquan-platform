@@ -10,7 +10,6 @@ from backend.models import User
 from backend.serializers.user_serializers import UserSerializer
 from backend.scripts.email_verification import create_email_verification_record
 
-
 class UserList(APIView):
     """ Create and get Users """
     def get(self, request):
