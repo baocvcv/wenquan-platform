@@ -81,10 +81,9 @@
                 </v-col>
                 <v-col>
                     <image-uploader
-                        v-model="question_bank.image"
+                        v-model="edited_question_bank_image"
                         label="Picture"
-                        :readonly="edit_mode"
-                        multiple
+                        :readonly="!edit_mode"
                         placeholder="No picture"
                     >
                     </image-uploader>
@@ -117,6 +116,8 @@ export default {
         question_bank: {},
         edited_question_bank: {},
         edit_mode: false,
+        question_bank_image: [],
+        edited_question_bank_image: []
     }),
     beforeRouteLeave (to, from, next) {
         if (this.edit_mode === true)
@@ -128,8 +129,10 @@ export default {
         cancel() {
             this.edit_mode = false;
             this.edited_question_bank = Object.assign({}, this.question_bank);
+            this.edited_question_bank_image = JSON.parse(JSON.stringify(this.question_bank_image));
         },
         save() {
+            this.edited_question_bank.picture = this.edited_question_bank_image[0];
             this.$axios
                 .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
@@ -148,6 +151,8 @@ export default {
             .then(response => {
                 this.question_bank = response.data;
                 this.edited_question_bank = response.data;
+                this.question_bank_image.push(this.question_bank.picture);
+                this.edited_question_bank_image = JSON.parse(JSON.stringify(this.question_bank_image));
             })
             .catch((error) => {
                 console.log(error);
