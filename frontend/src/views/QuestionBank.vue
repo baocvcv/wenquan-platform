@@ -122,7 +122,12 @@ export default {
     beforeRouteLeave (to, from, next) {
         if (this.edit_mode === true)
         {
-            confirm("You have changes that are not saved. Are you sure you want to leave the web page?");
+            const answer = window.confirm("You have changes that are not saved. Are you sure you want to leave the web page?");
+            if (answer) {
+                next()
+            } else {
+                next(false)
+            }
         }
     },
     methods: {
@@ -157,6 +162,6 @@ export default {
             .catch((error) => {
                 console.log(error);
             })
-    }
+    },
 }
 </script>
