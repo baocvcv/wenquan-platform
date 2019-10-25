@@ -69,11 +69,11 @@
                         </v-col>
                         <v-col>
                             <v-text-field
-                                label="Invitation Code Count"
+                                label="Activated Code Count"
                                 v-model="question_bank.activated_code_count"
                                 :readonly="true"
                                 outlined
-                                hint="The total count of the invitation code"
+                                hint="The total count of the activated invitation code"
                             >
                             </v-text-field>
                         </v-col>

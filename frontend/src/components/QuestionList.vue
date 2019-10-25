@@ -240,7 +240,8 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 })
+            this.create_question_dialog = false;
         }
-    }
+    },
 }
 </script>

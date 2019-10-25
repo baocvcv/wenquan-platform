@@ -35,6 +35,7 @@
                     label="Question"
                     v-model="content"
                     auto-grow
+                    rows="1"
                 >
                 </v-textarea>
                 <v-textarea
@@ -43,6 +44,7 @@
                     label="Answer"
                     v-model="question.question_ans"
                     auto-grow
+                    rows="1"
                 >
                 </v-textarea>
                 <div 
@@ -88,10 +90,16 @@ export default {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
         this.max_height_cache = this.max_height;
-        console.log(this.question.question_type);
-        content += this.question.question_content;
+        this.content += this.question.question_content;
         if (this.question.question_choice)
-            content += "\n" + this.question.question_choice;
+        {
+            this.content += "\n";
+            let index;
+            for (index = 0; index < this.question.question_choice.length; index++)
+            {
+                this.content += "\n" + String.fromCharCode(index + 65) + '. ' + this.question.question_choice[index];
+            }
+        }
     },
     watch: {
         width: function() {
@@ -108,6 +116,11 @@ export default {
                 this.content_too_long = false;
                 this.hide_content = false;
             }
+        },
+        question: function() {
+            this.content += this.question.question_content;
+            if (this.question.question_choice)
+                this.content += "\n" + this.question.question_choice;
         }
     },
     computed: {
