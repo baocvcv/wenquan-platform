@@ -11,14 +11,20 @@ export default function (base64Images) {
         u8arr[n] = bstr.charCodeAt(n);
     }
     var file = new File([u8arr], String.fromCharCode(65 + i), {type:mime});
+	console.log("Here " + i);
+	console.log(file);
     axios
       .post("https://sm.ms/api/upload", {
         smfile: file
       })
       .then(response => {
+		console.log("success")
+		console.log(response);
         resultUrls.push(response.data.url);	
       })
       .catch(error => {
+		console.log("error")
+		console.log(error)
         return error.code;
       })
   }
