@@ -80,9 +80,9 @@
                     </v-row>
                 </v-col>
                 <v-col>
+                    <span class="grey--text caption">Picture</span>
                     <image-uploader
                         v-model="edited_question_bank_image"
-                        label="Picture"
                         :readonly="!edit_mode"
                         placeholder="No picture"
                     >

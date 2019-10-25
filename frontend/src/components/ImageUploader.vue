@@ -1,47 +1,47 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-toolbar v-if="!!label">
-      <v-toolbar-title>
+    <v-card outlined>
+      <v-card-text v-if="!!label">
         {{ label }}
-      </v-toolbar-title>
-    </v-toolbar>
-    <v-container fluid align="center">
-      <v-row justify="center" align="center">
-        <v-col
-          v-for="(image, i) in img"
-          :key="i"
-          cols="12"
-          :lg="Math.max(12 / ((check_create() ? 1 : 0) + img.length), 4)"
-          md="6"
-          xs="12"
-          align="center"
-        >
-          <v-img
-            v-if="!!image"
-            :aspect-ratio="aspectRatio"
-            :src="image"
-            contain
-          />
-          <v-btn v-if="!readonly" icon @click="delete_image(i)">
-            <v-icon color="red">mdi-delete</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col v-if="check_create()" align="center">
-          <v-btn icon large @click="upload()">
-            <v-icon color="green">mdi-plus</v-icon>
-          </v-btn>
-          <br />
-          <v-label>{{ placeholder }}</v-label>
-        </v-col>
-      </v-row>
-    </v-container>
-    <input
-      ref="upload"
-      type="file"
-      @change="preview_image($event)"
-      accept="image/*"
-      style="display: none"
-    />
+      </v-card-text>
+      <v-container fluid align="center">
+        <v-row justify="center" align="center">
+          <v-col
+            v-for="(image, i) in img"
+            :key="i"
+            cols="12"
+            :lg="Math.max(12 / ((check_create() ? 1 : 0) + img.length), 4)"
+            md="6"
+            xs="12"
+            align="center"
+          >
+            <v-img
+              v-if="!!image"
+              :aspect-ratio="aspectRatio"
+              :src="image"
+              contain
+            />
+            <v-btn v-if="!readonly" icon @click="delete_image(i)">
+              <v-icon color="red">mdi-delete</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col v-if="check_create()" align="center">
+            <v-btn icon large @click="upload()">
+              <v-icon color="green">mdi-plus</v-icon>
+            </v-btn>
+            <br />
+            <v-label>{{ placeholder }}</v-label>
+          </v-col>
+        </v-row>
+      </v-container>
+      <input
+        ref="upload"
+        type="file"
+        @change="preview_image($event)"
+        accept="image/*"
+        style="display: none"
+      />
+    </v-card>
   </div>
 </template>
 
