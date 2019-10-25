@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from backend.models import EmailVerificationRecord
 from backend.tests.utils import reset_database_permissions
 
 class TestVerificationView(APITestCase):
