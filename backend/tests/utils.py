@@ -1,4 +1,5 @@
 """ Utils for testing """
+from backend.models import User
 from backend.models import UserPermissions
 
 def create_permission(user_type="Student"):
@@ -24,3 +25,16 @@ def create_permission(user_type="Student"):
     else:
         res = UserPermissions(group_name="Student")
     return res
+
+def reset_database_permissions():
+    """ create 3 permissions """
+    create_permission().save() # Student
+    create_permission("Admin").save()
+    create_permission("SuperAdmin").save()
+
+def activate_all_users():
+    """ set users to be active """
+    users = User.objects.all()
+    for user in users:
+        user.is_active = True
+        user.save()
