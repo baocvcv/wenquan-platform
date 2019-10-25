@@ -233,7 +233,7 @@ export default {
         create() {
             this.create_question_dialog = false;
             this.$axios
-                .get("/api/question_banks" + this.id + "/")
+                .get("/api/question_banks/" + this.id + "/")
                 .then((response) => {
                     this.question_list = response.data.questions;
                 })
