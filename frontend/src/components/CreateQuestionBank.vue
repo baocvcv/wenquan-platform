@@ -103,6 +103,7 @@ export default {
   methods: {
     create() {
       let that = this;
+	  console.log("start uploading");
 	  this.image = uploadImage(this.image);
 	  console.log(this.image);
       axios
