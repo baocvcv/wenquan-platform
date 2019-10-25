@@ -16,7 +16,12 @@
           xs="12"
           align="center"
         >
-          <v-img v-if="!!image" :aspect-ratio="aspectRatio" :src="image" contain />
+          <v-img
+            v-if="!!image"
+            :aspect-ratio="aspectRatio"
+            :src="image"
+            contain
+          />
           <v-btn v-if="!readonly" icon @click="delete_image(i)">
             <v-icon color="red">mdi-delete</v-icon>
           </v-btn>
@@ -72,7 +77,10 @@ export default {
       type: String,
       default: "1.78"
     },
-    img: Array,
+    img: {
+      type: Array,
+      default: () => []
+    },
     width: String,
     height: String
   },
@@ -115,10 +123,10 @@ export default {
       this.img.splice(0, this.img.length);
       this.$emit("change", this.img);
     },
-	test() {
-	  console.log("here test image uploader");
-	  console.log(this.img);
-	}
+    test() {
+      console.log("here test image uploader");
+      console.log(this.img);
+    }
   }
 };
 </script>
