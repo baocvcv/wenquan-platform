@@ -76,8 +76,8 @@ DATABASES = {
         'NAME': 'wen_quan',
         'USER': 'postgres',
         'PASSWORD': '123',
-        'HOST': 'postgres.Never404.secoder.local',
-        # 'HOST': 'localhost',
+        # 'HOST': 'postgres.Never404.secoder.local',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -136,6 +136,6 @@ AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
 try:
-    from .local_settings import *
+    from config.local_settings import *
 except ImportError:
     print("local settings not found")
