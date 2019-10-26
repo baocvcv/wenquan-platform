@@ -9,37 +9,42 @@
         <multiple-choice
             ref="multiple"
             v-if="typeSelected=='multiple'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></multiple-choice>
         <single-choice
             ref="single"
             v-if="typeSelected=='single'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></single-choice>
         <single-choice
             ref="TorF"
             v-if="typeSelected=='TorF'"
+            v-on:submit="submit"
             TF
             :readonly="readonly"
         ></single-choice>
         <brief-answer
             ref="brief_ans"
             v-if="typeSelected=='brief_ans'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></brief-answer>
         <fill-in-blank
             ref="fill_blank"
             v-if="typeSelected=='fill_blank'"
+            v-on:submit="submit"
             :readonly="readonly"
         ></fill-in-blank>
     </div>
 </template>
 
 <script>
-import MultipleChoice from "../components/MultipleChoice.vue";
-import SingleChoice from "../components/SingleChoice.vue"
-import BriefAnswer from "../components/BriefAnswer.vue"
-import FillInBlank from "../components/FillInBlank.vue";
+import MultipleChoice from "./MultipleChoice.vue";
+import SingleChoice from "./SingleChoice.vue"
+import BriefAnswer from "./BriefAnswer.vue"
+import FillInBlank from "./FillInBlank.vue";
 
 export default {
     name: "question-view",
@@ -57,6 +62,20 @@ export default {
         initData: {
             type: Object,
             default: null
+        },
+        bankID: {
+            type: Array,
+            default: null
+        }
+    },
+    watch: {
+        initData: function(newOne){
+            if(!newOne)
+                this.typeSelected = null;
+            else {
+                this.typeSelected = this.initData.question_type;
+                //then updated will be called
+            }
         }
     },
     mounted() {
@@ -68,6 +87,26 @@ export default {
             this.$refs[this.initData.question_type].updateData(this.initData);
     },
     methods: {
+        submit(info) {
+            if(info.parents_node.length==0 && this.bankID){
+                //New question
+                info.parents_node=this.bankID;
+                axios.post("/api/questions/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                });
+            }else{
+                //Edit question
+                axios.put("/api/questions/"+info.id.toString()+"/",[info]).then(response => {
+                    this.$emit("submit",info);
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                })
+            }
+        },
         test() {
             this.$refs.brief.readonly=true;
             this.$refs.brief.updateData({

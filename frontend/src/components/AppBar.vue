@@ -1,11 +1,11 @@
 <template>
     <div id="app-bar">
-        <v-navigation-drawer v-model="drawer" app clipped v-if="$vuetify.breakpoint.xsOnly">
+        <v-navigation-drawer v-model="drawer" app clipped v-show="$vuetify.breakpoint.xsOnly">
             <v-list dense>
                 <template 
                     v-for="nav_link in rendered_nav_links"
                 >
-                    <v-list-item :key="nav_link.name" @click="$router.push(nav_link.link)">
+                    <v-list-item :key="nav_link.name" @click="nav_link.name == 'Log out' ? logout() : $router.push(nav_link.link)">
                         <v-list-item-action>
                             <v-icon>{{ nav_link.icon }}</v-icon>
                         </v-list-item-action>
@@ -16,6 +16,7 @@
                         </v-list-item-content>
                     </v-list-item>
                 </template>
+
                 <v-list-item v-if="render_admin_entry" @click="$router.push('/admin')">
                     <v-list-item-action>
                         <v-icon>mdi-account-supervisor-circle</v-icon>
@@ -45,7 +46,7 @@
         clipped-left
         >
         <v-app-bar-nav-icon 
-            v-if="!$vuetify.breakpoint.smAndUp"
+            v-show="!$vuetify.breakpoint.smAndUp"
             @click="drawer = !drawer"
         ></v-app-bar-nav-icon>
 
@@ -59,7 +60,7 @@
             v-for="nav_link in rendered_nav_links"
             :key="nav_link.name"
             :to="nav_link.link">
-                <v-btn text>
+                <v-btn text @click="nav_link.name == 'Log out' ? logout() : ''">
                     <v-icon>{{ nav_link.icon }}</v-icon>
                     <div v-if="$vuetify.breakpoint.mdAndUp">
                         {{ nav_link.text }}
@@ -69,13 +70,17 @@
             <router-link to="/admin" v-if="render_admin_entry">
                 <v-btn text>
                     <v-icon>mdi-account-supervisor-circle</v-icon>
-                    Admin
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Admin
+                    </div>
                 </v-btn>
             </router-link>
             <router-link to="/" v-if="render_exit">
                 <v-btn text>
                     <v-icon>mdi-location-exit</v-icon>
-                    Exit
+                    <div v-if="$vuetify.breakpoint.mdAndUp">
+                        Exit
+                    </div>
                 </v-btn>
             </router-link>
         </div>
@@ -124,8 +129,14 @@ export default {
                         name: "Account",
                         text: "Account",
                         link: "/account",
-                        icon: "mdi-account"
-                    }
+                        icon: "mdi-account-circle"
+                    },
+					{
+						name: "Log out",
+						text: "Log out",
+						link: "/",
+						icon: "mdi-logout"
+					}
                 ],
                 admin: [
                     {
@@ -163,8 +174,11 @@ export default {
             else
                 return this.nav_link_groups.student;
         },
+		render_logout_entry: function() {
+			return this.user && 
+				this.$router.currentRoute.path == "/";
+		},
         render_admin_entry: function() {
-            console.log("Testing....");
             if (!this.user)
                 return false;
             return this.$router.currentRoute.path.split('/')[1] != "admin"
@@ -182,17 +196,17 @@ export default {
             alert("Logged out");
             sessionStorage.removeItem('user');
             this.login=false;
+			this.$store.state.user = null;
         }
     },
     watch: {
         show_drawer: function() {
             if (!show_drawer)
-                drawer = false;
+                this.drawer = false;
         }
     },
     mounted() {
         window.addEventListener('resize', () => {
-            console.log("Resizing...");
             if (this.$vuetify.breakpoint.smAndUp)
                 this.drawer = false;
         })

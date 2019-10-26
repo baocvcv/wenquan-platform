@@ -45,7 +45,6 @@
                     color="yellow darken-3"
                     background-color="grey darken-1"
                     :readonly="readonly"
-                    half-increments
                     hover
                 ></v-rating>
             </v-list-item>
@@ -90,7 +89,7 @@ export default {
     },
     methods: {
         submit() {
-            this.parse();
+            this.$emit("submit",this.parse());
         },
         reset() {
             this.$refs.form.reset();
@@ -130,7 +129,7 @@ export default {
         return {
             data: {
                 id: -1,
-                parents: [0],
+                parents: [],
                 change_time: "",
                 title: "",
                 content: "",

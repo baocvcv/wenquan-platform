@@ -27,6 +27,9 @@ class QuestionBankSerializer(serializers.ModelSerializer):
             "question_count": {
                 "required": False
             },
+            "picture": {
+                "allow_blank": True
+            },
             "createTime": {
                 "required": False
             },

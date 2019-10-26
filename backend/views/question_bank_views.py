@@ -4,8 +4,15 @@ from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
+from backend.serializers.question_serializer import SingleChoiceQSerializer
+from backend.serializers.question_serializer import MultpChoiceQSerializer
+from backend.serializers.question_serializer import TrueOrFalseQSerializer
+from backend.serializers.question_serializer import FillBlankQSerializer
+from backend.serializers.question_serializer import BriefAnswerQSerializer
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
+from backend.models.questions.question import TYPEDIC
+from backend.models.questions.question import INT2TYPE
 
 
 class QuestionBankList(APIView):
@@ -19,7 +26,9 @@ class QuestionBankList(APIView):
         post_data.pop("id")
 
         root = KnowledgeNode.objects.create()
+
         post_data['root_id'] = root.id
+
         serializer = QuestionBankSerializer(data=post_data)
 
         if serializer.is_valid():
@@ -31,7 +40,7 @@ class QuestionBankList(APIView):
         return Response(serializer.errors, status=400)
 
 
-class QuestionBankDetial(APIView):
+class QuestionBankDetail(APIView):
     def get(self, request, pk):
         bank = QuestionBank.objects.get(id=pk)
         serializer = QuestionBankSerializer(bank)
@@ -39,9 +48,27 @@ class QuestionBankDetial(APIView):
         questions = []
 
         for i in bank.questiongroup_set.all():
-            questions += i
-        response['questions'] = questions
+            if (len(i.question_set.all()) == 0):
+                continue
+            question = i.question_set.all().get(question_change_time=i.current_version)
+            qtype = question.question_type
 
+            if qtype == TYPEDIC['single']:
+                serializer = SingleChoiceQSerializer(question)
+            elif qtype == TYPEDIC['multiple']:
+                serializer = MultpChoiceQSerializer(question)
+            elif qtype == TYPEDIC['TorF']:
+                serializer = TrueOrFalseQSerializer(question)
+            elif qtype == TYPEDIC['fill_blank']:
+                serializer = FillBlankQSerializer(question)
+            elif qtype == TYPEDIC['brief_ans']:
+                serializer = BriefAnswerQSerializer(question)
+
+            question_data = serializer.data
+            question_data['question_type'] = INT2TYPE[(str)(question_data['question_type'])]
+            questions.append(question_data)
+
+        response['questions'] = questions
         return Response(response)
 
     def put(self, request, pk):

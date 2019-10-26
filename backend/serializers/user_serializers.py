@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=False)
     is_banned = serializers.BooleanField(default=False)
     user_group = serializers.CharField(default="Student")
+    password = serializers.CharField(required=False)
 
     def create(self, validated_data):
         """ create user """
@@ -44,6 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_group="Student",
             profile=profile,
             user_permissions=user_permissions,
+            is_active=False,
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -62,15 +64,17 @@ class UserSerializer(serializers.ModelSerializer):
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
         instance.save()
 
-        profile_data = validated_data.pop('profile')
-        profile = instance.profile
-        profile_serializer = ProfileSerializer(data=profile_data)
-        profile_serializer.update(profile, profile_data)
-        # profile.update(**profile_data)
+        if 'profile' in validated_data:
+            profile_data = validated_data.pop('profile')
+            profile = instance.profile
+            profile_serializer = ProfileSerializer(data=profile_data)
+            profile_serializer.update(profile, profile_data)
 
         return instance
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'password', 'last_login_time', 'last_login_ip', 'is_banned', 'user_group', 'user_permissions', 'profile']
+        fields = ['id', 'email', 'username', 'password',
+                  'last_login_time', 'last_login_ip', 'is_banned', 'is_active',
+                  'user_group', 'user_permissions', 'profile']
         read_only_fields = ['last_login_time', 'last_login_ip']

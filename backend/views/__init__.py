@@ -3,8 +3,11 @@
 from .users_views import UserList
 from .users_views import UserDetail
 from .auth_views import CustomAuthToken
+from .verification_views import EmailVerificationView
+from .change_password_view import ChangePasswordView
 
 from .question_views import QuestionList
+from .question_views import QuestionDetail
 from .knowledge_node_views import KnowledgeNodeList
 from .question_bank_views import QuestionBankList
-from .question_bank_views import QuestionBankDetial
+from .question_bank_views import QuestionBankDetail
