@@ -7,6 +7,7 @@ All urls that doesn't conform to backend url patterns will be dealt with here
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from .settings import STATICFILES_DIRS
+
 def index(request, url):
     '''
     if 'static' or 'img' or 'manifest' is found, redirect them to static files,
