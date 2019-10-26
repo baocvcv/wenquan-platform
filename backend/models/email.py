@@ -38,7 +38,9 @@ class EmailVerificationRecord(models.Model):
             # remote deploy
             email_body = "Please click this link to activate your account: http://https://never404-never404.app.secoder.net:8000/active/{0}".format(self.token)
             # 发送邮件
+            print(email_title)
             send_status = self.user.email_user(email_title, email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+            print(email_body)
         if send_status:
             pass
