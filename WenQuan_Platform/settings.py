@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'polymorphic',
     'corsheaders',
+    'mailer',
     ]
 
 MIDDLEWARE = [
@@ -151,7 +152,7 @@ AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
 # email backend
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'mailer.backend.DbBackend'
 
 try:
     from config.local_settings import *
