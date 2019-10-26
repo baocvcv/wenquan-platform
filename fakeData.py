@@ -11,6 +11,7 @@ from backend.models import UserPermissions
 from backend.models import User
 from backend.models import Profile
 from backend.models.question_bank import QuestionBank
+from backend.models.knowledge_node import KnowledgeNode
 
 
 def createUser(
@@ -44,7 +45,6 @@ createUser(username='xq', user_group=User.SUPER_ADMIN)
 
 def createBank(
         name,
-        root_id=1,
         picture="nothinghere",
         brief="",
         createTime=timezone.now(),
@@ -54,8 +54,10 @@ def createBank(
         invitation_code_count=0,
         activated_code_count=0,
 ):
+    root = KnowledgeNode.objects.create()
+    root.save()
     bank = QuestionBank.objects.create(
-        root_id=root_id,
+        root_id=root.id,
         name=name,
         picture=picture,
         brief=brief,
@@ -67,6 +69,8 @@ def createBank(
         activated_code_count=activated_code_count,
     )
     bank.save()
+    root.question_bank = bank
+    root.save()
     return bank
 
 

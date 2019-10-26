@@ -1,6 +1,6 @@
 <template>
     <div id="app-bar">
-        <v-navigation-drawer v-model="drawer" app clipped v-if="$vuetify.breakpoint.xsOnly">
+        <v-navigation-drawer v-model="drawer" app clipped v-show="$vuetify.breakpoint.xsOnly">
             <v-list dense>
                 <template 
                     v-for="nav_link in rendered_nav_links"
@@ -46,7 +46,7 @@
         clipped-left
         >
         <v-app-bar-nav-icon 
-            v-if="!$vuetify.breakpoint.smAndUp"
+            v-show="!$vuetify.breakpoint.smAndUp"
             @click="drawer = !drawer"
         ></v-app-bar-nav-icon>
 
@@ -202,7 +202,7 @@ export default {
     watch: {
         show_drawer: function() {
             if (!show_drawer)
-                drawer = false;
+                this.drawer = false;
         }
     },
     mounted() {

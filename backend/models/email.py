@@ -1,17 +1,19 @@
 """ Email verification model """
 from django.db import models
-from django.utils import timezone
-from django.core.mail import send_mail
-from .user import User
+# from django.utils import timezone
+# from .user import User
 
 class EmailVerificationRecord(models.Model):
     """ Email verification for user """
-    email_type = (("register",u"Register"), ("forget",u"Reset password"))
+    expiration_time = 24 # hours
+    email_type = (("register", u"Register"), ("forget", u"Reset password"))
 
     token = models.CharField(max_length=50, verbose_name=u"Code")
     email = models.EmailField(max_length=50, verbose_name=u"Email")
-    send_type = models.CharField(verbose_name=u"Verification type", max_length=10, choices=email_type)
-    send_time = models.DateTimeField(verbose_name=u"Send time")
+    send_type = models.CharField(
+        verbose_name=u"Veification type",
+        max_length=10, choices=email_type)
+    send_time = models.DateTimeField(verbose_name=u"Send time", auto_now=True)
 
     is_valid = models.BooleanField(default=True)
 
@@ -22,25 +24,34 @@ class EmailVerificationRecord(models.Model):
         verbose_name = u"Email verification code"
         verbose_name_plural = verbose_name
 
-    def __unicode__(self):
-        """ to unicode """
-        return '{0}({1})'.format(self.code, self.email)
+    def __str__(self):
+        """ to str """
+        return '{0}({1})'.format(self.token, self.email)
 
     def send_email(self):
-        # 初始化为空
+        """ send email to user """
         email_title = ""
         email_body = ""
-        # 如果为注册类型
-        if self.send_type == "register":
+        # local test
+        # domain = "https://127.0.0.1:8000"
+        domain = "https://never404-never404.app.secoder.net:8000"
+        if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
-            # local test
-            # email_body = "Please click this link to activate your account: http://127.0.0.1:8000/active/{0}".format(self.token)
-            # remote deploy
-            email_body = "Please click this link to activate your account: http://https://never404-never404.app.secoder.net:8000/active/{0}".format(self.token)
-            # 发送邮件
+            url = domain + "activate/{0}".format(self.token)
+            email_body = "Please click this link to activate your account: " + url
+            # send email
             print(email_title)
-            send_status = self.user.email_user(email_title, email_body)
-            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+            self.user.email_user(email_title, email_body)
             print(email_body)
-        if send_status:
-            pass
+            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+        elif self.send_type == "forget":
+            email_title = "[Wen Quan Platform] Change your password"
+            url = domain + "/forget_password/{0}".format(self.token)
+            email_body = "Please click this link to change your password: " + url
+            # send email
+            self.user.email_user(email_title, email_body)
+            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
+
+    def is_time_valid(self, time):
+        """ check if time is valid """
+        return (time - self.send_time).seconds < self.expiration_time * 3600
