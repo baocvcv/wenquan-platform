@@ -69,4 +69,3 @@ deploy:
   only:
     - master
     - develop
-    - refactor-image-upload
