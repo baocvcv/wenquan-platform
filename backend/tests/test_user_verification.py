@@ -6,19 +6,10 @@ from rest_framework.test import APITestCase
 
 from backend.models import EmailVerificationRecord
 from backend.tests.utils import reset_database_permissions
+from backend.tests.utils import USER_DATA
 
 class TestVerificationView(APITestCase):
     """ test for user detail views """
-    user_data = {
-        'email': 'kb@goat.com',
-        'username': 'Jack',
-        'password': '1234abcd',
-        'user_group': 'Student',
-    }
-    profile_data = {
-        'school_name': 'PKU',
-    }
-
     @classmethod
     def setUpTestData(cls):
         reset_database_permissions()
@@ -27,23 +18,18 @@ class TestVerificationView(APITestCase):
         """ test authentication """
         # add user
         url1 = reverse('user-list')
-        self.client.post(url1, self.user_data, format='json')
+        self.client.post(url1, USER_DATA, format='json')
         # authentication
         url2 = reverse('account-auth')
-        data = {
-            'username': 'Jack',
-            'password': '1234abcd'
-        }
-        response1 = self.client.post(url2, data, format='json')
+        response1 = self.client.post(url2, USER_DATA, format='json')
         # not activated
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         # activate
         url3 = reverse('verification')
         verification_token = EmailVerificationRecord.objects.get().token
         data = {'token': verification_token}
-        response2 = self.client.put(url3, data, format='json')
+        response2 = self.client.post(url3, data, format='json')
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
         # auth again
-        data = {'username': 'Jack', 'password': '1234abcd'}
-        response3 = self.client.post(url2, data, format='json')
+        response3 = self.client.post(url2, USER_DATA, format='json')
         self.assertEqual(response3.status_code, status.HTTP_200_OK)

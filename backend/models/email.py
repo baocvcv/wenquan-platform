@@ -1,6 +1,6 @@
 """ Email verification model """
 from django.db import models
-from django.utils import timezone
+# from django.utils import timezone
 # from .user import User
 
 class EmailVerificationRecord(models.Model):
@@ -32,26 +32,24 @@ class EmailVerificationRecord(models.Model):
         """ send email to user """
         email_title = ""
         email_body = ""
+        # local test
+        # domain = "https://127.0.0.1:8000"
+        domain = "https://never404-never404.app.secoder.net:8000"
         if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
-            # local test
-            # url = "https://127.0.0.1:8000/active/{0}".format(self.token)
-            # remote deploy
-            url = "https://never404-never404.app.secoder.net:8000/active/{0}".format(self.token)
+            url = domain + "active/{0}".format(self.token)
             email_body = "Please click this link to activate your account: " + url
             # send email
             self.user.email_user(email_title, email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
-            # local test
-            # url = "https://127.0.0.1:8000/forgetpassword/{0}".format(self.token)
-            # remote deploy
-            url = "https://never404-never404.app.secoder.net:8000/forgetpassword/{0}".format(self.token)
+            url = domain + "/forgetpassword/{0}".format(self.token)
             email_body = "Please click this link to change your password: " + url
             # send email
             self.user.email_user(email_title, email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
 
     def is_time_valid(self, time):
+        """ check if time is valid """
         return (time - self.send_time).seconds < self.expiration_time * 3600
