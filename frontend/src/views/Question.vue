@@ -6,53 +6,53 @@
             label="Choose Type"
             v-if="!readonly">
         </v-select>
-        <multiple-choice
+        <question-multiple-choice
             ref="multiple"
             v-if="typeSelected=='multiple'"
             v-on:submit="submit"
             :readonly="readonly"
-        ></multiple-choice>
-        <single-choice
+        ></question-multiple-choice>
+        <question-single-choice
             ref="single"
             v-if="typeSelected=='single'"
             v-on:submit="submit"
             :readonly="readonly"
-        ></single-choice>
-        <single-choice
+        ></question-single-choice>
+        <question-single-choice
             ref="TorF"
             v-if="typeSelected=='TorF'"
             v-on:submit="submit"
             TF
             :readonly="readonly"
-        ></single-choice>
-        <brief-answer
+        ></question-single-choice>
+        <question-brief-answer
             ref="brief_ans"
             v-if="typeSelected=='brief_ans'"
             v-on:submit="submit"
             :readonly="readonly"
-        ></brief-answer>
-        <fill-in-blank
+        ></question-brief-answer>
+        <question-fill-in-blank
             ref="fill_blank"
             v-if="typeSelected=='fill_blank'"
             v-on:submit="submit"
             :readonly="readonly"
-        ></fill-in-blank>
+        ></question-fill-in-blank>
     </div>
 </template>
 
 <script>
-import MultipleChoice from "./MultipleChoice.vue";
-import SingleChoice from "./SingleChoice.vue"
-import BriefAnswer from "./BriefAnswer.vue"
-import FillInBlank from "./FillInBlank.vue";
+import QuestionMultipleChoice from "./QuestionMultipleChoice.vue";
+import QuestionSingleChoice from "./QuestionSingleChoice.vue"
+import QuestionBriefAnswer from "./QuestionBriefAnswer.vue"
+import QuestionFillInBlank from "./QuestionFillInBlank.vue";
 
 export default {
     name: "question-view",
     components: {
-        "multiple-choice": MultipleChoice,
-        "single-choice": SingleChoice,
-        "brief-answer": BriefAnswer,
-		"fill-in-blank": FillInBlank
+        "question-multiple-choice": QuestionMultipleChoice,
+        "question-single-choice": QuestionSingleChoice,
+        "question-brief-answer": QuestionBriefAnswer,
+		"question-fill-in-blank": QuestionFillInBlank
     },
     props: {
         readonly: {
