@@ -1,23 +1,21 @@
-""" Views for verification """
+""" Views for password change"""
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 from backend.scripts.email_verification import create_email_verification_record
 from backend.scripts.email_verification import use_token
 
-class EmailVerificationView(APIView):
-    """ Perform email verification """
+class ChangePasswordView(APIView):
+    """ Handle password change """
     def get(self, request):
         """ send verification email """
         user = request.user
-        if not user.is_active:
-            create_email_verification_record(user)
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        create_email_verification_record(user, send_type='forget')
+        return Response(status=status.HTTP_200_OK)
 
     def post(self, request):
-        """ make modifications """
+        """ change pasword """
         token = request.data['token']
-        msg, sta = use_token(token)
+        msg, sta = use_token(token, request.data['password'])
         return Response(msg, sta)
