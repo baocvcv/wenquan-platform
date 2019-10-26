@@ -1,7 +1,8 @@
 """ Email verification model """
 from django.db import models
 from django.conf import settings
-from mailer import send_mail
+# from mailer import send_mail
+from django.core.mail import send_mail
 
 class EmailVerificationRecord(models.Model):
     """ Email verification for user """
@@ -37,13 +38,13 @@ class EmailVerificationRecord(models.Model):
         domain = "https://never404-never404.app.secoder.net:8000"
         if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
-            url = domain + "activate/{0}".format(self.token)
+            url = domain + "/activate/{0}".format(self.token)
             email_body = "Please click this link to activate your account: " + url
             # send email
-            print(email_title)
+            print(self.email)
             # self.user.email_user(email_title, email_body)
-            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, self.email)
-            print(email_body)
+            send_status = send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, [self.email])
+            print(send_status)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
@@ -51,7 +52,7 @@ class EmailVerificationRecord(models.Model):
             email_body = "Please click this link to change your password: " + url
             # send email
             # self.user.email_user(email_title, email_body)
-            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, self.email)
+            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, [self.email])
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
 
     def is_time_valid(self, time):
