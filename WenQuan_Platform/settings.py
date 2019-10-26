@@ -30,7 +30,19 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'backend', 'rest_framework', 'rest_framework.authtoken', 'polymorphic', 'corsheaders']
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'backend',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'polymorphic',
+    'corsheaders',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,8 +150,10 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
+# email backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 try:
     from config.local_settings import *
-    print("successful in loading settings")
 except ImportError:
     print("local settings not found")
