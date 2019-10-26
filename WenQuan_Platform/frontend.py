@@ -5,6 +5,9 @@ This is for frontend router navigation
 All urls that doesn't conform to backend url patterns will be dealt with here
 '''
 from django.shortcuts import render, redirect
+import requests
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
 
 def index(request, url):
     '''

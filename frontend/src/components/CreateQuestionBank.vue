@@ -73,7 +73,6 @@
 
 <script>
 import ImageUploader from "../components/ImageUploader.vue";
-import uploadImage from "./Base64ToFile.js";
 import axios from "axios";
 export default {
   name: "create-question-bank",
@@ -103,10 +102,6 @@ export default {
   methods: {
     create() {
       let that = this;
-	  console.log("start uploading");
-	  this.image = uploadImage(this.image);
-	  console.log("Image is:")
-	  console.log(this.image);
       axios
         .post("/api/question_banks/", {
           id: -1,

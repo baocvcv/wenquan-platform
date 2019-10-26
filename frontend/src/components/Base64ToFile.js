@@ -35,9 +35,7 @@ export default function (base64Images) {
 	console.log("Here " + i);
 	console.log(file);
     axios
-      .post("/smmsImageUpload", {
-        smfile: file
-      })
+      .post("/smmsImageUpload", {file: base64Images[i]})
       .then(response => {
 		console.log("success")
 		console.log(response);
