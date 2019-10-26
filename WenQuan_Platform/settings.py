@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'polymorphic',
     'corsheaders',
-    'mailer',
+    # 'mailer',
     ]
 
 MIDDLEWARE = [
@@ -152,7 +152,9 @@ AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
 # email backend
-EMAIL_BACKEND = 'mailer.backend.DbBackend'
+# EMAIL_BACKEND = 'mailer.backend.DbBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAILER_EMAIL_MAX_DEFERRED = 5
 
 try:
     from config.local_settings import *
