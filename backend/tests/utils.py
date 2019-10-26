@@ -2,6 +2,16 @@
 from backend.models import User
 from backend.models import UserPermissions
 
+USER_DATA = {
+    'email': 'kb@goat.com',
+    'username': 'Kobe',
+    'password': '1234abcd',
+    'user_group': 'Student',
+}
+PROFILE_DATA = {
+    'school_name': 'PKU',
+}
+
 def create_permission(user_type="Student"):
     """ creat a UserPermission """
     if user_type == "Admin":
