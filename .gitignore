@@ -35,5 +35,8 @@ lib/
 #coverage
 .coverage
 
+#config
+config/
+
 backend.md
 local_settings.py
