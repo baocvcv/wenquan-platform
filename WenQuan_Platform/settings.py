@@ -140,5 +140,6 @@ AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
 
 try:
     from config.local_settings import *
+    print("successful in loading settings")
 except ImportError:
     print("local settings not found")

@@ -40,7 +40,9 @@ class EmailVerificationRecord(models.Model):
             url = domain + "activate/{0}".format(self.token)
             email_body = "Please click this link to activate your account: " + url
             # send email
+            print(email_title)
             self.user.email_user(email_title, email_body)
+            print(email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
