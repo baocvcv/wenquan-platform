@@ -122,14 +122,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),
 ]
 
-# Email settings
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'smtp.163.com'
-EMAIL_HOST_USER = 'baocvcv@163.com'
-EMAIL_HOST_PASSWORD = 'BaoHan828'
-EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = 'baocvcv@163.com'
-
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -145,3 +137,8 @@ REST_FRAMEWORK = {
 # authentication settings
 AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
+
+try:
+    from .local_settings import *
+except ImportError:
+    print("local settings not found")
