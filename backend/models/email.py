@@ -1,7 +1,7 @@
 """ Email verification model """
 from django.db import models
-# from django.utils import timezone
-# from .user import User
+from django.conf import settings
+from mailer import send_mail
 
 class EmailVerificationRecord(models.Model):
     """ Email verification for user """
@@ -41,7 +41,8 @@ class EmailVerificationRecord(models.Model):
             email_body = "Please click this link to activate your account: " + url
             # send email
             print(email_title)
-            self.user.email_user(email_title, email_body)
+            # self.user.email_user(email_title, email_body)
+            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, self.email)
             print(email_body)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
@@ -49,7 +50,8 @@ class EmailVerificationRecord(models.Model):
             url = domain + "/forget_password/{0}".format(self.token)
             email_body = "Please click this link to change your password: " + url
             # send email
-            self.user.email_user(email_title, email_body)
+            # self.user.email_user(email_title, email_body)
+            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, self.email)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
 
     def is_time_valid(self, time):
