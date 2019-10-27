@@ -2,7 +2,7 @@
     <div class="treeview">
         <tree-view :model="testData" category="subnodes" :selection="selection" 
         :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="d"
-        :strategies="strategies" :transition="transition"/>
+        :strategies="strategies" :transition="transition" :openerOpts="openerOpts"/>
         {{ selection }}
         <br/>
         {{ testData }}
@@ -51,6 +51,9 @@ export default {
             transition: {
                 attrs: { appear: true },
                 props: { name: "TreeViewDemoTransition" }
+            },
+            openerOpts: {
+                position: "right"
             },
             testData: [
                     { name: "Click me, I'm a node with two subnodes.", subnodes: [
@@ -163,14 +166,14 @@ export default {
     cursor: pointer;
 }
 
-.TreeViewDemo .opener::after {
+.TreeViewDemo .opener::before {
     content: '+';
     display: block;
     transition: all 0.25s;
     font-family: monospace;
 }
 
-.TreeViewDemo li.category.async>.item>.opener::after {
+.TreeViewDemo li.category.async>.item>.opener::before {
     content: '!';
 }
 
@@ -178,7 +181,7 @@ export default {
     color: #1E88E5;
 }
 
-.TreeViewDemo li.category:not(.folded)>.item>.opener::after {
+.TreeViewDemo li.category:not(.folded)>.item>.opener::before {
     color: #1E88E5;
     transform: rotate(45deg);
 }
