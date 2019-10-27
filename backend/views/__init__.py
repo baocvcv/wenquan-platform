@@ -9,5 +9,6 @@ from .change_password_view import ChangePasswordView
 from .question_views import QuestionList
 from .question_views import QuestionDetail
 from .knowledge_node_views import KnowledgeNodeList
+from .knowledge_node_views import KnowledgeNodeDetail
 from .question_bank_views import QuestionBankList
 from .question_bank_views import QuestionBankDetail

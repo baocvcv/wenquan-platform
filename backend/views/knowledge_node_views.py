@@ -25,12 +25,14 @@ class KnowledgeNodeList(APIView):
         root = self.get_object(root_id)
         json = {}
         child_json = []
-        json['id'] = root.id
+        child = []
+        json['id'] = root_id
         json['name'] = root.name
-        child = root.subnodes.all()
+        child = list(root.subnodes.all())
         while child:
             for i in child:
-                child_json += self.go_through_tree(i.id)
+                child_json.append(self.go_through_tree(i.id))
+                child.remove(i)
         json['subnodes'] = child_json
         return json
 
@@ -43,7 +45,7 @@ class KnowledgeNodeList(APIView):
     def post(self, request, root_id):
         """Create a KnowledgeNode"""
         post_data = JSONParser().parse(request)[0]
-        parent = self.get_object(post_data['parent'])
+        parent = self.get_object(root_id)
         bank = parent.question_bank
         new_node = KnowledgeNode.objects.create(name=post_data['name'])
         new_node.question_bank = bank
@@ -57,7 +59,7 @@ class KnowledgeNodeList(APIView):
         return Response(response)
 
 
-class KnowledgeNodeName(APIView):
+class KnowledgeNodeDetail(APIView):
     """View for a KnowledgeNode"""
     @classmethod
     def serializer(cls, node):
@@ -68,7 +70,7 @@ class KnowledgeNodeName(APIView):
             questions.append(question.id)
 
         response = {}
-        response['id'] = nood.id
+        response['id'] = node.id
         response['name'] = node.name
         response['questions'] = questions
         return response
@@ -86,7 +88,7 @@ class KnowledgeNodeName(APIView):
     def put(self, request, root_id):
         """Modify infomation"""
         put_data = JSONParser().parse(request)[0]
-        node = self.KnowledgeNodeList.get_object(root_id)
+        node = KnowledgeNodeList.get_object(root_id)
         node.name = put_data['name']
         node.save()
         response = self.serializer(node)
