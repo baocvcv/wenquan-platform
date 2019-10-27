@@ -125,7 +125,7 @@
                         <v-card>
                             <v-card-title>Create A Question</v-card-title>
                             <v-card-text>
-                                <question :readonly="false" :initData="null" :bankID="[id]" @submit="create"></question>
+                                <question :initData="null" :bankID="[id]" creation @submit="create"></question>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -150,12 +150,18 @@
                             :key="question.id"
                             cols="12"
                             >
-                                <v-checkbox 
-                                    v-if="select"
-                                    v-model="selected_questions"
-                                    :value="question.id"
-                                >
-                                <question-list-item :question="question"></question-list-item>
+                                <v-row align="center">
+                                    <v-checkbox 
+                                        v-if="select"
+                                        v-model="selected_questions"
+                                        :value="question.id"
+                                        hide-details
+                                        class="shrink mr-2 mt-0"
+                                    ></v-checkbox>
+                                    <v-col>
+                                    <question-list-item :question="question"></question-list-item>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                     </v-col>
