@@ -1,11 +1,12 @@
 <template>
     <div class="treeview">
-        <tree-view :model="testData" category="children" :selection="selection" 
-        :onSelect="select" :display="item => item.label" class="TreeViewDemo" :dragndrop="d"
-        :strategies="strategies"/>
+        <tree-view :model="testData" category="subnodes" :selection="selection" 
+        :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="d"
+        :strategies="strategies" :transition="transition"/>
         {{ selection }}
         <br/>
         {{ testData }}
+        <v-btn v-if="edit" @click="submit">Submit</v-btn>
     </div>
 </template>
 
@@ -17,9 +18,23 @@ export default {
     components: {
         "tree-view": TreeView
     },
+    props: {
+        treeData: {
+            type: Object,
+            default: () => {}
+        },
+        edit: {
+            type: Boolean,
+            default: false
+        }
+    },
     methods: {
         select(newOne) {
             this.selection=newOne
+            if(!this.edit) this.$emit("selectChange",newOne);
+        },
+        submit() {
+            this.$emit("treeSubmit",treeData);
         }
     },
     data: function() {
@@ -27,16 +42,23 @@ export default {
             d: { ...dragndrop.selection(() => this.testData, m => this.testData = m)},
             strategies: {
                 selection: ["multiple"],
-                click: ["select", "unfold-on-selection"],
-                fold: ["opener-control", "no-child-selection"]
+                click: ["select", "toggle-fold"],
+                fold: ["opener-control"]
+            },
+            display: item => {
+                return item.name;
+            },
+            transition: {
+                attrs: { appear: true },
+                props: { name: "TreeViewDemoTransition" }
             },
             testData: [
-                    { label: "Click me, I'm a node with two children.", children: [
-                        { label: "I am a childless leaf." },
-                        { label: "I am a also a childless leaf." }
+                    { name: "Click me, I'm a node with two subnodes.", subnodes: [
+                        { name: "I am a childless leaf." },
+                        { name: "I am a also a childless leaf." }
                     ]},
-                    { label: "I'm a leaf, I do not have children.",children:[] },
-                    { label: "I am an asynchronous node, click me and wait one second."}
+                    { name: "I'm a leaf, I do not have subnodes.",subnodes:[] },
+                    { name: "I am an asynchronous node, click me and wait one second."}
                 ],
             selection: [],
         }
@@ -90,11 +112,11 @@ export default {
 }
 
 .TreeViewDemo li.selected {
-    color:crimson;
+    color:#1565C0;
 }
 
 .TreeViewDemo ul li.selected>.item>a {
-    color: crimson;
+    color: #1E88E5;
 }
 
 .TreeViewDemo ul li.selected>.item>a:hover {
@@ -102,7 +124,7 @@ export default {
 }
 
 .TreeViewDemo ul li:not(.disabled)>.item>a:hover {
-    color: #e26f6f;
+    color: #1E88E5;
 }
 
 
@@ -117,7 +139,7 @@ export default {
 }
 
 
-/* Categories : Nodes with children */
+/* Categories : Nodes with subnodes */
 
 .TreeViewDemo li.category>.item {
     display: block;
@@ -153,11 +175,11 @@ export default {
 }
 
 .TreeViewDemo .opener:hover {
-    color: #e26f6f;
+    color: #1E88E5;
 }
 
 .TreeViewDemo li.category:not(.folded)>.item>.opener::after {
-    color: crimson;
+    color: #1E88E5;
     transform: rotate(45deg);
 }
 
