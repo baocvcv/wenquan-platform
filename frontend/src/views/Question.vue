@@ -1,7 +1,7 @@
 <template>
     <div class="question">
         <v-card>
-            <v-card-title>
+            <v-card-title v-if="!creation">
                 Question
                 <v-btn
                     absolute
@@ -29,6 +29,7 @@
                 :readonly="!creation && !(_editable && edit_mode)"
                 v-on:submit="submit"
                 v-on:cancel="cancel"
+                :creation="creation"
             ></question-multiple-choice>
             <question-single-choice
                 ref="single"
@@ -36,6 +37,7 @@
                 :readonly="!creation && !(_editable && edit_mode)"
                 v-on:submit="submit"
                 v-on:cancel="cancel"
+                :creation="creation"
             ></question-single-choice>
             <question-single-choice
                 ref="TorF"
@@ -44,6 +46,7 @@
                 :readonly="!creation && !(_editable && edit_mode)"
                 v-on:submit="submit"
                 v-on:cancel="cancel"
+                :creation="creation"
             ></question-single-choice>
             <question-brief-answer
                 ref="brief_ans"
@@ -159,9 +162,28 @@ export default {
                 "question_solution": "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况"
             });
         },
-        submit() {
-            this.edit_mode = false;
-            this.$emit("submit");
+        submit(info) {
+            if(info.parents_node.length==0 && this.bankID){
+                //New question
+                info.parents_node=this.bankID;
+                axios.post("http://localhost:8000/api/questions/",[info]).then(response => {
+                    this.edit_mode = false;
+                    this.$emit("submit");
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                });
+            }else{
+                //Edit question
+                axios.put("http://localhost:8000/api/questions/"+info.id.toString()+"/",[info]).then(response => {
+                    this.$refs[this.typeSelected].submitted();
+                    this.edit_mode = false;
+                    this.$emit("submit");
+                }).catch(err => {
+                    console.log(info);
+                    console.log(err);
+                })
+            }
         },
         cancel() {
             this.edit_mode = false;
@@ -169,7 +191,7 @@ export default {
         },
         change_edit_mode() {
             if (this.edit_mode)
-                this.$refs[this.initData.question_type].cancel();
+                this.$refs[this.typeSelected].cancel();
             else
                 this.edit_mode = true;
         }

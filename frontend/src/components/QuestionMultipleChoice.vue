@@ -1,10 +1,10 @@
 <template>
     <div class="multiple-choice-component">
         <v-form ref="form" v-model="valid">
-            <v-text-field label="Title" v-model="data.title" outlined :readonly="readonly"></v-text-field>
+            <v-text-field label="Title" v-model="edited_data.title" outlined :readonly="readonly"></v-text-field>
             <v-textarea 
                 label="Content"
-                v-model="data.content" 
+                v-model="edited_data.content" 
                 :rules="[v => !!v || 'Question content is required!']"
                 outlined
                 auto-grow
@@ -12,7 +12,7 @@
             ></v-textarea>
             <image-uploader
 			  ref="uploader"
-              v-model="data.image"
+              v-model="edited_data.image"
               width="50%"
               label="picture"
               :readonly="readonly"
@@ -24,13 +24,13 @@
                     <v-list-item-content align="left">
                     <v-list-item-title>Choices</v-list-item-title>
                     <v-list-item-subtitle :style="answer=='none' ? 'color:red' : 'color:green'">
-                        You have chosen {{ answer }}
+                        {{ answer === 'none'? "You haven't selected a right answer" : "You have selected " + answer }}
                     </v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item-group color="primary">
                     <v-list-item
-                        v-for="(item,index) in data.choices"
+                        v-for="(item,index) in edited_data.choices"
                         :key="item.name"
                     >
                         <v-list-item-icon>
@@ -68,9 +68,9 @@
             </v-list>
             <br/>
             <v-textarea 
-                label="Analyse"
-                v-model="data.analyse" 
-                :rules="[v => !!v || 'Analyse is required!']"
+                label="Analysis"
+                v-model="edited_data.analysis" 
+                :rules="[v => !!v || 'Analysis is required!']"
                 outlined
                 auto-grow
                 :readonly="readonly"
@@ -78,7 +78,7 @@
             <v-list-item>
                 <span>Difficulty:</span>
                 <v-rating
-                    v-model="data.difficulty"
+                    v-model="edited_data.difficulty"
                     color="yellow darken-3"
                     background-color="grey darken-1"
                     :readonly="readonly"
@@ -98,9 +98,12 @@
                 class="mr-4"
                 color="error"
                 @click="reset()"
-                v-if="!readonly"
+                v-if="!readonly && creation"
             >
                 Reset
+            </v-btn>
+            <v-btn v-if="!readonly" @click="cancel">
+                Cancel
             </v-btn>
         </v-form>
     </div>
@@ -118,11 +121,15 @@ export default {
             type: Boolean,
             default: false
         },
+        creation: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         answer() {
             let ans=[];
-            this.data.rightAnswer.every(item => ans.push(item.name));
+            this.edited_data.rightAnswer.every(item => ans.push(item.name));
             if(ans.length<1) return "none";
             else return ans.join("");
         },
@@ -132,34 +139,41 @@ export default {
     },
     methods: {
         addChoice() {
-            let length=this.data.choices.length;
-            this.data.choices.push({
+            let length=this.edited_data.choices.length;
+            this.edited_data.choices.push({
                 name: String.fromCharCode(65+length),
                 content: "",
                 right: false
             });
         },
         removeChoice(index) {
-            if(this.data.choices[index].right)
-                this.data.rightAnswer.splice(this.data.rightAnswer.indexOf(this.data.choices[index]));
-            this.data.choices.splice(index,1);
-            for(var i=0;i<this.data.choices.length;i++)
-                this.data.choices[i].name=String.fromCharCode(65+i);
+            if(this.edited_data.choices[index].right)
+                this.edited_data.rightAnswer.splice(this.edited_data.rightAnswer.indexOf(this.data.choices[index]));
+            this.edited_data.choices.splice(index,1);
+            for(var i=0;i<this.edited_data.choices.length;i++)
+                this.edited_data.choices[i].name=String.fromCharCode(65+i);
         },
         changeRightStatus(item) {
             item.right=!item.right;
-            if(item.right) this.data.rightAnswer.push(item);
-            else this.data.rightAnswer.splice(this.data.rightAnswer.indexOf(item),1);
-            this.data.rightAnswer.sort((a,b) => a.name>b.name);
+            if(item.right) this.edited_data.rightAnswer.push(item);
+            else this.edited_data.rightAnswer.splice(this.edited_data.rightAnswer.indexOf(item),1);
+            this.edited_data.rightAnswer.sort((a,b) => a.name>b.name);
         },
         submit() {
-            this.$emit("submit",this.parse());
+            this.$emit("submit", this.parse());
+        },
+        submitted() {
+            this.data = Object.assign({}, this.edited_data);
+        },
+        cancel() {
+            this.edited_data = Object.assign({}, this.data);
+            this.$emit("cancel");
         },
         reset() {
             this.$refs.form.reset();
 			this.$refs.uploader.reset();
-            this.data.rightAnswer=[];
-            this.data.choices= [
+            this.edited_data.rightAnswer=[];
+            this.edited_data.choices= [
                 {
                     name: "A",
                     content: "",
@@ -181,6 +195,7 @@ export default {
                     right: false
                 },
             ];
+            this.data = Object.assign({}, this.edited_data);
         },
         updateData(input) {
             //parse data input from backend
@@ -190,7 +205,7 @@ export default {
             this.data.title = input.question_name;
             this.data.content = input.question_content;
 			this.data.image = input.question_image;
-            this.data.analyse = input.question_solution;
+            this.data.analysis = input.question_solution;
             this.data.difficulty = input.question_level;
 
             let choices = [];
@@ -210,26 +225,30 @@ export default {
                     rightAns.push(item);
             });
             this.data.rightAnswer = rightAns;
+            this.edited_data = Object.assign({}, this.data);
         },
         parse() {
             let result = {
-                id: this.data.id,
-                parents_node: this.data.parents,
-                question_change_time: this.data.change_time,
-                question_name: this.data.title,
+                id: this.edited_data.id,
+                parents_node: this.edited_data.parents,
+                question_change_time: this.edited_data.change_time,
+                question_name: this.edited_data.title,
                 question_type: "multiple",
-                question_level: this.data.difficulty,
-                question_content: this.data.content,
-                question_image: this.data.image,
+                question_level: this.edited_data.difficulty,
+                question_content: this.edited_data.content,
+                question_image: this.edited_data.image,
                 question_choice: [],
                 question_ans: [], 
-                question_ans_num: this.data.rightAnswer.length,
-                question_solution: this.data.analyse
+                question_ans_num: this.edited_data.rightAnswer.length,
+                question_solution: this.edited_data.analysis
             };
-            this.data.rightAnswer.forEach(item => result.question_ans.push(item.name));
-            this.data.choices.forEach(item => result.question_choice.push(item.content));
+            this.edited_data.rightAnswer.forEach(item => result.question_ans.push(item.name));
+            this.edited_data.choices.forEach(item => result.question_choice.push(item.content));
             return result;
         }
+    },
+    created() {
+        this.edited_data = Object.assign({}, this.data);
     },
     data: function() {
         return {
@@ -263,9 +282,10 @@ export default {
                     },
                 ],
                 rightAnswer: [],
-                analyse: "",
+                analysis: "",
                 difficulty: 0,
             },
+            edited_data: null,
             valid: false
         };
     }

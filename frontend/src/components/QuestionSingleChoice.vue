@@ -108,7 +108,7 @@
         required
       ></v-textarea>
       <v-list-item>
-        <span>Level:</span>
+        <span>Difficulty:</span>
         <v-rating
           v-model="edited_question.question_level"
           color="yellow darken-3"
@@ -178,7 +178,7 @@ export default {
     };
   },
   created() {
-    this.edited_question = this.question;
+    this.edited_question = Object.assign({}, this.question);
   },
   methods: {
     choice_num_up() {
@@ -259,35 +259,20 @@ export default {
     },
     reset() {
       this.$refs.input.reset();
-      this.question.question_choice.splice(0, this.question.question_choice.length);
-      this.question.question_ans = undefined;
+      this.edited_question.question_choice.splice(0, this.question.question_choice.length);
+      this.edited_question.question_ans = undefined;
       this.$refs.uploader.reset();
+      this.question = Object.assign({}, this.edited_question);
     },
     cancel() {
       this.edited_question = Object.assign({}, this.question);
       this.$emit("cancel");
     },
     submit() {
-        let info = this.parse();
-            if(info.parents_node.length==0 && this.bankID){
-                //New question
-                info.parents_node=this.bankID;
-                axios.post("/api/questions/",[info]).then(response => {
-                    this.$emit("submit",info);
-                    this.question = Object.assign({}, this.edited_question);
-                }).catch(err => {
-                    console.log(info);
-                    console.log(err);
-                });
-            }else{
-                //Edit question
-                axios.put("/api/questions/"+info.id.toString()+"/",[info]).then(response => {
-                    this.$emit("submit",info);
-                }).catch(err => {
-                    console.log(info);
-                    console.log(err);
-                })
-            }
+      this.$emit("submit", this.parse());
+    },
+    submitted() {
+      this.question = Object.assign({}, this.edited_question);
     }
   }
 };
