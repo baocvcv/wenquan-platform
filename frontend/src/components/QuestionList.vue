@@ -1,7 +1,24 @@
 <template>
     <div id="question-list">
         <v-card>
-            <v-card-title>Question List</v-card-title>
+            <v-card-title>
+                Question List
+                <div class="flex-grow-1"></div>
+                <v-btn
+                    v-if="select"
+                    text
+                    @click="cancel_select"
+                >
+                    Cancel
+                </v-btn>
+                <v-btn
+                    v-if="select"
+                    text
+                    @click="done_select"
+                >
+                    Done
+                </v-btn>
+            </v-card-title>
             <v-app-bar flat clipped-left>
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <div class="flex-grow-1"></div>
@@ -108,7 +125,7 @@
                         <v-card>
                             <v-card-title>Create A Question</v-card-title>
                             <v-card-text>
-                                <question :readonly="false" :initData="null" :bankID="[id]" @submit="create"></question>
+                                <question :initData="null" :bankID="[id]" creation @submit="create"></question>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -133,7 +150,18 @@
                             :key="question.id"
                             cols="12"
                             >
-                                <question-list-item :question="question"></question-list-item>
+                                <v-row align="center">
+                                    <v-checkbox 
+                                        v-if="select"
+                                        v-model="selected_questions"
+                                        :value="question.id"
+                                        hide-details
+                                        class="shrink mr-2 mt-0"
+                                    ></v-checkbox>
+                                    <v-col>
+                                    <question-list-item :question="question"></question-list-item>
+                                    </v-col>
+                                </v-row>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -151,8 +179,18 @@ import question from "@/views/Question.vue";
 export default {
     name: "question-list",
     props: {
-        editable: Boolean,
-        id: Number,
+        editable: {
+            type: Boolean,
+            default: false
+        },
+        id: {
+            type: Number,
+            id: -1
+        },
+        select: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {
         "tree-view": tree_view,
@@ -178,7 +216,8 @@ export default {
                 "T/F",
                 "Blank Filling",
                 "Brief Answer"
-            ]
+            ],
+            selected_questions: []
         }
     },
     mounted() {
@@ -241,6 +280,14 @@ export default {
                     console.log(error);
                 })
             this.create_question_dialog = false;
+        },
+        cancel_select() {
+            this.selected_questions = [];
+            this.$emit("cancel-select");
+        },
+        done_select() {
+            console.log(this.selected_questions);
+            this.$emit("done-select", this.selected_questions);
         }
     },
 }
