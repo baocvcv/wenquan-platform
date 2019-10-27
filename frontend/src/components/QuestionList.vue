@@ -51,7 +51,7 @@
                                         >(+{{ type_filter.length - 1}} others)</span>
                                     </template>
                                 </v-select>
-                                <span class="grey--text caption">Level</span>
+                                <span class="grey--text caption">Difficulty</span>
                                 <v-row>
                                     <v-col>
                                         <v-select
@@ -108,7 +108,7 @@
                         <v-card>
                             <v-card-title>Create A Question</v-card-title>
                             <v-card-text>
-                                <question-view :readonly="false" :initData="null" :bankID="[id]" @submit="create"></question-view>
+                                <question :readonly="false" :initData="null" :bankID="[id]" @submit="create"></question>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -146,7 +146,7 @@
 <script>
 import tree_view from "@/components/TreeView.vue";
 import question_list_item from "@/components/QuestionListItem.vue"
-import question_view from "@/components/QuestionView.vue";
+import question from "@/views/Question.vue";
 
 export default {
     name: "question-list",
@@ -157,7 +157,7 @@ export default {
     components: {
         "tree-view": tree_view,
         "question-list-item": question_list_item,
-        "question-view": question_view
+        "question": question
     },
     data: function() {
         return {
