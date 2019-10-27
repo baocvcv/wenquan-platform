@@ -77,8 +77,6 @@ export default {
 
           this.sign_in_result="Success";
 
-          console.log(response);
-
           this.$router.push("/").catch(err => console.log(err));
         }).catch((response) => {
           this.sign_in_result = "Error";
