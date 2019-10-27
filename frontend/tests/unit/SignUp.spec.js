@@ -155,7 +155,7 @@ describe("SignUpBox.vue", () => {
       email: "kxz@qq.com",
       accept_terms: true
     });
-	wrapper.element.setAttribute("data-app", true);
+    wrapper.element.setAttribute("data-app", true);
     await wrapper.vm.$nextTick();
     wrapper.vm.$refs.input.validate();
     await wrapper.vm.$nextTick();
@@ -166,8 +166,8 @@ describe("SignUpBox.vue", () => {
       expect(wrapper.vm.sign_up_result).toBe("Success");
       done();
     }, 1000);
-	await wrapper.vm.redirect();
-	expect(wrapper.vm.show_dialog).toBe(false);
+    await wrapper.vm.redirect();
+    expect(wrapper.vm.show_dialog).toBe(false);
   });
 
   it("sign up failed", async done => {
@@ -184,7 +184,7 @@ describe("SignUpBox.vue", () => {
       email: "kxz@qq.com",
       accept_terms: true
     });
-	wrapper.element.setAttribute("data-app", true);
+    wrapper.element.setAttribute("data-app", true);
     await wrapper.vm.$nextTick();
     wrapper.vm.$refs.input.validate();
     await wrapper.vm.$nextTick();
@@ -193,7 +193,8 @@ describe("SignUpBox.vue", () => {
     await wrapper.vm.$nextTick();
     setTimeout(() => {
       expect(wrapper.vm.sign_up_result).toBe("Error");
-	  done();
+      done();
     }, 1000);
+	wrapper.vm.redirect(); 
   });
 });
