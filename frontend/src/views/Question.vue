@@ -54,6 +54,7 @@
                 :readonly="!creation && !(_editable && edit_mode)"
                 v-on:submit="submit"
                 v-on:cancel="cancel"
+                :creation="creation"
             ></question-brief-answer>
             <question-fill-in-blank
                 ref="fill_blank"
@@ -61,6 +62,7 @@
                 :readonly="!creation && !(_editable && edit_mode)"
                 v-on:submit="submit"
                 v-on:cancel="cancel"
+                :creation="creation"
             ></question-fill-in-blank>
         </v-card>
     </div>
@@ -114,11 +116,11 @@ export default {
             let url;
             if (this.questionID == -1)
             {
-                url="http://localhost:8000/api/questions/" + this.$route.params.id + "/";
+                url="/api/questions/" + this.$route.params.id + "/";
             }
             else
             {
-                url = "http://localhost:8000/api/questions/" + this.questionID + "/";
+                url = "/api/questions/" + this.questionID + "/";
             }
             axios.get(url)
                 .then((response) => {
@@ -166,7 +168,7 @@ export default {
             if(info.parents_node.length==0 && this.bankID){
                 //New question
                 info.parents_node=this.bankID;
-                axios.post("http://localhost:8000/api/questions/",[info]).then(response => {
+                axios.post("/api/questions/",[info]).then(response => {
                     this.edit_mode = false;
                     this.$emit("submit");
                 }).catch(err => {
@@ -175,7 +177,7 @@ export default {
                 });
             }else{
                 //Edit question
-                axios.put("http://localhost:8000/api/questions/"+info.id.toString()+"/",[info]).then(response => {
+                axios.put("/api/questions/"+info.id.toString()+"/",[info]).then(response => {
                     this.$refs[this.typeSelected].submitted();
                     this.edit_mode = false;
                     this.$emit("submit");
