@@ -166,6 +166,8 @@ describe("SignUpBox.vue", () => {
       expect(wrapper.vm.sign_up_result).toBe("Success");
       done();
     }, 1000);
+	await wrapper.vm.redirect();
+	expect(wrapper.vm.show_dialog).toBe(false);
   });
 
   it("sign up failed", async done => {
