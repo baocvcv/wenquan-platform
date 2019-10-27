@@ -1,10 +1,10 @@
 <template>
     <div class="brief-answer-component">
         <v-form ref="form" v-model="valid">
-            <v-text-field label="Title" v-model="data.title" outlined :readonly="readonly"></v-text-field>
+            <v-text-field label="Title" v-model="edited_data.title" outlined :readonly="readonly"></v-text-field>
             <v-textarea 
                 label="Content"
-                v-model="data.content" 
+                v-model="edited_data.content" 
                 :rules="[v => !!v || 'Question content is required!']"
                 outlined
                 auto-grow
@@ -13,7 +13,7 @@
             <br/>
 			<image-uploader
 			  ref="uploader"
-			  v-model="data.image"
+			  v-model="edited_data.image"
 			  width="50%"
 			  label="picture"
 			  :readonly="readonly"
@@ -23,7 +23,7 @@
 			<br/>
             <v-textarea 
                 label="Answer"
-                v-model="data.answer" 
+                v-model="edited_data.answer" 
                 :rules="[v => !!v || 'Answer is required!']"
                 outlined
                 auto-grow
@@ -31,9 +31,9 @@
             ></v-textarea>
             <br/>
             <v-textarea 
-                label="Analyse"
-                v-model="data.analyse" 
-                :rules="[v => !!v || 'Analyse is required!']"
+                label="Analysis"
+                v-model="edited_data.analysis" 
+                :rules="[v => !!v || 'Analysis is required!']"
                 outlined
                 auto-grow
                 :readonly="readonly"
@@ -41,7 +41,7 @@
             <v-list-item>
                 <span>Difficulty:</span>
                 <v-rating
-                    v-model="data.difficulty"
+                    v-model="edited_data.difficulty"
                     color="yellow darken-3"
                     background-color="grey darken-1"
                     :readonly="readonly"
@@ -61,9 +61,12 @@
                 class="mr-4"
                 color="error"
                 @click="reset()"
-                v-if="!readonly"
+                v-if="!readonly && creation"
             >
                 Reset
+            </v-btn>
+            <v-btn v-if="!readonly" @click="cancel">
+                Cancel
             </v-btn>
         </v-form>
     </div>
@@ -81,11 +84,18 @@ export default {
             type: Boolean,
             default: false
         },
+        creation: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         canSubmit() {
             return this.valid;
         }
+    },
+    created() {
+        this.edited_data = this.data;
     },
     methods: {
         submit() {
@@ -95,6 +105,13 @@ export default {
             this.$refs.form.reset();
 			this.$refs.uploader.reset();
         },
+        cancel() {
+            this.edited_data = Object.assign({}, this.data);
+            this.$emit("cancel");
+        },
+        submitted() {
+            this.data = Object.assign({}, this.edited_data);
+        },
         updateData(input) {
             //parse data input from backend
             this.data.id = input.id;
@@ -103,23 +120,24 @@ export default {
             this.data.title = input.question_name;
             this.data.content = input.question_content;
 			this.data.image = input.question_image;
-            this.data.analyse = input.question_solution;
+            this.data.analysis = input.question_solution;
             this.data.difficulty = input.question_level;
             this.data.answer = input.question_ans;
+            this.edited_data = Object.assign({}, this.data);
         },
         parse() {
             let result = {
-                id: this.data.id,
-                parents_node: this.data.parents,
-                question_change_time: this.data.change_time,
-                question_name: this.data.title,
+                id: this.edited_data.id,
+                parents_node: this.edited_data.parents,
+                question_change_time: this.edited_data.change_time,
+                question_name: this.edited_data.title,
                 question_type: "brief_ans",
-                question_level: this.data.difficulty,
-                question_content: this.data.content,
-                question_image: this.data.image,
+                question_level: this.edited_data.difficulty,
+                question_content: this.edited_data.content,
+                question_image: this.edited_data.image,
                 question_choice: [],
-                question_ans: this.data.answer, 
-                question_solution: this.data.analyse
+                question_ans: this.edited_data.answer, 
+                question_solution: this.edited_data.analysis
             };
             console.log(JSON.stringify(result));
             return result;
@@ -135,9 +153,10 @@ export default {
                 content: "",
 				image: [],
                 answer: "",
-                analyse: "",
+                analysis: "",
                 difficulty: 0,
             },
+            edited_data: null,
             valid: false
         };
     }
