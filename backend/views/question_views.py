@@ -151,6 +151,8 @@ class QuestionDetail(APIView):
     def put(self, request, q_id):
         """Upate information of the Question whose id=q_id"""
         post_data = JSONParser().parse(request)[0]
+        if "id" in post_data:
+            post_data.pop("id")
         old_q = self.get_object(q_id)
 
         q_group = old_q.history_version
