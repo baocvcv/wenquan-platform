@@ -195,6 +195,6 @@ describe("SignUpBox.vue", () => {
       expect(wrapper.vm.sign_up_result).toBe("Error");
       done();
     }, 1000);
-	wrapper.vm.redirect(); 
+    wrapper.vm.redirect(); 
   });
 });
