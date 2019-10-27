@@ -82,6 +82,77 @@ describe("SignInBox.vue", () => {
         },1000);
     });
 
+    it("Try login with session", async done => {
+        const store = new Vuex.Store({
+          state: {
+            user: null
+          },
+          mutations: {
+            login(state, payload) {
+              state.user = payload.user;
+              sessionStorage.setItem('user',JSON.stringify(payload.user));
+            }
+          },
+          actions: {}
+        });
+        const wrapper=mount(SignInBox, {
+            localVue,
+            vuetify,
+            store,
+            router,
+            sync: false,
+            attachToDocument: true
+        });
+        sessionStorage.setItem("user",JSON.stringify({
+            username:"test",
+            password:"test"
+        }))
+        await wrapper.vm.$nextTick();
+        wrapper.find("button").trigger("click");
+        await wrapper.vm.$nextTick();
+        setTimeout(() => {
+            expect(wrapper.vm.sign_in_result).toBe("");
+            sessionStorage.removeItem('user');
+            done();
+        },1000);
+    });
+
+    it("Try login with banned", async done => {
+        const store = new Vuex.Store({
+          state: {
+            user: null
+          },
+          mutations: {
+            login(state, payload) {
+              state.user = payload.user;
+              sessionStorage.setItem('user',JSON.stringify(payload.user));
+            }
+          },
+          actions: {}
+        });
+        const wrapper=mount(SignInBox, {
+            localVue,
+            vuetify,
+            store,
+            router,
+            sync: false,
+            attachToDocument: true
+        });
+        wrapper.setData({
+            username: "bannedusr",
+            password: "bannedpsw"
+        });
+        await wrapper.vm.$nextTick();
+        wrapper.find("button").trigger("click");
+        await wrapper.vm.$nextTick();
+        setTimeout(() => {
+            expect(wrapper.vm.sign_in_result).toBe("Error");
+            expect(wrapper.vm.sign_in_response).toBe("You are banned! Please contact your administrator.")
+            sessionStorage.removeItem('user');
+            done();
+        },1000);
+    });
+
     it("Try login wrongly", async done => {
         const store = new Vuex.Store({
           state: {
@@ -109,10 +180,8 @@ describe("SignInBox.vue", () => {
         });
         await wrapper.vm.$nextTick();
         wrapper.find("button").trigger("click");
-        console.log(wrapper.find("button"));
         await wrapper.vm.$nextTick();
         setTimeout(() => {
-            console.log(wrapper.vm.sign_in_response);
             expect(wrapper.vm.sign_in_result).toBe("Error");
             done();
         },1000);
