@@ -1,123 +1,215 @@
 <template>
-    <div class="tree-view">
-        <tree :items="testData" v-model="selection"></tree>
+    <div class="treeview">
+        <tree-view :model="testData" category="children" :selection="selection" 
+        :onSelect="select" :display="item => item.label" class="TreeViewDemo" :dragndrop="d"
+        :strategies="strategies"/>
+        {{ selection }}
+        <br/>
+        {{ testData }}
     </div>
 </template>
 
-<style>
-.tree-row:before{
-    content: "";
-    position: absolute;
-    z-index: -1;
-    background: #eeeeee;
-    border-radius: 10%;
-    transform: scaleX(0);
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition:transform 0.3s ease-out;
-}
-.tree-row:hover:before{
-    transform: scaleX(2);
-}
-.tree-row{
-    transform: perspective(1px) translateZ(0);
-    overflow: hidden;
-}
-.tree-row:hover{
-    background: none !important;
-}
-</style>
-
 <script>
-//import tree from "drag-tree-table"
-//https://github.com/mafengwo/vue-drag-tree-table
-import tree from "@/components/tree/TreeView";
+import { TreeView } from "@bosket/vue"
+import { dragndrop } from "@bosket/core"
 export default {
-    name: "tree-view",
+    name: "treeview",
     components: {
-        tree
-    },
-    data: function(){
-        return {
-            testData: {
-                name: "Root",
-                children: [
-                    {
-                        name:"1"
-                    },
-                    {
-                        name:"2"
-                    }
-                ]
-            },
-            selection: [],
-            treeData: {
-                columns: [
-                    {
-                        type: 'selection',
-                        title: '知识点',
-                        field: 'name',
-                        width: 200,
-                        align: 'center',
-                        formatter: (item) => {
-                            return item.name
-                        }
-                    },
-                    {
-                        type: 'checkbox',
-                        isContainChildren: true, //是否勾选子节点，默认false
-                        onChange: this.onCheck, // parmas selectRows
-                        width: 200,
-                        align: 'center'
-                    }
-                ],
-                lists: [//test
-                    {
-                    "id":40,
-                    "parent_id":0,
-                    "order":0,
-                    "name":"动物类",
-                    "open":true,
-                    "lists":[]
-                    },{
-                    "id":5,
-                    "parent_id":0,
-                    "order":0,
-                    "name":"昆虫类",
-                    "open":true,
-                    "isShowCheckbox": false,
-                    "lists":[
-                        {
-                        "id":12,
-                        "parent_id":5,
-                        "open":true,
-                        "order":0,
-                        "name":"蚂蚁",
-                        "uri":"/masd/ds",
-                        "lists":[]
-                        }
-                    ]
-                    },
-                    {
-                    "id":19,
-                    "parent_id":0,
-                    "order":1,
-                    "name":"植物类",
-                    "open":true,
-                    "lists":[]
-                    }
-                ],
-            }
-        };
+        "tree-view": TreeView
     },
     methods: {
-        onTreeDataChange(list, from, to, where) {
-            console.log(from, to, where);
-            this.treeData.lists = list;
-            console.log(JSON.stringify(list));
+        select(newOne) {
+            this.selection=newOne
+        }
+    },
+    data: function() {
+        return {
+            d: { ...dragndrop.selection(() => this.testData, m => this.testData = m)},
+            strategies: {
+                selection: ["multiple"],
+                click: ["select", "unfold-on-selection"],
+                fold: ["opener-control", "no-child-selection"]
+            },
+            testData: [
+                    { label: "Click me, I'm a node with two children.", children: [
+                        { label: "I am a childless leaf." },
+                        { label: "I am a also a childless leaf." }
+                    ]},
+                    { label: "I'm a leaf, I do not have children.",children:[] },
+                    { label: "I am an asynchronous node, click me and wait one second."}
+                ],
+            selection: [],
         }
     }
 }
 </script>
+
+<style>
+/* Search bar */
+
+.TreeViewDemo>input[type="search"] {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    height: 3em;
+    border-width: 2px;
+    transition: border 0.5s;
+}
+
+/* Elements */
+
+.TreeViewDemo {
+    box-shadow: 0px 0px 10px #DADADA;
+    white-space: nowrap;
+}
+
+.TreeViewDemo ul {
+    list-style: none;
+}
+
+.TreeViewDemo li {
+    min-width: 100px;
+    transition: all 0.25s ease-in-out;
+}
+
+.TreeViewDemo ul li a {
+    color: #222;
+}
+
+.TreeViewDemo ul li>.item>a {
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 55px);
+    margin-right: 30px;
+    padding: 10px 5px;
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+.TreeViewDemo ul li:not(.disabled) {
+    cursor: pointer;
+}
+
+.TreeViewDemo li.selected {
+    color:crimson;
+}
+
+.TreeViewDemo ul li.selected>.item>a {
+    color: crimson;
+}
+
+.TreeViewDemo ul li.selected>.item>a:hover {
+    color: #aaa;
+}
+
+.TreeViewDemo ul li:not(.disabled)>.item>a:hover {
+    color: #e26f6f;
+}
+
+
+/* Root elements */
+
+.TreeViewDemo ul.depth-0 {
+    padding: 20px;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+    user-select: none;
+    transition: all 0.25s;
+}
+
+
+/* Categories : Nodes with children */
+
+.TreeViewDemo li.category>.item {
+    display: block;
+    margin-bottom: 5px;
+    transition: all 0.25s ease-in-out;
+}
+
+/*
+.TreeViewDemo li.category:not(.folded)>.item {
+    border-bottom: 1px solid crimson;
+}
+*/
+
+
+/* Category opener */
+
+.TreeViewDemo .opener {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.TreeViewDemo .opener::after {
+    content: '+';
+    display: block;
+    transition: all 0.25s;
+    font-family: monospace;
+}
+
+.TreeViewDemo li.category.async>.item>.opener::after {
+    content: '!';
+}
+
+.TreeViewDemo .opener:hover {
+    color: #e26f6f;
+}
+
+.TreeViewDemo li.category:not(.folded)>.item>.opener::after {
+    color: crimson;
+    transform: rotate(45deg);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+.TreeViewDemo li.category.loading>.item>.opener::after {
+    animation: spin 1s infinite;
+}
+
+
+/* Animations on fold / unfold */
+
+.TreeViewDemoTransition-enter, .TreeViewDemoTransition-leave-to {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.TreeViewDemoTransition-enter-active, .TreeViewDemoTransition-leave-active {
+    transition: all .3s ease-in-out;
+}
+
+
+/* Drag'n'drop */
+
+.TreeViewDemo li.dragover, .TreeViewDemo ul.dragover {
+    box-shadow: 0px 0px 5px #CCC
+}
+
+.TreeViewDemo ul.dragover {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+.TreeViewDemo li.dragover {
+    background-color: rgba(100, 100, 100, 0.05);
+    padding: 0px 5px;
+}
+
+.TreeViewDemo li.dragover>span.item {
+    border-color: transparent;
+}
+
+.TreeViewDemo li.nodrop {
+    box-shadow: 0px 0px 5px crimson;
+    background-color: rgba(255, 20, 60, 0.1);
+    padding: 0px 5px;
+}
+
+</style>

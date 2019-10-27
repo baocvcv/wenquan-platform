@@ -11,9 +11,16 @@ MAX_URL = 10000000
 class QuestionBank(PolymorphicModel):
     """Models for Question Banks
     Attributes:
-        name: name of bank
-        subnodes: children Knowledge Node of bank
-        questions: children question of bank
+        root_id: The id of root KnowledgeNode
+        name: Name of bank
+        picture: The url of banks icon
+        brief: The brief introduction of bank
+        createTime: The date and time when bank was created
+        lastUpdate: The date and time of the latest modifying
+        authority: The authority of bank
+        question_count: The number of QuestionGroup related to bank
+        invitation_code_count: The number of invitation code of bank
+        activated_code_count: The number of activated invitation bank
     """
     root_id = models.IntegerField()
     name = models.CharField(max_length=MAX_NAME)

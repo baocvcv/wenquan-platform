@@ -30,7 +30,20 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes', 'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles', 'backend', 'rest_framework', 'rest_framework.authtoken', 'polymorphic', 'corsheaders']
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'backend',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'polymorphic',
+    'corsheaders',
+    # 'mailer',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,23 +135,28 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),
 ]
 
-# Email settings
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'smtp.163.com'
-EMAIL_HOST_USER = 'baocvcv@163.com'
-EMAIL_HOST_PASSWORD = 'BaoHan828'
-EMAIL_PORT = 25
-DEFAULT_FROM_EMAIL = 'baocvcv@163.com'
-
 # Rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    #  'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
 }
 
 # authentication settings
 AUTH_USER_MODEL = 'backend.User'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
+
+# email backend
+# EMAIL_BACKEND = 'mailer.backend.DbBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAILER_EMAIL_MAX_DEFERRED = 5
+
+try:
+    from config.local_settings import *
+except ImportError:
+    print("local settings not found")
