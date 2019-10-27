@@ -156,7 +156,7 @@ export default {
             this.hide_content = true;
         },
         click() {
-            this.$router.push("/question/" + this.question.id + "/");
+            this.$router.push("/questions/" + this.question.id + "/");
         }
     }
 }
