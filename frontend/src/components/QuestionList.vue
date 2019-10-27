@@ -1,7 +1,24 @@
 <template>
     <div id="question-list">
         <v-card>
-            <v-card-title>Question List</v-card-title>
+            <v-card-title>
+                Question List
+                <div class="flex-grow-1"></div>
+                <v-btn
+                    v-if="select"
+                    text
+                    @click="cancel_select"
+                >
+                    Cancel
+                </v-btn>
+                <v-btn
+                    v-if="select"
+                    text
+                    @click="done_select"
+                >
+                    Done
+                </v-btn>
+            </v-card-title>
             <v-app-bar flat clipped-left>
                 <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
                 <div class="flex-grow-1"></div>
@@ -133,6 +150,11 @@
                             :key="question.id"
                             cols="12"
                             >
+                                <v-checkbox 
+                                    v-if="select"
+                                    v-model="selected_questions"
+                                    :value="question.id"
+                                >
                                 <question-list-item :question="question"></question-list-item>
                             </v-col>
                         </v-row>
@@ -151,8 +173,18 @@ import question from "@/views/Question.vue";
 export default {
     name: "question-list",
     props: {
-        editable: Boolean,
-        id: Number,
+        editable: {
+            type: Boolean,
+            default: false
+        },
+        id: {
+            type: Number,
+            id: -1
+        },
+        select: {
+            type: Boolean,
+            default: false
+        }
     },
     components: {
         "tree-view": tree_view,
@@ -178,7 +210,8 @@ export default {
                 "T/F",
                 "Blank Filling",
                 "Brief Answer"
-            ]
+            ],
+            selected_questions: []
         }
     },
     mounted() {
@@ -241,6 +274,14 @@ export default {
                     console.log(error);
                 })
             this.create_question_dialog = false;
+        },
+        cancel_select() {
+            this.selected_questions = [];
+            this.$emit("cancel-select");
+        },
+        done_select() {
+            console.log(this.selected_questions);
+            this.$emit("done-select", this.selected_questions);
         }
     },
 }
