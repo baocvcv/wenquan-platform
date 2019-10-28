@@ -1,12 +1,45 @@
 <template>
     <div class="treeview">
         <tree-view :model="testData" category="subnodes" :selection="selection" 
-        :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="d"
+        :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="drag_drop"
         :strategies="strategies" :transition="transition" :openerOpts="openerOpts"/>
         {{ selection }}
         <br/>
         {{ testData }}
-        <v-btn v-if="edit" @click="submit">Submit</v-btn>
+        <div>
+            <v-btn v-if="edit" @click="addSubNode" color="success" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+            <v-btn v-if="edit" @click="removeNode" color="error" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-minus</v-icon>
+            </v-btn>
+            <v-btn v-if="edit" @click="rename" color="primary" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+        </div>
+        <v-dialog v-model="renameDialog" persistent max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Rename</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-text-field v-model="renameName"></v-text-field>
+                        <v-btn @click="renameConfirmation" class="mx-2" color="primary"
+                            :disabled="renameName == ''"
+                        >Confirm</v-btn>
+                        <v-btn @click="renameDialog = false" class="mx-2">Cancel</v-btn>
+                    </v-container>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-btn v-if="edit" @click="submit" color="success" class="mx-2 my-2">Submit</v-btn>
     </div>
 </template>
 
@@ -25,7 +58,7 @@ export default {
         },
         edit: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     methods: {
@@ -34,15 +67,52 @@ export default {
             if(!this.edit) this.$emit("selectChange",newOne);
         },
         submit() {
-            this.$emit("treeSubmit",treeData);
+            this.$emit("treeSubmit",this.treeData);
+        },
+        addSubNode(){
+            if(this.selection.length > 0){
+                let newNode={
+                    id: -1,
+                    name: "No name",
+                    subnodes: []
+                };
+                this.selection[0].subnodes.push(newNode);
+            }
+        },
+        removeNode(){
+            if(this.selection.length > 0){
+                this.selection[0].id=-2;
+                let removeFunc=(item,index,arr) => {
+                    if(item.id==-2){
+                        arr.splice(index,1);
+                        return;
+                    }
+                    if(item.subnodes)
+                        item.subnodes.forEach(removeFunc);
+                }
+                this.testData.forEach(removeFunc);
+                this.selection=[];
+            }
+        },
+        rename(){
+            if(this.selection.length > 0){
+                this.renameName = this.selection[0].name;
+                this.renameDialog = true;
+            }
+        },
+        renameConfirmation(){
+            this.selection[0].name = this.renameName;
+            this.renameDialog = false;
         }
     },
     data: function() {
         return {
-            d: { ...dragndrop.selection(() => this.testData, m => this.testData = m)},
+            drag_drop: this.edit
+                ? { ...dragndrop.selection(() => this.testData, m => this.testData = m)}
+                : null,
             strategies: {
-                selection: ["multiple"],
-                click: ["select", "toggle-fold"],
+                selection: this.edit ? ["single"] : ["multiple"],
+                click: ["select", "unfold-on-selection"],
                 fold: ["opener-control"]
             },
             display: item => {
@@ -55,6 +125,8 @@ export default {
             openerOpts: {
                 position: "right"
             },
+            renameDialog: false,
+            renameName: "",
             testData: [
                     { name: "Click me, I'm a node with two subnodes.", subnodes: [
                         { name: "I am a childless leaf." },
