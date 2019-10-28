@@ -53,13 +53,18 @@ describe("CreateQuestionBank.vue", () => {
       name: "test",
       brief: "brief",
       authority: "private",
-      invitation_code_count: 100,
+      invitation_code_count: "not a number",
       image: [""]
     });
     wrapper.vm.$router.push("/");
     await wrapper.vm.$nextTick();
     wrapper.vm.$refs.form.validate();
     await wrapper.vm.$nextTick();
+    expect(wrapper.vm.valid).toBe(false);
+	wrapper.vm.invitation_code_count = 100;
+	await wrapper.vm.$nextTick();
+	wrapper.vm.$refs.form.validate();
+	await wrapper.vm.$nextTick();
     expect(wrapper.vm.valid).toBe(true);
     const submit_btn = wrapper.findAll("button").at(1);
     submit_btn.trigger("click");
