@@ -2,7 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import "mock/QuestionBanksListMock.js";
+import "./mock/QuestionBanksListMock.js";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 
@@ -29,8 +29,8 @@ describe("SignUp.vue", () => {
       }
     };
     wrapper.setProps({
-      question_banks: [question_bank],
-    })
+      question_banks: [question_bank]
+    });
     wrapper.setData({
       cur_qst_bank: question_bank
     });
@@ -47,7 +47,7 @@ describe("SignUp.vue", () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.exists("Confirm")).toBe(true);
     expect(wrapper.exists("Cancel")).toBe(true);
-	wrapper.vm.show_del_dialog = false;
+    wrapper.vm.show_del_dialog = false;
     done();
   });
 
@@ -69,16 +69,47 @@ describe("SignUp.vue", () => {
       }
     };
     wrapper.setProps({
-      question_banks: [question_bank],
-    })
+      question_banks: [question_bank]
+    });
     wrapper.setData({
       cur_qst_bank: question_bank
     });
-	wrapper.vm.show_del_dialog = true;
+    wrapper.vm.show_del_dialog = true;
     await wrapper.vm.$nextTick();
-	wrapper.vm.delete_qst_bank();
-	setTimeout(() => {
-	  done();
-	});
+    wrapper.vm.delete_qst_bank();
+    setTimeout(() => {
+      done();
+    }, 1000);
+  });
+  it("Fail to delete question bank", async done => {
+    window.alert = jest.fn();
+    const wrapper = mount(QuestionBanksList, {
+      vuetify,
+      localVue,
+      sync: false,
+      attachToDocument: true
+    });
+    wrapper.element.setAttribute("data-app", true);
+    const question_bank = {
+      id: 2,
+      name: "Error",
+      brief: "brief",
+      icon: "mdi-eye",
+      details: {
+        question_number: 200
+      }
+    };
+    wrapper.setProps({
+      question_banks: [question_bank]
+    });
+    wrapper.setData({
+      cur_qst_bank: question_bank
+    });
+    wrapper.vm.show_del_dialog = true;
+    await wrapper.vm.$nextTick();
+    wrapper.vm.delete_qst_bank();
+    setTimeout(() => {
+      done();
+    }, 1000);
   });
 });
