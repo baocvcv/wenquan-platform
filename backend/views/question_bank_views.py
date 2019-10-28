@@ -7,7 +7,6 @@ from django.http import Http404
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
-from backend.models.questions.question import INT2TYPE
 from .question_views import QuestionList
 
 
@@ -62,12 +61,7 @@ class QuestionBankDetail(APIView):
             if not i.question_set.all():
                 continue
             question = QuestionList.get_latest_version(i)
-
-            serializer = QuestionList.create_serializer_from_question(question)
-
-            question_data = serializer.data
-            question_data['question_type'] = INT2TYPE[(str)(question_data['question_type'])]
-            questions.append(question_data)
+            questions.append(question.id)
 
         response['questions'] = questions
         response['id'] = bank.id
