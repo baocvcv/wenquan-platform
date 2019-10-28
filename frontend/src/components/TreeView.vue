@@ -45,36 +45,60 @@
 </template>
 
 <script>
-import { TreeView } from "@bosket/vue"
-import { dragndrop } from "@bosket/core"
+import { TreeView } from "@bosket/vue";
+import { dragndrop } from "@bosket/core";
+import axios from "axios";
+
 export default {
     name: "treeview",
     components: {
         "tree-view": TreeView
     },
+    model: {
+        prop: "selection",
+        event: "selectChange"
+    },
     props: {
         editable: {
             type: Boolean,
             default: false
+        },
+        selection: {
+            type: Array,
+            default: () => []
+        },
+        bankID: {
+            tyre: Number,
+            default: -1
         }
     },
     mounted() {
-        this.treeData = [{
-            id: 0,
-            name: "Loading...",
-            subnodes: []
-        }];
         this.drag_drop.draggable = false;
+        if(this.bankID != -1){
+            axios.get("/api/nodes_list/"+ this.id + "/")
+            .then(response => {
+                this.treeData = [response.data];
+            })
+            .catch(error => {
+                this.treeData = [{
+                    id: 0,
+                    name: error.toString()
+                }];
+            });
+        }
     },
     methods: {
         updateData(data) {
+            //load data
             this.treeData = data;
         },
         select(newOne) {
+            //a new selection
             this.selection=newOne
             if(!this.edit) this.$emit("selectChange",newOne);
         },
         beginEdit() {
+            //begin edit mode
             this.formerTreeData = JSON.stringify(this.treeData);
             this.selection
             this.edit = true;
@@ -83,21 +107,32 @@ export default {
             this.drag_drop.draggable = true;
         },
         submit() {
-            this.$emit("treeSubmit",this.treeData);
+            //submit modification
+
+            //check new nodes
+            let travalNewNodes = async (item,index,arr) => {
+                if(item.id==-1);//TO BE CONTINUED
+            };
+
+
             this.edit = false;
             this.selection = [];
+            this.$emit("selectChange",[]);
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
         cancel() {
+            //Cancel Change
             this.treeData = JSON.parse(this.formerTreeData);
             this.edit = false;
             this.selection = [];
+            this.$emit("selectChange",[]);
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
         addSubNode(){
-            if(this.selection.length > 0){
+            //add a sub node at selected one
+            if(this.selection.length > 0 && this.selection[0].subnodes){
                 let newNode={
                     id: -1,
                     name: "No name",
@@ -107,6 +142,7 @@ export default {
             }
         },
         removeNode(){
+            //remove the selected node
             if(this.selection.length > 0){
                 this.selection[0].id=-2;
                 let removeFunc=(item,index,arr) => {
@@ -122,12 +158,14 @@ export default {
             }
         },
         rename(){
+            //rename start
             if(this.selection.length > 0){
                 this.renameName = this.selection[0].name;
                 this.renameDialog = true;
             }
         },
         renameConfirmation(){
+            //rename confirm
             this.selection[0].name = this.renameName;
             this.renameDialog = false;
         }
@@ -136,7 +174,10 @@ export default {
         return {
             edit: false,
             formerTreeData: "",
-            treeData: [],
+            treeData: [{
+                id: 0,
+                name: "Loading...",
+            }],
             drag_drop: { ...dragndrop.selection(() => this.treeData, m => this.treeData = m)},
             strategies: {
                 selection: ["multiple"],
@@ -155,7 +196,6 @@ export default {
             },
             renameDialog: false,
             renameName: "",
-            selection: [],
         }
     }
 }

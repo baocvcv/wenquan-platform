@@ -121,7 +121,8 @@
                         md="4"
                         sm="6"
                         >
-                        <tree-view ref="tree_view" :treeData="[{id:1,name:'root',subnodes:[]}]" editable></tree-view>
+                        <tree-view :bankID="id" v-model="tree_selection" editable></tree-view>
+                           {{ tree_selection }} 
                     </v-col>
                     <v-col
                         :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
@@ -167,7 +168,7 @@ export default {
             level_max_filter: 5,
             drawer: null,
             question_list: [],
-            tree_data: [],
+            tree_selection: [],
             sort_menu: [
                 "Popularity",
                 "Level"
@@ -189,14 +190,6 @@ export default {
                 this.question_list = response.data.questions;
             })
             .catch((error) => {
-                console.log(error);
-            })
-        this.$axios
-            .get("/api/nodes_list/"+ this.id + "/")
-            .then(response => {
-                this.$refs.tree_view.updateData([response.data]);
-            })
-            .catch(error => {
                 console.log(error);
             })
     },
