@@ -6,17 +6,17 @@
         <div>
             <v-btn v-if="editable && !edit" @click="beginEdit" text>Edit</v-btn>
             <v-btn v-if="edit" @click="addSubNode" color="success" small fab class="mx-2 my-2"
-                :disabled="selection.length == 0"
+                :disabled="currentSelection.length == 0"
             >
                 <v-icon>mdi-plus</v-icon>
             </v-btn>
             <v-btn v-if="edit" @click="removeNode" color="error" small fab class="mx-2 my-2"
-                :disabled="selection.length == 0"
+                :disabled="currentSelection.length == 0"
             >
                 <v-icon>mdi-minus</v-icon>
             </v-btn>
             <v-btn v-if="edit" @click="rename" color="primary" small fab class="mx-2 my-2"
-                :disabled="selection.length == 0"
+                :disabled="currentSelection.length == 0"
             >
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
@@ -106,7 +106,6 @@ export default {
         beginEdit() {
             //begin edit mode
             this.formerTreeData = JSON.stringify(this.treeData);
-            this.selection
             this.edit = true;
             this.$emit("selectChange",[]);
             this.singleSelection = [];
@@ -149,19 +148,19 @@ export default {
         },
         addSubNode(){
             //add a sub node at selected one
-            if(this.selection.length > 0 && this.selection[0].subnodes){
+            if(this.currentSelection.length > 0 && this.currentSelection[0].subnodes){
                 let newNode={
                     id: -1,
                     name: "No name",
                     subnodes: []
                 };
-                this.selection[0].subnodes.push(newNode);
+                this.currentSelection[0].subnodes.push(newNode);
             }
         },
         removeNode(){
             //remove the selected node
-            if(this.selection.length > 0){
-                this.selection[0].id=-2;
+            if(this.currentSelection.length > 0){
+                this.currentSelection[0].id=-2;
                 let removeFunc=(item,index,arr) => {
                     if(item.id==-2){
                         arr.splice(index,1);
@@ -171,7 +170,7 @@ export default {
                         item.subnodes.forEach(removeFunc);
                 }
                 this.treeData.forEach(removeFunc);
-                this.selection=[];
+                this.singleSelection=[];
             }
         },
         rename(){

@@ -185,7 +185,7 @@ export default {
         },
         id: {
             type: Number,
-            id: -1
+            default: -1
         },
         select: {
             type: Boolean,
@@ -193,7 +193,7 @@ export default {
         },
         questions: {
             type: Array,
-            default: []
+            default: () => []
         }
     },
     components: {
