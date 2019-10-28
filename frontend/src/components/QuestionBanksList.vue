@@ -139,9 +139,7 @@ export default {
     delete_qst_bank() {
       let that = this;
       axios
-        .post("/api/question_banks/" + that.cur_qst_bank.id + "/", {
-          id: that.cur_qst_bank.id
-        })
+        .delete("/api/question_banks/" + that.cur_qst_bank.id + "/")
         .catch(error => {
           alert(error);
         });
