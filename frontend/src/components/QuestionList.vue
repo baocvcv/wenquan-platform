@@ -122,7 +122,6 @@
                         sm="6"
                         >
                         <tree-view :bankID="id" v-model="tree_selection" editable></tree-view>
-                           {{ tree_selection }} 
                     </v-col>
                     <v-col
                         :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"

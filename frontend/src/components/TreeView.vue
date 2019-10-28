@@ -1,6 +1,6 @@
 <template>
     <div class="treeview">
-        <tree-view :model="treeData" category="subnodes" :selection="selection" 
+        <tree-view :model="treeData" category="subnodes" :selection="currentSelection" 
         :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="drag_drop"
         :strategies="strategies" :transition="transition" :openerOpts="openerOpts"/>
         <div>
@@ -87,6 +87,12 @@ export default {
             });
         }
     },
+    computed: {
+        currentSelection() {
+            //returns the selection in used
+            return this.edit ? this.singleSelection : this.selection;
+        }
+    },
     methods: {
         updateData(data) {
             //load data
@@ -94,15 +100,16 @@ export default {
         },
         select(newOne) {
             //a new selection
-            this.selection=newOne
-            if(!this.edit) this.$emit("selectChange",newOne);
+            if(this.edit) this.singleSelection=newOne
+            else this.$emit("selectChange",newOne);
         },
         beginEdit() {
             //begin edit mode
             this.formerTreeData = JSON.stringify(this.treeData);
             this.selection
             this.edit = true;
-            this.selection = [];
+            this.$emit("selectChange",[]);
+            this.singleSelection = [];
             this.strategies.selection = ["single"];
             this.drag_drop.draggable = true;
         },
@@ -111,13 +118,23 @@ export default {
 
             //check new nodes
             let travalNewNodes = async (item,index,arr) => {
-                if(item.id==-1);//TO BE CONTINUED
+                if(item.id==-1){
+                    let response = await axios.post("/api/nodes_list/" + this.bankID + "/",{
+                        name: item.name
+                    });
+                    item.id = response[0].id;
+                }
+                if(item.subnodes)
+                    item.subnodes.forEach(travalNewNodes);
             };
-
+            this.treeData.forEach(travalNewNodes);
+            
+            //submit changes
+            axios.put("/api/nodes_list/" + this.bankID + "/").catch(err => console.log(err));
 
             this.edit = false;
-            this.selection = [];
             this.$emit("selectChange",[]);
+            this.singleSelection = [];
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
@@ -125,8 +142,8 @@ export default {
             //Cancel Change
             this.treeData = JSON.parse(this.formerTreeData);
             this.edit = false;
-            this.selection = [];
             this.$emit("selectChange",[]);
+            this.singleSelection = [];
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
@@ -178,6 +195,11 @@ export default {
                 id: 0,
                 name: "Loading...",
             }],
+            singleSelection: [],//used only in edit mode
+            renameDialog: false,
+            renameName: "",
+
+            //tree properties
             drag_drop: { ...dragndrop.selection(() => this.treeData, m => this.treeData = m)},
             strategies: {
                 selection: ["multiple"],
@@ -194,8 +216,6 @@ export default {
             openerOpts: {
                 position: "right"
             },
-            renameDialog: false,
-            renameName: "",
         }
     }
 }
