@@ -121,7 +121,7 @@
                         md="4"
                         sm="6"
                         >
-                        <tree-view></tree-view>
+                        <tree-view ref="tree_view" :treeData="[{id:1,name:'root',subnodes:[]}]" editable></tree-view>
                     </v-col>
                     <v-col
                         :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
@@ -167,6 +167,7 @@ export default {
             level_max_filter: 5,
             drawer: null,
             question_list: [],
+            tree_data: [],
             sort_menu: [
                 "Popularity",
                 "Level"
@@ -182,45 +183,20 @@ export default {
         }
     },
     mounted() {
-        /*
-        let question_1 = {
-            id: 1,
-            parents_node: [0, 1],
-            question_change_time: "2019-10-22",
-            question_name: "Name 1",
-            question_type: "single",
-            question_level: 2,
-            question_content: "What's the result of 1 + 1?",
-            question_image: [""],
-            question_choice: ["A.1", "B.2", "C.3", "D.4"],
-            question_ans: "B",
-            question_solution: "It is trival.",
-            question_tags: ["Math", "Arithmetics"]
-        }
-        let question_2 = {
-            id: 12,
-            parents_node: [0,1],
-            question_change_time: "2019-10-15T01:11:21.754312Z",
-            question_name: "quesion2",
-            question_type: "multiple",
-            question_level: 0.5,
-            question_content: "人类的本质是?",
-            question_image: [""],
-            question_choice: ["A.复读机", "B.鸽子", "C.真香", "D.草履虫"],
-            question_ans: ["A","B","C"], 
-            question_ans_num: 3,
-            question_solution: "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况",
-            question_tags: ["Tag1", "Tag2"]
-        }
-        this.question_list.push(question_1);
-        this.question_list.push(question_2);
-        */
         this.$axios
             .get("/api/question_banks/" + this.id + "/")
             .then((response) => {
                 this.question_list = response.data.questions;
             })
             .catch((error) => {
+                console.log(error);
+            })
+        this.$axios
+            .get("/api/nodes_list/"+ this.id + "/")
+            .then(response => {
+                this.$refs.tree_view.updateData([response.data]);
+            })
+            .catch(error => {
                 console.log(error);
             })
     },

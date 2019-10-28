@@ -1,12 +1,10 @@
 <template>
     <div class="treeview">
-        <tree-view :model="testData" category="subnodes" :selection="selection" 
+        <tree-view :model="treeData" category="subnodes" :selection="selection" 
         :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="drag_drop"
         :strategies="strategies" :transition="transition" :openerOpts="openerOpts"/>
-        {{ selection }}
-        <br/>
-        {{ testData }}
         <div>
+            <v-btn v-if="editable && !edit" @click="beginEdit" text>Edit</v-btn>
             <v-btn v-if="edit" @click="addSubNode" color="success" small fab class="mx-2 my-2"
                 :disabled="selection.length == 0"
             >
@@ -39,7 +37,10 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-        <v-btn v-if="edit" @click="submit" color="success" class="mx-2 my-2">Submit</v-btn>
+        <v-btn v-if="edit" @click="submit" color="success" class="mx-2 my-2"
+            :disabled="treeData.length == 0"
+        >Submit</v-btn>
+        <v-btn v-if="edit" @click="cancel" color="error" class="mx-2 my-2">Cancel</v-btn>
     </div>
 </template>
 
@@ -52,22 +53,48 @@ export default {
         "tree-view": TreeView
     },
     props: {
-        treeData: {
-            type: Object,
-            default: () => {}
-        },
-        edit: {
+        editable: {
             type: Boolean,
-            default: true
+            default: false
         }
     },
+    mounted() {
+        this.treeData = [{
+            id: 0,
+            name: "Loading...",
+            subnodes: []
+        }];
+        this.drag_drop.draggable = false;
+    },
     methods: {
+        updateData(data) {
+            this.treeData = data;
+        },
         select(newOne) {
             this.selection=newOne
             if(!this.edit) this.$emit("selectChange",newOne);
         },
+        beginEdit() {
+            this.formerTreeData = JSON.stringify(this.treeData);
+            this.selection
+            this.edit = true;
+            this.selection = [];
+            this.strategies.selection = ["single"];
+            this.drag_drop.draggable = true;
+        },
         submit() {
             this.$emit("treeSubmit",this.treeData);
+            this.edit = false;
+            this.selection = [];
+            this.strategies.selection = ["multiple"];
+            this.drag_drop.draggable = false;
+        },
+        cancel() {
+            this.treeData = JSON.parse(this.formerTreeData);
+            this.edit = false;
+            this.selection = [];
+            this.strategies.selection = ["multiple"];
+            this.drag_drop.draggable = false;
         },
         addSubNode(){
             if(this.selection.length > 0){
@@ -90,7 +117,7 @@ export default {
                     if(item.subnodes)
                         item.subnodes.forEach(removeFunc);
                 }
-                this.testData.forEach(removeFunc);
+                this.treeData.forEach(removeFunc);
                 this.selection=[];
             }
         },
@@ -107,12 +134,13 @@ export default {
     },
     data: function() {
         return {
-            drag_drop: this.edit
-                ? { ...dragndrop.selection(() => this.testData, m => this.testData = m)}
-                : null,
+            edit: false,
+            formerTreeData: "",
+            treeData: [],
+            drag_drop: { ...dragndrop.selection(() => this.treeData, m => this.treeData = m)},
             strategies: {
-                selection: this.edit ? ["single"] : ["multiple"],
-                click: ["select", "unfold-on-selection"],
+                selection: ["multiple"],
+                click: ["select", "toggle-fold","unfold-on-selection"],
                 fold: ["opener-control"]
             },
             display: item => {
@@ -127,14 +155,6 @@ export default {
             },
             renameDialog: false,
             renameName: "",
-            testData: [
-                    { name: "Click me, I'm a node with two subnodes.", subnodes: [
-                        { name: "I am a childless leaf." },
-                        { name: "I am a also a childless leaf." }
-                    ]},
-                    { name: "I'm a leaf, I do not have subnodes.",subnodes:[] },
-                    { name: "I am an asynchronous node, click me and wait one second."}
-                ],
             selection: [],
         }
     }
@@ -166,6 +186,10 @@ export default {
 .TreeViewDemo li {
     min-width: 100px;
     transition: all 0.25s ease-in-out;
+}
+
+.TreeViewDemo li:hover{
+    background-color: #E3F2FD;
 }
 
 .TreeViewDemo ul li a {
