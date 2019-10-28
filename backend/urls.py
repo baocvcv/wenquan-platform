@@ -26,12 +26,17 @@ urlpatterns = [
     path(
         r'api/questions/<int:q_id>/',
         views.QuestionDetail.as_view(),
-        name='questions_list',
+        name='questions_detail',
     ),
     path(
         r'api/nodes_list/<int:root_id>/',
         views.KnowledgeNodeList.as_view(),
         name='nodes_list',
+    ),
+    path(
+        r'api/knowledge_nodes/<int:root_id>/',
+        views.KnowledgeNodeDetail.as_view(),
+        name='node_detail',
     ),
     path(
         r'api/question_banks/',

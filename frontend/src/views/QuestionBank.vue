@@ -98,7 +98,7 @@
             </v-card-actions>
         </v-expand-transition>
     </v-card>
-    <question-list v-if="question_bank.id" :id="question_bank.id" :editable="true"></question-list>
+    <question-list v-if="question_bank.id" :questions="question_bank.questions" editable></question-list>
 </div>
 </template>
 

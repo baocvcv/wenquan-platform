@@ -43,7 +43,11 @@ class EmailVerificationRecord(models.Model):
             # send email
             print(self.email)
             # self.user.email_user(email_title, email_body)
-            send_status = send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, [self.email])
+            send_status = send_mail(
+                email_title,
+                email_body,
+                settings.DEFAULT_FROM_EMAIL,
+                [self.email])
             print(send_status)
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
@@ -52,7 +56,11 @@ class EmailVerificationRecord(models.Model):
             email_body = "Please click this link to change your password: " + url
             # send email
             # self.user.email_user(email_title, email_body)
-            send_mail(email_title, email_body, settings.DEFAULT_FROM_EMAIL, [self.email])
+            send_mail(
+                email_title,
+                email_body,
+                settings.DEFAULT_FROM_EMAIL,
+                [self.email])
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
 
     def is_time_valid(self, time):

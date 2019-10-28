@@ -6,7 +6,7 @@ import Home from "./views/Home.vue";
 Vue.use(Router);
 
 const router = new Router({
-  mode: "history",
+  //mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
@@ -21,7 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
+        import(/* webpackChunkName: "about" */ "./views/Question.vue")
     },
     {
       path: "/admin/usermanagement",
@@ -49,24 +49,25 @@ const router = new Router({
       component: () => import("./views/QuestionBank.vue")
     },
     {
-      path: "/question/:id",
+      path: "/questions/:id",
       name: "question-view",
-      component: () => import("./views/QuestionViewOuter.vue")
+      component: () => import("./views/Question.vue")
     },
     {
       path: "/create_question/:id",
       name: "question-create",
-      component: () => import("./views/QuestionViewOuter.vue")
+      component: () => import("./views/Question.vue")
     },
     {
       path: "/edit_question/:id",
       name: "question-edit",
-      component: () => import("./views/QuestionViewOuter.vue")
-    }
+      component: () => import("./views/Question.vue")
+    },
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  console.log("Entering a new router!");
   if (sessionStorage.getItem("user"))
 	store.state.user=JSON.parse(sessionStorage.getItem("user"));
   if (!store.state.user)

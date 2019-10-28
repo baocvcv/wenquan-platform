@@ -21,8 +21,8 @@ from backend.models.questions.question import INT2TYPE
 
 class QuestionList(APIView):
     """Get all questions info or create a question"""
-    @staticmethod
-    def create_question_from_data(post_data):
+    @classmethod
+    def create_question_from_data(cls, post_data):
         """Create diffrent types of Question objects from json"""
         post_data['question_type'] = TYPEDIC[post_data['question_type']]
         if post_data['question_type'] == TYPEDIC['single']:
@@ -37,8 +37,8 @@ class QuestionList(APIView):
             question = BriefAnswerQSerializer(data=post_data)
         return question
 
-    @staticmethod
-    def create_serializer_from_question(question):
+    @classmethod
+    def create_serializer_from_question(cls, question):
         """Create diffrent Serializer from Question"""
         qtype = question.question_type
         if qtype == TYPEDIC['single']:
@@ -53,8 +53,8 @@ class QuestionList(APIView):
             serializer = BriefAnswerQSerializer(question)
         return serializer
 
-    @staticmethod
-    def get_latest_version(q_group):
+    @classmethod
+    def get_latest_version(cls, q_group):
         """Get the latest version of a Question"""
         try:
             return q_group.question_set.all().get(question_change_time=q_group.current_version)
@@ -88,8 +88,16 @@ class QuestionList(APIView):
         """Create a question"""
 
         post_data = JSONParser().parse(request)[0]
-        post_data.pop('id')
-        parents_id = post_data.pop('parents_node')
+        if "id" in post_data:
+            post_data.pop('id')
+
+        if "parents_node" in post_data:
+            parents_id = post_data.pop('parents_node')
+        else:
+            return Response({"errors": "No parents_id"}, status=404)
+
+        if not parents_id:
+            return Response({"errors": "No parents_id"}, status=404)
 
         parents = []
         for i in parents_id:
@@ -151,6 +159,8 @@ class QuestionDetail(APIView):
     def put(self, request, q_id):
         """Upate information of the Question whose id=q_id"""
         post_data = JSONParser().parse(request)[0]
+        if "id" in post_data:
+            post_data.pop("id")
         old_q = self.get_object(q_id)
 
         q_group = old_q.history_version
