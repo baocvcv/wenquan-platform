@@ -1,44 +1,221 @@
 <template>
     <div class="treeview">
-        <tree-view :model="testData" category="children" :selection="selection" 
-        :onSelect="select" :display="item => item.label" class="TreeViewDemo" :dragndrop="d"
-        :strategies="strategies"/>
-        {{ selection }}
-        <br/>
-        {{ testData }}
+        <tree-view :model="treeData" category="subnodes" :selection="currentSelection" 
+        :onSelect="select" :display="display" class="TreeViewDemo" :dragndrop="drag_drop"
+        :strategies="strategies" :transition="transition" :openerOpts="openerOpts"/>
+        <div>
+            <v-btn v-if="editable && !edit" @click="beginEdit" text>Edit</v-btn>
+            <v-btn v-if="edit" @click="addSubNode" color="success" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+            <v-btn v-if="edit" @click="removeNode" color="error" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-minus</v-icon>
+            </v-btn>
+            <v-btn v-if="edit" @click="rename" color="primary" small fab class="mx-2 my-2"
+                :disabled="selection.length == 0"
+            >
+                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+        </div>
+        <v-dialog v-model="renameDialog" persistent max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Rename</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-text-field v-model="renameName"></v-text-field>
+                        <v-btn @click="renameConfirmation" class="mx-2" color="primary"
+                            :disabled="renameName == ''"
+                        >Confirm</v-btn>
+                        <v-btn @click="renameDialog = false" class="mx-2">Cancel</v-btn>
+                    </v-container>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+        <v-btn v-if="edit" @click="submit" color="success" class="mx-2 my-2"
+            :disabled="treeData.length == 0"
+        >Submit</v-btn>
+        <v-btn v-if="edit" @click="cancel" color="error" class="mx-2 my-2">Cancel</v-btn>
     </div>
 </template>
 
 <script>
-import { TreeView } from "@bosket/vue"
-import { dragndrop } from "@bosket/core"
+import { TreeView } from "@bosket/vue";
+import { dragndrop } from "@bosket/core";
+import axios from "axios";
+
 export default {
     name: "treeview",
     components: {
         "tree-view": TreeView
     },
+    model: {
+        prop: "selection",
+        event: "selectChange"
+    },
+    props: {
+        editable: {
+            type: Boolean,
+            default: false
+        },
+        selection: {
+            type: Array,
+            default: () => []
+        },
+        bankID: {
+            tyre: Number,
+            default: -1
+        }
+    },
+    mounted() {
+        this.drag_drop.draggable = false;
+        if(this.bankID != -1){
+            axios.get("/api/nodes_list/"+ this.id + "/")
+            .then(response => {
+                this.treeData = [response.data];
+            })
+            .catch(error => {
+                this.treeData = [{
+                    id: 0,
+                    name: error.toString()
+                }];
+            });
+        }
+    },
+    computed: {
+        currentSelection() {
+            //returns the selection in used
+            return this.edit ? this.singleSelection : this.selection;
+        }
+    },
     methods: {
+        updateData(data) {
+            //load data
+            this.treeData = data;
+        },
         select(newOne) {
-            this.selection=newOne
+            //a new selection
+            if(this.edit) this.singleSelection=newOne
+            else this.$emit("selectChange",newOne);
+        },
+        beginEdit() {
+            //begin edit mode
+            this.formerTreeData = JSON.stringify(this.treeData);
+            this.selection
+            this.edit = true;
+            this.$emit("selectChange",[]);
+            this.singleSelection = [];
+            this.strategies.selection = ["single"];
+            this.drag_drop.draggable = true;
+        },
+        submit() {
+            //submit modification
+
+            //check new nodes
+            let travalNewNodes = async (item,index,arr) => {
+                if(item.id==-1){
+                    let response = await axios.post("/api/nodes_list/" + this.bankID + "/",{
+                        name: item.name
+                    });
+                    item.id = response[0].id;
+                }
+                if(item.subnodes)
+                    item.subnodes.forEach(travalNewNodes);
+            };
+            this.treeData.forEach(travalNewNodes);
+            
+            //submit changes
+            axios.put("/api/nodes_list/" + this.bankID + "/").catch(err => console.log(err));
+
+            this.edit = false;
+            this.$emit("selectChange",[]);
+            this.singleSelection = [];
+            this.strategies.selection = ["multiple"];
+            this.drag_drop.draggable = false;
+        },
+        cancel() {
+            //Cancel Change
+            this.treeData = JSON.parse(this.formerTreeData);
+            this.edit = false;
+            this.$emit("selectChange",[]);
+            this.singleSelection = [];
+            this.strategies.selection = ["multiple"];
+            this.drag_drop.draggable = false;
+        },
+        addSubNode(){
+            //add a sub node at selected one
+            if(this.selection.length > 0 && this.selection[0].subnodes){
+                let newNode={
+                    id: -1,
+                    name: "No name",
+                    subnodes: []
+                };
+                this.selection[0].subnodes.push(newNode);
+            }
+        },
+        removeNode(){
+            //remove the selected node
+            if(this.selection.length > 0){
+                this.selection[0].id=-2;
+                let removeFunc=(item,index,arr) => {
+                    if(item.id==-2){
+                        arr.splice(index,1);
+                        return;
+                    }
+                    if(item.subnodes)
+                        item.subnodes.forEach(removeFunc);
+                }
+                this.treeData.forEach(removeFunc);
+                this.selection=[];
+            }
+        },
+        rename(){
+            //rename start
+            if(this.selection.length > 0){
+                this.renameName = this.selection[0].name;
+                this.renameDialog = true;
+            }
+        },
+        renameConfirmation(){
+            //rename confirm
+            this.selection[0].name = this.renameName;
+            this.renameDialog = false;
         }
     },
     data: function() {
         return {
-            d: { ...dragndrop.selection(() => this.testData, m => this.testData = m)},
+            edit: false,
+            formerTreeData: "",
+            treeData: [{
+                id: 0,
+                name: "Loading...",
+            }],
+            singleSelection: [],//used only in edit mode
+            renameDialog: false,
+            renameName: "",
+
+            //tree properties
+            drag_drop: { ...dragndrop.selection(() => this.treeData, m => this.treeData = m)},
             strategies: {
                 selection: ["multiple"],
-                click: ["select", "unfold-on-selection"],
-                fold: ["opener-control", "no-child-selection"]
+                click: ["select", "toggle-fold","unfold-on-selection"],
+                fold: ["opener-control"]
             },
-            testData: [
-                    { label: "Click me, I'm a node with two children.", children: [
-                        { label: "I am a childless leaf." },
-                        { label: "I am a also a childless leaf." }
-                    ]},
-                    { label: "I'm a leaf, I do not have children.",children:[] },
-                    { label: "I am an asynchronous node, click me and wait one second."}
-                ],
-            selection: [],
+            display: item => {
+                return item.name;
+            },
+            transition: {
+                attrs: { appear: true },
+                props: { name: "TreeViewDemoTransition" }
+            },
+            openerOpts: {
+                position: "right"
+            },
         }
     }
 }
@@ -71,6 +248,10 @@ export default {
     transition: all 0.25s ease-in-out;
 }
 
+.TreeViewDemo li:hover{
+    background-color: #E3F2FD;
+}
+
 .TreeViewDemo ul li a {
     color: #222;
 }
@@ -90,11 +271,11 @@ export default {
 }
 
 .TreeViewDemo li.selected {
-    color:crimson;
+    color:#1565C0;
 }
 
 .TreeViewDemo ul li.selected>.item>a {
-    color: crimson;
+    color: #1E88E5;
 }
 
 .TreeViewDemo ul li.selected>.item>a:hover {
@@ -102,7 +283,7 @@ export default {
 }
 
 .TreeViewDemo ul li:not(.disabled)>.item>a:hover {
-    color: #e26f6f;
+    color: #1E88E5;
 }
 
 
@@ -117,7 +298,7 @@ export default {
 }
 
 
-/* Categories : Nodes with children */
+/* Categories : Nodes with subnodes */
 
 .TreeViewDemo li.category>.item {
     display: block;
@@ -141,23 +322,23 @@ export default {
     cursor: pointer;
 }
 
-.TreeViewDemo .opener::after {
+.TreeViewDemo .opener::before {
     content: '+';
     display: block;
     transition: all 0.25s;
     font-family: monospace;
 }
 
-.TreeViewDemo li.category.async>.item>.opener::after {
+.TreeViewDemo li.category.async>.item>.opener::before {
     content: '!';
 }
 
 .TreeViewDemo .opener:hover {
-    color: #e26f6f;
+    color: #1E88E5;
 }
 
-.TreeViewDemo li.category:not(.folded)>.item>.opener::after {
-    color: crimson;
+.TreeViewDemo li.category:not(.folded)>.item>.opener::before {
+    color: #1E88E5;
     transform: rotate(45deg);
 }
 

@@ -138,7 +138,7 @@
                         md="4"
                         sm="6"
                         >
-                        <tree-view></tree-view>
+                        <tree-view :bankID="id" v-model="tree_selection" editable></tree-view>
                     </v-col>
                     <v-col
                         :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
@@ -209,6 +209,7 @@ export default {
             level_max_filter: 5,
             drawer: null,
             question_list: [],
+            tree_selection: [],
             sort_menu: [
                 "Popularity",
                 "Level"
