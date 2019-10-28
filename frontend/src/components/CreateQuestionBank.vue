@@ -83,12 +83,12 @@ export default {
       name: "",
       name_rules: [
         v => !!v || "name is required!",
-        v => v.length <= 200 || "Max 200 characters!"
+        v => (!!v && v.length <= 200) || "Max 200 characters!"
       ],
       brief: "",
       brief_rules: [
         v => !!v || "brief introduction is required",
-        v => v.length <= 200 || "Max 200 characters!"
+        v => (!!v && v.length <= 200) || "Max 200 characters!"
       ],
       authorities: ["private", "public"],
       authority: "",
