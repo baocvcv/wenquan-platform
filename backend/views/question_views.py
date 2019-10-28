@@ -88,8 +88,16 @@ class QuestionList(APIView):
         """Create a question"""
 
         post_data = JSONParser().parse(request)[0]
-        post_data.pop('id')
-        parents_id = post_data.pop('parents_node')
+        if "id" in post_data:
+            post_data.pop('id')
+
+        if "parents_node" in post_data:
+            parents_id = post_data.pop('parents_node')
+        else:
+            return Response({"errors": "No parents_id"}, status=404)
+
+        if not parents_id:
+            return Response({"errors": "No parents_id"}, status=404)
 
         parents = []
         for i in parents_id:
