@@ -36,15 +36,39 @@ class KnowledgeNodeList(APIView):
         json['subnodes'] = child_json
         return json
 
-    def rebuild_tree(self, put_data):
+    def rebuild_tree(self, put_data, root_id):
         root = self.get_object(put_data['id'])
         root.name = put_data['name']
         root.subnodes.clear()
         for i in put_data['subnodes']:
-            child_node = self.get_object(i['id'])
+            if i['id'] == -1:
+                child_node = self.create_node(i['name'], root_id)
+                i['id'] = child_node.id
+            else:
+                child_node = self.get_object(i['id'])
             root.subnodes.add(child_node)
-            self.rebuild_tree(i)
+            self.rebuild_tree(i, root_id)
         root.save()
+
+    def create_node(self, name, root_id):
+        """Create a KnowledgeNode"""
+        parent = self.get_object(root_id)
+        bank = parent.question_bank
+        new_node = KnowledgeNode.objects.create(name=name)
+        new_node.question_bank = bank
+        new_node.save()
+        return new_node
+
+    def delete_node(self, nodes_id):
+        for i in nodes_id:
+            node = self.get_object(i)
+            parent = node.knowledgenode_set.get()
+            while parent.id in nodes_id:
+                parent = parent.knowledgenode_set.get()
+            question = node.questiongroup_set.all()
+            for j in question:
+                j.parents_node.remove(i)
+                j.parents_node.add(parent)
 
     def get(self, request, root_id):
         """Get a tree whose root's id = root_id"""
@@ -52,27 +76,14 @@ class KnowledgeNodeList(APIView):
         response['bank_id'] = self.get_object(root_id).question_bank.id
         return Response(response)
 
-    def post(self, request, root_id):
-        """Create a KnowledgeNode"""
-        post_data = JSONParser().parse(request)[0]
-        parent = self.get_object(root_id)
-        bank = parent.question_bank
-        new_node = KnowledgeNode.objects.create(name=post_data['name'])
-        new_node.question_bank = bank
-        new_node.save()
-        parent.subnodes.add(new_node)
-        response = {}
-        response['id'] = new_node.id
-        response['name'] = new_node.name
-        response['parent'] = parent.id
-        response['subnodes'] = []
-        return Response(response)
-
     def put(self, request, root_id):
         put_data = JSONParser().parse(request)
-        if not root_id == put_data['id']:
+        modify = put_data['modify']
+        delete = put_data['delete']
+        if not root_id == modify['id']:
             return Response({"errors": "root_id != id"}, status=400)
-        self.rebuild_tree(put_data)
+        self.delete_node(delete)
+        self.rebuild_tree(modify, root_id)
         response = self.go_through_tree(root_id)
         return Response(response)
 

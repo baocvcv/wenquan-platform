@@ -122,10 +122,6 @@ export default {
     reset() {
       this.img.splice(0, this.img.length);
       this.$emit("change", this.img);
-    },
-    test() {
-      console.log("here test image uploader");
-      console.log(this.img);
     }
   }
 };

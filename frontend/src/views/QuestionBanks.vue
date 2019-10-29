@@ -74,10 +74,23 @@ export default {
     axios
       .get("/api/question_banks/")
       .then(response => {
+        let all_count = response.data.length;
+        let count = 0;
+        let lock = false;
         for (var i = 0; i < response.data.length; i++) {
-          that.question_banks.push(that.parse(response.data[i]));
+          axios
+            .get("/api/question_banks/" + response.data[i] + "/")
+            .then(response => {
+              that.question_banks.push(that.parse(response.data));
+              while (lock);
+              lock = true;
+              count++;
+              lock = false;
+              that.process =
+                "Loaded question banks: " + count + "/" + all_count;
+              if (count == all_count) that.process = "End";
+            });
         }
-        that.process = "End";
       })
       .catch(error => {
         that.process = "Failed to access data: " + error;
