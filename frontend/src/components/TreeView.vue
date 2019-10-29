@@ -130,7 +130,7 @@ export default {
             this.treeData.forEach(travalNewNodes);
             
             //submit changes
-            axios.put("/api/nodes_list/" + this.bankID + "/").catch(err => console.log(err));
+            axios.put("/api/nodes_list/" + this.bankID + "/",this.treeData[0]).catch(err => console.log(err));
 
             this.edit = false;
             this.$emit("selectChange",[]);
