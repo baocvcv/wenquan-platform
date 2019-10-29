@@ -107,7 +107,6 @@ export default {
             //begin edit mode
             this.formerTreeData = JSON.stringify(this.treeData);
             this.edit = true;
-            this.$emit("selectChange",[]);
             this.singleSelection = [];
             this.strategies.selection = ["single"];
             this.drag_drop.draggable = true;
