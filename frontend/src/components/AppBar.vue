@@ -155,8 +155,6 @@ export default {
             }
         };
     },
-    mounted(){
-    },
     computed: {
         user() {
             var _user=this.$store.state.user;
