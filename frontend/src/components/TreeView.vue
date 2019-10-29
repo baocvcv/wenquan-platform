@@ -122,6 +122,7 @@ export default {
                     let response = await axios.post("/api/nodes_list/" + this.bankID + "/",[{
                         name: item.name
                     }]);
+                    console.log(response);
                     item.id = response[0].id;
                     console.log("new id:"+item.id);
                 }
