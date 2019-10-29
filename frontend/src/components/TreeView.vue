@@ -82,7 +82,8 @@ export default {
             .catch(error => {
                 this.treeData = [{
                     id: 0,
-                    name: error.toString()
+                    name: error.toString(),
+                    subnodes: []
                 }];
             });
         }
@@ -116,6 +117,7 @@ export default {
 
             //check new nodes
             let travalNewNodes = async (item,index,arr) => {
+                console.log("in "+item.name+ JSON.stringify(item.subnodes))
                 if(item.id==-1){
                     let response = await axios.post("/api/nodes_list/" + this.bankID + "/",{
                         name: item.name
@@ -174,14 +176,14 @@ export default {
         },
         rename(){
             //rename start
-            if(this.selection.length > 0){
-                this.renameName = this.selection[0].name;
+            if(this.currentSelection.length > 0){
+                this.renameName = this.currentSelection[0].name;
                 this.renameDialog = true;
             }
         },
         renameConfirmation(){
             //rename confirm
-            this.selection[0].name = this.renameName;
+            this.singleSelection[0].name = this.renameName;
             this.renameDialog = false;
         }
     },
