@@ -36,6 +36,16 @@ class KnowledgeNodeList(APIView):
         json['subnodes'] = child_json
         return json
 
+    def rebuild_tree(self, put_data):
+        root = self.get_object(put_data['id'])
+        root.name = put_data['name']
+        root.subnodes.clear()
+        for i in put_data['subnodes']:
+            child_node = self.get_object(i['id'])
+            root.subnodes.add(child_node)
+            self.rebuild_tree(i)
+        root.save()
+
     def get(self, request, root_id):
         """Get a tree whose root's id = root_id"""
         response = self.go_through_tree(root_id)
@@ -56,6 +66,14 @@ class KnowledgeNodeList(APIView):
         response['name'] = new_node.name
         response['parent'] = parent.id
         response['subnodes'] = []
+        return Response(response)
+
+    def put(self, request, root_id):
+        put_data = JSONParser().parse(request)
+        if not root_id == put_data['id']:
+            return Response({"errors": "root_id != id"}, status=400)
+        self.rebuild_tree(put_data)
+        response = self.go_through_tree(root_id)
         return Response(response)
 
 
@@ -87,9 +105,11 @@ class KnowledgeNodeDetail(APIView):
 
     def put(self, request, root_id):
         """Modify infomation"""
-        put_data = JSONParser().parse(request)[0]
-        node = KnowledgeNodeList.get_object(root_id)
-        node.name = put_data['name']
-        node.save()
-        response = self.serializer(node)
+        put_datas = JSONParser().parse(request)
+        response = []
+        for put_data in put_datas:
+            node = KnowledgeNodeList.get_object(root_id)
+            node.name = put_data['name']
+            node.save()
+            response.append(self.serializer(node))
         return Response(response)
