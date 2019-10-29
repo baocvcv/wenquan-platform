@@ -7,11 +7,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from backend.models.questions import Question
-from backend.models.questions import SingleChoiceQ
-from backend.models.questions import MultpChoiceQ
-from backend.models.questions import TrueOrFalseQ
-from backend.models.questions import FillBlankQ
-from backend.models.questions import BriefAnswerQ
 
 from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
@@ -63,7 +58,7 @@ class QuestionListViewTest(APITestCase):
             "parents_node": [],
             "question_name": "question3",
             "question_type": "TorF",
-            "question_level": 0.5,
+            "question_level": 5,
             "question_content": "人类的本质是复读机吗?",
             "question_image": [""],
             "question_ans": True,
@@ -74,7 +69,7 @@ class QuestionListViewTest(APITestCase):
     fill_blank_example = [
         {
             "parents_node": [],
-            "question_name": "quetsion4",
+            "question_name": "question4",
             "question_type": "fill_blank",
             "question_level": 5,
             "question_content": ["人类的本质是", "和", "还有", ""],
@@ -122,3 +117,55 @@ class QuestionListViewTest(APITestCase):
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_name, 'question1')
         self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.以上选项均正确"])
+
+    def test_create_Multiple(self):
+        """ test creating an single choice question"""
+        url = reverse('questions_list')
+        data = copy(self.multi_example)
+        data[0]["parents_node"] = [self.bank.root_id]
+        response = self.client.post(url, data, format='json')
+
+        new_q = Question.objects.all()[0]
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Question.objects.count(), 1)
+        self.assertEqual(new_q.question_name, 'question2')
+        self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.草履虫"])
+
+    def test_create_True_Or_False(self):
+        """ test creating an single choice question"""
+        url = reverse('questions_list')
+        data = copy(self.t_or_f_example)
+        data[0]["parents_node"] = [self.bank.root_id]
+        response = self.client.post(url, data, format='json')
+
+        new_q = Question.objects.all()[0]
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Question.objects.count(), 1)
+        self.assertEqual(new_q.question_name, 'question3')
+        self.assertEqual(new_q.question_ans, True)
+
+    def test_create_fill_blank(self):
+        """ test creating an single choice question"""
+        url = reverse('questions_list')
+        data = copy(self.fill_blank_example)
+        data[0]["parents_node"] = [self.bank.root_id]
+        response = self.client.post(url, data, format='json')
+
+        new_q = Question.objects.all()[0]
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Question.objects.count(), 1)
+        self.assertEqual(new_q.question_name, 'question4')
+        self.assertEqual(new_q.question_content, ["人类的本质是", "和", "还有", ""])
+
+    def test_create_brief_ans(self):
+        """ test creating an single choice question"""
+        url = reverse('questions_list')
+        data = copy(self.brief_q_example)
+        data[0]["parents_node"] = [self.bank.root_id]
+        response = self.client.post(url, data, format='json')
+
+        new_q = Question.objects.all()[0]
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Question.objects.count(), 1)
+        self.assertEqual(new_q.question_name, 'question5')
+        self.assertEqual(new_q.question_ans, "复读机")
