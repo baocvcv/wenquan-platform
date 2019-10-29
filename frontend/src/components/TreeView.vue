@@ -117,14 +117,11 @@ export default {
 
             //check new nodes
             let travalNewNodes = async (item,index,arr) => {
-                console.log("in "+item.name+ JSON.stringify(item.subnodes))
                 if(item.id==-1){
                     let response = await axios.post("/api/nodes_list/" + this.bankID + "/",[{
                         name: item.name
                     }]);
-                    console.log(response);
-                    item.id = response[0].id;
-                    console.log("new id:"+item.id);
+                    item.id = response.data.id;
                 }
                 if(item.subnodes)
                     item.subnodes.forEach(travalNewNodes);
