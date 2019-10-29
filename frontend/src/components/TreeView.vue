@@ -112,7 +112,7 @@ export default {
             this.strategies.selection = ["single"];
             this.drag_drop.draggable = true;
         },
-        submit() {
+        async submit() {
             //submit modification
 
             //check new nodes
@@ -123,11 +123,12 @@ export default {
                         name: item.name
                     }]);
                     item.id = response[0].id;
+                    console.log("new id:"+item.id);
                 }
                 if(item.subnodes)
                     item.subnodes.forEach(travalNewNodes);
             };
-            this.treeData.forEach(travalNewNodes);
+            await this.treeData.forEach(travalNewNodes);
             
             //submit changes
             axios.put("/api/nodes_list/" + this.bankID + "/",this.treeData[0]).catch(err => console.log(err));
