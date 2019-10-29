@@ -95,7 +95,7 @@ export default {
         }
     },
     created() {
-        this.edited_data = this.data;
+        this.edited_data = Object.assign({}, this.data);
     },
     methods: {
         submit() {
