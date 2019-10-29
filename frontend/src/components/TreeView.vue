@@ -104,37 +104,35 @@ export default {
             if(this.edit) this.singleSelection=newOne
             else this.$emit("selectChange",newOne);
         },
+        clearSelection() {
+            this.$emit("selectChange",[]);
+            this.singleSelection = [];
+        },
         beginEdit() {
             //begin edit mode
             this.formerTreeData = JSON.stringify(this.treeData);
             this.edit = true;
             this.singleSelection = [];
+            this.deletedID = [];
             this.strategies.selection = ["single"];
             this.drag_drop.draggable = true;
         },
-        async submit() {
+        submit() {
             //submit modification
 
-            //check new nodes
-            let travalNewNodes = async item => {
-                if(item.id==-1){
-                    let response = await axios.post("/api/nodes_list/" + this.bankID + "/",[{
-                        name: item.name
-                    }]);
-                    item.id = response.data.id;
-                }
-                for(subitem in item.subnodes)
-                    await travalNewNodes(subitem);
-            };
-            for(item in this.treeData)
-                await travalNewNodes(item)
-            
             //submit changes
-            axios.put("/api/nodes_list/" + this.bankID + "/",this.treeData[0]).catch(err => console.log(err));
+            axios.put("/api/nodes_list/" + this.bankID + "/",{
+                delete: this.deletedID,
+                modify: this.treeData[0]
+            })
+            .then(response => {
+                this.treeData = [response.data];
+            })
+            .catch(err => console.log(err));
 
             this.edit = false;
-            this.$emit("selectChange",[]);
-            this.singleSelection = [];
+            this.clearSelection();
+            this.deletedID = [];
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
@@ -142,8 +140,8 @@ export default {
             //Cancel Change
             this.treeData = JSON.parse(this.formerTreeData);
             this.edit = false;
-            this.$emit("selectChange",[]);
-            this.singleSelection = [];
+            this.clearSelection();
+            this.deletedID = [];
             this.strategies.selection = ["multiple"];
             this.drag_drop.draggable = false;
         },
@@ -161,6 +159,14 @@ export default {
         removeNode(){
             //remove the selected node
             if(this.currentSelection.length > 0){
+                if(this.currentSelection[0].id != -1){
+                    let travelDeleteNode = item => {
+                        this.deletedID.push(item.id);
+                        if(item.subnodes)
+                            item.subnodes.forEach(travelDeleteNode);
+                    };
+                    travelDeleteNode(this.currentSelection[0]);
+                }
                 this.currentSelection[0].id=-2;
                 let removeFunc=(item,index,arr) => {
                     if(item.id==-2){
@@ -196,6 +202,7 @@ export default {
                 name: "Loading...",
             }],
             singleSelection: [],//used only in edit mode
+            deletedID: [],//used only in edit mode
             renameDialog: false,
             renameName: "",
 
