@@ -75,7 +75,7 @@ export default {
     mounted() {
         this.drag_drop.draggable = false;
         if(this.bankID != -1){
-            axios.get("/api/nodes_list/"+ this.id + "/")
+            axios.get("/api/nodes_list/"+ this.bankID + "/")
             .then(response => {
                 this.treeData = [response.data];
             })
