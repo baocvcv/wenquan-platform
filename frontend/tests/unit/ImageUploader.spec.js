@@ -27,12 +27,29 @@ describe("ImageUploader.vue", () => {
       localVue,
       sync: false
     });
+	const upload_btn = wrapper.find("button");
+	upload_btn.trigger("click");
     wrapper.vm.preview_image(src);
     setTimeout(() => {
       expect(wrapper.vm.img[0]).toBe(dataurl);
       done();
     }, 1000);
   });
+  it("Cancel selecting an image", async done => {
+	const wrapper = mount(ImageUploader, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+	const none_src = {
+	  target: { files: [] }
+	};
+	wrapper.vm.preview_image(none_src);
+	setTimeout(() => {
+	  expect(wrapper.vm.img.length).toBe(0);
+	  done();
+	}, 1000)
+  })
   it("delete image", async done => {
     const wrapper = mount(ImageUploader, {
       vuetify,
