@@ -119,9 +119,9 @@ export default {
             let travalNewNodes = async (item,index,arr) => {
                 console.log("in "+item.name+ JSON.stringify(item.subnodes))
                 if(item.id==-1){
-                    let response = await axios.post("/api/nodes_list/" + this.bankID + "/",{
+                    let response = await axios.post("/api/nodes_list/" + this.bankID + "/",[{
                         name: item.name
-                    });
+                    }]);
                     item.id = response[0].id;
                 }
                 if(item.subnodes)
@@ -130,7 +130,7 @@ export default {
             this.treeData.forEach(travalNewNodes);
             
             //submit changes
-            axios.put("/api/nodes_list/" + this.bankID + "/").catch(err => console.log(err));
+            axios.put("/api/nodes_list/" + this.bankID + "/",this.treeData[0]).catch(err => console.log(err));
 
             this.edit = false;
             this.$emit("selectChange",[]);
