@@ -159,14 +159,14 @@ export default {
         removeNode(){
             //remove the selected node
             if(this.currentSelection.length > 0){
-                if(this.currentSelection[0].id != -1){
-                    let travelDeleteNode = item => {
+                let travelDeleteNode = item => {
+                    if(item.id!=-1)
                         this.deletedID.push(item.id);
-                        if(item.subnodes)
-                            item.subnodes.forEach(travelDeleteNode);
-                    };
-                    travelDeleteNode(this.currentSelection[0]);
-                }
+                    if(item.subnodes)
+                        item.subnodes.forEach(travelDeleteNode);
+                };
+                travelDeleteNode(this.currentSelection[0]);
+
                 this.currentSelection[0].id=-2;
                 let removeFunc=(item,index,arr) => {
                     if(item.id==-2){
