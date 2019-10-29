@@ -17,16 +17,14 @@ class QuestionBankList(APIView):
         banks = QuestionBank.objects.all()
         response = []
         for i in banks:
-            serializer = QuestionBankSerializer(i)
-            bank_data = serializer.data
-            bank_data['id'] = i.id
-            response.append(bank_data)
+            response.append(i.id)
         return Response(response)
 
     def post(self, request):
         """Create a new QuestionBank"""
         post_data = JSONParser().parse(request)
-        post_data.pop("id")
+        if "id" in post_data:
+            post_data.pop("id")
         root = KnowledgeNode.objects.create()
         post_data['root_id'] = root.id
         serializer = QuestionBankSerializer(data=post_data)
