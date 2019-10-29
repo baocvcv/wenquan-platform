@@ -116,17 +116,18 @@ export default {
             //submit modification
 
             //check new nodes
-            let travalNewNodes = async (item,index,arr) => {
+            let travalNewNodes = async (item,index) => {
                 if(item.id==-1){
                     let response = await axios.post("/api/nodes_list/" + this.bankID + "/",[{
                         name: item.name
                     }]);
                     item.id = response.data.id;
                 }
-                if(item.subnodes)
-                    item.subnodes.forEach(travalNewNodes);
+                for((subitem,subindex) in item.subnodes)
+                    await travalNewNodes(subitem,subindex);
             };
-            await this.treeData.forEach(travalNewNodes);
+            for((item,index) in this.treeData)
+                await travalNewNodes(item,index)
             
             //submit changes
             axios.put("/api/nodes_list/" + this.bankID + "/",this.treeData[0]).catch(err => console.log(err));
