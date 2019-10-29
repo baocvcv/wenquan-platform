@@ -18,10 +18,20 @@ describe("QuestionBanks", () => {
       sync: false
     });
 	setTimeout(() => {
-	  console.log(wrapper.vm.question_banks);
-	  console.log(wrapper.vm.process);
-      console.log(wrapper.text());
+	  expect(wrapper.exists("test1")).toBe(true);
+	  expect(wrapper.exists("test2")).toBe(true);
 	  done();
-	})
+	}, 1000);
+  })
+  it("Render failed", async done => {
+    const wrapper = mount(QuestionBanks, {
+      vuetify,
+      localVue,
+      sync: false
+    });
+	setTimeout(() => {
+	  expect(wrapper.exists("Failed")).toBe(true);
+	  done();
+	}, 1000);
   })
 });
