@@ -58,7 +58,7 @@ class QuestionList(APIView):
         """Get the latest version of a Question"""
         try:
             return q_group.question_set.all().get(question_change_time=q_group.current_version)
-        except q_group.question_set.all().DoesNotExist:
+        except q_group.question_set.DoesNotExist:
             raise Http404
 
     def get(self, request):
