@@ -105,12 +105,21 @@ class QuestionListViewTest(APITestCase):
         else:
             print(serializer.errors)
 
-    def test_create_Single(self):
-        """ test creating an single choice question"""
+    def get_response(self, new_q_id):
+        url = reverse("questions_detail", args=[new_q_id])
+        response = self.client.get(url)
+        return response
+
+    def create_question(self, data):
         url = reverse('questions_list')
-        data = copy(self.single_example)
         data[0]["parents_node"] = [self.bank.root_id]
         response = self.client.post(url, data, format='json')
+        return response
+
+    def test_create_Single(self):
+        """ test creating an single choice question"""
+        data = copy(self.single_example)
+        response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -118,12 +127,13 @@ class QuestionListViewTest(APITestCase):
         self.assertEqual(new_q.question_name, 'question1')
         self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.以上选项均正确"])
 
+        response2 = self.get_response(new_q.id)
+        self.assertEqual(response.data, response2.data)
+
     def test_create_Multiple(self):
         """ test creating an single choice question"""
-        url = reverse('questions_list')
         data = copy(self.multi_example)
-        data[0]["parents_node"] = [self.bank.root_id]
-        response = self.client.post(url, data, format='json')
+        response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -131,12 +141,13 @@ class QuestionListViewTest(APITestCase):
         self.assertEqual(new_q.question_name, 'question2')
         self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.草履虫"])
 
+        response2 = self.get_response(new_q.id)
+        self.assertEqual(response.data, response2.data)
+
     def test_create_True_Or_False(self):
         """ test creating an single choice question"""
-        url = reverse('questions_list')
         data = copy(self.t_or_f_example)
-        data[0]["parents_node"] = [self.bank.root_id]
-        response = self.client.post(url, data, format='json')
+        response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -144,12 +155,13 @@ class QuestionListViewTest(APITestCase):
         self.assertEqual(new_q.question_name, 'question3')
         self.assertEqual(new_q.question_ans, True)
 
+        response2 = self.get_response(new_q.id)
+        self.assertEqual(response.data, response2.data)
+
     def test_create_fill_blank(self):
         """ test creating an single choice question"""
-        url = reverse('questions_list')
         data = copy(self.fill_blank_example)
-        data[0]["parents_node"] = [self.bank.root_id]
-        response = self.client.post(url, data, format='json')
+        response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -157,15 +169,19 @@ class QuestionListViewTest(APITestCase):
         self.assertEqual(new_q.question_name, 'question4')
         self.assertEqual(new_q.question_content, ["人类的本质是", "和", "还有", ""])
 
+        response2 = self.get_response(new_q.id)
+        self.assertEqual(response.data, response2.data)
+
     def test_create_brief_ans(self):
         """ test creating an single choice question"""
-        url = reverse('questions_list')
         data = copy(self.brief_q_example)
-        data[0]["parents_node"] = [self.bank.root_id]
-        response = self.client.post(url, data, format='json')
+        response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_name, 'question5')
         self.assertEqual(new_q.question_ans, "复读机")
+
+        response2 = self.get_response(new_q.id)
+        self.assertEqual(response.data, response2.data)
