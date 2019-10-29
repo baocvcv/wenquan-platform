@@ -126,7 +126,7 @@ export default {
             this.data = Object.assign({}, this.edited_data);
         },
         cancel() {
-            this.edited_data = Object.assign({}, this,data);
+            this.edited_data = Object.assign({}, this.data);
             this.$emit("cancel");
         },
         submitted() {
@@ -162,7 +162,6 @@ export default {
             if(result.question_ans.length>result.question_blank_num)
                 result.question_ans.splice(result.question_blank_num,
                     result.question_ans.length-result.question_blank_num);
-            console.log(JSON.stringify(result));
             return result;
         }
     },
