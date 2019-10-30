@@ -85,6 +85,26 @@ class UserFactory {
         user.user_permissions = user_permissions["SuperAdmin"];
         return user;
     }
+
+    log_out(wrapper) {
+        sessionStorage.removeItem('user');
+        wrapper.vm.$store.state.user = null;
+        return wrapper;
+    }
+
+    login(wrapper, user_group) {
+        if (wrapper.vm.$store.state.user)
+            wrapper = this.log_out(wrapper);
+        let user;
+        if (user_group === "Student")
+            user = this.create_anonymous_student();
+        else if (user_group === "Admin")
+            user = this.create_anonymous_admin();
+        else if (user_group === "SuperAdmin")
+            user = this.create_anonymous_superadmin();
+        wrapper.vm.$store.state.user = user;
+        return wrapper;
+    }
 };
 
 export default UserFactory;
