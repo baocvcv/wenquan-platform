@@ -77,6 +77,39 @@
               </v-tooltip>
             </v-list-item-action>
           </v-list-item>
+		  <v-list-item
+		    v-for="(question, id) in section.questions"
+			:key="id"
+		  >
+		    <!--each question-->
+		    <v-list>
+			  <v-list-item>
+			    <v-list-content>
+				  <v-col cols="12" xs="8" lg="6">
+				  <v-text-field
+				    v-model="question.point"
+					suffix="points"
+					:rules="total_points_rules"
+				  ></v-text-field>
+				  </v-col>
+				</v-list-content>
+			    <v-list-item-action>
+			      <v-tooltip top>
+			        <template v-slot:activator="{ on }">
+			          <v-btn
+			      	  icon
+			      	  v-on="on"
+			      	  @click="drop_question(section, id)"
+			      	><v-icon color="red">mdi-trash-can-outline</v-icon>
+			      	</v-btn>
+			        </template>
+			        <span>Remove this question</span>
+			      </v-tooltip>
+			    </v-list-item-action>
+			  </v-list-item>
+		      <question-list-item :question="question.content" />
+		  </v-list>
+		  </v-list-item>
         </v-list-item-group>
         <v-list-item>
         <v-list-item-content>
@@ -145,12 +178,14 @@
 <script>
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
 import QuestionList from "@/components/QuestionList.vue";
+import QuestionListItem from "@/components/QuestionListItem.vue";
 export default {
   name: "",
   props: {},
   components: {
     "question-banks-list": QuestionBanksList,
-    "question-list": QuestionList
+    "question-list": QuestionList,
+	"question-list-item": QuestionListItem
   },
   data: function() {
     return {
@@ -194,7 +229,10 @@ export default {
     },
     get_selected_questions(questions) {
       for (var i = 0; i < questions.length; i++) {
-        this.cur_section.questions.push(questions[i]);
+        this.cur_section.questions.push({
+		  point: "",
+		  content: questions[i]
+		});
       }
     },
     roman(num) {
