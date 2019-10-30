@@ -174,8 +174,8 @@ export default {
         for (var i = 0; i < response.data.length; i++) {
           axios
             .get("/api/question_banks/" + response.data[i] + "/")
-            .then(response => {
-              that.question_banks.push(that.parse(response.data));
+            .then(sub_response => {
+              that.question_banks.push(that.parse(sub_response.data));
               while (lock);
               lock = true;
               count++;
