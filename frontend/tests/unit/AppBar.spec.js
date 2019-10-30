@@ -15,6 +15,12 @@ Vue.use(Router);
 
 const user_factory = new UserFactory();
 
+const resizeWindow = (x, y) => {
+    window.innerWidth = x;
+    window.innerHeight = y;
+    window.dispatchEvent(new Event('resize'));
+}
+
 describe("AppBar.vue", () => {
     let vuetify, router;
 
@@ -82,7 +88,7 @@ describe("AppBar.vue", () => {
             expect(button_wrappers.at(index).text() === "Exit").toBe(false);
         }
 
-        //logged in  as Admin
+        //logged in as Admin
         wrapper = user_factory.login(wrapper, "Admin");
         await wrapper.vm.$nextTick();
         button_wrappers = wrapper.findAll("a[href='#/']")
@@ -162,5 +168,31 @@ describe("AppBar.vue", () => {
             expect(wrapper.vm.$store.state.user === null).toBe(true);
             done();
         }, 1000);
+    })
+
+    it("navigation drawer works properly", async (done) => {
+        const store = new Vuex.Store({
+            state: {
+                user: null,
+            }
+        })
+        let wrapper = mount(AppBar, {
+            localVue,
+            vuetify,
+            router,
+            store,
+            sync: false
+        });
+
+        wrapper.setData({
+            drawer: true
+        });
+        expect(wrapper.vm.drawer).toBe(true);
+        resizeWindow(1000, 400);
+        setTimeout(() => {
+            expect(wrapper.vm.drawer).toBe(false);
+            done();
+        }, 1000)
+
     })
 });
