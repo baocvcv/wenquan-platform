@@ -1,5 +1,6 @@
 <template>
     <div id="app-bar">
+        <!--BUGS here. Cannot fully close the drawer when transformed into sm or md.-->
         <v-navigation-drawer v-model="drawer" app clipped v-show="$vuetify.breakpoint.xsOnly">
             <v-list dense>
                 <template 
@@ -54,8 +55,7 @@
 
         <div class="flex-grow-1"></div>
 
-        <!--这里根据当前用户登录状态/类别渲染出对应的路由-->
-        <div id="nav-links" v-if="$vuetify.breakpoint.smAndUp">
+        <div id="nav-links" v-show="$vuetify.breakpoint.smAndUp">
             <router-link 
             v-for="nav_link in rendered_nav_links"
             :key="nav_link.name"
@@ -94,7 +94,7 @@ export default {
     data: function(){
         return {
             drawer: false,
-            show_drawer: !this.$vuetify.breakpoint.smAndUp,
+            // show_drawer: !this.$vuetify.breakpoint.smAndUp,
             nav_link_groups: {
                 not_signed_in: [
                     {
@@ -195,10 +195,12 @@ export default {
         }
     },
     watch: {
+        /*
         show_drawer: function() {
             if (!show_drawer)
                 this.drawer = false;
         }
+        */
     },
     mounted() {
         window.addEventListener('resize', () => {
