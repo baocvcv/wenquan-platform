@@ -69,11 +69,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn
-            color="green"
-            dark
-            @click="click_action"
-          >
+          <v-btn color="green" dark @click="click_action">
             Goto
           </v-btn>
           <v-btn color="primary" dark @click="detail = false">Back</v-btn>
@@ -121,12 +117,12 @@ import axios from "axios";
 export default {
   name: "question-banks-list",
   props: {
-	click_action: {
-	  type: Function,
-	  default:function() {
-	    this.$router.push('questionbanks/' + this.cur_qst_bank.id)
-	  }
-	},
+    click_action: {
+      type: Function,
+      default: function() {
+        this.$router.push("questionbanks/" + this.cur_qst_bank.id);
+      }
+    },
     read_only: Boolean(true)
   },
   data: function() {
@@ -135,7 +131,7 @@ export default {
       show_del_dialog: false,
       question_banks: [],
       cur_qst_bank: {},
-	  process: "End"
+      process: "End"
     };
   },
   methods: {
@@ -164,37 +160,36 @@ export default {
         }
       };
       return result;
-    },
+    }
   },
   mounted: function() {
-	  console.log("here");
-      let that = this;
-      this.process = "Loading";
-      axios
-        .get("/api/question_banks/")
-        .then(response => {
-          let all_count = response.data.length;
-          let count = 0;
-          let lock = false;
-          for (var i = 0; i < response.data.length; i++) {
-            axios
-              .get("/api/question_banks/" + response.data[i] + "/")
-              .then(response => {
-                that.question_banks.push(that.parse(response.data));
-                while (lock);
-                lock = true;
-                count++;
-                lock = false;
-                that.process =
-                  "Loaded question banks: " + count + "/" + all_count;
-                if (count == all_count) that.process = "End";
-              });
-          }
-        })
-        .catch(error => {
-          that.process = "Failed to access data: " + error;
-        });
-	}
+    let that = this;
+    this.process = "Loading";
+    axios
+      .get("/api/question_banks/")
+      .then(response => {
+        let all_count = response.data.length;
+        let count = 0;
+        let lock = false;
+        for (var i = 0; i < response.data.length; i++) {
+          axios
+            .get("/api/question_banks/" + response.data[i] + "/")
+            .then(response => {
+              that.question_banks.push(that.parse(response.data));
+              while (lock);
+              lock = true;
+              count++;
+              lock = false;
+              that.process =
+                "Loaded question banks: " + count + "/" + all_count;
+              if (count == all_count) that.process = "End";
+            });
+        }
+      })
+      .catch(error => {
+        that.process = "Failed to access data: " + error;
+      });
+  }
 };
 </script>
 

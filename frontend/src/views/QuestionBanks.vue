@@ -16,9 +16,7 @@
         </v-tab>
 
         <v-tab-item>
-          <question-banks-list
-            :read_only="read_only"
-          ></question-banks-list>
+          <question-banks-list :read_only="read_only"></question-banks-list>
         </v-tab-item>
         <v-tab-item>
           <create-question-bank></create-question-bank>
@@ -36,13 +34,13 @@ export default {
   name: "",
   data: function() {
     return {
-      read_only: false,
+      read_only: false
     };
   },
   components: {
     "question-banks-list": QuestionBanksList,
     "create-question-bank": CreateQuestionBank
-  },
+  }
 };
 </script>
 
