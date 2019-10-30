@@ -1,5 +1,6 @@
 """ Serializers for Questions """
 from rest_framework import serializers
+from django.http import Http404
 
 from backend.models.questions import BriefAnswerQ
 from backend.models.questions import SingleChoiceQ
@@ -7,6 +8,14 @@ from backend.models.questions import MultpChoiceQ
 from backend.models.questions import FillBlankQ
 from backend.models.questions import TrueOrFalseQ
 from backend.models.questions import QuestionGroup
+
+
+def get_object(group_id):
+    try:
+        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+    except QuestionGroup.DoesNotExist:
+        raise Http404
+    return group
 
 
 class SingleChoiceQSerializer(serializers.ModelSerializer):
@@ -35,7 +44,7 @@ class SingleChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create single choice question"""
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = get_object(validated_data['history_version_id'])
         question = SingleChoiceQ.objects.create(
             **validated_data,
             history_version=group,
@@ -71,7 +80,7 @@ class MultpChoiceQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create multiple choices question"""
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = get_object(validated_data['history_version_id'])
         question = MultpChoiceQ.objects.create(
             **validated_data,
             history_version=group,
@@ -105,7 +114,7 @@ class TrueOrFalseQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create true or false choices question"""
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = get_object(validated_data['history_version_id'])
         question = TrueOrFalseQ.objects.create(
             **validated_data,
             history_version=group,
@@ -149,7 +158,7 @@ class FillBlankQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create fill blank question"""
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = get_object(validated_data['history_version_id'])
         question = FillBlankQ.objects.create(
             **validated_data,
             history_version=group,
@@ -183,7 +192,7 @@ class BriefAnswerQSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """create brief answer question"""
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = get_object(validated_data['history_version_id'])
         question = BriefAnswerQ.objects.create(
             **validated_data,
             history_version=group,
