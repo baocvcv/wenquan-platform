@@ -16,11 +16,7 @@
         </v-tab>
 
         <v-tab-item>
-          <question-banks-list
-            :process="process"
-            :question_banks="question_banks"
-            :read_only="read_only"
-          ></question-banks-list>
+          <question-banks-list :read_only="read_only"></question-banks-list>
         </v-tab-item>
         <v-tab-item>
           <create-question-bank></create-question-bank>
@@ -33,68 +29,17 @@
 <script>
 import QuestionBanksList from "../components/QuestionBanksList.vue";
 import CreateQuestionBank from "../components/CreateQuestionBank.vue";
-import axios from "axios";
 
 export default {
   name: "",
   data: function() {
     return {
-      read_only: false,
-      question_banks: [],
-      process: "Loading"
+      read_only: false
     };
   },
   components: {
     "question-banks-list": QuestionBanksList,
     "create-question-bank": CreateQuestionBank
-  },
-  methods: {
-    parse(input) {
-      var result = {
-        id: input.id,
-        name: input.name,
-        brief: input.brief,
-        icon: input.picture,
-        details: {
-          Authority: input.authority,
-          "Create Time": input.createTime,
-          "Last Updated Time": input.lastUpdate,
-          Brief: input.brief,
-          "Total Question Number": input.question_count,
-          "Total Invite Code number": input.invitation_code_count,
-          "Total Activated Code number": input.activated_code_count
-        }
-      };
-      return result;
-    }
-  },
-  created: function() {
-    let that = this;
-    this.loading = "Loading";
-    axios
-      .get("/api/question_banks/")
-      .then(response => {
-        let all_count = response.data.length;
-        let count = 0;
-        let lock = false;
-        for (var i = 0; i < response.data.length; i++) {
-          axios
-            .get("/api/question_banks/" + response.data[i] + "/")
-            .then(response => {
-              that.question_banks.push(that.parse(response.data));
-              while (lock);
-              lock = true;
-              count++;
-              lock = false;
-              that.process =
-                "Loaded question banks: " + count + "/" + all_count;
-              if (count == all_count) that.process = "End";
-            });
-        }
-      })
-      .catch(error => {
-        that.process = "Failed to access data: " + error;
-      });
   }
 };
 </script>

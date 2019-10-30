@@ -69,11 +69,7 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn
-            color="green"
-            dark
-            @click="$router.push('questionbanks/' + cur_qst_bank.id)"
-          >
+          <v-btn color="green" dark @click="click_action">
             Goto
           </v-btn>
           <v-btn color="primary" dark @click="detail = false">Back</v-btn>
@@ -121,18 +117,21 @@ import axios from "axios";
 export default {
   name: "question-banks-list",
   props: {
-    question_banks: {},
-    read_only: Boolean(true),
-    process: {
-      type: String,
-      default: "End"
-    }
+    click_action: {
+      type: Function,
+      default: function() {
+        this.$router.push("questionbanks/" + this.cur_qst_bank.id);
+      }
+    },
+    read_only: Boolean(true)
   },
   data: function() {
     return {
       detail: false,
       show_del_dialog: false,
-      cur_qst_bank: {}
+      question_banks: [],
+      cur_qst_bank: {},
+      process: "End"
     };
   },
   methods: {
@@ -143,7 +142,53 @@ export default {
         .catch(error => {
           alert(error);
         });
+    },
+    parse(input) {
+      var result = {
+        id: input.id,
+        name: input.name,
+        brief: input.brief,
+        icon: input.picture,
+        details: {
+          Authority: input.authority,
+          "Create Time": input.createTime,
+          "Last Updated Time": input.lastUpdate,
+          Brief: input.brief,
+          "Total Question Number": input.question_count,
+          "Total Invite Code number": input.invitation_code_count,
+          "Total Activated Code number": input.activated_code_count
+        }
+      };
+      return result;
     }
+  },
+  mounted: function() {
+    let that = this;
+    this.process = "Loading";
+    axios
+      .get("/api/question_banks/")
+      .then(response => {
+        let all_count = response.data.length;
+        let count = 0;
+        let lock = false;
+        for (var i = 0; i < response.data.length; i++) {
+          axios
+            .get("/api/question_banks/" + response.data[i] + "/")
+            .then(sub_response => {
+              that.question_banks.push(that.parse(sub_response.data));
+              while (lock);
+              lock = true;
+              count++;
+              lock = false;
+              that.process =
+                "Loaded question banks: " + count + "/" + all_count;
+              if (count == all_count) that.process = "End";
+            });
+        }
+      })
+      .catch(error => {
+        that.process = "Failed to access data: " + error;
+      });
   }
 };
 </script>

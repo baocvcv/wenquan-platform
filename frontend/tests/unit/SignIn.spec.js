@@ -108,10 +108,11 @@ describe("SignInBox.vue", () => {
             password:"test"
         }))
         await wrapper.vm.$nextTick();
-        wrapper.find("button").trigger("click");
+        wrapper.vm.click();
         await wrapper.vm.$nextTick();
         setTimeout(() => {
             expect(wrapper.vm.sign_in_result).toBe("");
+            console.log(store.state.user);
             sessionStorage.removeItem('user');
             done();
         },1000);
