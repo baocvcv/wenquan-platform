@@ -89,8 +89,6 @@
 </template>
 
 <script>
-import bus from "./EventBus";
-
 export default {
     name: "app-bar",
     data: function(){
@@ -173,19 +171,18 @@ export default {
                 return this.nav_link_groups.student;
         },
 		render_logout_entry: function() {
-			return this.user && 
-				this.$router.currentRoute.path == "/";
+			return this.user;
 		},
         render_admin_entry: function() {
             if (!this.user)
                 return false;
-            return this.$router.currentRoute.path.split('/')[1] != "admin"
+            return this.$route.fullPath.search("/admin/") === -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         },
         render_exit: function() {
             if (!this.user)
                 return false;
-            return this.$router.currentRoute.path.split('/')[1] === "admin"
+            return this.$route.fullPath.search("/admin/") != -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         }
     },
@@ -193,8 +190,8 @@ export default {
         logout: function(){
             alert("Logged out");
             sessionStorage.removeItem('user');
-            this.login=false;
-			this.$store.state.user = null;
+            //this.login=false;
+            this.$store.state.user = null;
         }
     },
     watch: {
