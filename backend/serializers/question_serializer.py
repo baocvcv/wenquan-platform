@@ -12,7 +12,7 @@ from backend.models.questions import QuestionGroup
 
 def get_object(group_id):
     try:
-        group = QuestionGroup.objects.get(id=validated_data['history_version_id'])
+        group = QuestionGroup.objects.get(id=group_id)
     except QuestionGroup.DoesNotExist:
         raise Http404
     return group
