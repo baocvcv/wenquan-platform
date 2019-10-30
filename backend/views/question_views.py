@@ -58,7 +58,7 @@ class QuestionList(APIView):
         """Get the latest version of a Question"""
         try:
             return q_group.question_set.all().get(question_change_time=q_group.current_version)
-        except q_group.question_set.DoesNotExist:
+        except Question.DoesNotExist:
             raise Http404
 
     def get(self, request):
@@ -101,7 +101,10 @@ class QuestionList(APIView):
 
         parents = []
         for i in parents_id:
-            node = KnowledgeNode.objects.get(id=i)
+            try:
+                node = KnowledgeNode.objects.get(id=i)
+            except KnowledgeNode.DoesNotExist:
+                raise Http404
             parents.append(node)
 
         bank = node.question_bank
