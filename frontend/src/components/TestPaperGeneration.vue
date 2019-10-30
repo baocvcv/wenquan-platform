@@ -23,7 +23,17 @@
         auto-grow
         outlined
       ></v-textarea>
+
+	  <!--list of sections-->
       <v-list>
+	    <v-list-item two-line>
+		  <v-list-item-content>
+		    <v-list-item-title>Sections</v-list-item-title>
+		    <v-list-item-subtitle :style="'color:'+ section_sum_up.color">{{ section_sum_up.content }}</v-list-item-subtitle>
+		  </v-list-item-content>
+		</v-list-item>
+
+		<!--sections-->
         <v-list-item-group v-for="(section, key) in sections" :key="key">
           <v-list-item>
             <v-list-item-avatar>
@@ -45,9 +55,14 @@
                 :rules="total_points_rules"
               ></v-text-field>
               </v-col>
-              <v-col cols="12" xs="3" lg="2">
+              <v-col cols="12" xs="3" lg="1">
                 <v-label>points</v-label>
               </v-col>
+			  <v-col cols="12" xs="5" lg="4">
+			    <span :style="'color: ' + question_sum_up(key).color">
+				  {{ question_sum_up(key).content }}
+				</span>
+			  </v-col>
               </v-row>
             </v-list-item-content>
             <v-list-item-action>
@@ -77,6 +92,8 @@
               </v-tooltip>
             </v-list-item-action>
           </v-list-item>
+
+		  <!--questions-->
 		  <v-list-item
 		    v-for="(question, id) in section.questions"
 			:key="id"
@@ -192,7 +209,7 @@ export default {
       valid: false,
       title: "",
       title_rules: [v => !!v || "Title is required!"],
-      total_points: "",
+      total_points: "0",
       total_points_rules: [
         v => !!v || "Total points is required!",
         v => (!!v && /^[0-9]+$/.test(v)) || "An integer is expected!"
@@ -205,14 +222,39 @@ export default {
       question_bank_id: -1
     };
   },
+  computed: {
+	section_sum_up: function() {
+	  //sum up of points assigned to each section and check if sum == total points of test paper
+	  let sum = 0;
+	  for(var i = 0; i < this.sections.length; i++) {
+		sum += parseInt(this.sections[i].total_points);
+	  }
+	  var tip = sum == this.total_points && !!this.total_points
+	  ? { color: "green", content: "valid" }
+	  : { color: "red", content: "Sum-up of points of sections: " + sum + " |Points assigned to this test paper: " + this.total_points };
+	  return tip;
+	}
+  },
   methods: {
     create_section() {
       this.sections.push({
         title: "",
-        total_points: "",
+        total_points: "0",
         questions: []
       });
     },
+	question_sum_up(index) {
+	  //sum up of points assigned to each question and check if sum == total points of this section
+	  let section = this.sections[index];
+	  let sum = 0;
+	  for(var i = 0; !!section && i < section.questions.length; i++) {
+		sum += parseInt(section.questions.point);
+	  }
+	  var tip = sum == section.total_points && !!section.total_points
+	  ? { color: "green", content: "valid" }
+	  : { color: "red", content: "Sum-up of points of questions: " + sum + " |Points assigned to this section: " + section.total_points };
+	  return tip;
+	},
     drop_section(index) {
       //delete a section
       this.sections.splice(index, 1);
