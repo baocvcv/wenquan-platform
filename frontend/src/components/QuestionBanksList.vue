@@ -7,7 +7,8 @@
       <v-list-item
         v-for="qst_bank in question_banks"
         :key="qst_bank.name"
-        @click="$router.push('questionbanks/' + qst_bank.id)"
+        @click="
+          select ? select_action(qst_bank.id) : $router.push('questionbanks/' + qst_bank.id)"
       >
         <v-list-item-avatar>
           <v-img :src="qst_bank.icon"></v-img>
@@ -33,7 +34,7 @@
         </v-list-item-action>
 
         <v-list-item-action
-          v-bind:style="read_only ? 'display:none' : ''"
+          v-bind:style="readonly ? 'display:none' : ''"
           @click.stop="
             show_del_dialog = true;
             cur_qst_bank = qst_bank;
@@ -69,7 +70,11 @@
         </v-card-text>
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="green" dark @click="click_action">
+          <v-btn
+            color="green"
+            dark
+            @click="select ? select_action(cur_qst_bank.id) : $router.push('questionbanks/' + cur_qst_bank.id)"
+          >
             Goto
           </v-btn>
           <v-btn color="primary" dark @click="detail = false">Back</v-btn>
@@ -117,13 +122,14 @@ import axios from "axios";
 export default {
   name: "question-banks-list",
   props: {
-    click_action: {
-      type: Function,
-      default: function() {
-        this.$router.push("questionbanks/" + this.cur_qst_bank.id);
-      }
+    select: {
+      type: Boolean,
+      default: false
     },
-    read_only: Boolean(true)
+    readonly: {
+	  type: Boolean,
+	  default: false
+	}
   },
   data: function() {
     return {
@@ -142,6 +148,9 @@ export default {
         .catch(error => {
           alert(error);
         });
+    },
+    select_action(id) {
+      this.$emit("done-select", id);
     },
     parse(input) {
       var result = {

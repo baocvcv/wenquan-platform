@@ -56,7 +56,7 @@
                   <v-btn
                     icon
                     v-on="on"
-                    @click.stop="adding_question = true"
+                    @click.stop="adding_question = true; cur_section = section"
                   ><v-icon color="green" dark>mdi-plus</v-icon>
                   </v-btn>
                 </template>
@@ -93,7 +93,7 @@
         </v-list-item>
       </v-list>
     </v-form>
-	<!--The dialog is for selecting questions-->
+    <!--The dialog is for selecting questions-->
     <v-dialog
       v-model="adding_question"
       fullscreen
@@ -102,13 +102,41 @@
     >
       <v-card>
         <v-toolbar>
-          <v-btn icon @click="adding_question = false">
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
+		  <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+		      <v-btn v-on="on" icon @click="adding_question = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+			</template>
+			<span>Close</span>
+		  </v-tooltip>
+		  <v-tooltip bottom>
+		    <template v-slot:activator="{ on }">
+			  <v-btn
+			    v-if="process == 'question'"
+				v-on="on"
+				icon
+				@click="process = 'question bank'"
+			  ><v-icon>mdi-arrow-left</v-icon>
+			  </v-btn>
+			</template>
+			<span>Back to question banks list</span>
+		  </v-tooltip>
           <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
         </v-toolbar>
-		<question-banks-list v-if="process == 'question bank'" />
-		<question-list v-if="process == 'question'" />
+        <question-banks-list
+          v-if="process == 'question bank'"
+          select
+          readonly
+          v-on:done-select="get_bank_id(id)"
+        />
+        <question-list
+          v-if="process == 'question'"
+          :id="question_bank_id"
+          editable="true"
+          select
+          v-on:done-select="get_selected_questions(questions)"
+        />
       </v-card>
     </v-dialog>
   </div>
@@ -121,8 +149,8 @@ export default {
   name: "",
   props: {},
   components: {
-	"question-banks-list": QuestionBanksList,
-	"question-list": QuestionList
+    "question-banks-list": QuestionBanksList,
+    "question-list": QuestionList
   },
   data: function() {
     return {
@@ -136,8 +164,10 @@ export default {
       ],
       tips: "",
       sections: [],
+      cur_section: undefined,
       adding_question: false,
-	  process: "question bank"
+      process: "question bank",
+      question_bank_id: -1
     };
   },
   methods: {
@@ -149,7 +179,23 @@ export default {
       });
     },
     drop_section(index) {
+      //delete a section
       this.sections.splice(index, 1);
+      if (this.cur_section == this.sections[index])
+        this.cur_section = undefined;
+    },
+    drop_question(section, index) {
+      //delete a question in selected question
+      section.questions.splice(index, 1);
+    },
+    get_bank_id(id) {
+      this.question_bank_id = id;
+      this.process = "question";
+    },
+    get_selected_questions(questions) {
+      for (var i = 0; i < questions.length; i++) {
+        this.cur_section.questions.push(questions[i]);
+      }
     },
     roman(num) {
       var n,
