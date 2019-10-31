@@ -1,6 +1,5 @@
 <template>
     <div id="app-bar">
-        <!--BUGS here. Cannot fully close the drawer when transformed into sm or md.-->
         <v-navigation-drawer v-model="drawer" app clipped v-show="$vuetify.breakpoint.xsOnly">
             <v-list dense>
                 <template 
@@ -171,18 +170,21 @@ export default {
                 return this.nav_link_groups.student;
         },
 		render_logout_entry: function() {
-			return this.user;
+            if (this.user)
+                return true;
+            else
+                return false;
 		},
         render_admin_entry: function() {
             if (!this.user)
                 return false;
-            return this.$route.fullPath.search("/admin/") === -1
+            return this.$route.fullPath.search("/admin") === -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         },
         render_exit: function() {
             if (!this.user)
                 return false;
-            return this.$route.fullPath.search("/admin/") != -1
+            return this.$route.fullPath.search("/admin") != -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         }
     },
@@ -204,8 +206,10 @@ export default {
     },
     mounted() {
         window.addEventListener('resize', () => {
-            if (this.$vuetify.breakpoint.smAndUp)
+            if (window.innerWidth > 600)
+            {
                 this.drawer = false;
+            }
         })
     }
 }
