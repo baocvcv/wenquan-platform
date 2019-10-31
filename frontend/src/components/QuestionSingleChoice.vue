@@ -171,9 +171,9 @@ export default {
         question_image: [],
         question_choice: [],
         question_ans: undefined,
-        question_solution: "",
-        tf_choice: [{ name: "T", content: true }, { name: "F", content: false }]
+        question_solution: ""
       },
+      tf_choice: [{ name: "T", content: true }, { name: "F", content: false }],
       edited_question: null
     };
   },
@@ -182,23 +182,23 @@ export default {
   },
   methods: {
     choice_num_up() {
-      let choice_num = this.question.question_choice.length;
-      this.question.question_choice.push({
+      let choice_num = this.edited_question.question_choice.length;
+      this.edited_question.question_choice.push({
         name: String.fromCharCode(choice_num + 65),
         content: ""
       });
     },
     delete_choice(index) {
-      if (this.question.question_ans == this.question.question_choice[index]) {
-        this.question.question_ans = undefined;
+      if (this.edited_question.question_ans == this.edited_question.question_choice[index]) {
+        this.edited_question.question_ans = undefined;
       }
-      this.question.question_choice.splice(index, 1);
-      for (var i = 0; i < this.question.question_choice.length; i++) {
-        this.question.question_choice[i].name = String.fromCharCode(65 + i);
+      this.edited_question.question_choice.splice(index, 1);
+      for (var i = 0; i < this.edited_question.question_choice.length; i++) {
+        this.edited_question.question_choice[i].name = String.fromCharCode(65 + i);
       }
     },
     check_ans(choice) {
-      this.question.question_ans = this.question.question_ans == choice ? undefined : choice;
+      this.edited_question.question_ans = this.edited_question.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
       this.question = Object.assign({}, input);
