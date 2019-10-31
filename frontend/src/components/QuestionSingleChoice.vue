@@ -161,7 +161,7 @@ export default {
   data: function() {
     return {
       valid: false,
-      question: {
+      edited_question: {
         id: -1,
         parents_node: [],
         question_level: 0,
@@ -174,11 +174,8 @@ export default {
         question_solution: ""
       },
       tf_choice: [{ name: "T", content: true }, { name: "F", content: false }],
-      edited_question: null
+      question: undefined
     };
-  },
-  created() {
-    this.edited_question = JSON.parse(JSON.stringify(this.question));
   },
   methods: {
     choice_num_up() {
@@ -201,14 +198,14 @@ export default {
       this.edited_question.question_ans = this.edited_question.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
-      this.question.id = input.id;
-      this.question.parents_node = input.parents_node;
-      this.question.question_level = input.question_level;
-      this.question.question_change_time = input.question_change_time;
-      this.question.question_name = input.question_name;
-      this.question.question_image = input.question_image;
-      this.question.question_solution = input.question_solution;
-      this.question.question_content = input.question_content;
+      this.edited_question.id = input.id;
+      this.edited_question.parents_node = input.parents_node;
+      this.edited_question.question_level = input.question_level;
+      this.edited_question.question_change_time = input.question_change_time;
+      this.edited_question.question_name = input.question_name;
+      this.edited_question.question_image = input.question_image;
+      this.edited_question.question_solution = input.question_solution;
+      this.edited_question.question_content = input.question_content;
       if (!this.TF) {
         var parsed = [];
         var origin = input.question_choice;
@@ -218,17 +215,16 @@ export default {
             name: id,
             content: origin[i]
           };
-          if (input.question_ans == id) this.question.question_ans = choice;
+          if (input.question_ans == id) this.edited_question.question_ans = choice;
           parsed.push(choice);
         }
-        this.question.question_choice = parsed;
+        this.edited_question.question_choice = parsed;
       } else {
-        this.question.question_ans = input.question_ans
+        this.edited_question.question_ans = input.question_ans
           ? this.tf_choice[0]
           : this.tf_choice[1];
       }
-      this.edited_question = JSON.parse(JSON.stringify(this.question));
-
+      this.question = JSON.stringify(this.parse());
     },
     parse() {
       var result = {
@@ -257,20 +253,20 @@ export default {
     },
     reset() {
       this.$refs.input.reset();
-      this.edited_question.question_choice.splice(0, this.question.question_choice.length);
+      this.edited_question.question_choice.splice(0, this.edited_question.question_choice.length);
       this.edited_question.question_ans = undefined;
       this.$refs.uploader.reset();
-      this.question = JSON.parse(JSON.stringify(this.edited_question));
+      this.question = JSON.stringify(this.parse());
     },
     cancel() {
-      this.edited_question = JSON.parse(JSON.stringify(this.question));
+      this.updateData(JSON.parse(this.question));
       this.$emit("cancel");
     },
     submit() {
       this.$emit("submit", this.parse());
     },
     submitted() {
-      this.question = JSON.parse(JSON.stringify(this.edited_question));
+      this.question = JSON.stringify(this.parse());
     }
   }
 };
