@@ -113,7 +113,7 @@ export default {
         }
     },
     created() {
-        this.edited_data = Object.assign({}, this.data);
+        this.edited_data = JSON.parse(JSON.stringify(this.data));
     },
     methods: {
         submit() {
@@ -123,14 +123,14 @@ export default {
             this.$refs.form.reset();
             this.edited_data.answers = [];
             this.edited_data.image = [];
-            this.data = Object.assign({}, this.edited_data);
+            this.data = JSON.parse(JSON.stringify(this.edited_data));
         },
         cancel() {
-            this.edited_data = Object.assign({}, this.data);
+            this.edited_data = JSON.parse(JSON.stringify(this.data));
             this.$emit("cancel");
         },
         submitted() {
-            this.data = Object.assign({}, this.edited_data);
+            this.data = JSON.parse(JSON.stringify(this.edited_data));
         },
         updateData(input) {
             //parse data input from backend
@@ -143,7 +143,7 @@ export default {
             this.data.analysis = input.question_solution;
             this.data.difficulty = input.question_level;
             this.data.answers = input.question_ans;      
-            this.edited_data = Object.assign({}, this.data);      
+            this.edited_data = JSON.parse(JSON.stringify(this.data));      
         },
         parse() {
             let result = {

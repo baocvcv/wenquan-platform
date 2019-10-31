@@ -204,7 +204,7 @@ export default {
         close_dialog_create() {
             this.dialog_create = false;
             setTimeout(() => {
-                this.edited_user = Object.assign({}, this.default_user)
+                this.edited_user = JSON.parse(JSON.stringify(this.user));
             }, 10000);
         },
         create() {

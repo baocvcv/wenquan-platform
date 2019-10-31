@@ -163,10 +163,10 @@ export default {
             this.$emit("submit", this.parse());
         },
         submitted() {
-            this.data = Object.assign({}, this.edited_data);
+            this.data = JSON.parse(JSON.stringify(this.edited_data));
         },
         cancel() {
-            this.edited_data = Object.assign({}, this.data);
+            this.edited_data = JSON.parse(JSON.stringify(this.data));
             this.$emit("cancel");
         },
         reset() {
@@ -195,7 +195,7 @@ export default {
                     right: false
                 },
             ];
-            this.data = Object.assign({}, this.edited_data);
+            this.data = JSON.parse(JSON.stringify(this.edited_data));
         },
         updateData(input) {
             //parse data input from backend
@@ -225,7 +225,7 @@ export default {
                     rightAns.push(item);
             });
             this.data.rightAnswer = rightAns;
-            this.edited_data = Object.assign({}, this.data);
+            this.edited_data = JSON.parse(JSON.stringify(this.data));
         },
         parse() {
             let result = {
@@ -248,7 +248,7 @@ export default {
         }
     },
     created() {
-        this.edited_data = Object.assign({}, this.data);
+        this.edited_data = JSON.parse(JSON.stringify(this.data));
     },
     data: function() {
         return {
