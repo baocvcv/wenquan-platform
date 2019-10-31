@@ -171,9 +171,9 @@ export default {
         question_image: [],
         question_choice: [],
         question_ans: undefined,
-        question_solution: "",
-        tf_choice: [{ name: "T", content: true }, { name: "F", content: false }]
+        question_solution: ""
       },
+      tf_choice: [{ name: "T", content: true }, { name: "F", content: false }],
       edited_question: null
     };
   },

@@ -23,9 +23,23 @@ describe("QuestionSingleChoice.vue", () => {
         wrapper.vm.delete_choice(0);
         expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
         wrapper.vm.choice_num_up();
+        wrapper.vm.choice_num_up();
+        wrapper.vm.choice_num_up();
         wrapper.vm.edited_question.question_ans = wrapper.vm.edited_question.question_choice[0];
         wrapper.vm.delete_choice(0);
+        expect(wrapper.vm.edited_question.question_choice.length).toBe(2);
+    });
+    it("Choice check assert", () => {
+        const wrapper=mount(SingleChoice, {
+            localVue,
+            vuetify,
+            sync: false
+        });
         expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
+        wrapper.vm.choice_num_up();
+        wrapper.vm.check_ans(wrapper.vm.edited_question.question_choice[0]);
+        wrapper.vm.check_ans(wrapper.vm.edited_question.question_choice[0]);
+        expect(wrapper.vm.edited_question.question_choice.length).toBe(1);
     });
     it("Submit event listener", () => {
         const wrapper=mount(SingleChoice, {
@@ -72,7 +86,7 @@ describe("QuestionSingleChoice.vue", () => {
         wrapper.vm.choice_num_up();
         wrapper.vm.submitted();
         wrapper.vm.reset();
-        expect(wrapper.vm.question.question_choice.length).toBe(0);
+        expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
     });
     it("Update question assignment", () => {
         const wrapper=mount(SingleChoice, {
@@ -97,5 +111,32 @@ describe("QuestionSingleChoice.vue", () => {
         wrapper.vm.updateData(input);
         expect(wrapper.vm.question.id).toBe(12);
         expect(wrapper.vm.edited_question.id).toBe(12);
+    });
+    it("Test TF", () => {
+        const wrapper=mount(SingleChoice, {
+            localVue,
+            vuetify,
+            sync: false
+        });
+        wrapper.setProps({
+            TF: true
+        });
+        let input={
+            "id": 12,
+            "parents_node": [3,5],
+            "history_version_id":1,
+            "question_change_time": "2019-10-15T01:11:21.754312Z",
+            "question_name": "question3",
+            "question_type": "TorF",
+            "question_level": 5,
+            "question_content": "人类的本质是复读机吗?",
+            "question_image": [""],
+            "question_ans": true,
+            "question_solution": "因为人类的本质是复读机"
+        };
+        wrapper.vm.updateData(input);
+        input.question_ans = false;
+        wrapper.vm.updateData(input);
+        wrapper.vm.parse();
     });
 });
