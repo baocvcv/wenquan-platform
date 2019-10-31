@@ -273,11 +273,11 @@ export default {
             this.level_min_filter = 0;
             this.level_max_fileter = 5;
         },
-        create() {
+        create(question_id) {
             axios
-                .get("/api/question_banks/" + this.id + "/")
+                .get("/api/questions/" + question_id + "/")
                 .then((response) => {
-                    this.question_list = response.data.questions;
+                    this.question_list.push(response.data);
                     this.create_question_dialog = false;
                 })
                 .catch((error) => {
