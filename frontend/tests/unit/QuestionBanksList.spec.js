@@ -54,9 +54,9 @@ describe("SignUp.vue", () => {
     expect(wrapper.exists("Cancel")).toBe(true);
     wrapper.vm.show_del_dialog = false;
     await wrapper.vm.$nextTick();
-    wrapper.vm.click_action();
+    wrapper.vm.select_action();
     await wrapper.vm.$nextTick();
-    expect(wrapper.vm.$route.path).toBe("/questionbanks/1");
+    expect(wrapper.emitted()["done-select"]).toBeTruthy();
     done();
   });
 

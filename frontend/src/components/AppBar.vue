@@ -54,8 +54,7 @@
 
         <div class="flex-grow-1"></div>
 
-        <!--这里根据当前用户登录状态/类别渲染出对应的路由-->
-        <div id="nav-links" v-if="$vuetify.breakpoint.smAndUp">
+        <div id="nav-links" v-show="$vuetify.breakpoint.smAndUp">
             <router-link 
             v-for="nav_link in rendered_nav_links"
             :key="nav_link.name"
@@ -89,14 +88,12 @@
 </template>
 
 <script>
-import bus from "./EventBus";
-
 export default {
     name: "app-bar",
     data: function(){
         return {
             drawer: false,
-            show_drawer: !this.$vuetify.breakpoint.smAndUp,
+            // show_drawer: !this.$vuetify.breakpoint.smAndUp,
             nav_link_groups: {
                 not_signed_in: [
                     {
@@ -150,7 +147,13 @@ export default {
                         text: "Question Banks",
                         link: "/admin/questionbanks",
                         icon: "mdi-bank"
-                    }
+                    },
+					{
+						name: "Test Papers",
+						text: "Test Papers",
+						link: "/admin/testpapers",
+						icon: "mdi-book-open-variant"
+					},
                 ]
             }
         };
@@ -173,19 +176,21 @@ export default {
                 return this.nav_link_groups.student;
         },
 		render_logout_entry: function() {
-			return this.user && 
-				this.$router.currentRoute.path == "/";
+            if (this.user)
+                return true;
+            else
+                return false;
 		},
         render_admin_entry: function() {
             if (!this.user)
                 return false;
-            return this.$router.currentRoute.path.split('/')[1] != "admin"
+            return this.$route.fullPath.search("/admin") === -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         },
         render_exit: function() {
             if (!this.user)
                 return false;
-            return this.$router.currentRoute.path.split('/')[1] === "admin"
+            return this.$route.fullPath.search("/admin") != -1
             && (this.user.user_group === "Admin" || (this.user.user_group === "SuperAdmin"));
         }
     },
@@ -193,20 +198,24 @@ export default {
         logout: function(){
             alert("Logged out");
             sessionStorage.removeItem('user');
-            this.login=false;
-			this.$store.state.user = null;
+            //this.login=false;
+            this.$store.state.user = null;
         }
     },
     watch: {
+        /*
         show_drawer: function() {
             if (!show_drawer)
                 this.drawer = false;
         }
+        */
     },
     mounted() {
         window.addEventListener('resize', () => {
-            if (this.$vuetify.breakpoint.smAndUp)
+            if (window.innerWidth > 600)
+            {
                 this.drawer = false;
+            }
         })
     }
 }

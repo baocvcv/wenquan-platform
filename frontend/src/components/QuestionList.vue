@@ -242,11 +242,11 @@ export default {
         {
             questions = this.questions;
         }
-        let question_id;
-        for (question_id in questions)
+        let question_id_index;
+        for (question_id_index in questions)
         {
             this.$axios
-                .get("/api/questions/" + question_id + "/")
+                .get("/api/questions/" + questions[question_id_index] + "/")
                 .then(response => {
                     this.question_list.push(response.data);
                 })
