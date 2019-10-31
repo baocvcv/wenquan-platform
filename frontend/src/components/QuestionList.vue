@@ -226,13 +226,28 @@ export default {
         }
     },
     mounted() {
+		let load_questions = () => {
+          let question_id_index;
+          for (question_id_index in questions)
+          {
+              this.$axios
+                  .get("/api/questions/" + questions[question_id_index] + "/")
+                  .then(response => {
+                      this.question_list.push(response.data);
+                  })
+                  .catch(error => {
+                      console.log(error);
+                  })
+          }
+		}
         let questions;
-        if (!this.questions)
+        if (this.questions.length == 0)
         {
             this.$axios
                 .get("/api/question_banks/" + this.id + "/")
                 .then(response => {
-                    questions = response.data;
+                    questions = response.data.questions;
+					load_questions();
                 })
                 .catch(error => {
                     console.log(error);
@@ -241,18 +256,7 @@ export default {
         else
         {
             questions = this.questions;
-        }
-        let question_id_index;
-        for (question_id_index in questions)
-        {
-            this.$axios
-                .get("/api/questions/" + questions[question_id_index] + "/")
-                .then(response => {
-                    this.question_list.push(response.data);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+			load_questions();
         }
     },
     methods: {

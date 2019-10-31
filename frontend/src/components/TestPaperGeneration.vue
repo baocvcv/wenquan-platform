@@ -142,7 +142,17 @@
         </v-list-item-content>
         </v-list-item>
       </v-list>
+	  <v-btn
+	    color="success"
+		:disabled="!valid"
+		class="mr-4"
+		@click="submit()"
+		>Submit</v-btn
+	  >
+
+	  <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
     </v-form>
+
     <!--The dialog is for selecting questions-->
     <v-dialog
       v-model="adding_question"
@@ -178,14 +188,14 @@
           v-if="process == 'question bank'"
           select
           readonly
-          v-on:done-select="get_bank_id(id)"
+          v-on:done-select="get_bank_id"
         />
         <question-list
           v-if="process == 'question'"
           :id="question_bank_id"
           editable="true"
           select
-          v-on:done-select="get_selected_questions(questions)"
+          v-on:done-select="get_selected_questions"
         />
       </v-card>
     </v-dialog>
@@ -196,6 +206,8 @@
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
 import QuestionList from "@/components/QuestionList.vue";
 import QuestionListItem from "@/components/QuestionListItem.vue";
+import axios from "axios";
+
 export default {
   name: "",
   props: {},
@@ -270,11 +282,16 @@ export default {
       this.process = "question";
     },
     get_selected_questions(questions) {
+	  let that = this;
       for (var i = 0; i < questions.length; i++) {
-        this.cur_section.questions.push({
-		  point: "",
-		  content: questions[i]
-		});
+		axios
+		  .get("/api/questions/" + questions[i] +"/")
+		  .then(response => {
+			that.cur_section.questions.push({
+		      point: "",
+		      content: response.data
+			});
+		  });
       }
     },
     roman(num) {
