@@ -16,3 +16,8 @@ class BriefAnswerQ(Question):
     question_image = ArrayField(models.CharField(default='', max_length=MAX_URL))
     question_ans = models.CharField(default='', max_length=MAX_CONTENT)
     question_solution = models.CharField(default='', max_length=MAX_CONTENT)
+
+    def checker(self, ans):
+        """Checker for BriefAnswerQ"""
+        response = {}
+        return response
