@@ -58,12 +58,12 @@ describe("QuestionSingleChoice.vue", () => {
             vuetify,
             sync: false
         });
-        let testObj = Object.assign({},wrapper.vm.question);
+        let testObj = JSON.parse(wrapper.vm.question);
         testObj.id = -100;
-        wrapper.vm.edited_question = testObj;
-        expect(wrapper.vm.question.id == -100).toBe(false);
+        expect(wrapper.vm.edited_question.id == -100).toBe(false);
+        wrapper.vm.updateData(testObj);
         wrapper.vm.submitted();
-        expect(wrapper.vm.question).toEqual(testObj);
+        expect(wrapper.vm.edited_question.id == -100).toBe(true);
     });
     it("Submitted assignment", () => {
         const wrapper=mount(SingleChoice, {
@@ -72,7 +72,6 @@ describe("QuestionSingleChoice.vue", () => {
             sync: false
         });
         wrapper.vm.edited_question.id = -100;
-        expect(wrapper.vm.question.id).toBe(-1);
         wrapper.vm.cancel();
         expect(wrapper.vm.edited_question.id).toBe(-1);
         expect(wrapper.emitted().cancel).toBeTruthy();
@@ -109,7 +108,6 @@ describe("QuestionSingleChoice.vue", () => {
             "question_solution": "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况"
         };
         wrapper.vm.updateData(input);
-        expect(wrapper.vm.question.id).toBe(12);
         expect(wrapper.vm.edited_question.id).toBe(12);
     });
     it("Test TF", () => {
@@ -121,6 +119,7 @@ describe("QuestionSingleChoice.vue", () => {
         wrapper.setProps({
             TF: true
         });
+        wrapper.vm.parse();
         let input={
             "id": 12,
             "parents_node": [3,5],

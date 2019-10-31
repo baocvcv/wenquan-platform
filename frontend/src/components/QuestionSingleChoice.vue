@@ -177,6 +177,10 @@ export default {
       question: undefined
     };
   },
+  created() {
+    this.question = JSON.stringify(this.parse());
+    console.log(this.question);
+  },
   methods: {
     choice_num_up() {
       let choice_num = this.edited_question.question_choice.length;
@@ -239,14 +243,18 @@ export default {
         question_solution: this.edited_question.question_solution
       };
       if (this.TF) {
-        result["question_ans"] = this.edited_question.question_ans.content;
+        result["question_ans"] = this.edited_question.question_ans
+          ? this.edited_question.question_ans.content
+          : undefined;
       } else {
         var parsedChoice = [];
         var localChoice = this.edited_question.question_choice;
         for (var i = 0; i < localChoice.length; i++) {
           parsedChoice.push(localChoice[i].content);
         }
-        result["question_ans"] = this.edited_question.question_ans.name;
+        result["question_ans"] = this.edited_question.question_ans
+          ? this.edited_question.question_ans.name
+          : undefined;
         result["question_choice"] = parsedChoice;
       }
       return result;
