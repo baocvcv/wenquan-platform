@@ -179,7 +179,7 @@ class QuestionDetail(APIView):
             for i in post_data['parents_node']:
                 new_parents.append(KnowledgeNode.objects.get(id=i))
             q_group.parents_node.set(new_parents)
-            q_group.current_version = new_q.question_change_time
+            q_group.current_version = question.question_change_time
 
             q_group.save()
             new_q = question.save()
