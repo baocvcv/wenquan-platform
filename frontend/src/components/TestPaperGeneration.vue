@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form v-model="valid">
+    <v-form ref="input" v-model="valid">
       <v-text-field
         v-model="title"
         :rules="title_rules"
@@ -143,7 +143,7 @@
       </v-list>
       <v-btn
         color="success"
-        :disabled="!valid || !judge_points_sum()"
+        :disabled="!valid || !judge_points_sum"
         class="mr-4"
         @click="submit()"
         >Submit</v-btn
@@ -246,9 +246,25 @@ export default {
       }
       var tip = sum == this.total_points && !!this.total_points
       ? { color: "green", content: "valid" }
-      : { color: "red", content: "Sum-up of points of sections: " + sum + " |Points assigned to this test paper: " + this.total_points };
+      : { color: "red", content: "Sum-up of points of sections: " + sum + " | Points assigned to this test paper: " + this.total_points };
       return tip;
-    }
+    },
+	judge_points_sum: function() {
+	  if (this.section_sum_up.content != "valid") {
+		  console.log("section");
+		  console.log(this.section_sum_up);
+		  return false;
+	  }
+	  for (var i = 0; i < this.sections.length; i++) {
+		if (this.question_sum_up(i).content != "valid") {
+			console.log("question");
+			console.log(this.question_sum_up(i));
+			return false;
+		}
+	  }
+	  console.log("here");
+	  return true;
+	},
   },
   methods: {
     create_section() {
@@ -299,12 +315,9 @@ export default {
           });
       }
     },
-	judge_points_sum() {
-	  if (this.section_sum_up.content != "valid") return false;
-	  for (var i = 0; i < this.sections.length; i++) {
-		if (this.question_sum_up(i).content != "valid") return false;
-	  }
-	  return true;
+	reset() {
+	  this.$refs.input.reset();
+	  this.sections.splice(0, this.sections.length);
 	},
     roman(num) {
       var n,
