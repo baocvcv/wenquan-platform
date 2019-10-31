@@ -73,6 +73,7 @@ import QuestionMultipleChoice from "@/components/QuestionMultipleChoice.vue";
 import QuestionSingleChoice from "@/components/QuestionSingleChoice.vue"
 import QuestionBriefAnswer from "@/components/QuestionBriefAnswer.vue"
 import QuestionFillInBlank from "@/components/QuestionFillInBlank.vue";
+import axios from "axios";
 
 export default {
     name: "question-view",

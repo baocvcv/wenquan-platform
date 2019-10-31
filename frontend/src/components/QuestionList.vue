@@ -175,6 +175,7 @@
 import tree_view from "@/components/TreeView.vue";
 import question_list_item from "@/components/QuestionListItem.vue"
 import question from "@/views/Question.vue";
+import axios from "axios";
 
 export default {
     name: "question-list",
@@ -232,7 +233,7 @@ export default {
         let questions;
         if (!this.questions)
         {
-            this.$axios
+            axios
                 .get("/api/question_banks/" + this.id + "/")
                 .then(response => {
                     questions = response.data;
@@ -248,7 +249,7 @@ export default {
         let question_id_index;
         for (question_id_index in questions)
         {
-            this.$axios
+            axios
                 .get("/api/questions/" + questions[question_id_index] + "/")
                 .then(response => {
                     this.question_list.push(response.data);
@@ -265,16 +266,15 @@ export default {
             this.level_max_fileter = 5;
         },
         create() {
-            this.create_question_dialog = false;
-            this.$axios
+            axios
                 .get("/api/question_banks/" + this.id + "/")
                 .then((response) => {
                     this.question_list = response.data.questions;
+                    this.create_question_dialog = false;
                 })
                 .catch((error) => {
                     console.log(error);
                 })
-            this.create_question_dialog = false;
         },
         cancel_select() {
             this.selected_questions = [];

@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     name: "question-list-item",
     props: {
@@ -129,7 +130,7 @@ export default {
             for (node in this.question.parents_node)
             {
                 /*
-                this.$axios
+                axios
                     .get("/api/nodes_list/" + node + "/")
                     .then((response) => {
                         nodes.push(response.data.name);

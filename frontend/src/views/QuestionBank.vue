@@ -110,6 +110,7 @@
 <script>
 import question_list from "@/components/QuestionList.vue";
 import image_uploader from "@/components/ImageUploader.vue";
+import axios from "axios";
 
 export default {
     name: "question-bank",
@@ -147,7 +148,7 @@ export default {
         },
         save() {
             this.edited_question_bank.picture = this.edited_question_bank_image[0];
-            this.$axios
+            axios
                 .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
@@ -160,7 +161,7 @@ export default {
     },
     created() {
         let id = this.$route.params.id;
-        this.$axios
+        axios
             .get('/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
