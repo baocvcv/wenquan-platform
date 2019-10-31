@@ -147,7 +147,13 @@ export default {
                         text: "Question Banks",
                         link: "/admin/questionbanks",
                         icon: "mdi-bank"
-                    }
+                    },
+					{
+						name: "Test Papers",
+						text: "Test Papers",
+						link: "/admin/testpapers",
+						icon: "mdi-book-open-variant"
+					},
                 ]
             }
         };
