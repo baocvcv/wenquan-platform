@@ -5,14 +5,14 @@
                 Question List
                 <div class="flex-grow-1"></div>
                 <v-btn
-                    v-if="select"
+                    v-if="is_selecting"
                     text
                     @click="cancel_select"
                 >
                     Cancel
                 </v-btn>
                 <v-btn
-                    v-if="select"
+                    v-if="is_selecting"
                     text
                     @click="done_select"
                 >
@@ -222,10 +222,13 @@ export default {
                 "Blank Filling",
                 "Brief Answer"
             ],
-            selected_questions: []
+            selected_questions: [],
+            is_selecting: false
         }
     },
     mounted() {
+        if (this.select)
+            this.is_selecting = true;
         let questions;
         if (!this.questions)
         {
@@ -276,10 +279,12 @@ export default {
         cancel_select() {
             this.selected_questions = [];
             this.$emit("cancel-select");
+            this.is_selecting = false;
         },
         done_select() {
             console.log(this.selected_questions);
             this.$emit("done-select", this.selected_questions);
+            this.is_selecting = false;
         }
     },
 }
