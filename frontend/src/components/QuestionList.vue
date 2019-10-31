@@ -238,7 +238,7 @@ export default {
           let question_id_index;
           for (question_id_index in questions)
           {
-              this.$axios
+              axios
                   .get("/api/questions/" + questions[question_id_index] + "/")
                   .then(response => {
                       this.question_list.push(response.data);
@@ -290,7 +290,6 @@ export default {
             this.is_selecting = false;
         },
         done_select() {
-            console.log(this.selected_questions);
             this.$emit("done-select", this.selected_questions);
             this.is_selecting = false;
         }
