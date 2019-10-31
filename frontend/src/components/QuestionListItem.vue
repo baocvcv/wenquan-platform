@@ -68,15 +68,43 @@
                 </div>
             </v-card-actions>
         </v-card>
+    
+	  <!--This dialog is for viewing questions-->
+      <v-dialog
+        v-model="viewing_question"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
+        <v-card>
+          <v-toolbar>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on" icon @click="viewing_question = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </template>
+              <span>Close</span>
+            </v-tooltip>
+            <v-toolbar-title>Viewing Question</v-toolbar-title>
+          </v-toolbar>
+          <question-view :questionID="question.id" />
+        </v-card>
+      </v-dialog>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import Question from "@/views/Question.vue";
 export default {
     name: "question-list-item",
     props: {
-        question: Object
+        question: Object,
+		dialog: {
+		  type: Boolean,
+		  default: false
+		}
     },
     data: () => ({
         hide_content: false,
@@ -84,8 +112,12 @@ export default {
         width: 0,
         max_height: 120,
         max_height_cache: 0,
-        content: ""
+        content: "",
+		viewing_question: false
     }),
+    components: {
+	  "question-view": Question
+	},
     mounted() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
@@ -157,7 +189,9 @@ export default {
             this.hide_content = true;
         },
         click() {
-            this.$router.push("/questions/" + this.question.id + "/");
+			console.log(this.question);
+			if (this.dialog) this.viewing_question = true;
+            else this.$router.push("/questions/" + this.question.id + "/");
         }
     }
 }
