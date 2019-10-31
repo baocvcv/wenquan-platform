@@ -143,7 +143,7 @@
       </v-list>
       <v-btn
         color="success"
-        :disabled="!valid"
+        :disabled="!valid || !judge_points_sum()"
         class="mr-4"
         @click="submit()"
         >Submit</v-btn
@@ -173,8 +173,7 @@
             </template>
             <span>Back to question banks list</span>
           </v-tooltip>
-          <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
-		  <v-spacer></v-spacer>
+
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" icon @click="adding_question = false">
@@ -183,6 +182,7 @@
             </template>
             <span>Close</span>
           </v-tooltip>
+          <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
         </v-toolbar>
         <question-banks-list
           v-if="process == 'question bank'"
@@ -197,6 +197,7 @@
 		  dialog="true"
           select
           v-on:done-select="get_selected_questions"
+		  v-on:cancel-select="process = 'question bank'"
         />
       </v-card>
     </v-dialog>
@@ -262,7 +263,7 @@ export default {
       let section = this.sections[index];
       let sum = 0;
       for(var i = 0; !!section && i < section.questions.length; i++) {
-        sum += parseInt(section.questions.point);
+        sum += parseInt(section.questions[i].point);
       }
       var tip = sum == section.total_points && !!section.total_points
       ? { color: "green", content: "valid" }
@@ -293,10 +294,18 @@ export default {
               point: "",
               content: response.data
             });
+			//after at least one question has been loaded, close the dialog
+			this.adding_question = false;
           });
       }
-      this.adding_question = false;
     },
+	judge_points_sum() {
+	  if (this.section_sum_up.content != "valid") return false;
+	  for (var i = 0; i < this.sections.length; i++) {
+		if (this.question_sum_up(i).content != "valid") return false;
+	  }
+	  return true;
+	},
     roman(num) {
       var n,
         m,
