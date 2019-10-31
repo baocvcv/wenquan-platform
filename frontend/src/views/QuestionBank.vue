@@ -142,7 +142,7 @@ export default {
     methods: {
         cancel() {
             this.edit_mode = false;
-            this.edited_question_bank = Object.assign({}, this.question_bank);
+            this.edited_question_bank = JSON.parse(JSON.stringify(this.question_bank));
             this.edited_question_bank_image = JSON.parse(JSON.stringify(this.question_bank_image));
         },
         save() {
@@ -151,7 +151,7 @@ export default {
                 .put('/api/question_banks/' + this.question_bank.id + '/', this.edited_question_bank)
                 .then((response) => {
                     this.edit_mode = false;
-                    this.quesion_bank = Object.assign({}, this.edited_question_bank);
+                    this.question_bank = JSON.parse(JSON.stringify(this.edited_question_bank));
                 })
                 .catch((error) => {
                     console.log(error);

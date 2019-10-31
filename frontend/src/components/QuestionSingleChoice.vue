@@ -178,7 +178,7 @@ export default {
     };
   },
   created() {
-    this.edited_question = Object.assign({}, this.question);
+    this.edited_question = JSON.parse(JSON.stringify(this.question));
   },
   methods: {
     choice_num_up() {
@@ -201,7 +201,14 @@ export default {
       this.edited_question.question_ans = this.edited_question.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
-      this.question = Object.assign({}, input);
+      this.question.id = input.id;
+      this.question.parents_node = input.parents_node;
+      this.question.question_level = input.question_level;
+      this.question.question_change_time = input.question_change_time;
+      this.question.question_name = input.question_name;
+      this.question.question_image = input.question_image;
+      this.question.question_solution = input.question_solution;
+      this.question.question_content = input.question_content;
       if (!this.TF) {
         var parsed = [];
         var origin = input.question_choice;
@@ -220,17 +227,8 @@ export default {
           ? this.tf_choice[0]
           : this.tf_choice[1];
       }
-      this.edited_question = Object.assign({}, this.question);
-      /*
-      this.id = input.id;
-      this.parents_node = input.parents_node;
-      this.question_level = input.question_level;
-      this.question_change_time = input.question_change_time;
-      this.question_name = input.question_name;
-      this.question_image = input.question_image;
-      this.question_solution = input.question_solution;
-      this.question_content = input.question_content;
-      */
+      this.edited_question = JSON.parse(JSON.stringify(this.question));
+
     },
     parse() {
       var result = {
@@ -262,17 +260,17 @@ export default {
       this.edited_question.question_choice.splice(0, this.question.question_choice.length);
       this.edited_question.question_ans = undefined;
       this.$refs.uploader.reset();
-      this.question = Object.assign({}, this.edited_question);
+      this.question = JSON.parse(JSON.stringify(this.edited_question));
     },
     cancel() {
-      this.edited_question = Object.assign({}, this.question);
+      this.edited_question = JSON.parse(JSON.stringify(this.question));
       this.$emit("cancel");
     },
     submit() {
       this.$emit("submit", this.parse());
     },
     submitted() {
-      this.question = Object.assign({}, this.edited_question);
+      this.question = JSON.parse(JSON.stringify(this.edited_question));
     }
   }
 };
