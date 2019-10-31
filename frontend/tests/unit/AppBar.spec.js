@@ -183,16 +183,16 @@ describe("AppBar.vue", () => {
             store,
             sync: false
         });
-
-        wrapper.setData({
-            drawer: true
-        });
-        expect(wrapper.vm.drawer).toBe(true);
-        resizeWindow(1000, 400);
+        resizeWindow(400, 400);
         setTimeout(() => {
-            expect(wrapper.vm.drawer).toBe(false);
-            done();
-        }, 1000)
-
+            expect(wrapper.find(".mdi-menu").exists()).toBe(true);
+            wrapper.find(".mdi-menu").trigger("click");
+            expect(wrapper.vm.drawer).toBe(true);
+            resizeWindow(1024, 768);
+            setTimeout(() => {
+                expect(wrapper.vm.drawer).toBe(false);
+                done();
+            }, 500)
+        }, 500)
     })
 });
