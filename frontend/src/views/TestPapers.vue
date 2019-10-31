@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-toolbar flat color="primary" dark>
-        <v-toolbar-title>Question Banks</v-toolbar-title>
+        <v-toolbar-title>Test Papers</v-toolbar-title>
       </v-toolbar>
 
       <v-tabs vertical>
@@ -16,33 +16,29 @@
         </v-tab>
 
         <v-tab-item>
-          <question-banks-list :read_only="read_only"></question-banks-list>
-        </v-tab-item>
+          <h1>developing...</h1>
+		</v-tab-item>
         <v-tab-item>
-          <create-question-bank></create-question-bank>
-        </v-tab-item>
+		  <br />
+          <test-paper-generation />
+		</v-tab-item>
       </v-tabs>
-    </v-card>
+    </v-card>  
   </div>
 </template>
 
 <script>
-import QuestionBanksList from "../components/QuestionBanksList.vue";
-import CreateQuestionBank from "../components/CreateQuestionBank.vue";
-
+import TestPaperGeneration from "@/components/TestPaperGeneration.vue";
 export default {
-  name: "",
-  data: function() {
-    return {
-      read_only: false
-    };
+  name: "test-papers",
+  props: {
   },
   components: {
-    "question-banks-list": QuestionBanksList,
-    "create-question-bank": CreateQuestionBank
-  }
-};
+	"test-paper-generation": TestPaperGeneration
+  },
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>
+

@@ -3,18 +3,23 @@ import QuestionBanksList from "@/components/QuestionBanksList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
 import "./mock/QuestionBanksListMock.js";
+import Router from "vue-router";
+import RouterRule from "@/router";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
+Vue.use(Router);
 
 describe("SignUp.vue", () => {
-  let vuetify;
+  let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
+    router = new Router({ RouterRule });
   });
   it("render correctly", async done => {
     const wrapper = mount(QuestionBanksList, {
       vuetify,
       localVue,
+      router,
       sync: false,
       attachToDocument: true
     });
@@ -48,6 +53,10 @@ describe("SignUp.vue", () => {
     expect(wrapper.exists("Confirm")).toBe(true);
     expect(wrapper.exists("Cancel")).toBe(true);
     wrapper.vm.show_del_dialog = false;
+    await wrapper.vm.$nextTick();
+    wrapper.vm.select_action();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted()["done-select"]).toBeTruthy();
     done();
   });
 

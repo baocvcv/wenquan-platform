@@ -12,6 +12,7 @@ PROFILE_DATA = {
     'school_name': 'PKU',
 }
 
+
 def create_permission(user_type="Student"):
     """ creat a UserPermission """
     if user_type == "Admin":
@@ -36,11 +37,13 @@ def create_permission(user_type="Student"):
         res = UserPermissions(group_name="Student")
     return res
 
+
 def reset_database_permissions():
     """ create 3 permissions """
-    create_permission().save() # Student
+    create_permission().save()  # Student
     create_permission("Admin").save()
     create_permission("SuperAdmin").save()
+
 
 def activate_all_users():
     """ set users to be active """

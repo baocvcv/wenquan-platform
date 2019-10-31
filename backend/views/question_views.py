@@ -58,7 +58,7 @@ class QuestionList(APIView):
         """Get the latest version of a Question"""
         try:
             return q_group.question_set.all().get(question_change_time=q_group.current_version)
-        except q_group.question_set.DoesNotExist:
+        except Question.DoesNotExist:
             raise Http404
 
     def get(self, request):
@@ -101,12 +101,15 @@ class QuestionList(APIView):
 
         parents = []
         for i in parents_id:
-            node = KnowledgeNode.objects.get(id=i)
+            try:
+                node = KnowledgeNode.objects.get(id=i)
+            except KnowledgeNode.DoesNotExist:
+                raise Http404
             parents.append(node)
 
         bank = node.question_bank
 
-        q_group = QuestionGroup(
+        q_group = QuestionGroup.objects.create(
             current_version=timezone.now(),
             belong_bank=bank,
         )
@@ -130,6 +133,8 @@ class QuestionList(APIView):
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = parents_id
             return Response(response, status=201)
+        else:
+            q_group.delete()
         return Response(question.errors, status=400)
 
 
@@ -157,31 +162,32 @@ class QuestionDetail(APIView):
         return Response(response)
 
     def put(self, request, q_id):
-        """Upate information of the Question whose id=q_id"""
+        """Update information of the Question whose id=q_id"""
         post_data = JSONParser().parse(request)[0]
         if "id" in post_data:
             post_data.pop("id")
         old_q = self.get_object(q_id)
-
         q_group = old_q.history_version
-        q_group.current_version = timezone.now()
-        q_group.save()
 
-        post_data['question_change_time'] = q_group.current_version
+        post_data['question_change_time'] = timezone.now()
         post_data['history_version_id'] = q_group.id
 
         question = QuestionList.create_question_from_data(post_data)
 
         if question.is_valid():
             new_q = question.save()
-            response = question.data
-            response['id'] = new_q.id
-            response['question_type'] = INT2TYPE[(str)(response['question_type'])]
+
             new_parents = []
             for i in post_data['parents_node']:
                 new_parents.append(KnowledgeNode.objects.get(id=i))
             q_group.parents_node.set(new_parents)
+            q_group.current_version = new_q.question_change_time
 
+            q_group.save()
+
+            response = question.data
+            response['id'] = new_q.id
+            response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = post_data['parents_node']
             return Response(response, status=201)
         return Response(question.errors, status=400)
