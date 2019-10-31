@@ -39,6 +39,11 @@ const router = new Router({
       component: () => import("./views/SignIn.vue")
     },
     {
+      path: "/admin/testpapers",
+      name: "test-papers",
+      component: () => import("./views/TestPapers.vue")
+    },
+    {
       path: "/admin/questionbanks",
       name: "question-banks",
       component: () => import("./views/QuestionBanks.vue")
@@ -69,7 +74,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   console.log("Entering a new router!");
   if (sessionStorage.getItem("user"))
-	store.state.user=JSON.parse(sessionStorage.getItem("user"));
+    store.state.user=JSON.parse(sessionStorage.getItem("user"));
   if (!store.state.user)
   {
     if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
