@@ -33,7 +33,7 @@
               v-if="!readonly"
               :style="!!edited_question.question_ans ? 'color: green;' : 'color: red;'"
               >
-              {{ !!edited_question.question_ans ? "You have selected " + edited_question.question_ans.name + " as the right answer": "You haven't a right answer!" }}
+              {{ !!edited_question.question_ans ? "You have selected " + edited_question.question_ans.name + " as the right answer": "You haven't choose a right answer!" }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -179,7 +179,6 @@ export default {
   },
   created() {
     this.question = JSON.stringify(this.parse());
-    console.log(this.question);
   },
   methods: {
     choice_num_up() {
@@ -210,6 +209,7 @@ export default {
       this.edited_question.question_image = input.question_image;
       this.edited_question.question_solution = input.question_solution;
       this.edited_question.question_content = input.question_content;
+      this.edited_question.question_ans = undefined;
       if (!this.TF) {
         var parsed = [];
         var origin = input.question_choice;
