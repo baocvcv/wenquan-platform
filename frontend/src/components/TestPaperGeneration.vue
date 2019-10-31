@@ -160,15 +160,7 @@
       transition="dialog-bottom-transition"
     >
       <v-card>
-        <v-toolbar>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" icon @click="adding_question = false">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </template>
-            <span>Close</span>
-          </v-tooltip>
+		<v-toolbar>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -182,6 +174,15 @@
             <span>Back to question banks list</span>
           </v-tooltip>
           <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
+		  <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" icon @click="adding_question = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </template>
+            <span>Close</span>
+          </v-tooltip>
         </v-toolbar>
         <question-banks-list
           v-if="process == 'question bank'"
