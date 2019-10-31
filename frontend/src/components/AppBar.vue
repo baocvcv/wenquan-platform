@@ -169,12 +169,6 @@ export default {
             else
                 return this.nav_link_groups.student;
         },
-		render_logout_entry: function() {
-            if (this.user)
-                return true;
-            else
-                return false;
-		},
         render_admin_entry: function() {
             if (!this.user)
                 return false;
