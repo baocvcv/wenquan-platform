@@ -159,7 +159,7 @@
                                         class="shrink mr-2 mt-0"
                                     ></v-checkbox>
                                     <v-col>
-                                    <question-list-item :question="question"></question-list-item>
+                                    <question-list-item :question="question" :dialog="dialog"></question-list-item>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -194,7 +194,11 @@ export default {
         questions: {
             type: Array,
             default: () => []
-        }
+        },
+		dialog: {
+			type: Boolean,
+			default: false
+		}
     },
     components: {
         "tree-view": tree_view,
