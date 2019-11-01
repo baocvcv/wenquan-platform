@@ -127,13 +127,19 @@ export default {
         edited: false
     }),
     watch: {
-        edited_question_bank() {
-            if (this.edit_mode)
-                this.edited = true;
+        edited_question_bank: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
         },
-        edited_question_image() {
-            if (this.edit_mode)
-                this.edited = true;
+        edited_question_bank_image: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
         },
         edit_mode() {
             this.edited = false;
@@ -173,7 +179,7 @@ export default {
                 })
         },
         edit_button_clicked() {
-            if (!this.edit_mode && this.edited)
+            if (this.edit_mode && this.edited)
             {
                 let ans = window.confirm("You have changes that are not saved. Are you sure you want to discard the changes?");
                 if (ans)
