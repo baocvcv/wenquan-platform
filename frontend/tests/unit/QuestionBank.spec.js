@@ -6,7 +6,6 @@ import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
 import "./mock/QuestionBankMock.js";
-import RouterRule from "@/router";
 
 const localVue = createLocalVue();
 Vue.use(Vuex);
