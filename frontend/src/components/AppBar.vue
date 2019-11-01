@@ -172,7 +172,7 @@ export default {
   computed: {
     user() {
       var _user = this.$store.state.user;
-      if (!_user) {
+      if (!_user && sessionStorage.getItem("user")) {
         _user = JSON.parse(sessionStorage.getItem("user"));
         this.$store.commit("login", {
           user: _user
