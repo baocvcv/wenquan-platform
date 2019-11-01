@@ -37,6 +37,7 @@ class KnowledgeNodeList(APIView):
         return json
 
     def rebuild_tree(self, put_data, root_id):
+        """Create new nodes and reconnect or remove old nodes"""
         root = self.get_object(put_data['id'])
         root.name = put_data['name']
         root.subnodes.clear()
@@ -60,6 +61,7 @@ class KnowledgeNodeList(APIView):
         return new_node
 
     def delete_node(self, nodes_id):
+        """Remove a knowledge node"""
         for i in nodes_id:
             node = self.get_object(i)
             parent = node.knowledgenode_set.get()
@@ -77,6 +79,7 @@ class KnowledgeNodeList(APIView):
         return Response(response)
 
     def put(self, request, root_id):
+        """Edit tree of node"""
         put_data = JSONParser().parse(request)
         modify = put_data['modify']
         delete = put_data['delete']
