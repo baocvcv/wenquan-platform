@@ -171,7 +171,7 @@ export default {
           .post("/api/questions/", [info])
           .then(response => {
             this.edit_mode = false;
-            this.$emit("submit", response.data);
+            this.$emit("submit", response.data.id);
           })
           .catch(err => {
             console.log(info);
