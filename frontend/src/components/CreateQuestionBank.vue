@@ -33,12 +33,12 @@
               ></v-text-field>
             </v-col>
             <v-col>
-                <image-uploader
-                  ref="uploader"
-                  v-model="image"
-                  label="Avatar"
-                  placeholder="Pick an avatar(optional)"
-                />
+              <image-uploader
+                ref="uploader"
+                v-model="image"
+                label="Avatar"
+                placeholder="Pick an avatar(optional)"
+              />
             </v-col>
           </v-row>
 

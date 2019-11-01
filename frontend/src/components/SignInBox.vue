@@ -1,18 +1,22 @@
 <template>
   <div class="sign-in-box">
     <v-form ref="input">
-        <v-text-field
+      <v-text-field
         v-model="username"
         label="用户名"
-        v-bind:rules="[v => !!v || 'Username cannot be empty']"></v-text-field>
-        <v-text-field
-          v-model="password"
-          label="密码"
-          v-bind:type="show_password ? 'text' : 'password'"
-          v-bind:rules="[v => !!v || 'Password cannot be empty']"
-          v-bind:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-          v-on:click:append="show_password=!show_password"></v-text-field>
-        <v-btn v-on:click="click" v-bind:disabled="!username || !password">Sign In</v-btn>
+        v-bind:rules="[v => !!v || 'Username cannot be empty']"
+      ></v-text-field>
+      <v-text-field
+        v-model="password"
+        label="密码"
+        v-bind:type="show_password ? 'text' : 'password'"
+        v-bind:rules="[v => !!v || 'Password cannot be empty']"
+        v-bind:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+        v-on:click:append="show_password = !show_password"
+      ></v-text-field>
+      <v-btn v-on:click="click" v-bind:disabled="!username || !password"
+        >Sign In</v-btn
+      >
     </v-form>
     <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
@@ -48,43 +52,45 @@ export default {
   },
   methods: {
     click: function() {
-      var cur_user=sessionStorage.getItem("user");
-      if(!cur_user){
-
+      var cur_user = sessionStorage.getItem("user");
+      if (!cur_user) {
         var user = {
           username: this.username,
-          password: this.password,
+          password: this.password
           //password: md5(this.password),
         };
 
-        axios.post("/api/jwt-auth/",user).then((response) => {
-          //Sign in successfully
+        axios
+          .post("/api/jwt-auth/", user)
+          .then(response => {
+            //Sign in successfully
 
-          if(response.data.is_banned){
-            this.sign_in_result="Error";
-            this.sign_in_response="You are banned! Please contact your administrator."
-            this.show_dialog=true;
-            return;
-          }
+            if (response.data.is_banned) {
+              this.sign_in_result = "Error";
+              this.sign_in_response =
+                "You are banned! Please contact your administrator.";
+              this.show_dialog = true;
+              return;
+            }
 
-          user.user_permissions=response.data.user_permissions;
-          user.user_group=response.data.user_group;
-          user.token=response.data.token;
+            user.user_permissions = response.data.user_permissions;
+            user.user_group = response.data.user_group;
+            user.token = response.data.token;
 
-          this.$store.commit("login", {
-            user: user
-          });
+            this.$store.commit("login", {
+              user: user
+            });
 
-          this.sign_in_result="Success";
+            this.sign_in_result = "Success";
 
-          this.$router.push("/").catch(err => console.log(err));
-        }).catch((response) => {
-          this.sign_in_result = "Error";
-          this.sign_in_response = response;
-          this.show_dialog=true;
-        }).then(() => {
-
-        });
+            this.$router.push("/").catch(err => console.log(err));
+          })
+          .catch(response => {
+            this.sign_in_result = "Error";
+            this.sign_in_response = response;
+            this.show_dialog = true;
+          })
+          .then(() => {});
       }
     }
   }
