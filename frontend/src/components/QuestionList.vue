@@ -5,14 +5,14 @@
                 Question List
                 <div class="flex-grow-1"></div>
                 <v-btn
-                    v-if="select"
+                    v-if="is_selecting"
                     text
                     @click="cancel_select"
                 >
                     Cancel
                 </v-btn>
                 <v-btn
-                    v-if="select"
+                    v-if="is_selecting"
                     text
                     @click="done_select"
                 >
@@ -175,6 +175,7 @@
 import tree_view from "@/components/TreeView.vue";
 import question_list_item from "@/components/QuestionListItem.vue"
 import question from "@/views/Question.vue";
+import axios from "axios";
 
 export default {
     name: "question-list",
@@ -226,15 +227,18 @@ export default {
                 "Blank Filling",
                 "Brief Answer"
             ],
-            selected_questions: []
+            selected_questions: [],
+            is_selecting: false
         }
     },
     mounted() {
+        if (this.select)
+            this.is_selecting = true;
 		let load_questions = () => {
           let question_id_index;
           for (question_id_index in questions)
           {
-              this.$axios
+              axios
                   .get("/api/questions/" + questions[question_id_index] + "/")
                   .then(response => {
                       this.question_list.push(response.data);
@@ -247,7 +251,7 @@ export default {
         let questions;
         if (this.questions.length == 0)
         {
-            this.$axios
+            axios
                 .get("/api/question_banks/" + this.id + "/")
                 .then(response => {
                     questions = response.data.questions;
@@ -267,27 +271,27 @@ export default {
         reset_filter() {
             this.type_filter = [];
             this.level_min_filter = 0;
-            this.level_max_fileter = 5;
+            this.level_max_filter = 5;
         },
-        create() {
-            this.create_question_dialog = false;
-            this.$axios
-                .get("/api/question_banks/" + this.id + "/")
+        create(question_id) {
+            axios
+                .get("/api/questions/" + question_id + "/")
                 .then((response) => {
-                    this.question_list = response.data.questions;
+                    this.question_list.push(response.data);
+                    this.create_question_dialog = false;
                 })
                 .catch((error) => {
                     console.log(error);
                 })
-            this.create_question_dialog = false;
         },
         cancel_select() {
             this.selected_questions = [];
             this.$emit("cancel-select");
+            this.is_selecting = false;
         },
         done_select() {
-            console.log(this.selected_questions);
             this.$emit("done-select", this.selected_questions);
+            this.is_selecting = false;
         }
     },
 }

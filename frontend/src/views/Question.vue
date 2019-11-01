@@ -73,6 +73,7 @@ import QuestionMultipleChoice from "@/components/QuestionMultipleChoice.vue";
 import QuestionSingleChoice from "@/components/QuestionSingleChoice.vue"
 import QuestionBriefAnswer from "@/components/QuestionBriefAnswer.vue"
 import QuestionFillInBlank from "@/components/QuestionFillInBlank.vue";
+import axios from "axios";
 
 export default {
     name: "question-view",
@@ -170,7 +171,7 @@ export default {
                 info.parents_node=this.bankID;
                 axios.post("/api/questions/",[info]).then(response => {
                     this.edit_mode = false;
-                    this.$emit("submit");
+                    this.$emit("submit", response.data);
                 }).catch(err => {
                     console.log(info);
                     console.log(err);

@@ -11,6 +11,7 @@
 
 <script>
 import user_table from "@/components/UserTable.vue";
+import axios from "axios";
 
 export default {
     name: "user-management",
@@ -24,7 +25,7 @@ export default {
     },
     methods: {
         create_user(user) {
-            this.$axios
+            axios
                 .post("/api/accounts/users/", user)
                 .then(response => {
                     this.users.push(user);
@@ -36,7 +37,7 @@ export default {
         change_user_status(user) {
             let changed_user = user;
             changed_user.is_banned = !changed_user.is_banned;
-            this.$axios
+            axios
                 .put("/api/accounts/users/" + user.id + "/", changed_user)
                 .then(response => {
                     user = changed_user;
@@ -51,7 +52,7 @@ export default {
                 changed_user.user_group = "Admin";
             else if (changed_user.user_group === "Admin")
                 changed_user.user_group = "Student";
-            this.$axios
+            axios
                 .put("/api/accounts/users/" + user.id + "/", user)
                 .then(response => {
                     user = changed_user;
@@ -62,7 +63,7 @@ export default {
         }
     },
     mounted: function() {
-        this.$axios
+        axios
             .get('/api/accounts/users/')
             .then(response => {
                 this.users = response.data;

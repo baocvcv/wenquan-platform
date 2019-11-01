@@ -1,6 +1,6 @@
 import {mount, createLocalVue} from "@vue/test-utils";
 import AppBar from "@/components/AppBar.vue";
-import UserFactory from "./UserFactory.js";
+import UserFactory from "./utils/UserFactory.js";
 import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
