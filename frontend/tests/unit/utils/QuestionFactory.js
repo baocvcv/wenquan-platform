@@ -32,6 +32,22 @@ class QuestionFactory {
       parents_node: [2]
     };
   }
+
+  create_question_for_creation() {
+    return {
+      id: 233,
+      history_version_id: 11,
+      question_name: "quesion5",
+      question_type: "brief_ans",
+      question_level: 5,
+      question_change_time: "2019-10-24T12:20:58.194766Z",
+      question_content: "人类的本质是?",
+      question_image: ["a"],
+      question_ans: "复读机",
+      question_solution: "因为人类的本质是复读机",
+      parents_node: []
+    }
+  }
 }
 
 export default QuestionFactory;

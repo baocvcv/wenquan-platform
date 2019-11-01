@@ -133,7 +133,7 @@ export default {
       if (
         !this.creation &&
         this.$route.fullPath.search("/questions/") != -1 &&
-        this.$store.state.user.user_type != "Student"
+        this.$store.state.user.user_group != "Student"
       )
         return true;
       return this.editable;
@@ -148,21 +148,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      this.$refs.brief.readonly = true;
-      this.$refs.brief.updateData({
-        id: 1,
-        parents_node: [0],
-        question_change_time: "2019-10-15T01:11:21.754312Z",
-        question_name: "quesion1",
-        question_type: "brief_ans",
-        question_level: 0.5,
-        question_content: "人类的本质是?",
-        question_image: [""],
-        question_ans: "复读机",
-        question_solution: "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况"
-      });
-    },
     submit(info) {
       if (info.parents_node.length == 0 && this.bankID) {
         //New question
