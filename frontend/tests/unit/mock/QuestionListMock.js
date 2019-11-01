@@ -34,3 +34,25 @@ nock(/.*?/)
         "/api/questions/1/"
     )
     .reply(200, question_factory.create_single_choice())
+
+nock(/.*?/)
+    .get(
+        "/api/questions/2/"
+    )
+    .reply(500, {
+        result: "Failed"
+    })
+
+nock(/.*?/)
+    .get(
+        "/api/question_banks/2/"
+    )
+    .reply(200, {
+        questions: []
+    })
+
+nock(/.*?/)
+    .get(
+        "/api/questions/3/"
+    )
+    .reply(200, question_factory.create_single_choice())

@@ -16,6 +16,7 @@ describe("QuestionList.vue", () => {
         vuetify = new Vuetify();
         router = new Router({ RouterRule });
     });
+
     it("Fails to fetch data from question bank", async (done) => {
         const wrapper = mount(QuestionList, {
             localVue,
@@ -29,7 +30,7 @@ describe("QuestionList.vue", () => {
         });
         setTimeout(() => {
             done();
-        }, 1000)
+        }, 500)
     })
 
     it("Fails to fetch data from questions", async (done) => {
@@ -45,7 +46,7 @@ describe("QuestionList.vue", () => {
         });
         setTimeout(() => {
             done();
-        }, 1000)
+        }, 500)
     })
     
     it("Renders the component successfully", async (done) => {
@@ -63,7 +64,7 @@ describe("QuestionList.vue", () => {
             expect(wrapper.vm.question_list.length != 0).toBe(true);
             expect(wrapper.exists(wrapper.vm.question_list[0].content)).toBe(true);
             done();
-        }, 1000)
+        }, 500)
     })
 
     it("Select works properly", async (done) => {
@@ -108,6 +109,67 @@ describe("QuestionList.vue", () => {
             expect(wrapper.emitted("done-select").length).toBe(1);
             expect(wrapper.emitted("done-select")[0]).toEqual([[1]]);
             done();
-        }, 1000)
+        }, 500)
+    })
+
+    it("Filters work properly", async (done) => {
+        const wrapper = mount(QuestionList, {
+            localVue,
+            vuetify,
+            router,
+            sync: false,
+            propsData: {
+                id: 1,
+                questions: [1],
+                select: true
+            }
+        })
+        wrapper.setData({
+            type_filter: ["single"]
+        })
+        setTimeout(async () => {
+            let filter_button = wrapper.find(".mdi-filter");
+            filter_button.trigger("click");
+            await wrapper.vm.$nextTick();
+            let reset_filter_button = wrapper.find(".mdi-autorenew");
+            reset_filter_button.trigger("click");
+            await wrapper.vm.$nextTick();
+            expect(wrapper.vm.type_filter.length === 0).toBe(true);
+            done();
+        }, 500)
+    })
+
+    it("Creates questions", async(done) => {
+        const wrapper = mount(QuestionList, {
+            localVue,
+            vuetify,
+            router,
+            sync: false,
+            propsData: {
+                id: 2,
+                select: true,
+                questions: []
+            }
+        })
+        setTimeout(async () => {
+            let create_button;
+            let buttons = wrapper.findAll("button");
+            for (let index = 0; index < buttons.length; index++)
+            {
+                if (buttons.at(index).text() === "Create")
+                    create_button = buttons.at(index); 
+            }
+            expect(create_button.exists()).toBe(true);
+            create_button.trigger("click");
+            await wrapper.vm.$nextTick();
+            wrapper.vm.create(2);
+            setTimeout(() => {
+                wrapper.vm.create(3);
+                setTimeout(() => {
+                    expect(wrapper.vm.question_list.length === 1).toBe(true);
+                    done();
+                }, 250)
+            }, 250)
+        }, 250)
     })
 })

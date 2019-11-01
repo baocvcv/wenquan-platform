@@ -271,7 +271,7 @@ export default {
         reset_filter() {
             this.type_filter = [];
             this.level_min_filter = 0;
-            this.level_max_fileter = 5;
+            this.level_max_filter = 5;
         },
         create(question_id) {
             axios
