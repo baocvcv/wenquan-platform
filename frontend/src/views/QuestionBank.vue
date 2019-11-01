@@ -6,7 +6,7 @@
                 absolute
                 right
                 icon
-                @click="edit_mode = !edit_mode"
+                @click="edit_button_clicked"
             ><v-icon>mdi-pencil</v-icon></v-btn>
         </v-card-title>
         <v-card-text>
@@ -94,7 +94,7 @@
             <v-card-actions v-show="edit_mode">
                 <div class="flex-grow-1"></div>
                 <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" text @click="save" :disabled="edited">Save</v-btn>
             </v-card-actions>
         </v-expand-transition>
     </v-card>
@@ -123,10 +123,30 @@ export default {
         edited_question_bank: {},
         edit_mode: false,
         question_bank_image: [],
-        edited_question_bank_image: []
+        edited_question_bank_image: [],
+        edited: false
     }),
+    watch: {
+        edited_question_bank: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
+        },
+        edited_question_bank_image: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
+        },
+        edit_mode() {
+            this.edited = false;
+        }
+    },
     beforeRouteLeave (to, from, next) {
-        if (this.edit_mode === true)
+        if (this.edited === true)
         {
             const answer = window.confirm("You have changes that are not saved. Are you sure you want to leave the web page?");
             if (answer) {
@@ -153,10 +173,23 @@ export default {
                 .then((response) => {
                     this.edit_mode = false;
                     this.question_bank = JSON.parse(JSON.stringify(this.edited_question_bank));
+                    this.question_bank_image = JSON.parse(JSON.stringify(this.edited_question_bank_image));
                 })
                 .catch((error) => {
                     console.log(error);
                 })
+        },
+        edit_button_clicked() {
+            if (this.edit_mode && this.edited)
+            {
+                let ans = window.confirm("You have changes that are not saved. Are you sure you want to discard the changes?");
+                if (ans)
+                    this.cancel();
+            }
+            else
+            {
+                this.edit_mode = !this.edit_mode;
+            }
         }
     },
     created() {
@@ -165,7 +198,7 @@ export default {
             .get('/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
-                this.edited_question_bank = response.data;
+                this.edited_question_bank = JSON.parse(JSON.stringify(this.question_bank));
                 this.question_bank_image.push(this.question_bank.picture);
                 this.edited_question_bank_image = JSON.parse(JSON.stringify(this.question_bank_image));
             })
