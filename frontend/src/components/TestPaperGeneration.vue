@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form v-model="valid">
+    <v-form ref="input" v-model="valid">
       <v-text-field
         v-model="title"
         :rules="title_rules"
@@ -143,7 +143,7 @@
       </v-list>
       <v-btn
         color="success"
-        :disabled="!valid"
+        :disabled="!valid || !judge_points_sum"
         class="mr-4"
         @click="submit()"
         >Submit</v-btn
@@ -173,8 +173,7 @@
             </template>
             <span>Back to question banks list</span>
           </v-tooltip>
-          <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
-		  <v-spacer></v-spacer>
+
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn v-on="on" icon @click="adding_question = false">
@@ -183,6 +182,7 @@
             </template>
             <span>Close</span>
           </v-tooltip>
+          <v-toolbar-title>Selecting {{ process }}</v-toolbar-title>
         </v-toolbar>
         <question-banks-list
           v-if="process == 'question bank'"
@@ -197,6 +197,7 @@
 		  dialog="true"
           select
           v-on:done-select="get_selected_questions"
+		  v-on:cancel-select="process = 'question bank'"
         />
       </v-card>
     </v-dialog>
@@ -245,9 +246,25 @@ export default {
       }
       var tip = sum == this.total_points && !!this.total_points
       ? { color: "green", content: "valid" }
-      : { color: "red", content: "Sum-up of points of sections: " + sum + " |Points assigned to this test paper: " + this.total_points };
+      : { color: "red", content: "Sum-up of points of sections: " + sum + " | Points assigned to this test paper: " + this.total_points };
       return tip;
-    }
+    },
+	judge_points_sum: function() {
+	  if (this.section_sum_up.content != "valid") {
+		  console.log("section");
+		  console.log(this.section_sum_up);
+		  return false;
+	  }
+	  for (var i = 0; i < this.sections.length; i++) {
+		if (this.question_sum_up(i).content != "valid") {
+			console.log("question");
+			console.log(this.question_sum_up(i));
+			return false;
+		}
+	  }
+	  console.log("here");
+	  return true;
+	},
   },
   methods: {
     create_section() {
@@ -262,7 +279,7 @@ export default {
       let section = this.sections[index];
       let sum = 0;
       for(var i = 0; !!section && i < section.questions.length; i++) {
-        sum += parseInt(section.questions.point);
+        sum += parseInt(section.questions[i].point);
       }
       var tip = sum == section.total_points && !!section.total_points
       ? { color: "green", content: "valid" }
@@ -293,10 +310,15 @@ export default {
               point: "",
               content: response.data
             });
+			//after at least one question has been loaded, close the dialog
+			this.adding_question = false;
           });
       }
-      this.adding_question = false;
     },
+	reset() {
+	  this.$refs.input.reset();
+	  this.sections.splice(0, this.sections.length);
+	},
     roman(num) {
       var n,
         m,
