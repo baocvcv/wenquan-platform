@@ -136,8 +136,10 @@ export default {
     watch: {
         width: function() {
             let content = this.$refs.content;
+            /*
             if (!content)
                 return;
+            */
             if (content.offsetHeight >= this.max_height)
             {
                 this.content_too_long = true;
@@ -149,11 +151,13 @@ export default {
                 this.hide_content = false;
             }
         },
+        /*
         question: function() {
             this.content += this.question.question_content;
             if (this.question.question_choice)
                 this.content += "\n" + this.question.question_choice;
         }
+        */
     },
     computed: {
         nodes() {
