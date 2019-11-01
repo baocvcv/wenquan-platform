@@ -37,6 +37,7 @@ describe("QuestionMultipleChoice.vue", () => {
             vuetify,
             sync: false
         });
+        console.log(wrapper.vm.edited_data.choices);
         expect(wrapper.vm.edited_data.choices.length).toBe(4);
         wrapper.vm.changeRightStatus(wrapper.vm.edited_data.choices[0]);
         wrapper.vm.removeChoice(0);
@@ -85,12 +86,12 @@ describe("QuestionMultipleChoice.vue", () => {
             vuetify,
             sync: false
         });
-        let testObj = Object.assign({},wrapper.vm.data);
+        let testObj = JSON.parse(wrapper.vm.data);
         testObj.id = -100;
-        wrapper.vm.edited_data = testObj;
-        expect(wrapper.vm.data.id == -100).toBe(false);
+        wrapper.vm.updateData(testObj);
+        expect(wrapper.vm.edited_data.id == -100).toBe(true);
         wrapper.vm.submitted();
-        expect(wrapper.vm.data).toEqual(testObj);
+        expect(wrapper.vm.data).toBe(JSON.stringify(testObj));
     });
     it("Submitted assignment", () => {
         const wrapper=mount(MultipleChoice, {
@@ -99,7 +100,6 @@ describe("QuestionMultipleChoice.vue", () => {
             sync: false
         });
         wrapper.vm.edited_data.id = -100;
-        expect(wrapper.vm.data.id).toBe(-1);
         wrapper.vm.cancel();
         expect(wrapper.vm.edited_data.id).toBe(-1);
         expect(wrapper.emitted().cancel).toBeTruthy();
@@ -113,7 +113,7 @@ describe("QuestionMultipleChoice.vue", () => {
         wrapper.vm.addChoice();
         wrapper.vm.submitted();
         wrapper.vm.reset();
-        expect(wrapper.vm.data.choices.length).toBe(4);
+        expect(wrapper.vm.edited_data.choices.length).toBe(4);
     });
     it("Update data assignment", () => {
         const wrapper=mount(MultipleChoice, {
@@ -137,7 +137,6 @@ describe("QuestionMultipleChoice.vue", () => {
             "question_solution": "某一时刻被观测时, 人类会坍缩为A,B,C中某一种情况"
         };
         wrapper.vm.updateData(input);
-        expect(wrapper.vm.data.id).toBe(12);
         expect(wrapper.vm.edited_data.id).toBe(12);
     });
 });

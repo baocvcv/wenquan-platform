@@ -148,7 +148,7 @@ export default {
         },
         removeChoice(index) {
             if(this.edited_data.choices[index].right)
-                this.edited_data.rightAnswer.splice(this.edited_data.rightAnswer.indexOf(this.data.choices[index]));
+                this.edited_data.rightAnswer.splice(this.edited_data.rightAnswer.indexOf(this.edited_data.choices[index]));
             this.edited_data.choices.splice(index,1);
             for(var i=0;i<this.edited_data.choices.length;i++)
                 this.edited_data.choices[i].name=String.fromCharCode(65+i);
@@ -163,10 +163,10 @@ export default {
             this.$emit("submit", this.parse());
         },
         submitted() {
-            this.data = JSON.parse(JSON.stringify(this.edited_data));
+            this.data = JSON.stringify(this.parse());
         },
         cancel() {
-            this.edited_data = JSON.parse(JSON.stringify(this.data));
+            this.updateData(JSON.parse(this.data));
             this.$emit("cancel");
         },
         reset() {
@@ -195,18 +195,20 @@ export default {
                     right: false
                 },
             ];
-            this.data = JSON.parse(JSON.stringify(this.edited_data));
+            this.data = JSON.stringify(this.parse());
         },
         updateData(input) {
             //parse data input from backend
-            this.data.id = input.id;
-            this.data.parents = input.parents_node;
-            this.data.change_time = input.question_change_time;
-            this.data.title = input.question_name;
-            this.data.content = input.question_content;
-			this.data.image = input.question_image;
-            this.data.analysis = input.question_solution;
-            this.data.difficulty = input.question_level;
+            this.data = JSON.stringify(input);
+
+            this.edited_data.id = input.id;
+            this.edited_data.parents = input.parents_node;
+            this.edited_data.change_time = input.question_change_time;
+            this.edited_data.title = input.question_name;
+            this.edited_data.content = input.question_content;
+            this.edited_data.image = input.question_image;
+            this.edited_data.analysis = input.question_solution;
+            this.edited_data.difficulty = input.question_level;
 
             let choices = [];
             input.question_choice.forEach(item => {
@@ -217,15 +219,14 @@ export default {
                     right: input.question_ans.indexOf(choiceName)!=-1 ? true : false
                 });
             });
-            this.data.choices = choices;
+            this.edited_data.choices = choices;
 
             let rightAns = [];
             choices.forEach(item => {
                 if(item.right)
                     rightAns.push(item);
             });
-            this.data.rightAnswer = rightAns;
-            this.edited_data = JSON.parse(JSON.stringify(this.data));
+            this.edited_data.rightAnswer = rightAns;
         },
         parse() {
             let result = {
@@ -248,11 +249,11 @@ export default {
         }
     },
     created() {
-        this.edited_data = JSON.parse(JSON.stringify(this.data));
+        this.data = JSON.stringify(this.parse());
     },
     data: function() {
         return {
-            data: {
+            edited_data: {
                 id: -1,
                 parents: [],
                 change_time: "",
@@ -285,7 +286,7 @@ export default {
                 analysis: "",
                 difficulty: 0,
             },
-            edited_data: null,
+            data: "",
             valid: false
         };
     }
