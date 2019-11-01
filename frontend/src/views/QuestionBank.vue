@@ -173,6 +173,7 @@ export default {
                 .then((response) => {
                     this.edit_mode = false;
                     this.question_bank = JSON.parse(JSON.stringify(this.edited_question_bank));
+                    this.question_bank_image = JSON.parse(JSON.stringify(this.edited_question_bank_image));
                 })
                 .catch((error) => {
                     console.log(error);
