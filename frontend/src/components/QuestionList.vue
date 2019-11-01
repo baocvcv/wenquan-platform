@@ -119,6 +119,7 @@
                 :bankID="[id]"
                 creation
                 @submit="create"
+                @cancel="create_question_dialog = false"
               ></question>
             </v-card-text>
           </v-card>
