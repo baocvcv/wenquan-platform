@@ -68,9 +68,10 @@ describe("QuestionListItem.vue", () => {
     wrapper.setProps({
       dialog: false
     });
+    view_button.trigger("click");
     await wrapper.vm.$nextTick();
     setTimeout(() => {
-      expect(wrapper.vm.$route.path).toBe("/questions/1");
+      expect(wrapper.vm.$route.path).toBe("/questions/1/");
       done();
     }, 1000);
   });
