@@ -127,13 +127,19 @@ export default {
         edited: false
     }),
     watch: {
-        edited_question_bank() {
-            if (this.edit_mode)
-                this.edited = true;
+        edited_question_bank: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
         },
-        edited_question_image() {
-            if (this.edit_mode)
-                this.edited = true;
+        edited_question_bank_image: {
+            handler: function() {
+                if (this.edit_mode)
+                    this.edited = true;
+            },
+            deep: true
         },
         edit_mode() {
             this.edited = false;
@@ -172,8 +178,8 @@ export default {
                     console.log(error);
                 })
         },
-        edited_button_clicked() {
-            if (!this.edit_mode && this.edited)
+        edit_button_clicked() {
+            if (this.edit_mode && this.edited)
             {
                 let ans = window.confirm("You have changes that are not saved. Are you sure you want to discard the changes?");
                 if (ans)
@@ -191,7 +197,7 @@ export default {
             .get('/api/question_banks/' + id + '/')
             .then(response => {
                 this.question_bank = response.data;
-                this.edited_question_bank = response.data;
+                this.edited_question_bank = JSON.parse(JSON.stringify(this.question_bank));
                 this.question_bank_image.push(this.question_bank.picture);
                 this.edited_question_bank_image = JSON.parse(JSON.stringify(this.question_bank_image));
             })
