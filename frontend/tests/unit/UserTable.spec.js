@@ -18,7 +18,7 @@ describe("UserTable.vue", () => {
     vuetify = new Vuetify();
   });
 
-  it("renders props.users according to their types", () => {
+  it("renders props.users according to their types", async () => {
     const user_logged_in = user_factory.create_anonymous_superadmin();
     const users = [
       user_factory.create_anonymous_student(),
@@ -45,9 +45,16 @@ describe("UserTable.vue", () => {
       const username = data_table_item.find("td").text();
       expect(username).toBe(users[i].username);
     }
+    wrapper.setData({
+      dialog_create: true
+    });
+    await wrapper.vm.$nextTick();
+    wrapper.vm.close_dialog_create();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.dialog_create).toBe(false);
   });
 
-  it("emits change_user_type event after changing user type", () => {
+  it("emits change_user_group event after changing user group", async () => {
     const user_logged_in = user_factory.create_anonymous_superadmin();
     const users = [user_factory.create_anonymous_student(), user_logged_in];
     const store = new Vuex.Store({
@@ -65,9 +72,12 @@ describe("UserTable.vue", () => {
         users
       }
     });
+    wrapper.vm.change_user_group(user_factory.create_anonymous_student());
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted("change-user-group")).toBeTruthy();
   });
 
-  it("emits change_user_status event after changing user status", () => {
+  it("emits change_user_status event after changing user status", async () => {
     const user_logged_in = user_factory.create_anonymous_superadmin();
     const users = [user_factory.create_anonymous_student(), user_logged_in];
     const store = new Vuex.Store({
@@ -89,7 +99,7 @@ describe("UserTable.vue", () => {
     expect(wrapper.emitted("change-user-status")).toBeTruthy();
   });
 
-  it("emits create_user event after clicking the CREATE button in the dialog", () => {
+  it("Can create a new user", async () => {
     const user_logged_in = user_factory.create_anonymous_superadmin();
     const users = [user_logged_in];
     const store = new Vuex.Store({
@@ -97,7 +107,7 @@ describe("UserTable.vue", () => {
         user: user_logged_in
       }
     });
-    const wrapper = mount(UserTable, {
+    let wrapper = mount(UserTable, {
       localVue,
       vuetify,
       store,
@@ -110,6 +120,11 @@ describe("UserTable.vue", () => {
       ".v-toolbar__content .v-btn.v-btn--contained"
     );
     create_user_button.trigger("click");
+    wrapper = user_factory.login(wrapper, "Admin");
+    await wrapper.vm.$nextTick();
+    wrapper.vm.create();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted("create-user")).toBeTruthy();
     //expect(wrapper.emitted('create-user')).toBeTruthy();
   });
 });

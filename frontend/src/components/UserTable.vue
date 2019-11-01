@@ -177,19 +177,7 @@ export default {
       }
     };
   },
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
   computed: {
-    changeable_group() {
-      if (this.$store.state.user.user_permissons)
-        if (this.$store.state.user.user_type.is_superadmin)
-          return ["Student", "Admin", "SuperAdmin"];
-        else if (this.$store.state.user.user_type.is_admin) return ["Student"];
-      return [];
-    },
     createable_group() {
       let group = [];
       if (this.$store.state.user.user_permissions.create_students)
