@@ -133,8 +133,7 @@ class QuestionList(APIView):
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = parents_id
             return Response(response, status=201)
-        else:
-            q_group.delete()
+        q_group.delete()
         return Response(question.errors, status=400)
 
 
