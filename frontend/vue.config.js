@@ -4,8 +4,8 @@ module.exports = {
   publicPath: "",
   devServer: {
     port: 80, //port
-    disableHostCheck: true, //disable host headers check
-	/*proxy: {
+    disableHostCheck: true //disable host headers check
+    /*proxy: {
 	  "/smmsImageUpload": {
 		  target: "https://sm.ms/api/upload",
 		  changeOrigin: true,
@@ -13,7 +13,7 @@ module.exports = {
 			"^/smmsImageUpload": ""
 		  }
 	  }
-	}*/	
+	}*/
   },
   lintOnSave: false //cancel output of eslint
 };

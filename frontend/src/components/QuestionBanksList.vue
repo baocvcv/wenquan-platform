@@ -8,7 +8,10 @@
         v-for="qst_bank in question_banks"
         :key="qst_bank.name"
         @click="
-          select ? select_action(qst_bank.id) : $router.push('questionbanks/' + qst_bank.id)"
+          select
+            ? select_action(qst_bank.id)
+            : $router.push('questionbanks/' + qst_bank.id)
+        "
       >
         <v-list-item-avatar>
           <v-img :src="qst_bank.icon"></v-img>
@@ -73,7 +76,11 @@
           <v-btn
             color="green"
             dark
-            @click="select ? select_action(cur_qst_bank.id) : $router.push('questionbanks/' + cur_qst_bank.id)"
+            @click="
+              select
+                ? select_action(cur_qst_bank.id)
+                : $router.push('questionbanks/' + cur_qst_bank.id)
+            "
           >
             Goto
           </v-btn>
@@ -127,9 +134,9 @@ export default {
       default: false
     },
     readonly: {
-	  type: Boolean,
-	  default: false
-	}
+      type: Boolean,
+      default: false
+    }
   },
   data: function() {
     return {

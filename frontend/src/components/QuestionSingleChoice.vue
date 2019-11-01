@@ -31,15 +31,25 @@
             <v-list-item-title>Choices</v-list-item-title>
             <v-list-item-subtitle
               v-if="!readonly"
-              :style="!!edited_question.question_ans ? 'color: green;' : 'color: red;'"
-              >
-              {{ !!edited_question.question_ans ? "You have selected " + edited_question.question_ans.name + " as the right answer": "You haven't choose a right answer!" }}
+              :style="
+                !!edited_question.question_ans ? 'color: green;' : 'color: red;'
+              "
+            >
+              {{
+                !!edited_question.question_ans
+                  ? "You have selected " +
+                    edited_question.question_ans.name +
+                    " as the right answer"
+                  : "You haven't choose a right answer!"
+              }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item-group color="primary">
           <v-list-item
-            v-for="(choice, i) in TF ? tf_choice : edited_question.question_choice"
+            v-for="(choice, i) in TF
+              ? tf_choice
+              : edited_question.question_choice"
             :key="i"
           >
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
@@ -59,7 +69,9 @@
                   @click="readonly ? () => {} : check_ans(choice)"
                   v-on="on"
                   ><v-icon
-                    :color="edited_question.question_ans == choice ? 'green' : 'red'"
+                    :color="
+                      edited_question.question_ans == choice ? 'green' : 'red'
+                    "
                     dark
                     >{{
                       edited_question.question_ans == choice
@@ -124,10 +136,14 @@
         color="success"
         class="mr-4"
         @click="submit()"
-        >
-          {{ creation? "Create" : "Save" }}
-        </v-btn>
-      <v-btn v-if="!readonly && creation" color="error" class="mr-4" @click="reset()"
+      >
+        {{ creation ? "Create" : "Save" }}
+      </v-btn>
+      <v-btn
+        v-if="!readonly && creation"
+        color="error"
+        class="mr-4"
+        @click="reset()"
         >Reset</v-btn
       >
       <v-btn v-if="!readonly" @click="cancel">
@@ -189,16 +205,22 @@ export default {
       });
     },
     delete_choice(index) {
-      if (this.edited_question.question_ans == this.edited_question.question_choice[index]) {
+      if (
+        this.edited_question.question_ans ==
+        this.edited_question.question_choice[index]
+      ) {
         this.edited_question.question_ans = undefined;
       }
       this.edited_question.question_choice.splice(index, 1);
       for (var i = 0; i < this.edited_question.question_choice.length; i++) {
-        this.edited_question.question_choice[i].name = String.fromCharCode(65 + i);
+        this.edited_question.question_choice[i].name = String.fromCharCode(
+          65 + i
+        );
       }
     },
     check_ans(choice) {
-      this.edited_question.question_ans = this.edited_question.question_ans == choice ? undefined : choice;
+      this.edited_question.question_ans =
+        this.edited_question.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
       this.edited_question.id = input.id;
@@ -219,7 +241,8 @@ export default {
             name: id,
             content: origin[i]
           };
-          if (input.question_ans == id) this.edited_question.question_ans = choice;
+          if (input.question_ans == id)
+            this.edited_question.question_ans = choice;
           parsed.push(choice);
         }
         this.edited_question.question_choice = parsed;
@@ -261,7 +284,10 @@ export default {
     },
     reset() {
       this.$refs.input.reset();
-      this.edited_question.question_choice.splice(0, this.edited_question.question_choice.length);
+      this.edited_question.question_choice.splice(
+        0,
+        this.edited_question.question_choice.length
+      );
       this.edited_question.question_ans = undefined;
       this.$refs.uploader.reset();
       this.question = JSON.stringify(this.parse());
