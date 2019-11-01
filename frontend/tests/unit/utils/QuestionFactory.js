@@ -46,7 +46,7 @@ class QuestionFactory {
       question_ans: "复读机",
       question_solution: "因为人类的本质是复读机",
       parents_node: []
-    }
+    };
   }
 }
 

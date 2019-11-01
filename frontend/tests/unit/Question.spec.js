@@ -17,7 +17,7 @@ const question_factory = new QuestionFactory();
 
 describe("UserTable.vue", () => {
   let vuetify, router, store;
-  
+
   beforeEach(() => {
     vuetify = new Vuetify();
     router = new Router({
@@ -27,36 +27,35 @@ describe("UserTable.vue", () => {
           name: "question",
           component: Question
         },
-        {path: "/"}
+        { path: "/" }
       ]
     });
     store = new Vuex.Store({
       state: {
         user: user_factory.create_anonymous_admin()
       }
-    })
+    });
   });
-  it("renders question view in a separate route", async (done) => {
-    router.push({name: "question", params: { id: 500 }})
+  it("renders question view in a separate route", async done => {
+    router.push({ name: "question", params: { id: 500 } });
     let wrapper = mount(Question, {
       localVue,
       vuetify,
       router,
       store,
       sync: false
-    })
+    });
     setTimeout(async () => {
       expect(wrapper.vm.initData).toBeNull();
       wrapper.destroy();
-      router.push({name: "question", params: {id: 200}});
+      router.push({ name: "question", params: { id: 200 } });
       wrapper = mount(Question, {
         localVue,
         vuetify,
         store,
         router,
         sync: false,
-        propsData: {
-        }
+        propsData: {}
       });
       setTimeout(async () => {
         //expect(wrapper.vm.initData != null).toBe(true);
@@ -66,27 +65,27 @@ describe("UserTable.vue", () => {
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.edit_mode).toBe(true);
         done();
-      }, 1000)
-    }, 1000)
-  })
+      }, 1000);
+    }, 1000);
+  });
 
-  it("Can submit", async (done) => {
-    router.push({name: "question", params: { id: 500 }})
+  it("Can submit", async done => {
+    router.push({ name: "question", params: { id: 500 } });
     let wrapper = mount(Question, {
       localVue,
       vuetify,
       router,
       store,
       sync: false
-    })
+    });
     setTimeout(async () => {
       wrapper.vm.submit(question_factory.create_question_for_creation());
       setTimeout(() => {
         wrapper.vm.submit(question_factory.create_single_choice(233));
         setTimeout(() => {
           done();
-        }, 200)
-      }, 200)
-    }, 200)
-  })
-})
+        }, 200);
+      }, 200);
+    }, 200);
+  });
+});
