@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style>
-.sign-in-view .sign-in-box{
+.sign-in-view .sign-in-box {
   width: 30%;
   margin: auto;
 }

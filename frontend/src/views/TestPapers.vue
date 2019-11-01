@@ -17,13 +17,13 @@
 
         <v-tab-item>
           <h1>developing...</h1>
-		</v-tab-item>
+        </v-tab-item>
         <v-tab-item>
-		  <br />
+          <br />
           <test-paper-generation />
-		</v-tab-item>
+        </v-tab-item>
       </v-tabs>
-    </v-card>  
+    </v-card>
   </div>
 </template>
 
@@ -31,14 +31,12 @@
 import TestPaperGeneration from "@/components/TestPaperGeneration.vue";
 export default {
   name: "test-papers",
-  props: {
-  },
+  props: {},
   components: {
-	"test-paper-generation": TestPaperGeneration
-  },
-}
+    "test-paper-generation": TestPaperGeneration
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>
-

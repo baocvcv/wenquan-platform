@@ -31,15 +31,25 @@
             <v-list-item-title>Choices</v-list-item-title>
             <v-list-item-subtitle
               v-if="!readonly"
-              :style="!!edited_question.question_ans ? 'color: green;' : 'color: red;'"
-              >
-              {{ !!edited_question.question_ans ? "You have selected " + edited_question.question_ans.name + " as the right answer": "You haven't a right answer!" }}
+              :style="
+                !!edited_question.question_ans ? 'color: green;' : 'color: red;'
+              "
+            >
+              {{
+                !!edited_question.question_ans
+                  ? "You have selected " +
+                    edited_question.question_ans.name +
+                    " as the right answer"
+                  : "You haven't choose a right answer!"
+              }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item-group color="primary">
           <v-list-item
-            v-for="(choice, i) in TF ? tf_choice : edited_question.question_choice"
+            v-for="(choice, i) in TF
+              ? tf_choice
+              : edited_question.question_choice"
             :key="i"
           >
             <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
@@ -59,7 +69,9 @@
                   @click="readonly ? () => {} : check_ans(choice)"
                   v-on="on"
                   ><v-icon
-                    :color="edited_question.question_ans == choice ? 'green' : 'red'"
+                    :color="
+                      edited_question.question_ans == choice ? 'green' : 'red'
+                    "
                     dark
                     >{{
                       edited_question.question_ans == choice
@@ -124,10 +136,14 @@
         color="success"
         class="mr-4"
         @click="submit()"
-        >
-          {{ creation? "Create" : "Save" }}
-        </v-btn>
-      <v-btn v-if="!readonly && creation" color="error" class="mr-4" @click="reset()"
+      >
+        {{ creation ? "Create" : "Save" }}
+      </v-btn>
+      <v-btn
+        v-if="!readonly && creation"
+        color="error"
+        class="mr-4"
+        @click="reset()"
         >Reset</v-btn
       >
       <v-btn v-if="!readonly" @click="cancel">
@@ -161,7 +177,7 @@ export default {
   data: function() {
     return {
       valid: false,
-      question: {
+      edited_question: {
         id: -1,
         parents_node: [],
         question_level: 0,
@@ -171,37 +187,51 @@ export default {
         question_image: [],
         question_choice: [],
         question_ans: undefined,
-        question_solution: "",
-        tf_choice: [{ name: "T", content: true }, { name: "F", content: false }]
+        question_solution: ""
       },
-      edited_question: null
+      tf_choice: [{ name: "T", content: true }, { name: "F", content: false }],
+      question: undefined
     };
   },
   created() {
-    this.edited_question = Object.assign({}, this.question);
+    this.question = JSON.stringify(this.parse());
   },
   methods: {
     choice_num_up() {
-      let choice_num = this.question.question_choice.length;
-      this.question.question_choice.push({
+      let choice_num = this.edited_question.question_choice.length;
+      this.edited_question.question_choice.push({
         name: String.fromCharCode(choice_num + 65),
         content: ""
       });
     },
     delete_choice(index) {
-      if (this.question.question_ans == this.question.question_choice[index]) {
-        this.question.question_ans = undefined;
+      if (
+        this.edited_question.question_ans ==
+        this.edited_question.question_choice[index]
+      ) {
+        this.edited_question.question_ans = undefined;
       }
-      this.question.question_choice.splice(index, 1);
-      for (var i = 0; i < this.question.question_choice.length; i++) {
-        this.question.question_choice[i].name = String.fromCharCode(65 + i);
+      this.edited_question.question_choice.splice(index, 1);
+      for (var i = 0; i < this.edited_question.question_choice.length; i++) {
+        this.edited_question.question_choice[i].name = String.fromCharCode(
+          65 + i
+        );
       }
     },
     check_ans(choice) {
-      this.question.question_ans = this.question.question_ans == choice ? undefined : choice;
+      this.edited_question.question_ans =
+        this.edited_question.question_ans == choice ? undefined : choice;
     },
     updateData(input) {
-      this.question = Object.assign({}, input);
+      this.edited_question.id = input.id;
+      this.edited_question.parents_node = input.parents_node;
+      this.edited_question.question_level = input.question_level;
+      this.edited_question.question_change_time = input.question_change_time;
+      this.edited_question.question_name = input.question_name;
+      this.edited_question.question_image = input.question_image;
+      this.edited_question.question_solution = input.question_solution;
+      this.edited_question.question_content = input.question_content;
+      this.edited_question.question_ans = undefined;
       if (!this.TF) {
         var parsed = [];
         var origin = input.question_choice;
@@ -211,26 +241,17 @@ export default {
             name: id,
             content: origin[i]
           };
-          if (input.question_ans == id) this.question.question_ans = choice;
+          if (input.question_ans == id)
+            this.edited_question.question_ans = choice;
           parsed.push(choice);
         }
-        this.question.question_choice = parsed;
+        this.edited_question.question_choice = parsed;
       } else {
-        this.question.question_ans = input.question_ans
+        this.edited_question.question_ans = input.question_ans
           ? this.tf_choice[0]
           : this.tf_choice[1];
       }
-      this.edited_question = Object.assign({}, this.question);
-      /*
-      this.id = input.id;
-      this.parents_node = input.parents_node;
-      this.question_level = input.question_level;
-      this.question_change_time = input.question_change_time;
-      this.question_name = input.question_name;
-      this.question_image = input.question_image;
-      this.question_solution = input.question_solution;
-      this.question_content = input.question_content;
-      */
+      this.question = JSON.stringify(this.parse());
     },
     parse() {
       var result = {
@@ -245,34 +266,41 @@ export default {
         question_solution: this.edited_question.question_solution
       };
       if (this.TF) {
-        result["question_ans"] = this.edited_question.question_ans.content;
+        result["question_ans"] = this.edited_question.question_ans
+          ? this.edited_question.question_ans.content
+          : undefined;
       } else {
         var parsedChoice = [];
         var localChoice = this.edited_question.question_choice;
         for (var i = 0; i < localChoice.length; i++) {
           parsedChoice.push(localChoice[i].content);
         }
-        result["question_ans"] = this.edited_question.question_ans.name;
+        result["question_ans"] = this.edited_question.question_ans
+          ? this.edited_question.question_ans.name
+          : undefined;
         result["question_choice"] = parsedChoice;
       }
       return result;
     },
     reset() {
       this.$refs.input.reset();
-      this.edited_question.question_choice.splice(0, this.question.question_choice.length);
+      this.edited_question.question_choice.splice(
+        0,
+        this.edited_question.question_choice.length
+      );
       this.edited_question.question_ans = undefined;
       this.$refs.uploader.reset();
-      this.question = Object.assign({}, this.edited_question);
+      this.question = JSON.stringify(this.parse());
     },
     cancel() {
-      this.edited_question = Object.assign({}, this.question);
+      this.updateData(JSON.parse(this.question));
       this.$emit("cancel");
     },
     submit() {
       this.$emit("submit", this.parse());
     },
     submitted() {
-      this.question = Object.assign({}, this.edited_question);
+      this.question = JSON.stringify(this.parse());
     }
   }
 };

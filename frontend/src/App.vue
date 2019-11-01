@@ -3,7 +3,7 @@
     <app-bar :key="$route.fullPath"></app-bar>
     <v-content>
       <v-container fluid>
-        <router-view/>
+        <router-view />
       </v-container>
     </v-content>
   </v-app>
@@ -13,13 +13,13 @@
 import app_bar from "./components/AppBar.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     "app-bar": app_bar
   },
   data: () => ({
     //
-  }),
+  })
 };
 </script>
 

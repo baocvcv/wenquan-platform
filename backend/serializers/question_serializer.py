@@ -11,6 +11,7 @@ from backend.models.questions import QuestionGroup
 
 
 def get_object(group_id):
+    """Get QuestionGroup"""
     try:
         group = QuestionGroup.objects.get(id=group_id)
     except QuestionGroup.DoesNotExist:

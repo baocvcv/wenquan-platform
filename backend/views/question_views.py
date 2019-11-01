@@ -133,8 +133,7 @@ class QuestionList(APIView):
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = parents_id
             return Response(response, status=201)
-        else:
-            q_group.delete()
+        q_group.delete()
         return Response(question.errors, status=400)
 
 
@@ -175,6 +174,8 @@ class QuestionDetail(APIView):
         question = QuestionList.create_question_from_data(post_data)
 
         if question.is_valid():
+            new_q = question.save()
+
             new_parents = []
             for i in post_data['parents_node']:
                 new_parents.append(KnowledgeNode.objects.get(id=i))
@@ -182,7 +183,6 @@ class QuestionDetail(APIView):
             q_group.current_version = new_q.question_change_time
 
             q_group.save()
-            new_q = question.save()
 
             response = question.data
             response['id'] = new_q.id
