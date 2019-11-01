@@ -33,7 +33,7 @@ nock(/.*?/)
     .get(
         "/api/questions/1/"
     )
-    .reply(200, question_factory.create_single_choice())
+    .reply(200, question_factory.create_single_choice(1))
 
 nock(/.*?/)
     .get(
@@ -55,4 +55,4 @@ nock(/.*?/)
     .get(
         "/api/questions/3/"
     )
-    .reply(200, question_factory.create_single_choice())
+    .reply(200, question_factory.create_single_choice(3))
