@@ -8,3 +8,5 @@ from .user import User
 from .permissions import UserPermissions
 from .profile import Profile
 from .email import EmailVerificationRecord
+
+from .question_record import QuestionRecord
