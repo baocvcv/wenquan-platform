@@ -12,3 +12,6 @@ from .knowledge_node_views import KnowledgeNodeList
 from .knowledge_node_views import KnowledgeNodeDetail
 from .question_bank_views import QuestionBankList
 from .question_bank_views import QuestionBankDetail
+
+from .question_record_view import QuestionRecordList
+from .question_record_view import QuestionRecordDetail
