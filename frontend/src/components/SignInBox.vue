@@ -112,3 +112,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+a {
+  color: grey;
+}
+
+a:hover {
+  color:lightskyblue;
+}
+</style>
