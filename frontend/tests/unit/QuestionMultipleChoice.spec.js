@@ -37,7 +37,6 @@ describe("QuestionMultipleChoice.vue", () => {
       vuetify,
       sync: false
     });
-    console.log(wrapper.vm.edited_data.choices);
     expect(wrapper.vm.edited_data.choices.length).toBe(4);
     wrapper.vm.changeRightStatus(wrapper.vm.edited_data.choices[0]);
     wrapper.vm.removeChoice(0);

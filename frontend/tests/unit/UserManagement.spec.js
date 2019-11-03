@@ -47,7 +47,6 @@ describe("UserManagement.vue", () => {
       sync: false
     });
     setTimeout(async () => {
-      console.log(wrapper.html());
       //expect(wrapper.vm.users.length != 0).toBe(true);
       wrapper.vm.create_user(user_factory.create_anonymous_student());
       await wrapper.vm.$nextTick();
@@ -68,7 +67,6 @@ describe("UserManagement.vue", () => {
       sync: false
     });
     setTimeout(async () => {
-      console.log(wrapper.html());
       //expect(wrapper.vm.users.length != 0).toBe(true);
       let user = user_factory.create_anonymous_student();
       user.id = 500;
@@ -92,7 +90,6 @@ describe("UserManagement.vue", () => {
       sync: false
     });
     setTimeout(async () => {
-      console.log(wrapper.html());
       //expect(wrapper.vm.users.length != 0).toBe(true);
       let user = user_factory.create_anonymous_student();
       user.id = 500;

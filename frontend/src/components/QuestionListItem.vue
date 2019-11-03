@@ -182,7 +182,6 @@ export default {
       this.hide_content = true;
     },
     click() {
-      console.log(this.question);
       if (this.dialog) this.viewing_question = true;
       else this.$router.push("/questions/" + this.question.id + "/");
     }

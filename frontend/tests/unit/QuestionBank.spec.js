@@ -79,7 +79,6 @@ describe("QuestionBank.vue", () => {
       expect(save_button.exists()).toBe(true);
       cancel_button.trigger("click");
       await wrapper.vm.$nextTick();
-      console.log(wrapper.vm.edited_question_bank.name);
       expect(wrapper.vm.edited_question_bank.name === "edited").toBe(false);
       edit_button.trigger("click");
       await wrapper.vm.$nextTick();
@@ -96,7 +95,6 @@ describe("QuestionBank.vue", () => {
             name: "edited"
           }
         });
-        console.log(wrapper.vm.edited_question_bank.name);
         wrapper.vm.save();
         // save_button.trigger("click");
         setTimeout(() => {
@@ -175,7 +173,6 @@ describe("QuestionBank.vue", () => {
       });
       wrapper.vm.$router.push("/");
       await wrapper.vm.$nextTick();
-      console.log(wrapper.vm.$route.path);
       //expect(window.confirm).toHaveBeenCalled();
       //expect(wrapper.vm.$route.path === "/").toBe(false);
       window.confirm = jest.fn(() => {
