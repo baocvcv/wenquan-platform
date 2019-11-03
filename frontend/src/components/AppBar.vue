@@ -70,7 +70,10 @@
           :key="nav_link.name"
           :to="nav_link.link"
         >
-          <v-btn text @click="nav_link.name == 'Log out' ? logout() : ''">
+          <v-btn v-if="nav_link.name === 'Sign up'" outlined>
+            {{ nav_link.text }}
+          </v-btn>
+          <v-btn v-else text @click="nav_link.name == 'Log out' ? logout() : ''">
             <v-icon>{{ nav_link.icon }}</v-icon>
             <div v-if="$vuetify.breakpoint.mdAndUp">
               {{ nav_link.text }}
@@ -127,9 +130,9 @@ export default {
           },
           {
             name: "Sign up",
-            text: "Sign up",
+            text: "Get started",
             link: "/signup",
-            icon: "mdi-login"
+            icon: ""
           }
         ],
         student: [
