@@ -3,19 +3,23 @@ import SignUpBox from "@/components/SignUpBox.vue";
 import SignUp from "@/views/SignUp.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import Router from "vue-router";
 import "./mock/SignUpMock";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
+Vue.use(Router);
 
 describe("SignUp.vue", () => {
-  let vuetify;
+  let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
+    router = new Router();
   });
   it("renders correctly", () => {
     const wrapper = mount(SignUp, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     expect(wrapper.contains(".v-form")).toBe(true);
@@ -24,15 +28,17 @@ describe("SignUp.vue", () => {
 });
 
 describe("SignUpBox.vue", () => {
-  let vuetify;
+  let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
+    router = new Router();
   });
 
   it("correct input", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -52,6 +58,7 @@ describe("SignUpBox.vue", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -70,6 +77,7 @@ describe("SignUpBox.vue", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -88,6 +96,7 @@ describe("SignUpBox.vue", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -106,6 +115,7 @@ describe("SignUpBox.vue", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -124,6 +134,7 @@ describe("SignUpBox.vue", () => {
     const wrapper = mount(SignUpBox, {
       vuetify,
       localVue,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -146,6 +157,7 @@ describe("SignUpBox.vue", () => {
       vuetify,
       localVue,
       sync: false,
+      router,
       attachToDocument: true
     });
     wrapper.setData({
@@ -175,6 +187,7 @@ describe("SignUpBox.vue", () => {
       vuetify,
       localVue,
       sync: false,
+      router,
       attachToDocument: true
     });
     wrapper.setData({
@@ -195,6 +208,6 @@ describe("SignUpBox.vue", () => {
       expect(wrapper.vm.sign_up_result).toBe("Error");
       done();
     }, 1000);
-    wrapper.vm.redirect(); 
+    wrapper.vm.redirect();
   });
 });

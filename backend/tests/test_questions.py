@@ -95,6 +95,7 @@ class QuestionListViewTest(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
+        """Create test bank and node"""
         root = KnowledgeNode.objects.create(name="unnamed node")
         cls.bank_data['root_id'] = root.id
         serializer = QuestionBankSerializer(data=cls.bank_data)
@@ -106,17 +107,19 @@ class QuestionListViewTest(APITestCase):
             print(serializer.errors)
 
     def get_response(self, new_q_id):
+        """GET method testing"""
         url = reverse("questions_detail", args=[new_q_id])
         response = self.client.get(url)
         return response
 
     def create_question(self, data):
+        """Create Question from data by POST method"""
         url = reverse('questions_list')
         data[0]["parents_node"] = [self.bank.root_id]
         response = self.client.post(url, data, format='json')
         return response
 
-    def test_create_Single(self):
+    def test_create_single(self):
         """ test creating an single choice question"""
         data = copy(self.single_example)
         response = self.create_question(data)
@@ -130,7 +133,7 @@ class QuestionListViewTest(APITestCase):
         response2 = self.get_response(new_q.id)
         self.assertEqual(response.data, response2.data)
 
-    def test_create_Multiple(self):
+    def test_create_multiple(self):
         """ test creating an single choice question"""
         data = copy(self.multi_example)
         response = self.create_question(data)
@@ -144,7 +147,7 @@ class QuestionListViewTest(APITestCase):
         response2 = self.get_response(new_q.id)
         self.assertEqual(response.data, response2.data)
 
-    def test_create_True_Or_False(self):
+    def test_create_true_or_false(self):
         """ test creating an single choice question"""
         data = copy(self.t_or_f_example)
         response = self.create_question(data)

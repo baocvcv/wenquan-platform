@@ -67,36 +67,34 @@ const router = new Router({
       path: "/edit_question/:id",
       name: "question-edit",
       component: () => import("./views/Question.vue")
-    },
+    }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
-  console.log("Entering a new router!");
   if (sessionStorage.getItem("user"))
-    store.state.user=JSON.parse(sessionStorage.getItem("user"));
-  if (!store.state.user)
-  {
-    if (to.path != "/" && to.path != "/about" && to.path != "/signin" && to.path != "/signup")
-    {
+    store.state.user = JSON.parse(sessionStorage.getItem("user"));
+  if (!store.state.user) {
+    if (
+      to.path != "/" &&
+      to.path != "/about" &&
+      to.path != "/signin" &&
+      to.path != "/signup"
+    ) {
       next("/signin");
-    }
-    else
-    {
+    } else {
       next();
     }
-  }
-  else
-  {
-    if (to.path.split('/')[0] === 'admin' && store.state.user.user_group === "Student")
-    {
+  } else {
+    if (
+      to.path.split("/")[0] === "admin" &&
+      store.state.user.user_group === "Student"
+    ) {
       next("/");
-    }
-    else
-    {
+    } else {
       next();
     }
   }
-})
+});
 
 export default router;
