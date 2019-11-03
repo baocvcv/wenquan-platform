@@ -144,7 +144,6 @@ export default {
         question_ans: this.edited_data.answer,
         question_solution: this.edited_data.analysis
       };
-      console.log(JSON.stringify(result));
       return result;
     }
   },
