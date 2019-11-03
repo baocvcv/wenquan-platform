@@ -51,9 +51,9 @@
     </v-navigation-drawer>
     <v-app-bar
       color="white"
-      scroll-target="#scrolling-techniques-7"
       app
       clipped-left
+      scroll-off-screen
     >
       <v-app-bar-nav-icon
         v-show="!$vuetify.breakpoint.smAndUp"

@@ -1,8 +1,8 @@
 <template>
-  <div class="sign-in-view">
+  <div id="sign-in">
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
-        <v-flex xs12 sm8 md4>
+        <v-flex xs12 sm8 md8>
           <sign-in-box></sign-in-box>
         </v-flex>
       </v-layout>

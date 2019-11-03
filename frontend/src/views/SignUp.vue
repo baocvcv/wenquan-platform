@@ -1,13 +1,12 @@
 <template>
   <div id="sign-up">
-    <v-card max-width="500" class="mx-auto">
-      <v-toolbar color="indigo" dark>
-        <v-toolbar-title>Sign up here~</v-toolbar-title>
-      </v-toolbar>
-      <v-card-text>
-        <sign-up-box></sign-up-box>
-      </v-card-text>
-    </v-card>
+    <v-container fluid fill-height>
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm8 md8>
+          <sign-up-box></sign-up-box>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
