@@ -2,7 +2,7 @@
 from django.db import models
 from polymorphic.models import PolymorphicModel
 from django.contrib.postgres.fields import ArrayField
-from .questions import QuestionGroup
+from .questions.question import Question
 
 MAX_NAME = 200
 
@@ -34,8 +34,10 @@ class Section(PolymorphicModel):
     name = models.CharField(max_length=MAX_NAME)
     title = models.CharField(max_length=MAX_NAME)
     total_point = models.IntegerField()
+    is_latest = models.BooleanField(default=True)
+    belong_paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     questions = models.ManyToManyField(
-        QuestionGroup,
+        Question,
         through='QuestionVersion',
         through_fields=('section', 'question'),
     )
@@ -49,6 +51,5 @@ class QuestionVersion(PolymorphicModel):
         question_version: the change_time of question saved in this paper
     '''
     section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None)
-    question = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
-    question_version = models.DateTimeField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     question_point = models.IntegerField(default=0)
