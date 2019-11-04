@@ -127,3 +127,17 @@ class KnowledgeNodeDetail(APIView):
             node.save()
             response.append(self.serializer(node))
         return Response(response)
+
+
+class NodeQuestionView(APIView):
+    def post(self, request):
+        response = set()
+        post_data = JSONParser().parse(request)
+        for i in post_data['nodes_id']:
+            node = KnowledgeNodeList.get_object(i)
+            questions = []
+            for i in node.questiongroup_set.all():
+                question = QuestionList.get_latest_version(i)
+                questions.append(question.id)
+            response = response | set(questions)
+        return Response(list(response))
