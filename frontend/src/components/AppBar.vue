@@ -49,12 +49,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      color="white"
-      app
-      clipped-left
-      scroll-off-screen
-    >
+    <v-app-bar color="white" app clipped-left scroll-off-screen>
       <v-app-bar-nav-icon
         v-show="!$vuetify.breakpoint.smAndUp"
         @click="drawer = !drawer"
@@ -73,7 +68,11 @@
           <v-btn v-if="nav_link.name === 'Sign up'" outlined>
             {{ nav_link.text }}
           </v-btn>
-          <v-btn v-else text @click="nav_link.name == 'Log out' ? logout() : ''">
+          <v-btn
+            v-else
+            text
+            @click="nav_link.name == 'Log out' ? logout() : ''"
+          >
             <v-icon>{{ nav_link.icon }}</v-icon>
             <div v-if="$vuetify.breakpoint.mdAndUp">
               {{ nav_link.text }}

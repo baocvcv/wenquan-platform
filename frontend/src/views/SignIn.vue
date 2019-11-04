@@ -1,5 +1,6 @@
 <template>
   <div id="sign-in">
+    <!--BUGS here! A container has already been wrapped in App.vue-->
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
         <v-flex xs12 sm8 md8>

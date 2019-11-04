@@ -1,43 +1,55 @@
 <template>
   <div class="sign-in-box">
-        <v-card>
-          <v-layout row justify-center>
-            <v-flex md8>
-              <v-card-text>
-                <p class="text-center display-1 font-weight-bold text--primary text-uppercase pt-4">sign in</p>
-                <v-container>
-                  <v-form ref="input">
-                    <v-text-field
-                      v-model="username"
-                      label="Username"
-                      v-bind:rules="[v => !!v || 'Username is required.']"
-                    ></v-text-field>
-                    <v-text-field
-                      v-model="password"
-                      label="Password"
-                      v-bind:type="show_password ? 'text' : 'password'"
-                      v-bind:rules="[v => !!v || 'Password is required.']"
-                      v-bind:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
-                      v-on:click:append="show_password = !show_password"
-                    ></v-text-field>
-                    <v-row>
-                      <v-spacer></v-spacer>
-                      <v-btn outlined v-on:click="click" v-bind:disabled="!username || !password"
-                        >Sign In</v-btn
-                      >
-                      <v-spacer></v-spacer>
-                    </v-row>
-                  </v-form>
-                </v-container>
-                <p class="text-center mt-4 mb-0 pb-0">
-                  <router-link to="/"><small>Forget Password?</small></router-link> | 
-                  <router-link to="/signup"><small>Do not have an account yet? click here to sign up.</small></router-link>
-                </p>
-              </v-card-text>
-            </v-flex>
-          </v-layout>
-        </v-card>
-    
+    <v-card>
+      <v-layout row justify-center>
+        <v-flex md8>
+          <v-card-text>
+            <p
+              class="text-center display-1 font-weight-bold text--primary text-uppercase pt-4"
+            >
+              sign in
+            </p>
+            <v-container>
+              <v-form ref="input">
+                <v-text-field
+                  v-model="username"
+                  label="Username"
+                  v-bind:rules="[v => !!v || 'Username is required.']"
+                ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  label="Password"
+                  v-bind:type="show_password ? 'text' : 'password'"
+                  v-bind:rules="[v => !!v || 'Password is required.']"
+                  v-bind:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                  v-on:click:append="show_password = !show_password"
+                ></v-text-field>
+                <v-row>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    outlined
+                    v-on:click="click"
+                    v-bind:disabled="!username || !password"
+                    >Sign In</v-btn
+                  >
+                  <v-spacer></v-spacer>
+                </v-row>
+              </v-form>
+            </v-container>
+            <p class="text-center mt-4 mb-0 pb-0">
+              <router-link to="/"><small>Forget Password?</small></router-link>
+              |
+              <router-link to="/signup"
+                ><small
+                  >Do not have an account yet? click here to sign up.</small
+                ></router-link
+              >
+            </p>
+          </v-card-text>
+        </v-flex>
+      </v-layout>
+    </v-card>
+
     <v-dialog v-model="show_dialog" max-width="300" data-app>
       <v-card>
         <v-toolbar color="indigo" dark>
@@ -123,6 +135,6 @@ a {
 }
 
 a:hover {
-  color:dodgerblue;
+  color: dodgerblue;
 }
 </style>

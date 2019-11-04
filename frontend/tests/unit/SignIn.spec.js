@@ -17,7 +17,7 @@ describe("SignInBox.vue", () => {
   let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
-    router = new Router({RouterRule});
+    router = new Router({ RouterRule });
   });
   it("Correct Input", () => {
     const wrapper = mount(SignInBox, {
@@ -201,7 +201,7 @@ describe("SignIn.vue", () => {
   let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
-    router = new Router({RouterRule});
+    router = new Router({ RouterRule });
   });
   it("Render Component Correctly", () => {
     const wrapper = mount(SignIn, {
