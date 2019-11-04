@@ -48,4 +48,19 @@ urlpatterns = [
         views.QuestionBankDetail.as_view(),
         name='banks_list',
     ),
+    path(
+        r'api/papers/',
+        views.PaperList.as_view(),
+        name='papers_list',
+    ),
+    path(
+        r'api/papers/<int:paper_id>/',
+        views.PaperDetail.as_view(),
+        name='paper_detail',
+    ),
+    path(
+        r'api/paper_sections/<int:section_id>/',
+        views.SectionDetail.as_view(),
+        name='section_detail',
+    ),
 ]
