@@ -22,7 +22,7 @@
         >
             Change Password
         </v-btn>
-        <v-form v-model="password_valid" v-show="password_editing">
+        <v-form v-model="password_valid" v-show="password_editing" ref="form">
             <v-text-field
                 v-model="new_psw"
                 label="New password"
@@ -40,9 +40,10 @@
         </v-form>
         <v-btn
             outlined
-            color = "success"
+            color="success"
             @click="submit_new_psw"
             v-show="password_editing"
+            :disabled="!password_valid"
             class="mx-2"
         >
             Confirm
@@ -57,10 +58,39 @@
         </v-btn>
         </v-card-text>
     </v-card>
+    <v-dialog v-model="dialog" max-width=600px>
+        <v-card>
+            <v-card-title
+                class="headline grey lighten-2"
+                primary-title
+            >
+                Password Edit
+            </v-card-title>
+            <v-card-text>
+                {{ msg }}
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="primary"
+                text
+                @click="() => {
+                    dialog = false;
+                    msg = null;
+                }"
+            >
+                OK
+            </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     name: "account-view",
     computed: {
@@ -73,14 +103,22 @@ export default {
     },
     methods: {
         submit_new_psw() {
-            this.password_editing = false;
-            this.new_psw = "";
-            this.new_psw_2 = "";
+            axios.post("/api/password/",{
+                token: this.user.token,
+                password: this.new_psw
+            }).then(response => {
+                this.password_editing = false;
+                this.msg = "Success!"
+                this.dialog = true;
+            }).catch(err => {
+                this.msg = err;
+                this.dialog = true;
+            })
+            this.$refs.form.reset();
         },
         cancel_editing() {
             this.password_editing = false;
-            this.new_psw = "";
-            this.new_psw_2 = "";
+            this.$refs.form.reset();
         }
     },
     data: function() {
@@ -94,8 +132,10 @@ export default {
                 v => (!!v && v.length >= 8) || "At least 8 characters are required."
             ],
             re_password_rules: [
-                v => v == this.new_psw || "Does not consist with former one."
+                v => (!!v && v == this.new_psw) || "Does not consist with former one."
             ],
+            msg: null,
+            dialog: false
         };
     }
 };
