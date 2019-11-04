@@ -79,12 +79,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (sessionStorage.getItem("user"))
     store.state.user = JSON.parse(sessionStorage.getItem("user"));
-  if (router.resolve(to).route.name === "404")
-  {
+  if (router.resolve(to).route.name === "404") {
     next();
-  }
-  else
-  {
+  } else {
     if (!store.state.user) {
       if (
         to.path != "/" &&

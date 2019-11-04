@@ -2,11 +2,14 @@
   <div id="sign-up-box">
     <v-card>
       <v-layout row justify-center>
-        <v-flex v-show="$vuetify.breakpoint.mdAndUp">
-        </v-flex>
+        <v-flex v-show="$vuetify.breakpoint.mdAndUp"> </v-flex>
         <v-flex md8>
           <v-card-text>
-            <p class="text-center display-1 font-weight-bold text--primary text-uppercase pt-4">sign up</p>
+            <p
+              class="text-center display-1 font-weight-bold text--primary text-uppercase pt-4"
+            >
+              sign up
+            </p>
             <v-container>
               <v-form ref="input" v-model="valid">
                 <v-text-field
@@ -46,7 +49,10 @@
                     class="shrink mr-0 mt-0 pt-0"
                     small
                   ></v-checkbox>
-                  <span class="caption grey--text">I accept and agree to Terms of Service and Privacy Statement</span>
+                  <span class="caption grey--text"
+                    >I accept and agree to Terms of Service and Privacy
+                    Statement</span
+                  >
                 </v-layout>
 
                 <v-layout>
@@ -59,18 +65,23 @@
                     >Submit
                   </v-btn>
 
-                  <v-btn text class="mr-4 reset-button" @click="reset_input">Reset</v-btn>
+                  <v-btn text class="mr-4 reset-button" @click="reset_input"
+                    >Reset</v-btn
+                  >
                   <v-spacer></v-spacer>
                 </v-layout>
               </v-form>
               <p class="text-center mt-4 mb-0 pb-0">
-                <router-link to="/signup"><small>Already have an account? Click here to sign in.</small></router-link>
+                <router-link to="/signup"
+                  ><small
+                    >Already have an account? Click here to sign in.</small
+                  ></router-link
+                >
               </p>
             </v-container>
           </v-card-text>
         </v-flex>
-        <v-flex v-show="$vuetify.breakpoint.mdAndUp">
-        </v-flex>
+        <v-flex v-show="$vuetify.breakpoint.mdAndUp"> </v-flex>
       </v-layout>
     </v-card>
     <v-dialog v-model="show_dialog" max-width="300">
@@ -178,6 +189,6 @@ a {
   color: grey;
 }
 a:hover {
-  color:dodgerblue;
+  color: dodgerblue;
 }
 </style>
