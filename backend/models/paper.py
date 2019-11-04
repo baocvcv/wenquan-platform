@@ -22,6 +22,7 @@ class Paper(PolymorphicModel):
     total_point = models.IntegerField(default=100)
     tips = ArrayField(models.CharField(max_length=MAX_NAME), default=list)
     status = models.CharField(max_length=MAX_NAME, default="drafted")
+    is_latest = models.BooleanField(default=True)
 
 
 class Section(PolymorphicModel):
@@ -34,7 +35,6 @@ class Section(PolymorphicModel):
     name = models.CharField(max_length=MAX_NAME)
     title = models.CharField(max_length=MAX_NAME)
     total_point = models.IntegerField()
-    is_latest = models.BooleanField(default=True)
     belong_paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
     questions = models.ManyToManyField(
         Question,

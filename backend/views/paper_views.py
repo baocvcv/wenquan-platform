@@ -7,6 +7,7 @@ from django.http import Http404
 from backend.models.paper import Paper
 from backend.models.paper import Section
 from backend.serializers.paper_serializer import PaperSerializer
+from backend.serializers.paper_serializer import SectionSerializer
 from .question_views import QuestionDetail
 
 
@@ -68,6 +69,29 @@ class PaperList(APIView):
         post_data = JSONParser().parse(request)
         new_paper = self.create_paper_from_data(post_data)
         response = self.create_response_from_paper(new_paper)
+        return Response(response)
+
+
+class SectionDetail(APIView):
+    @classmethod
+    def get_object(cls, section_id):
+        try:
+            return Section.objects.get(id=section_id)
+        except Paper.DoesNotExist:
+            raise Http404
+
+    def get(self, request, section_id):
+        section = self.get_object(section_id)
+        serializer = SectionSerializer(section)
+        response = serializer.data
+        questions = []
+        for i in section.questions.all():
+            question_data = {}
+            q_on_paper = i.questionversion_set.get(section=section)
+            question_data['id'] = i.id
+            question_data['question_point'] = q_on_paper.question_point
+            questions.append(question_data)
+        response['questions'] = questions
         return Response(response)
 
 
