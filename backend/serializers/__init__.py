@@ -12,3 +12,4 @@ from .question_serializer import BriefAnswerQSerializer
 from .question_bank_serializer import QuestionBankSerializer
 
 from .question_record_serializer import QuestionRecordSerializer
+from .paper_record_serializer import PaperRecordSerializer

@@ -10,3 +10,4 @@ from .profile import Profile
 from .email import EmailVerificationRecord
 
 from .question_record import QuestionRecord
+from .paper_record import PaperRecord

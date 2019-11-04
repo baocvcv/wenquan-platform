@@ -5,13 +5,11 @@ from .questions import SingleChoiceQ
 from .questions import MultpChoiceQ
 from .questions import FillBlankQ
 from .questions import TrueOrFalseQ
-from .questions.question import TYPEDIC
-from .questions.question import INT2TYPE
 
 class QuestionRecord(models.Model):
     """ Question record entry """
     question_id = models.IntegerField()
-    question_type = models.CharField(20)
+    question_type = models.CharField(max_length=20)
     record_time = models.DateTimeField(auto_now=True)
     #TODO: same format for question answers???
     ans = models.CharField(max_length=200, default="")
