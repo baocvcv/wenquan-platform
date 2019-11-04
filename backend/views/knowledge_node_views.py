@@ -130,14 +130,16 @@ class KnowledgeNodeDetail(APIView):
 
 
 class NodeQuestionView(APIView):
+    """View for question set in nodes"""
     def post(self, request):
+        """Get question belong to some nodes"""
         response = set()
         post_data = JSONParser().parse(request)
         for i in post_data['nodes_id']:
             node = KnowledgeNodeList.get_object(i)
             questions = []
-            for i in node.questiongroup_set.all():
-                question = QuestionList.get_latest_version(i)
+            for j in node.questiongroup_set.all():
+                question = QuestionList.get_latest_version(j)
                 questions.append(question.id)
             response = response | set(questions)
         return Response(list(response))
