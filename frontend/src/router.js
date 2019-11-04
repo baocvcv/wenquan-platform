@@ -24,6 +24,11 @@ const router = new Router({
         import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
     },
     {
+      path: "/account",
+      name: "account",
+      component: () => import("./views/Account.vue")
+    },
+    {
       path: "/admin/usermanagement",
       name: "user-management",
       component: () => import("./views/UserManagement.vue")
@@ -72,7 +77,6 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("Entering a new router!");
   if (sessionStorage.getItem("user"))
     store.state.user = JSON.parse(sessionStorage.getItem("user"));
   if (!store.state.user) {
