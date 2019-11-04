@@ -26,6 +26,7 @@ class PaperList(APIView):
                     target,
                     through_defaults={
                         "question_point": j['question_point'],
+                        "question_num": j["question_num"],
                     },
                 )
                 section_objects.append(new_section)
@@ -52,7 +53,11 @@ class PaperList(APIView):
         response = serializer.data
         response['sections'] = []
         for i in paper.section_set.all():
-            response['sections'].append(i.id)
+            section_data = {}
+            section_data['id'] = i.id
+            section_data['section_num'] = i.section_num
+            response['sections'].append(section_data)
+        response['sections'].sort(key=lambda x: x['section_num'])
         return response
 
     def get(self, request):
@@ -90,7 +95,9 @@ class SectionDetail(APIView):
             q_on_paper = i.questionversion_set.get(section=section)
             question_data['id'] = i.id
             question_data['question_point'] = q_on_paper.question_point
+            question_data['question_num'] = q_on_paper.question_num
             questions.append(question_data)
+        questions.sort(key=lambda x: x['question_num'])
         response['questions'] = questions
         return Response(response)
 
@@ -111,6 +118,7 @@ class PaperDetail(APIView):
     def put(self, request, paper_id):
         paper = self.get_object(paper_id)
         paper.is_latest = False
+        paper.save()
         put_data = JSONParser().parse(request)
         new_paper = PaperList.create_paper_from_data(put_data)
         response = PaperList.create_response_from_paper(new_paper)

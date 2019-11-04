@@ -30,17 +30,10 @@ class PaperSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         new_paper = Paper.objects.create(**validated_data)
-
         return new_paper
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.title = validated_data.get("title", instance.title)
-        instance.total_point = validated_data.get("total_point", instance.total_point)
-        instance.tips = validated_data.get("tips", instance.tips)
-        instance.status = validated_data.get("status", instance.status)
-        instance.save()
-        return instance
+        pass
 
 
 class SectionSerializer(serializers.ModelSerializer):
@@ -55,14 +48,11 @@ class SectionSerializer(serializers.ModelSerializer):
             "name",
             "title",
             "total_point",
+            "section_num",
         ]
 
     def create(self, validated_data):
         return new_section
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.title = validated_data.get("title", instance.title)
-        instance.total_point = validated_data.get("total_point", instance.total_point)
-        instance.save()
-        return instance
+        pass
