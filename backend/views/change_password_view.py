@@ -24,9 +24,7 @@ class ChangePasswordView(APIView):
             token = data['token']
             msg, sta = use_token(token, data['password'])
             return Response(msg, sta)
-        else:
-            user = request.user
-            print(user)
-            user.set_password(data['password'])
-            user.save()
-            return Response(UserSerializer(user).data, status.HTTP_200_OK)
+        user = request.user
+        user.set_password(data['password'])
+        user.save()
+        return Response(UserSerializer(user).data, status.HTTP_200_OK)
