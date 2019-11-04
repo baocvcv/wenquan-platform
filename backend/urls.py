@@ -39,6 +39,11 @@ urlpatterns = [
         name='node_detail',
     ),
     path(
+        r'api/nodes_question/',
+        views.NodeQuestionView.as_view(),
+        name='nodes_question',
+    ),
+    path(
         r'api/question_banks/',
         views.QuestionBankList.as_view(),
         name='banks_list',
