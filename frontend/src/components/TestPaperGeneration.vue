@@ -36,7 +36,7 @@
         </v-list-item>
 
         <!--sections-->
-        <v-list-item-group v-for="(section, key) in sections" :key="key">
+        <v-list-item-group v-for="(section, key) in edited_paper.sections" :key="key">
           <v-list-item>
             <v-list-item-avatar>
               <v-icon>{{ roman(key + 1) }}</v-icon>
@@ -145,10 +145,10 @@
         :disabled="!valid || !judge_points_sum"
         class="mr-4"
         @click="submit()"
-        >Submit</v-btn
+        >Save</v-btn
       >
-
       <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
+      <v-btn :disabled="!paper" class="mr-4" @click="cancel()">Cancel</v-btn>
     </v-form>
 
     <!--The dialog is for selecting questions-->
@@ -211,7 +211,17 @@ import axios from "axios";
 
 export default {
   name: "",
-  props: {},
+  props: {
+    paper: {
+      type: Object,
+      default: undefined
+    },
+    id: -1
+  },
+  model: {
+    prop: "paper",
+    event: "save"
+  },
   components: {
     "question-banks-list": QuestionBanksList,
     "question-list": QuestionList,
@@ -220,27 +230,28 @@ export default {
   data: function() {
     return {
       valid: false,
-      title: "",
+      edited_paper: {
+        title: "",
+        total_points: "0",
+        tips: "",
+        sections: []
+      },
       title_rules: [v => !!v || "Title is required!"],
-      total_points: "0",
       total_points_rules: [
         v => !!v || "Total points is required!",
         v => (!!v && /^[0-9]+$/.test(v)) || "An integer is expected!"
       ],
-      tips: "",
-      sections: [],
       cur_section: undefined,
       adding_question: false,
-      process: "question bank",
-      question_bank_id: -1
+      process: "question bank"
     };
   },
   computed: {
     section_sum_up: function() {
       //sum up of points assigned to each section and check if sum == total points of test paper
       let sum = 0;
-      for (var i = 0; i < this.sections.length; i++) {
-        sum += parseInt(this.sections[i].total_points);
+      for (var i = 0; i < this.edited_paper.sections.length; i++) {
+        sum += parseInt(this.edited_paper.sections[i].total_points);
       }
       var tip =
         sum == this.total_points && !!this.total_points
@@ -261,7 +272,7 @@ export default {
         console.log(this.section_sum_up);
         return false;
       }
-      for (var i = 0; i < this.sections.length; i++) {
+      for (var i = 0; i < this.edited_paper.sections.length; i++) {
         if (this.question_sum_up(i).content != "valid") {
           console.log("question");
           console.log(this.question_sum_up(i));
@@ -274,7 +285,7 @@ export default {
   },
   methods: {
     create_section() {
-      this.sections.push({
+      this.edited_paper.sections.push({
         title: "",
         total_points: "0",
         questions: []
@@ -282,7 +293,7 @@ export default {
     },
     question_sum_up(index) {
       //sum up of points assigned to each question and check if sum == total points of this section
-      let section = this.sections[index];
+      let section = this.edited_paper.sections[index];
       let sum = 0;
       for (var i = 0; !!section && i < section.questions.length; i++) {
         sum += parseInt(section.questions[i].point);
@@ -302,8 +313,8 @@ export default {
     },
     drop_section(index) {
       //delete a section
-      this.sections.splice(index, 1);
-      if (this.cur_section == this.sections[index])
+      this.edited_paper.sections.splice(index, 1);
+      if (this.cur_section == this.edited_paper.sections[index])
         this.cur_section = undefined;
     },
     drop_question(section, index) {
@@ -327,9 +338,33 @@ export default {
         });
       }
     },
+    submit() {
+      this.$emit("save", JSON.parse(JSON.stringfy(this.edited_paper)));
+      var result = JSON.parse(JSON.stringfy(this.edited_paper));
+      for (var i = 0; i < result.sections.length; i++) {
+        var section = result.sections[i];
+        section["section_num"] = i + 1;
+        for (var j = 0; j < section.questions.length; j++) {
+          section.questions[j]["question_num"] = j + 1;
+        }
+      }
+      if (this.id == -1) {
+        axios
+          .post("/api/papers/", result)
+          .then(response => {
+            alert("OK" + response.data);
+          })
+          .catch(error => {
+            alert(error);
+          });
+      }
+    },
     reset() {
       this.$refs.input.reset();
-      this.sections.splice(0, this.sections.length);
+      this.edited_paper.sections.splice(0, this.edited_paper.sections.length);
+    },
+    cancel() {
+      this.edited_paper = JSON.parse(JSON.stringfy(this.paper));
     },
     roman(num) {
       var n,
