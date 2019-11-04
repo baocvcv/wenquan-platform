@@ -24,6 +24,11 @@ const router = new Router({
         import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
     },
     {
+      path: "/account",
+      name: "account",
+      component: () => import("./views/Account.vue")
+    },
+    {
       path: "/admin/usermanagement",
       name: "user-management",
       component: () => import("./views/UserManagement.vue")
