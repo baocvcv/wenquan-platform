@@ -6,12 +6,8 @@ from backend.models.paper import Section
 
 
 class PaperSerializer(serializers.ModelSerializer):
-    """Serializer for QuestionGroup
+    """Serializer for PaperSerializer
     Attributes:
-        id: The identity number of QuestionGroup
-        current_version: The latest version's change time
-        parents_node: This QuestionGroup belongs to KnowledgeNode with its id<int> in parents_node
-        belong_bank: This QuestionGroup belongs ot QuestionBank with id=belong_bank
     """
     id = serializers.IntegerField(required=False)
     name = serializers.CharField(allow_blank=True)
@@ -29,6 +25,7 @@ class PaperSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        """Create a Paper"""
         new_paper = Paper.objects.create(**validated_data)
         return new_paper
 
@@ -37,6 +34,10 @@ class PaperSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Section
+    Attributes:
+    """
     id = serializers.IntegerField(required=False)
     name = serializers.CharField(allow_blank=True)
     title = serializers.CharField(allow_blank=True)
@@ -52,7 +53,7 @@ class SectionSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        return new_section
+        pass
 
     def update(self, instance, validated_data):
         pass

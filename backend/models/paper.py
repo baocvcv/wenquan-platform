@@ -1,7 +1,7 @@
 '''Code for models: paper'''
 from django.db import models
-from polymorphic.models import PolymorphicModel
 from django.contrib.postgres.fields import ArrayField
+from polymorphic.models import PolymorphicModel
 from .questions.question import Question
 
 MAX_NAME = 200

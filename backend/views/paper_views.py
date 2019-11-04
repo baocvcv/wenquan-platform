@@ -15,9 +15,9 @@ class PaperList(APIView):
     """View of all QuestionBank"""
     @classmethod
     def create_sections_from_data(cls, data):
+        """Create Section objects from json"""
         section_objects = []
         for i in data:
-            '''--TODO: input examine--'''
             question_list = i.pop("questions", [])
             new_section = Section.objects.create(**i)
             for j in question_list:
@@ -34,6 +34,7 @@ class PaperList(APIView):
 
     @classmethod
     def create_paper_from_data(cls, data):
+        """Create Paper objects from json"""
         if "id" in data:
             data.pop("id")
         if "sections" not in data:
@@ -49,6 +50,7 @@ class PaperList(APIView):
 
     @classmethod
     def create_response_from_paper(cls, paper):
+        """Create json from Paper objects"""
         serializer = PaperSerializer(paper)
         response = serializer.data
         response['sections'] = []
@@ -61,6 +63,7 @@ class PaperList(APIView):
         return response
 
     def get(self, request):
+        """Get a list of all Paper"""
         papers = Paper.objects.all()
         response = []
         for i in papers:
@@ -71,6 +74,7 @@ class PaperList(APIView):
         return Response(response)
 
     def post(self, request):
+        """Create a Paper"""
         post_data = JSONParser().parse(request)
         new_paper = self.create_paper_from_data(post_data)
         response = self.create_response_from_paper(new_paper)
@@ -78,14 +82,17 @@ class PaperList(APIView):
 
 
 class SectionDetail(APIView):
+    """View for details of Section"""
     @classmethod
     def get_object(cls, section_id):
+        """Get Section objects whose id=section_id"""
         try:
             return Section.objects.get(id=section_id)
         except Paper.DoesNotExist:
             raise Http404
 
     def get(self, request, section_id):
+        """Get details of Section whose id=section_id"""
         section = self.get_object(section_id)
         serializer = SectionSerializer(section)
         response = serializer.data
@@ -103,19 +110,23 @@ class SectionDetail(APIView):
 
 
 class PaperDetail(APIView):
+    """View for Paper details"""
     @classmethod
     def get_object(cls, paper_id):
+        """Get Paper objects whose id=paper_id"""
         try:
             return Paper.objects.get(id=paper_id)
         except Paper.DoesNotExist:
             raise Http404
 
     def get(self, request, paper_id):
+        """Get details of Paper whose id=paper_id"""
         paper = self.get_object(paper_id)
         response = PaperList.create_response_from_paper(paper)
         return Response(response)
 
     def put(self, request, paper_id):
+        """Modify Paper whose id=paper_id"""
         paper = self.get_object(paper_id)
         paper.is_latest = False
         paper.save()
