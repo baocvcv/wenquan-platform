@@ -1,161 +1,211 @@
 <template>
   <div>
-    <v-form ref="input" v-model="valid">
-      <v-text-field
-        v-model="title"
-        :rules="title_rules"
-        hint="The title of the test paper"
-        label="Title"
-        outlined
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="total_point"
-        :rules="total_point_rules"
-        label="Total points"
-        outlined
-        required
-      ></v-text-field>
-      <v-textarea
-        v-model="tips"
-        hint="Tips provided to students(optional)"
-        label="Tips"
-        auto-grow
-        outlined
-      ></v-textarea>
+    <v-card>
+      <v-card-title
+        >Test Paper
+        <v-btn
+          v-if="editable && !create"
+          absolute
+          right
+          icon
+          @click="edit_button_clicked"
+          ><v-icon :color="readonly ? 'grey' : 'blue'"
+            >mdi-pencil</v-icon
+          ></v-btn
+        >
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="input" v-model="valid">
+          <v-text-field
+            v-model="title"
+            :rules="title_rules"
+            hint="The title of the test paper"
+            label="Title"
+            :readonly="readonly"
+            outlined
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="total_point"
+            :rules="total_point_rules"
+            label="Total points"
+            :readonly="readonly"
+            outlined
+            required
+          ></v-text-field>
+          <v-textarea
+            v-model="tips"
+            hint="Tips provided to students(optional)"
+            label="Tips"
+            :readonly="readonly"
+            auto-grow
+            outlined
+          ></v-textarea>
 
-      <!--list of sections-->
-      <v-list>
-        <v-list-item two-line>
-          <v-list-item-content>
-            <v-list-item-title>Sections</v-list-item-title>
-            <v-list-item-subtitle :style="'color:' + section_sum_up.color">{{
-              section_sum_up.content
-            }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!--sections-->
-        <v-list-item-group v-for="(section, key) in edited_paper.sections" :key="key">
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-icon>{{ roman(key + 1) }}</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-row align="center">
-                <v-col cols="12" xs="6" lg="4">
-                  <v-text-field
-                    v-model="section.title"
-                    label="Title"
-                    :rules="title_rules"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" xs="3" lg="2">
-                  <v-text-field
-                    v-model="section.total_point"
-                    label="Total points"
-                    :rules="total_point_rules"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" xs="3" lg="1">
-                  <v-label>points</v-label>
-                </v-col>
-                <v-col cols="12" xs="5" lg="4">
-                  <span :style="'color: ' + question_sum_up(key).color">
-                    {{ question_sum_up(key).content }}
-                  </span>
-                </v-col>
-              </v-row>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    icon
-                    v-on="on"
-                    @click.stop="
-                      adding_question = true;
-                      cur_section = section;
-                    "
-                    ><v-icon color="green" dark>mdi-plus</v-icon>
-                  </v-btn>
-                </template>
-                <span>Add question</span>
-              </v-tooltip>
-            </v-list-item-action>
-            <v-list-item-action>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" @click.stop="drop_section(key)"
-                    ><v-icon color="red" dark>mdi-trash-can-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>remove</span>
-              </v-tooltip>
-            </v-list-item-action>
-          </v-list-item>
-
-          <!--questions-->
-          <v-list-item-group
-            v-for="(question, id) in section.questions"
-            :key="id"
-          >
-            <!--each question-->
-            <v-list-item>
-              <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
-              <v-list-content>
-                <v-col cols="12" xs="8" lg="6">
-                  <v-text-field
-                    v-model="question.question_point"
-                    suffix="points"
-                    :rules="total_point_rules"
-                  ></v-text-field>
-                </v-col>
-              </v-list-content>
-              <v-list-item-action>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" @click="drop_question(section, id)"
-                      ><v-icon color="red">mdi-trash-can-outline</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Remove this question</span>
-                </v-tooltip>
-              </v-list-item-action>
+          <!--list of sections-->
+          <v-list>
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-title>Sections</v-list-item-title>
+                <v-list-item-subtitle
+                  :style="'color:' + section_sum_up.color"
+                  >{{ section_sum_up.content }}</v-list-item-subtitle
+                >
+              </v-list-item-content>
             </v-list-item>
-            <question-list-item :question="question.content" dialog="true" />
-          </v-list-item-group>
-        </v-list-item-group>
-        <v-list-item>
-          <v-list-item-content>
-            <v-btn
-              class="mx-2"
-              block
-              tile
-              dark
-              color="green"
-              @click="create_section()"
-              >Create new</v-btn
+
+            <!--sections-->
+            <v-list-item-group
+              v-for="(section, key) in edited_paper.sections"
+              :key="key"
             >
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <v-select
-        v-model="edited_paper.status"
-        :items="['drafted', 'published']"
-        label="Status"
-        outlined
-      ></v-select>
-      <v-btn
-        color="success"
-        :disabled="!valid || !judge_points_sum"
-        class="mr-4"
-        @click="submit"
-        >Save</v-btn
-      >
-      <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
-      <v-btn :disabled="!paper" class="mr-4" @click="cancel">Cancel</v-btn>
-    </v-form>
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon>{{ roman(key + 1) }}</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-row align="center">
+                    <v-col cols="12" xs="6" lg="4">
+                      <v-text-field
+                        v-model="section.title"
+                        label="Title"
+                        :rules="title_rules"
+                        :readonly="readonly"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" xs="3" lg="2">
+                      <v-text-field
+                        v-model="section.total_point"
+                        label="Total points"
+                        :rules="total_point_rules"
+                        :readonly="readonly"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" xs="3" lg="1">
+                      <v-label>points</v-label>
+                    </v-col>
+                    <v-col cols="12" xs="5" lg="4">
+                      <span :style="'color: ' + question_sum_up(key).color">
+                        {{ question_sum_up(key).content }}
+                      </span>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-if="!readonly"
+                        icon
+                        v-on="on"
+                        @click.stop="
+                          adding_question = true;
+                          cur_section = section;
+                        "
+                        ><v-icon color="green" dark>mdi-plus</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Add question</span>
+                  </v-tooltip>
+                </v-list-item-action>
+                <v-list-item-action>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-if="!readonly"
+                        icon
+                        v-on="on"
+                        @click.stop="drop_section(key)"
+                        ><v-icon color="red" dark>mdi-trash-can-outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>remove</span>
+                  </v-tooltip>
+                </v-list-item-action>
+              </v-list-item>
+
+              <!--questions-->
+              <v-list-item-group
+                v-for="(question, id) in section.questions"
+                :key="id"
+              >
+                <!--each question-->
+                <v-list-item>
+                  <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
+                  <v-list-content>
+                    <v-col cols="12" xs="8" lg="6">
+                      <v-text-field
+                        v-model="question.question_point"
+                        suffix="points"
+                        :rules="total_point_rules"
+                        :readonly="readonly"
+                      ></v-text-field>
+                    </v-col>
+                  </v-list-content>
+                  <v-list-item-action>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          v-if="!readonly"
+                          icon
+                          v-on="on"
+                          @click="drop_question(section, id)"
+                          ><v-icon color="red">mdi-trash-can-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Remove this question</span>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+                <question-list-item
+                  :question="question.content"
+                  dialog="true"
+                />
+              </v-list-item-group>
+            </v-list-item-group>
+            <v-list-item>
+              <v-list-item-content>
+                <v-btn
+                  v-if="!readonly"
+                  class="mx-2"
+                  block
+                  tile
+                  dark
+                  color="green"
+                  @click="create_section()"
+                  >Create new</v-btn
+                >
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-select
+            v-model="edited_paper.status"
+            :items="['drafted', 'published']"
+            label="Status"
+            :readonly="readonly"
+            outlined
+          ></v-select>
+          <v-btn
+            v-if="!readonly"
+            color="success"
+            :disabled="!valid || !judge_points_sum"
+            class="mr-4"
+            @click="submit"
+            >{{ create ? "Create" : "Save" }}</v-btn
+          >
+          <v-btn v-if="!readonly" color="error" class="mr-4" @click="reset"
+            >Reset</v-btn
+          >
+          <v-btn
+            v-if="!readonly"
+            :disabled="!paper"
+            class="mr-4"
+            @click="cancel"
+            >Cancel</v-btn
+          >
+        </v-form>
+      </v-card-text>
+    </v-card>
 
     <!--The dialog is for selecting questions-->
     <v-dialog
@@ -225,6 +275,14 @@ export default {
     id: {
       type: Number,
       default: -1
+    },
+    editable: {
+      type: Boolean,
+      default: true
+    },
+    create: {
+      type: Boolean,
+      default: false
     }
   },
   model: {
@@ -253,7 +311,8 @@ export default {
       ],
       cur_section: undefined,
       adding_question: false,
-      process: "question bank"
+      process: "question bank",
+      readonly: this.create ? false : true
     };
   },
   computed: {
@@ -291,6 +350,20 @@ export default {
       }
       console.log("here");
       return true;
+    }
+  },
+  mounted: function() {
+    let that = this;
+    if (this.id != -1) {
+      axios
+        .get("/api/papers/" + this.id + "/")
+        .then(response => {
+          that.edited_paper = response.data;
+          //to be continue
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   methods: {
@@ -347,6 +420,9 @@ export default {
           this.adding_question = false;
         });
       }
+    },
+    edit_button_clicked() {
+      this.readonly = !this.readonly;
     },
     submit() {
       this.$emit("save", JSON.parse(JSON.stringify(this.edited_paper)));
