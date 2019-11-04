@@ -10,8 +10,8 @@
         required
       ></v-text-field>
       <v-text-field
-        v-model="total_points"
-        :rules="total_points_rules"
+        v-model="total_point"
+        :rules="total_point_rules"
         label="Total points"
         outlined
         required
@@ -52,9 +52,9 @@
                 </v-col>
                 <v-col cols="12" xs="3" lg="2">
                   <v-text-field
-                    v-model="section.total_points"
+                    v-model="section.total_point"
                     label="Total points"
-                    :rules="total_points_rules"
+                    :rules="total_point_rules"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" xs="3" lg="1">
@@ -106,9 +106,9 @@
               <v-list-content>
                 <v-col cols="12" xs="8" lg="6">
                   <v-text-field
-                    v-model="question.point"
+                    v-model="question.question_point"
                     suffix="points"
-                    :rules="total_points_rules"
+                    :rules="total_point_rules"
                   ></v-text-field>
                 </v-col>
               </v-list-content>
@@ -140,15 +140,21 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-select
+        v-model="edited_paper.status"
+        :items="['drafted', 'published']"
+        label="Status"
+        outlined
+      ></v-select>
       <v-btn
         color="success"
         :disabled="!valid || !judge_points_sum"
         class="mr-4"
-        @click="submit()"
+        @click="submit"
         >Save</v-btn
       >
-      <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
-      <v-btn :disabled="!paper" class="mr-4" @click="cancel()">Cancel</v-btn>
+      <v-btn color="error" class="mr-4" @click="reset">Reset</v-btn>
+      <v-btn :disabled="!paper" class="mr-4" @click="cancel">Cancel</v-btn>
     </v-form>
 
     <!--The dialog is for selecting questions-->
@@ -216,7 +222,10 @@ export default {
       type: Object,
       default: undefined
     },
-    id: -1
+    id: {
+      type: Number,
+      default: -1
+    }
   },
   model: {
     prop: "paper",
@@ -232,12 +241,13 @@ export default {
       valid: false,
       edited_paper: {
         title: "",
-        total_points: "0",
+        total_point: "0",
         tips: "",
+        status: "drafted",
         sections: []
       },
       title_rules: [v => !!v || "Title is required!"],
-      total_points_rules: [
+      total_point_rules: [
         v => !!v || "Total points is required!",
         v => (!!v && /^[0-9]+$/.test(v)) || "An integer is expected!"
       ],
@@ -251,10 +261,10 @@ export default {
       //sum up of points assigned to each section and check if sum == total points of test paper
       let sum = 0;
       for (var i = 0; i < this.edited_paper.sections.length; i++) {
-        sum += parseInt(this.edited_paper.sections[i].total_points);
+        sum += parseInt(this.edited_paper.sections[i].total_point);
       }
       var tip =
-        sum == this.total_points && !!this.total_points
+        sum == this.total_point && !!this.total_point
           ? { color: "green", content: "valid" }
           : {
               color: "red",
@@ -262,7 +272,7 @@ export default {
                 "Sum-up of points of sections: " +
                 sum +
                 " | Points assigned to this test paper: " +
-                this.total_points
+                this.total_point
             };
       return tip;
     },
@@ -287,7 +297,7 @@ export default {
     create_section() {
       this.edited_paper.sections.push({
         title: "",
-        total_points: "0",
+        total_point: "0",
         questions: []
       });
     },
@@ -296,10 +306,10 @@ export default {
       let section = this.edited_paper.sections[index];
       let sum = 0;
       for (var i = 0; !!section && i < section.questions.length; i++) {
-        sum += parseInt(section.questions[i].point);
+        sum += parseInt(section.questions[i].question_point);
       }
       var tip =
-        sum == section.total_points && !!section.total_points
+        sum == section.total_point && !!section.total_point
           ? { color: "green", content: "valid" }
           : {
               color: "red",
@@ -307,7 +317,7 @@ export default {
                 "Sum-up of points of questions: " +
                 sum +
                 " |Points assigned to this section: " +
-                section.total_points
+                section.total_point
             };
       return tip;
     },
@@ -330,7 +340,7 @@ export default {
       for (var i = 0; i < questions.length; i++) {
         axios.get("/api/questions/" + questions[i] + "/").then(response => {
           that.cur_section.questions.push({
-            point: "",
+            question_point: "",
             content: response.data
           });
           //after at least one question has been loaded, close the dialog
@@ -339,18 +349,32 @@ export default {
       }
     },
     submit() {
-      this.$emit("save", JSON.parse(JSON.stringfy(this.edited_paper)));
-      var result = JSON.parse(JSON.stringfy(this.edited_paper));
+      this.$emit("save", JSON.parse(JSON.stringify(this.edited_paper)));
+      var result = JSON.parse(JSON.stringify(this.edited_paper));
       for (var i = 0; i < result.sections.length; i++) {
         var section = result.sections[i];
         section["section_num"] = i + 1;
         for (var j = 0; j < section.questions.length; j++) {
-          section.questions[j]["question_num"] = j + 1;
+          var question = section.questions[j];
+          section.questions[j] = {
+            id: question.content.id,
+            question_point: question.question_point,
+            question_num: j + 1
+          };
         }
       }
       if (this.id == -1) {
         axios
           .post("/api/papers/", result)
+          .then(response => {
+            alert("OK" + response.data);
+          })
+          .catch(error => {
+            alert(error);
+          });
+      } else {
+        axios
+          .put("/api/papers/" + this.id + "/", result)
           .then(response => {
             alert("OK" + response.data);
           })
@@ -364,7 +388,7 @@ export default {
       this.edited_paper.sections.splice(0, this.edited_paper.sections.length);
     },
     cancel() {
-      this.edited_paper = JSON.parse(JSON.stringfy(this.paper));
+      this.edited_paper = JSON.parse(JSON.stringify(this.paper));
     },
     roman(num) {
       var n,
