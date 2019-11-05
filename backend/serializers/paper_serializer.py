@@ -18,10 +18,10 @@ class PaperSerializer(serializers.ModelSerializer):
         model = Paper
         fields = [
             "id",
-            "name",
             "title",
             "tips",
             "status",
+            "time_limit",
         ]
 
     def create(self, validated_data):
@@ -46,7 +46,6 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = [
             "id",
-            "name",
             "title",
             "total_point",
             "section_num",
