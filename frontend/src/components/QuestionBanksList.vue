@@ -1,130 +1,161 @@
 <template>
   <div>
-    <h4 v-if="process != 'End'" align="center" style="color: grey;">
-      {{ process }}
-    </h4>
-    <v-list two-line>
-      <v-list-item
-        v-for="qst_bank in question_banks"
-        :key="qst_bank.name"
-        @click="
-          select
-            ? select_action(qst_bank.id)
-            : $router.push('questionbanks/' + qst_bank.id)
-        "
-      >
-        <v-list-item-avatar>
-          <v-img :src="qst_bank.icon"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content align="left">
-          <v-list-item-title v-text="qst_bank.name"></v-list-item-title>
-          <v-list-item-subtitle v-text="qst_bank.brief"></v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-action
-          @click.stop="
-            detail = true;
-            cur_qst_bank = qst_bank;
-          "
+    <v-card>
+      <v-toolbar flat>
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-text-field
+          flat
+          hide-details
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          clearable
+        ></v-text-field>
+        <v-dialog
+          v-if="!readonly"
+          v-model="create_bank_dialog"
+          max-width="600px"
         >
-          <v-hover v-slot:default="{ hover }">
-            <v-btn v-if="hover" color="blue" icon>detail</v-btn>
-            <v-btn v-else icon>
-              <v-icon color="grey lighten-1">mdi-information</v-icon>
-            </v-btn>
-          </v-hover>
-        </v-list-item-action>
-
-        <v-list-item-action
-          v-bind:style="readonly ? 'display:none' : ''"
-          @click.stop="
-            show_del_dialog = true;
-            cur_qst_bank = qst_bank;
-          "
-        >
-          <v-hover v-slot:default="{ hover }">
-            <v-btn v-if="hover" color="red" icon>delete</v-btn>
-            <v-btn v-else icon><v-icon>mdi-trash-can-outline</v-icon></v-btn>
-          </v-hover>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-
-    <!--detailed infomation for question banks-->
-    <v-dialog v-model="detail" max-width="500">
-      <v-card>
-        <v-toolbar flat color="blue" dark>
-          <v-toolbar-title>
-            Details of {{ cur_qst_bank.name }}
-          </v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>
-          <v-list>
-            <v-list-item
-              v-for="(value, attr) in cur_qst_bank.details"
-              :key="attr"
+          <template v-slot:activator="{ on }">
+            <v-btn
+              color="primary"
+              elevation="0"
+              class="ml-2"
+              v-on="on"
             >
-              <v-list-item-content>
-                {{ attr }}: {{ cur_qst_bank.details[attr] }}
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn
-            color="green"
-            dark
-            @click="
-              select
-                ? select_action(cur_qst_bank.id)
-                : $router.push('questionbanks/' + cur_qst_bank.id)
+              Create
+            </v-btn>
+          </template>
+          <create-question-bank></create-question-bank>
+        </v-dialog> 
+      </v-toolbar>
+      <span v-show="process != 'End'" align="right" class="caption">
+        {{ process }}
+      </span>
+      <v-list two-line>
+        <v-list-item
+          v-for="qst_bank in question_banks"
+          :key="qst_bank.name"
+          @click="
+            select
+              ? select_action(qst_bank.id)
+              : $router.push('questionbanks/' + qst_bank.id)
+          "
+        >
+          <v-list-item-avatar>
+            <v-img :src="qst_bank.icon"></v-img>
+          </v-list-item-avatar>
+
+          <v-list-item-content align="left">
+            <v-list-item-title v-text="qst_bank.name"></v-list-item-title>
+            <v-list-item-subtitle v-text="qst_bank.brief"></v-list-item-subtitle>
+          </v-list-item-content>
+
+          <v-list-item-action
+            @click.stop="
+              detail = true;
+              cur_qst_bank = qst_bank;
             "
           >
-            Goto
-          </v-btn>
-          <v-btn color="primary" dark @click="detail = false">Back</v-btn>
-          <div class="flex-grow-1"></div>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <v-hover v-slot:default="{ hover }">
+              <v-btn v-if="hover" color="blue" icon>detail</v-btn>
+              <v-btn v-else icon>
+                <v-icon color="grey lighten-1">mdi-information</v-icon>
+              </v-btn>
+            </v-hover>
+          </v-list-item-action>
 
-    <!--dialog for delete confirm-->
-    <v-dialog v-model="show_del_dialog" max-width="300">
-      <v-card>
-        <v-toolbar flat color="warning" dark>
-          <v-toolbar-title>
-            Deletion confirmation
-          </v-toolbar-title>
-        </v-toolbar>
-        <br />
-        <v-card-text align="left" style="color: red;">
-          Are you sure to delete this question bank({{ cur_qst_bank.name }})?
-        </v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn
-            color="error"
-            dark
-            @click="
-              delete_qst_bank();
-              show_del_dialog = false;
+          <v-list-item-action
+            v-bind:style="readonly ? 'display:none' : ''"
+            @click.stop="
+              show_del_dialog = true;
+              cur_qst_bank = qst_bank;
             "
-            >Confirm
-          </v-btn>
-          <v-btn color="grey" dark @click="show_del_dialog = false">
-            Cancel
-          </v-btn>
-          <div class="flex-grow-1"></div>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          >
+            <v-hover v-slot:default="{ hover }">
+              <v-btn v-if="hover" color="red" icon>delete</v-btn>
+              <v-btn v-else icon><v-icon>mdi-trash-can-outline</v-icon></v-btn>
+            </v-hover>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+
+      <!--detailed infomation for question banks-->
+      <v-dialog v-model="detail" max-width="500">
+        <v-card>
+          <v-toolbar flat color="blue" dark>
+            <v-toolbar-title>
+              Details of {{ cur_qst_bank.name }}
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-list>
+              <v-list-item
+                v-for="(value, attr) in cur_qst_bank.details"
+                :key="attr"
+              >
+                <v-list-item-content>
+                  {{ attr }}: {{ cur_qst_bank.details[attr] }}
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+          <v-card-actions>
+            <div class="flex-grow-1"></div>
+            <v-btn
+              color="green"
+              dark
+              @click="
+                select
+                  ? select_action(cur_qst_bank.id)
+                  : $router.push('questionbanks/' + cur_qst_bank.id)
+              "
+            >
+              Goto
+            </v-btn>
+            <v-btn color="primary" dark @click="detail = false">Back</v-btn>
+            <div class="flex-grow-1"></div>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <!--dialog for delete confirm-->
+      <v-dialog v-model="show_del_dialog" max-width="300">
+        <v-card>
+          <v-toolbar flat color="warning" dark>
+            <v-toolbar-title>
+              Deletion confirmation
+            </v-toolbar-title>
+          </v-toolbar>
+          <br />
+          <v-card-text align="left" style="color: red;">
+            Are you sure to delete this question bank({{ cur_qst_bank.name }})?
+          </v-card-text>
+          <v-card-actions>
+            <div class="flex-grow-1"></div>
+            <v-btn
+              color="error"
+              dark
+              @click="
+                delete_qst_bank();
+                show_del_dialog = false;
+              "
+              >Confirm
+            </v-btn>
+            <v-btn color="grey" dark @click="show_del_dialog = false">
+              Cancel
+            </v-btn>
+            <div class="flex-grow-1"></div>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import CreateQuestionBank from "@/components/CreateQuestionBank.vue";
 
 export default {
   name: "question-banks-list",
@@ -136,7 +167,14 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    title: {
+      type: String,
+      default: ""
     }
+  },
+  components: {
+    "create-question-bank": CreateQuestionBank
   },
   data: function() {
     return {
@@ -182,14 +220,14 @@ export default {
     let that = this;
     this.process = "Loading";
     axios
-      .get("/api/question_banks/")
+      .get("http://localhost:8000/api/question_banks/")
       .then(response => {
         let all_count = response.data.length;
         let count = 0;
         let lock = false;
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get("/api/question_banks/" + response.data[i] + "/")
+            .get("http://localhost:8000/api/question_banks/" + response.data[i] + "/")
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);
