@@ -104,8 +104,11 @@ export default {
     methods: {
         submit_new_psw() {
             axios.put("/api/password/",{
-                token: this.user.token,
                 password: this.new_psw
+            },{
+                headers: {
+                    Authorization: "Token " + this.user.token
+                }
             }).then(response => {
                 this.password_editing = false;
                 this.msg = "Success!"
