@@ -1,12 +1,14 @@
 <template>
   <div>
-    <question-banks-list :readonly="readonly" title="Question Banks"></question-banks-list>
+    <question-banks-list
+      :readonly="readonly"
+      title="Question Banks"
+    ></question-banks-list>
   </div>
 </template>
 
 <script>
 import QuestionBanksList from "../components/QuestionBanksList.vue";
-import CreateQuestionBank from "../components/CreateQuestionBank.vue";
 
 export default {
   name: "",
@@ -16,8 +18,7 @@ export default {
     };
   },
   components: {
-    "question-banks-list": QuestionBanksList,
-    "create-question-bank": CreateQuestionBank
+    "question-banks-list": QuestionBanksList
   }
 };
 </script>

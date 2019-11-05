@@ -17,20 +17,22 @@
           max-width="600px"
         >
           <template v-slot:activator="{ on }">
-            <v-btn
-              color="primary"
-              elevation="0"
-              class="ml-2"
-              v-on="on"
-            >
+            <v-btn color="primary" elevation="0" class="ml-2" v-on="on">
               Create
             </v-btn>
           </template>
-          <create-question-bank ref="create-question-bank"></create-question-bank>
-        </v-dialog> 
+          <create-question-bank
+            ref="create-question-bank"
+          ></create-question-bank>
+        </v-dialog>
       </v-toolbar>
       <v-card-text>
-        <span v-show="loading" align="right" class="caption grey--text" transition="fade-transition">
+        <span
+          v-show="loading"
+          align="right"
+          class="caption grey--text"
+          transition="fade-transition"
+        >
           {{ process }}
         </span>
         <v-list two-line>
@@ -49,7 +51,9 @@
 
             <v-list-item-content align="left">
               <v-list-item-title v-text="qst_bank.name"></v-list-item-title>
-              <v-list-item-subtitle v-text="qst_bank.brief"></v-list-item-subtitle>
+              <v-list-item-subtitle
+                v-text="qst_bank.brief"
+              ></v-list-item-subtitle>
             </v-list-item-content>
 
             <v-list-item-action
@@ -58,16 +62,18 @@
                 cur_qst_bank = qst_bank;
               "
             >
-                <v-tooltip bottom>
-                  <template v-slot:activator="{on}">
-                    <v-hover v-slot:default="{ hover }">
-                      <v-btn icon v-on="on">
-                        <v-icon :color="hover ? 'primary' : 'grey lighten-1'">mdi-information</v-icon>
-                      </v-btn>
-                    </v-hover>
-                  </template>
-                  <span>Details</span>
-                </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-hover v-slot:default="{ hover }">
+                    <v-btn icon v-on="on">
+                      <v-icon :color="hover ? 'primary' : 'grey lighten-1'"
+                        >mdi-information</v-icon
+                      >
+                    </v-btn>
+                  </v-hover>
+                </template>
+                <span>Details</span>
+              </v-tooltip>
             </v-list-item-action>
 
             <v-list-item-action
@@ -77,16 +83,18 @@
                 cur_qst_bank = qst_bank;
               "
             >
-                <v-tooltip bottom>
-                  <template v-slot:activator="{on}">
-                    <v-hover v-slot:default="{ hover }">
-                      <v-btn icon v-on="on">
-                        <v-icon :color="hover ? 'error' : 'grey lighten-1'">mdi-trash-can-outline</v-icon>
-                      </v-btn>
-                    </v-hover>
-                  </template>
-                  <span>Details</span>
-                </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-hover v-slot:default="{ hover }">
+                    <v-btn icon v-on="on">
+                      <v-icon :color="hover ? 'error' : 'grey lighten-1'"
+                        >mdi-trash-can-outline</v-icon
+                      >
+                    </v-btn>
+                  </v-hover>
+                </template>
+                <span>Details</span>
+              </v-tooltip>
             </v-list-item-action>
           </v-list-item>
         </v-list>
@@ -140,7 +148,9 @@
             </v-toolbar>
             <br />
             <v-card-text align="left" style="color: red;">
-              Are you sure to delete this question bank({{ cur_qst_bank.name }})?
+              Are you sure to delete this question bank({{
+                cur_qst_bank.name
+              }})?
             </v-card-text>
             <v-card-actions>
               <div class="flex-grow-1"></div>
@@ -196,7 +206,7 @@ export default {
       cur_qst_bank: {},
       process: "",
       create_bank_dialog: false,
-      loading: false,
+      loading: false
     };
   },
   methods: {
@@ -232,8 +242,7 @@ export default {
   },
   watch: {
     create_bank_dialog: function() {
-      if (!this.create_bank_dialog)
-        this.$refs["create-question-bank"].reset();
+      if (!this.create_bank_dialog) this.$refs["create-question-bank"].reset();
     }
   },
   mounted: function() {
@@ -248,7 +257,11 @@ export default {
         let lock = false;
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get("http://localhost:8000/api/question_banks/" + response.data[i] + "/")
+            .get(
+              "http://localhost:8000/api/question_banks/" +
+                response.data[i] +
+                "/"
+            )
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);
