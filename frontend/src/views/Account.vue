@@ -103,7 +103,7 @@ export default {
     },
     methods: {
         submit_new_psw() {
-            axios.post("/api/password/",{
+            axios.put("/api/password/",{
                 token: this.user.token,
                 password: this.new_psw
             }).then(response => {
