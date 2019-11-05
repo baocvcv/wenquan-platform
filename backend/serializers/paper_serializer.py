@@ -12,16 +12,16 @@ class PaperSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     name = serializers.CharField(allow_blank=True)
     title = serializers.CharField(allow_blank=True)
-    tips = serializers.ListField(child=serializers.CharField(allow_blank=True))
+    tips = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = Paper
         fields = [
             "id",
-            "name",
             "title",
             "tips",
             "status",
+            "time_limit",
         ]
 
     def create(self, validated_data):
@@ -46,7 +46,6 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = [
             "id",
-            "name",
             "title",
             "total_point",
             "section_num",

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <br />
     <v-card id="create-form">
-      <v-toolbar color="blue" dark>
+      <v-toolbar color="primary" dark>
         <v-toolbar-title>Create a Question Bank</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -65,7 +64,6 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <br />
   </div>
 </template>
 
@@ -128,11 +126,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#create-form {
-  width: 50%;
-  margin: auto;
-}
-</style>
