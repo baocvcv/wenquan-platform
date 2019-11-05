@@ -1,7 +1,13 @@
 <template>
-  <div class="sign-in-view">
-    <h2>Sign In</h2>
-    <sign-in-box></sign-in-box>
+  <div id="sign-in">
+    <!--BUGS here! A container has already been wrapped in App.vue-->
+    <v-container fluid fill-height>
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm8 md8>
+          <sign-in-box></sign-in-box>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
@@ -15,10 +21,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.sign-in-view .sign-in-box{
-  width: 30%;
-  margin: auto;
-}
-</style>

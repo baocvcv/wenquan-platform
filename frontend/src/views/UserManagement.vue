@@ -1,75 +1,76 @@
 <template>
-    <div id="user-management">
-        <user-table
-            :users="users"
-            @create-user="create_user"
-            @change-user-status="change_user_status"
-            @change-user-group="change_user_group"
-        ></user-table>
-    </div>
+  <div id="user-management">
+    <user-table
+      :users="users"
+      @create-user="create_user"
+      @change-user-status="change_user_status"
+      @change-user-group="change_user_group"
+    ></user-table>
+  </div>
 </template>
 
 <script>
 import user_table from "@/components/UserTable.vue";
+import axios from "axios";
 
 export default {
-    name: "user-management",
-    components: {
-        "user-table": user_table
+  name: "user-management",
+  components: {
+    "user-table": user_table
+  },
+  data: function() {
+    return {
+      users: []
+    };
+  },
+  methods: {
+    create_user(user) {
+      axios
+        .post("/api/accounts/users/", user)
+        .then(response => {
+          this.users.push(user);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    data: function() {
-        return {
-            users: []
-        }
+    change_user_status(user) {
+      let changed_user = user;
+      changed_user.is_banned = !changed_user.is_banned;
+      axios
+        .put("/api/accounts/users/" + user.id + "/", changed_user)
+        .then(response => {
+          user = changed_user;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    methods: {
-        create_user(user) {
-            this.$axios
-                .post("/api/accounts/users/", user)
-                .then(response => {
-                    this.users.push(user);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        change_user_status(user) {
-            let changed_user = user;
-            changed_user.is_banned = !changed_user.is_banned;
-            this.$axios
-                .put("/api/accounts/users/" + user.id + "/", changed_user)
-                .then(response => {
-                    user = changed_user;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
-        change_user_group(user) {
-            let changed_user = user;
-            if (changed_user.user_group === "Student")
-                changed_user.user_group = "Admin";
-            else if (changed_user.user_group === "Admin")
-                changed_user.user_group = "Student";
-            this.$axios
-                .put("/api/accounts/users/" + user.id + "/", user)
-                .then(response => {
-                    user = changed_user;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-    },
-    mounted: function() {
-        this.$axios
-            .get('/api/accounts/users/')
-            .then(response => {
-                this.users = response.data;
-            })
-            .catch(error => {
-                console.log(error);
-            })
+    change_user_group(user) {
+      let changed_user = user;
+      if (changed_user.user_group === "Student")
+        changed_user.user_group = "Admin";
+      else if (changed_user.user_group === "Admin")
+        changed_user.user_group = "Student";
+      axios
+        .put("/api/accounts/users/" + user.id + "/", user)
+        .then(response => {
+          user = changed_user;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
-}
+  },
+  mounted: function() {
+    axios
+      .get("/api/accounts/users/")
+      .then(response => {
+        this.users = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+};
 </script>

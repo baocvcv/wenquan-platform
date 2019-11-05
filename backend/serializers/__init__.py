@@ -9,7 +9,4 @@ from .question_serializer import MultpChoiceQSerializer
 from .question_serializer import TrueOrFalseQSerializer
 from .question_serializer import FillBlankQSerializer
 from .question_serializer import BriefAnswerQSerializer
-
 from .question_bank_serializer import QuestionBankSerializer
-
-from .knowledge_node_serializer import KnowlegdeNodeSerializer

@@ -33,7 +33,7 @@ build:
 
 unit-test:
   extends: .test
-  allow_failure: true
+  #allow_failure: true
   script:
     - coverage run -m pytest --junit-xml=xunit-reports/xunit-result.xml
     - BACKEND_RET=$?
@@ -52,7 +52,7 @@ unit-test:
 
 style-test:
   extends: .test
-  allow_failure: true
+  #allow_failure: true
   script:
     - pylint --load-plugins=pylint_django backend
     - BACKEND_RET=$?

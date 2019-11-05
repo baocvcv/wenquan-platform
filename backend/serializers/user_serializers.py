@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=False)
     is_banned = serializers.BooleanField(default=False)
     user_group = serializers.CharField(default="Student")
+    password = serializers.CharField(required=False)
 
     def create(self, validated_data):
         """ create user """
@@ -63,11 +64,11 @@ class UserSerializer(serializers.ModelSerializer):
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
         instance.save()
 
-        profile_data = validated_data.pop('profile')
-        profile = instance.profile
-        profile_serializer = ProfileSerializer(data=profile_data)
-        profile_serializer.update(profile, profile_data)
-        # profile.update(**profile_data)
+        if 'profile' in validated_data:
+            profile_data = validated_data.pop('profile')
+            profile = instance.profile
+            profile_serializer = ProfileSerializer(data=profile_data)
+            profile_serializer.update(profile, profile_data)
 
         return instance
 

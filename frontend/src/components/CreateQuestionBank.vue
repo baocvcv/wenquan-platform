@@ -1,8 +1,7 @@
 <template>
   <div>
-    <br />
     <v-card id="create-form">
-      <v-toolbar color="blue" dark>
+      <v-toolbar color="primary" dark>
         <v-toolbar-title>Create a Question Bank</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -33,12 +32,12 @@
               ></v-text-field>
             </v-col>
             <v-col>
-                <image-uploader
-                  ref="uploader"
-                  v-model="image"
-                  label="Avatar"
-                  placeholder="Pick an avatar(optional)"
-                />
+              <image-uploader
+                ref="uploader"
+                v-model="image"
+                label="Avatar"
+                placeholder="Pick an avatar(optional)"
+              />
             </v-col>
           </v-row>
 
@@ -65,7 +64,6 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <br />
   </div>
 </template>
 
@@ -83,12 +81,12 @@ export default {
       name: "",
       name_rules: [
         v => !!v || "name is required!",
-        v => v.length <= 200 || "Max 200 characters!"
+        v => (!!v && v.length <= 200) || "Max 200 characters!"
       ],
       brief: "",
       brief_rules: [
         v => !!v || "brief introduction is required",
-        v => v.length <= 200 || "Max 200 characters!"
+        v => (!!v && v.length <= 200) || "Max 200 characters!"
       ],
       authorities: ["private", "public"],
       authority: "",
@@ -128,11 +126,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#create-form {
-  width: 50%;
-  margin: auto;
-}
-</style>
