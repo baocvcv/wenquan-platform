@@ -42,11 +42,3 @@ class Question(PolymorphicModel):
     question_type = models.IntegerField()
     question_level = models.IntegerField(default=0)
     question_change_time = models.DateTimeField()
-
-    def checker(self, ans):
-        response = {}
-        if ans == self.ans:
-            response['result'] = True
-        else:
-            response['result'] = False
-        return response
