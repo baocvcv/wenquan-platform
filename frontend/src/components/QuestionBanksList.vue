@@ -26,15 +26,13 @@
           ></create-question-bank>
         </v-dialog>
       </v-toolbar>
-      <v-card-text>
-        <span
-          v-show="loading"
-          align="right"
-          class="caption grey--text"
+      <v-card-text class="pt-0">
+        <p
+          class="caption grey--text text-right mt-0 mb-0 pr-1"
           transition="fade-transition"
         >
           {{ process }}
-        </span>
+        </p>
         <v-list two-line>
           <v-list-item
             v-for="qst_bank in question_banks"
@@ -44,6 +42,7 @@
                 ? select_action(qst_bank.id)
                 : $router.push('questionbanks/' + qst_bank.id)
             "
+            class="pr-0"
           >
             <v-list-item-avatar>
               <v-img :src="qst_bank.icon"></v-img>
@@ -102,21 +101,16 @@
         <!--detailed infomation for question banks-->
         <v-dialog v-model="detail" max-width="500">
           <v-card>
-            <v-card-title>
-              Details of {{cur_qst_bank.name}}
-            </v-card-title>
+            <v-card-title> Details of {{ cur_qst_bank.name }} </v-card-title>
             <v-card-text class="mt-2">
               <v-container>
-                <p
-                  v-for="(value, attr) in cur_qst_bank.details"
-                  :key="attr"
-                >
+                <p v-for="(value, attr) in cur_qst_bank.details" :key="attr">
                   <v-row align="center">
                     <v-col class="mt-0 mb-0 pt-0 pd-0">
-                      <span class="font-weight-bold">{{attr}}:</span>
+                      <span class="font-weight-bold">{{ attr }}:</span>
                     </v-col>
                     <v-col class="mt-0 mb-0 pt-0 pd-0">
-                      <span>{{cur_qst_bank.details[attr]}}</span>
+                      <span>{{ cur_qst_bank.details[attr] }}</span>
                     </v-col>
                   </v-row>
                 </p>
@@ -135,7 +129,9 @@
               >
                 View
               </v-btn>
-              <v-btn class="cancel-button" text @click="detail = false">Done</v-btn>
+              <v-btn class="cancel-button" text @click="detail = false"
+                >Done</v-btn
+              >
               <div class="flex-grow-1"></div>
             </v-card-actions>
           </v-card>
@@ -208,8 +204,7 @@ export default {
       question_banks: [],
       cur_qst_bank: {},
       process: "",
-      create_bank_dialog: false,
-      loading: false
+      create_bank_dialog: false
     };
   },
   methods: {
@@ -260,11 +255,7 @@ export default {
         let lock = false;
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get(
-              "/api/question_banks/" +
-                response.data[i] +
-                "/"
-            )
+            .get("/api/question_banks/" + response.data[i] + "/")
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);
@@ -273,7 +264,8 @@ export default {
               lock = false;
               that.process =
                 "Loading question banks: " + count + " / " + all_count;
-              if (count == all_count) that.loading = false;
+              if (count == all_count)
+                that.process = "Total Count: " + all_count;
             });
         }
       })

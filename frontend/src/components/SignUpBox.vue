@@ -50,7 +50,7 @@
                     small
                     color="primary"
                   ></v-checkbox>
-                  <span :class="{caption: true, 'grey--text': accept_terms}"
+                  <span :class="{ caption: true, 'grey--text': accept_terms }"
                     >I accept and agree to Terms of Service and Privacy
                     Statement</span
                   >
