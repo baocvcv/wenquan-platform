@@ -1,6 +1,5 @@
 '''Code for models: paper'''
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from polymorphic.models import PolymorphicModel
 from .questions.question import Question
 
@@ -20,7 +19,7 @@ class Paper(PolymorphicModel):
     name = models.CharField(max_length=MAX_NAME, default="unmaned paper")
     title = models.CharField(max_length=MAX_NAME, default="unmaned paper")
     total_point = models.IntegerField(default=100)
-    tips = ArrayField(models.CharField(max_length=MAX_NAME), default=list)
+    tips = models.CharField(max_length=MAX_NAME, default="")
     status = models.CharField(max_length=MAX_NAME, default="drafted")
     is_latest = models.BooleanField(default=True)
 
