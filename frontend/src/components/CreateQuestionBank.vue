@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card id="create-form">
-      <v-toolbar color="blue" dark>
+      <v-toolbar color="primary" dark>
         <v-toolbar-title>Create a Question Bank</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
