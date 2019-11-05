@@ -12,7 +12,7 @@ class PaperSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     name = serializers.CharField(allow_blank=True)
     title = serializers.CharField(allow_blank=True)
-    tips = serializers.ListField(child=serializers.CharField(allow_blank=True))
+    tips = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = Paper
