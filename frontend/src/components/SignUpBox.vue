@@ -48,8 +48,9 @@
                     v-model="accept_terms"
                     class="shrink mr-0 mt-0 pt-0"
                     small
+                    color="primary"
                   ></v-checkbox>
-                  <span class="caption grey--text"
+                  <span :class="{caption: true, 'grey--text': accept_terms}"
                     >I accept and agree to Terms of Service and Privacy
                     Statement</span
                   >
@@ -60,12 +61,13 @@
                   <v-btn
                     :disabled="!valid || !accept_terms"
                     outlined
+                    color="primary"
                     class="mr-4"
                     @click="click"
                     >Submit
                   </v-btn>
 
-                  <v-btn text class="mr-4 reset-button" @click="reset_input"
+                  <v-btn text class="mr-4 cancel-button" @click="reset_input"
                     >Reset</v-btn
                   >
                   <v-spacer></v-spacer>
@@ -178,12 +180,6 @@ export default {
 <style scoped>
 #sign-up-box {
   margin: auto;
-}
-.reset-button {
-  color: grey;
-}
-.reset-button:hover {
-  color: black;
 }
 a {
   color: grey;

@@ -93,7 +93,7 @@
                     </v-btn>
                   </v-hover>
                 </template>
-                <span>Details</span>
+                <span>Delete</span>
               </v-tooltip>
             </v-list-item-action>
           </v-list-item>
@@ -102,37 +102,40 @@
         <!--detailed infomation for question banks-->
         <v-dialog v-model="detail" max-width="500">
           <v-card>
-            <v-toolbar flat color="blue" dark>
-              <v-toolbar-title>
-                Details of {{ cur_qst_bank.name }}
-              </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
-              <v-list>
-                <v-list-item
+            <v-card-title>
+              Details of {{cur_qst_bank.name}}
+            </v-card-title>
+            <v-card-text class="mt-2">
+              <v-container>
+                <p
                   v-for="(value, attr) in cur_qst_bank.details"
                   :key="attr"
                 >
-                  <v-list-item-content>
-                    {{ attr }}: {{ cur_qst_bank.details[attr] }}
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
+                  <v-row align="center">
+                    <v-col class="mt-0 mb-0 pt-0 pd-0">
+                      <span class="font-weight-bold">{{attr}}:</span>
+                    </v-col>
+                    <v-col class="mt-0 mb-0 pt-0 pd-0">
+                      <span>{{cur_qst_bank.details[attr]}}</span>
+                    </v-col>
+                  </v-row>
+                </p>
+              </v-container>
             </v-card-text>
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn
-                color="green"
-                dark
+                color="primary"
+                outlined
                 @click="
                   select
                     ? select_action(cur_qst_bank.id)
                     : $router.push('questionbanks/' + cur_qst_bank.id)
                 "
               >
-                Goto
+                View
               </v-btn>
-              <v-btn color="primary" dark @click="detail = false">Back</v-btn>
+              <v-btn class="cancel-button" text @click="detail = false">Done</v-btn>
               <div class="flex-grow-1"></div>
             </v-card-actions>
           </v-card>
@@ -250,7 +253,7 @@ export default {
     that.loading = true;
     that.process = "Fetching data from server...";
     axios
-      .get("http://localhost:8000/api/question_banks/")
+      .get("/api/question_banks/")
       .then(response => {
         let all_count = response.data.length;
         let count = 0;
@@ -258,7 +261,7 @@ export default {
         for (var i = 0; i < response.data.length; i++) {
           axios
             .get(
-              "http://localhost:8000/api/question_banks/" +
+              "/api/question_banks/" +
                 response.data[i] +
                 "/"
             )
