@@ -24,6 +24,11 @@ const router = new Router({
         import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
     },
     {
+      path: "/account",
+      name: "account",
+      component: () => import("./views/Account.vue")
+    },
+    {
       path: "/admin/usermanagement",
       name: "user-management",
       component: () => import("./views/UserManagement.vue")
@@ -67,33 +72,41 @@ const router = new Router({
       path: "/edit_question/:id",
       name: "question-edit",
       component: () => import("./views/Question.vue")
+    },
+    {
+      path: "*",
+      name: "404",
+      component: () => import("./views/404Error.vue")
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("Entering a new router!");
   if (sessionStorage.getItem("user"))
     store.state.user = JSON.parse(sessionStorage.getItem("user"));
-  if (!store.state.user) {
-    if (
-      to.path != "/" &&
-      to.path != "/about" &&
-      to.path != "/signin" &&
-      to.path != "/signup"
-    ) {
-      next("/signin");
-    } else {
-      next();
-    }
+  if (router.resolve(to).route.name === "404") {
+    next();
   } else {
-    if (
-      to.path.split("/")[0] === "admin" &&
-      store.state.user.user_group === "Student"
-    ) {
-      next("/");
+    if (!store.state.user) {
+      if (
+        to.path != "/" &&
+        to.path != "/about" &&
+        to.path != "/signin" &&
+        to.path != "/signup"
+      ) {
+        next("/signin");
+      } else {
+        next();
+      }
     } else {
-      next();
+      if (
+        to.path.split("/")[0] === "admin" &&
+        store.state.user.user_group === "Student"
+      ) {
+        next("/");
+      } else {
+        next();
+      }
     }
   }
 });

@@ -5,7 +5,7 @@ import Vuetify from "vuetify";
 import Vuex from "vuex";
 import Vue from "vue";
 import Router from "vue-router";
-import router from "@/router";
+import RouterRule from "@/router";
 import "./mock/SignInMock.js";
 
 const localVue = createLocalVue();
@@ -14,14 +14,16 @@ Vue.use(Vuex);
 Vue.use(Router);
 
 describe("SignInBox.vue", () => {
-  let vuetify;
+  let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
+    router = new Router({ RouterRule });
   });
   it("Correct Input", () => {
     const wrapper = mount(SignInBox, {
       localVue,
       vuetify,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -36,6 +38,7 @@ describe("SignInBox.vue", () => {
     const wrapper = mount(SignInBox, {
       localVue,
       vuetify,
+      router,
       sync: false
     });
     wrapper.setData({
@@ -115,7 +118,6 @@ describe("SignInBox.vue", () => {
     await wrapper.vm.$nextTick();
     setTimeout(() => {
       expect(wrapper.vm.sign_in_result).toBe("");
-      console.log(store.state.user);
       sessionStorage.removeItem("user");
       done();
     }, 1000);
@@ -196,14 +198,16 @@ describe("SignInBox.vue", () => {
 });
 
 describe("SignIn.vue", () => {
-  let vuetify;
+  let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
+    router = new Router({ RouterRule });
   });
   it("Render Component Correctly", () => {
     const wrapper = mount(SignIn, {
       localVue,
       vuetify,
+      router,
       sync: false
     });
     expect(wrapper.contains(".sign-in-box")).toBe(true);

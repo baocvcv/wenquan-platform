@@ -39,6 +39,11 @@ urlpatterns = [
         name='node_detail',
     ),
     path(
+        r'api/nodes_question/',
+        views.NodeQuestionView.as_view(),
+        name='nodes_question',
+    ),
+    path(
         r'api/question_banks/',
         views.QuestionBankList.as_view(),
         name='banks_list',
@@ -49,6 +54,22 @@ urlpatterns = [
         name='banks_list',
     ),
     path(
+        r'api/papers/',
+        views.PaperList.as_view(),
+        name='papers_list',
+    ),
+    path(
+        r'api/papers/<int:paper_id>/',
+        views.PaperDetail.as_view(),
+        name='paper_detail',
+    ),
+    path(
+        r'api/paper_sections/<int:section_id>/',
+        views.SectionDetail.as_view(),
+        name='section_detail',
+    ),
+    # records
+    path(
         r'api/question_records/',
         views.QuestionRecordList.as_view(),
         name='question_record_list',
@@ -57,5 +78,5 @@ urlpatterns = [
         r'api/question_records/<int:pk>',
         views.QuestionRecordDetail.as_view(),
         name='question_record_detail',
-    )
+    ),
 ]
