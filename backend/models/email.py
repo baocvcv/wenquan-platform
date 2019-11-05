@@ -35,7 +35,7 @@ class EmailVerificationRecord(models.Model):
         email_body = ""
         # local test
         # domain = "https://127.0.0.1:8000"
-        domain = "https://never404-never404.app.secoder.net:8000"
+        domain = "https://never404-never404.app.secoder.net"
         if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
             url = domain + "/activate/{0}".format(self.token)
