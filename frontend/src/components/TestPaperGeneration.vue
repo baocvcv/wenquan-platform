@@ -17,7 +17,8 @@
       <v-card-text>
         <v-form ref="input" v-model="valid">
           <v-text-field
-            v-model="title"
+            v-model="edited_paper.title"
+            prepend-icon="mdi-format-title"
             :rules="title_rules"
             hint="The title of the test paper"
             label="Title"
@@ -25,16 +26,34 @@
             outlined
             required
           ></v-text-field>
-          <v-text-field
-            v-model="total_point"
-            :rules="total_point_rules"
-            label="Total points"
-            :readonly="readonly"
-            outlined
-            required
-          ></v-text-field>
+          <v-row>
+            <v-col cols="12" xs="12" lg="6">
+              <v-text-field
+                v-model="edited_paper.total_point"
+                prepend-icon="mdi-counter"
+                :rules="total_point_rules"
+                label="Total points"
+                :readonly="readonly"
+                outlined
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" xs="12" lg="6">
+              <v-text-field
+                v-model="edited_paper.time_limit"
+                prepend-icon="mdi-alarm"
+                :rules="time_limit_rules"
+                label="Time Limit"
+                :readonly="readonly"
+                suffix="min"
+                outlined
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
           <v-textarea
-            v-model="tips"
+            v-model="edited_paper.tips"
+            prepend-icon="mdi-file-document-box-multiple-outline"
             hint="Tips provided to students(optional)"
             label="Tips"
             :readonly="readonly"
@@ -180,6 +199,7 @@
           </v-list>
           <v-select
             v-model="edited_paper.status"
+            prepend-icon="mdi-draw"
             :items="['drafted', 'published']"
             label="Status"
             :readonly="readonly"
@@ -301,16 +321,22 @@ export default {
         title: "",
         total_point: "0",
         tips: "",
+        time_limit: "",
         status: "drafted",
         sections: []
       },
       title_rules: [v => !!v || "Title is required!"],
+      time_limit_rules: [
+        v => !!v || "Time limit is required!",
+        v => (!!v && /^[0-9]+$/.test(v)) || "An integer is expected!"
+      ],
       total_point_rules: [
         v => !!v || "Total points is required!",
         v => (!!v && /^[0-9]+$/.test(v)) || "An integer is expected!"
       ],
       cur_section: undefined,
       adding_question: false,
+      randomize: false,
       process: "question bank",
       readonly: this.create ? false : true
     };
