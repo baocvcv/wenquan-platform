@@ -16,12 +16,12 @@ class Paper(PolymorphicModel):
         sections: a list of sections []
         status: published or drafted
     '''
-    name = models.CharField(max_length=MAX_NAME, default="unmaned paper")
     title = models.CharField(max_length=MAX_NAME, default="unmaned paper")
     total_point = models.IntegerField(default=100)
     tips = models.CharField(max_length=MAX_NAME, default="")
     status = models.CharField(max_length=MAX_NAME, default="drafted")
     is_latest = models.BooleanField(default=True)
+    time_limit = models.IntegerField(default=0)
 
 
 class Section(PolymorphicModel):
@@ -31,7 +31,6 @@ class Section(PolymorphicModel):
         total_points: total_points of the section
         questions:a list of questions
     '''
-    name = models.CharField(max_length=MAX_NAME)
     title = models.CharField(max_length=MAX_NAME)
     total_point = models.IntegerField()
     belong_paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
