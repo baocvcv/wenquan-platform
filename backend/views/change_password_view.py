@@ -11,13 +11,15 @@ from backend.models import User
 
 class ChangePasswordView(APIView):
     """ Handle password change """
-    def post(self, request):
+    @staticmethod
+    def post(request):
         """ send verification email """
         user = User.objects.get_by_natural_key(request.data['username'])
         create_email_verification_record(user, send_type='forget')
         return Response(status=status.HTTP_200_OK)
 
-    def put(self, request):
+    @staticmethod
+    def put(request):
         """ change pasword """
         data = request.data
         if 'token' in data:
