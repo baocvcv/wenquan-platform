@@ -153,6 +153,7 @@ export default {
     knowledge_string() {
       let result = "";
       this.node_selection.forEach(item => result += item.name);
+      return result;
     }
   },
   mounted() {
