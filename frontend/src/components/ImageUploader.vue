@@ -16,7 +16,7 @@
             align="center"
           >
             <v-img
-              v-if="!!image"
+              v-if="/^data:image.*?base64/.test(image)"
               :aspect-ratio="aspectRatio"
               :src="image"
               contain
@@ -42,6 +42,28 @@
         style="display: none"
       />
     </v-card>
+
+    <v-dialog v-model="not_an_image" max-width="250px">
+      <v-card>
+        <v-toolbar>
+          <v-toolbar-title>Error</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text align="center">
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-icon x-large color="error">mdi-information</v-icon>
+            </v-col>
+            <v-col cols="12">
+              <span>Not an image!</span>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="not_an_image = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -87,6 +109,7 @@ export default {
   data: function() {
     return {
       //img: [],
+      not_an_image: false,
       img_style: {
         width: this.width,
         height: this.height
@@ -104,8 +127,12 @@ export default {
       }
 
       reader.onload = function() {
-        that.img.push(this.result);
-        that.$emit("change", that.img);
+        if (/^data:image.*?base64/.test(this.result)) {
+          that.img.push(this.result);
+          that.$emit("change", that.img);
+        } else {
+          that.not_an_image = true;
+        }
       };
     },
     delete_image(index) {
