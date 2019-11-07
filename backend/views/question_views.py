@@ -158,6 +158,7 @@ class QuestionDetail(APIView):
         for i in q_group.parents_node.all():
             nodes.append(i.id)
         response['parents_node'] = nodes
+        response['question_bank'] = q_group.belong_bank.id
         return Response(response)
 
     def put(self, request, q_id):
