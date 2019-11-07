@@ -138,6 +138,12 @@
             :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
             :md="drawer ? 8 : 12"
           >
+            <p
+              class="caption grey--text text-right mt-0 mb-0 pr-1"
+              transition="fade-transition"
+            >
+              {{ process }}
+            </p>
             <v-row dense>
               <v-col
                 v-for="question in question_list"
@@ -222,31 +228,44 @@ export default {
         "Brief Answer"
       ],
       selected_questions: [],
-      is_selecting: false
+      is_selecting: false,
+      process: ""
     };
   },
   mounted() {
     if (this.select) this.is_selecting = true;
+    this.process = "Fetching data from server...";
     let load_questions = () => {
       let question_id_index;
+      let all_count = questions.length;
+      let count = 0;
+      let lock = false;
       for (question_id_index in questions) {
         axios
-          .get("/api/questions/" + questions[question_id_index] + "/")
-          .then(response => {
-            this.question_list.push(response.data);
+          .get("http://localhost:8000/api/questions/" + questions[question_id_index] + "/")
+          .then(sub_response => {
+            this.question_list.push(sub_response.data);
+            while (lock);
+            lock = true;
+            count++;
+            lock = false;
+            this.process = 
+              "Loading questions: " + count + " / " + all_count;
+            if (count == all_count)
+              this.process = "Total Count: " + all_count;
           })
           .catch(error => {
-            console.log(error);
+            this.process = "Failed to fetch data: " + error;
           });
       }
     };
     let questions;
     if (this.questions.length == 0) {
       axios
-        .get("/api/question_banks/" + this.id + "/")
+        .get("http://localhost:8000/api/question_banks/" + this.id + "/")
         .then(response => {
           questions = response.data.questions;
-          load_questions();
+          load_questions(response);
         })
         .catch(error => {
           console.log(error);

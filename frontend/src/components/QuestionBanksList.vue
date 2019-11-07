@@ -245,7 +245,6 @@ export default {
   },
   mounted: function() {
     let that = this;
-    that.loading = true;
     that.process = "Fetching data from server...";
     axios
       .get("/api/question_banks/")
