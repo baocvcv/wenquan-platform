@@ -140,7 +140,7 @@ export default {
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
               this.tree_data=[response.data];
-              this.$refs.tree.updateData(treeData);
+              this.$refs.tree.updateData(this.tree_data);
               this.node_selection = [];
               let travelSubnode=item => {
                 if(this.initData.parents_node.indexOf(item.id)!=-1)
