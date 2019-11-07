@@ -286,7 +286,7 @@ import QuestionListItem from "@/components/QuestionListItem.vue";
 import axios from "axios";
 
 export default {
-  name: "",
+  name: "test-paper",
   props: {
     paper: {
       type: Object,
@@ -466,13 +466,16 @@ export default {
         }
       }
       if (this.id == -1) {
+        //must be creating a test paper
         axios
           .post("/api/papers/", result)
           .then(response => {
-            alert("OK" + response.data);
+            alert("OK");
+            this.$emit("create-response", true);
           })
           .catch(error => {
             alert(error);
+            this.$emit("create-response", false);
           });
       } else {
         axios
