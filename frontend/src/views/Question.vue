@@ -139,7 +139,7 @@ export default {
           axios
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
-              this.$refs.tree.updateData(response.data);
+              this.$refs.tree.updateData([response.data]);
             })
             .catch(error => {});
         })
