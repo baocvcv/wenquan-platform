@@ -112,7 +112,12 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>Create A Question</v-card-title>
+            <v-card-title>
+              Create A Question
+              <v-btn right absolute icon @click="create_question_dialog = false"
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-card-title>
             <v-card-text>
               <question
                 :initData="null"
@@ -126,6 +131,7 @@
         </v-dialog>
       </v-app-bar>
       <v-card-text>
+        <vue-progress-bar style="position: relative;"></vue-progress-bar>
         <v-row>
           <v-col v-show="drawer" cols="12" md="4" sm="6">
             <tree-view
@@ -240,19 +246,22 @@ export default {
       let all_count = questions.length;
       let count = 0;
       let lock = false;
+      this.$Progress.set(0);
       for (question_id_index in questions) {
         axios
-          .get("http://localhost:8000/api/questions/" + questions[question_id_index] + "/")
+          .get("/api/questions/" + questions[question_id_index] + "/")
           .then(sub_response => {
             this.question_list.push(sub_response.data);
             while (lock);
             lock = true;
             count++;
             lock = false;
-            this.process = 
-              "Loading questions: " + count + " / " + all_count;
-            if (count == all_count)
+            this.process = "Loading questions: " + count + " / " + all_count;
+            this.$Progress.increase((1 / all_count) * 100);
+            if (count == all_count) {
               this.process = "Total Count: " + all_count;
+              this.$Progress.finish();
+            }
           })
           .catch(error => {
             this.process = "Failed to fetch data: " + error;
@@ -262,7 +271,7 @@ export default {
     let questions;
     if (this.questions.length == 0) {
       axios
-        .get("http://localhost:8000/api/question_banks/" + this.id + "/")
+        .get("/api/question_banks/" + this.id + "/")
         .then(response => {
           questions = response.data.questions;
           load_questions(response);

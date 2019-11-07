@@ -1,6 +1,6 @@
 <template>
   <div id="question-bank">
-    <vue-element-loading :active="loading" is-full-screen="true"></vue-element-loading>
+    <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     <v-card v-show="!loading">
       <v-card-title
         >Profile
@@ -100,7 +100,7 @@
       </v-expand-transition>
     </v-card>
     <question-list
-      v-show="loading"
+      v-show="!loading"
       v-if="question_bank.id"
       :questions="question_bank.questions"
       editable
@@ -113,7 +113,7 @@
 import question_list from "@/components/QuestionList.vue";
 import image_uploader from "@/components/ImageUploader.vue";
 import axios from "axios";
-import VueElementLoading from 'vue-element-loading'
+import VueElementLoading from "vue-element-loading";
 
 export default {
   name: "question-bank",

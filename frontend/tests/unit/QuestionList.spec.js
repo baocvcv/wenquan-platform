@@ -2,6 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionList from "@/components/QuestionList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import VueProgressBar from "vue-progressbar";
 import Router from "vue-router";
 import RouterRule from "@/router";
 import "./mock/QuestionListMock.js";
@@ -9,6 +10,7 @@ import "./mock/QuestionListMock.js";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(VueProgressBar);
 
 describe("QuestionList.vue", () => {
   let vuetify, router;
