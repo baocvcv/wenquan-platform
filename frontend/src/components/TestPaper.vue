@@ -466,16 +466,16 @@ export default {
         }
       }
       if (this.id == -1) {
-		//must be creating a test paper
+        //must be creating a test paper
         axios
           .post("/api/papers/", result)
           .then(response => {
-            alert("OK" );
-			this.$emit("create-response", true);
+            alert("OK");
+            this.$emit("create-response", true);
           })
           .catch(error => {
             alert(error);
-			this.$emit("create-response", false);
+            this.$emit("create-response", false);
           });
       } else {
         axios

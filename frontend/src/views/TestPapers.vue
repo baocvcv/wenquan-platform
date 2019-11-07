@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card>
-	  <test-papers-list title="Test Papers" />
+      <test-papers-list title="Test Papers" />
     </v-card>
   </div>
 </template>
