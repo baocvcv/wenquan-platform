@@ -27,7 +27,7 @@
       <!--tree-view and the words shown in readonly mode-->
       <tree-view
         v-model="node_selection"
-        :bankID="bankID ? bankID[0] : -1"
+        :bankID="bankID ? bankID[0] : tree_bank_id"
         v-show="creation || (_editable && edit_mode)"
       ></tree-view>
 
@@ -134,6 +134,7 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
+          this.tree_bank_id = response.data.parents_node[0];
         })
         .catch(error => {
           console.log(error);
@@ -215,7 +216,8 @@ export default {
       typeSelected: null,
       edit_mode: false,
       initData: null,
-      node_selection: []
+      node_selection: [],
+      tree_bank_id: -1
     };
   }
 };
