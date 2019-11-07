@@ -45,7 +45,10 @@
             class="pr-0"
           >
             <v-list-item-avatar>
-              <v-img :src="qst_bank.icon"></v-img>
+              <v-img
+                v-if="/^data:image\/.*?base64/.test(qst_bank.icon)"
+                :src="qst_bank.icon"
+              ></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content align="left">
