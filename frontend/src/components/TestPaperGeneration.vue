@@ -349,7 +349,7 @@ export default {
         sum += parseInt(this.edited_paper.sections[i].total_point);
       }
       var tip =
-        sum == this.total_point && !!this.total_point
+        sum == this.edited_paper.total_point && !!this.edited_paper.total_point
           ? { color: "green", content: "valid" }
           : {
               color: "red",
@@ -357,7 +357,7 @@ export default {
                 "Sum-up of points of sections: " +
                 sum +
                 " | Points assigned to this test paper: " +
-                this.total_point
+                this.edited_paper.total_point
             };
       return tip;
     },

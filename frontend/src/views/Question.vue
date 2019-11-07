@@ -23,6 +23,17 @@
           ></v-select>
         </v-col>
       </v-row>
+
+      <!--tree-view and the words shown in readonly mode-->
+      <tree-view
+        v-model="node_selection"
+        :bankID="bankID ? bankID[0] : tree_bank_id"
+        v-show="creation || (_editable && edit_mode)"
+        ref="tree"
+      ></tree-view>
+
+      <p v-show="!creation && !(_editable && edit_mode)">{{ knowledge_string }}</p>
+
       <question-multiple-choice
         ref="multiple"
         v-if="typeSelected == 'multiple'"
@@ -73,6 +84,7 @@ import QuestionMultipleChoice from "@/components/QuestionMultipleChoice.vue";
 import QuestionSingleChoice from "@/components/QuestionSingleChoice.vue";
 import QuestionBriefAnswer from "@/components/QuestionBriefAnswer.vue";
 import QuestionFillInBlank from "@/components/QuestionFillInBlank.vue";
+import TreeView from "@/components/TreeView.vue"
 import axios from "axios";
 
 export default {
@@ -81,7 +93,8 @@ export default {
     "question-multiple-choice": QuestionMultipleChoice,
     "question-single-choice": QuestionSingleChoice,
     "question-brief-answer": QuestionBriefAnswer,
-    "question-fill-in-blank": QuestionFillInBlank
+    "question-fill-in-blank": QuestionFillInBlank,
+    "tree-view": TreeView
   },
   props: {
     bankID: {
@@ -122,6 +135,13 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
+          this.tree_bank_id = response.data.parents_node[0];
+          axios
+            .get("/api/nodes_list/" + this.tree_bank_id + "/")
+            .then(response => {
+              this.$refs.tree.updateData([response.data]);
+            })
+            .catch(error => {});
         })
         .catch(error => {
           console.log(error);
@@ -137,6 +157,11 @@ export default {
       )
         return true;
       return this.editable;
+    },
+    knowledge_string() {
+      let result = "";
+      this.node_selection.forEach(item => result += item.name);
+      return result;
     }
   },
   mounted() {
@@ -197,7 +222,9 @@ export default {
       ],
       typeSelected: null,
       edit_mode: false,
-      initData: null
+      initData: null,
+      node_selection: [],
+      tree_bank_id: -1
     };
   }
 };

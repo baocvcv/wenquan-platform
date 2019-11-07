@@ -10,7 +10,6 @@ class PaperSerializer(serializers.ModelSerializer):
     Attributes:
     """
     id = serializers.IntegerField(required=False)
-    name = serializers.CharField(allow_blank=True)
     title = serializers.CharField(allow_blank=True)
     tips = serializers.CharField(allow_blank=True)
 
@@ -39,7 +38,6 @@ class SectionSerializer(serializers.ModelSerializer):
     Attributes:
     """
     id = serializers.IntegerField(required=False)
-    name = serializers.CharField(allow_blank=True)
     title = serializers.CharField(allow_blank=True)
 
     class Meta:
