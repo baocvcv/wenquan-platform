@@ -139,7 +139,15 @@ export default {
           axios
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
-              this.$refs.tree.updateData([response.data]);
+              this.tree_data=[response.data];
+              this.$refs.tree.updateData(this.tree_data);
+              this.node_selection = [];
+              let travelSubnode=item => {
+                if(this.initData.parents_node.indexOf(item.id)!=-1)
+                  this.node_selection.push(item);
+                  item.subnodes.forEach(travelSubnode);
+              };
+              this.tree_data[0].subnodes.forEach(travelSubnode);
             })
             .catch(error => {});
         })
@@ -173,10 +181,18 @@ export default {
     }
   },
   methods: {
+    parse_node() {
+      let result = [this.tree_bank_id];
+      this.node_selection.forEach(item => {
+        if(result.indexOf(item)==-1)
+          result.push(item);
+      })
+      return result;
+    },
     submit(info) {
       if (info.parents_node.length == 0 && this.bankID) {
         //New question
-        info.parents_node = this.bankID;
+        info.parents_node = this.parse_node();
         axios
           .post("/api/questions/", [info])
           .then(response => {
@@ -189,6 +205,7 @@ export default {
           });
       } else {
         //Edit question
+        info.parents_node = this.parse_node();
         axios
           .put("/api/questions/" + info.id.toString() + "/", [info])
           .then(response => {
@@ -224,7 +241,8 @@ export default {
       edit_mode: false,
       initData: null,
       node_selection: [],
-      tree_bank_id: -1
+      tree_bank_id: -1,
+      tree_data: null
     };
   }
 };
