@@ -32,7 +32,9 @@
         ref="tree"
       ></tree-view>
 
-      <p v-show="!creation && !(_editable && edit_mode)">{{ knowledge_string }}</p>
+      <p v-show="!creation && !(_editable && edit_mode)">
+        {{ knowledge_string }}
+      </p>
 
       <question-multiple-choice
         ref="multiple"
@@ -84,7 +86,7 @@ import QuestionMultipleChoice from "@/components/QuestionMultipleChoice.vue";
 import QuestionSingleChoice from "@/components/QuestionSingleChoice.vue";
 import QuestionBriefAnswer from "@/components/QuestionBriefAnswer.vue";
 import QuestionFillInBlank from "@/components/QuestionFillInBlank.vue";
-import TreeView from "@/components/TreeView.vue"
+import TreeView from "@/components/TreeView.vue";
 import axios from "axios";
 
 export default {
