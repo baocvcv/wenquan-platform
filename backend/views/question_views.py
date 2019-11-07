@@ -80,6 +80,7 @@ class QuestionList(APIView):
             question_info['id'] = question.id
             question_info['parents_node'] = nodes
             question_info['question_type'] = INT2TYPE[(str)(question_info['question_type'])]
+            question_info['question_bank'] = i.belong_bank.id
             response.append(question_info)
 
         return Response(response)
@@ -132,6 +133,7 @@ class QuestionList(APIView):
             bank.save()
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = parents_id
+            response['question_bank'] = q_group.belong_bank.id
             return Response(response, status=201)
         q_group.delete()
         return Response(question.errors, status=400)
@@ -189,5 +191,6 @@ class QuestionDetail(APIView):
             response['id'] = new_q.id
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
             response['parents_node'] = post_data['parents_node']
+            response['question_bank'] = q_group.belong_bank.id
             return Response(response, status=201)
         return Response(question.errors, status=400)
