@@ -21,7 +21,7 @@
 	  </v-card-text>
 	</v-card>
 
-	<v-dialog v-model="create_test_paper">
+	<v-dialog v-model="create_test_paper" hide-overlay fullscreen transition="dialog-bottom-transition">
 	  <v-card>
 	    <v-toolbar flat>
 		  <v-toolbar-title>Create a Test Paper</v-toolbar-title>
@@ -37,10 +37,15 @@
 </template>
 
 <script>
-import TestPaper from "@/components/TestPaper.vue"
+import TestPaper from "@/components/TestPaper.vue";
+import axios from "axios";
 export default {
   name: "test-papers-list",
   props: {
+	title: {
+	  type: String,
+	  default: "Test Papers"
+	}
   },
   components: {
 	"test-paper": TestPaper
@@ -49,7 +54,11 @@ export default {
 	return {
 	  create_test_paper: false,
 	  process: "",
+	  test_papers: []
 	};
+  },
+  mounted() {
+
   }
 }
 </script>
