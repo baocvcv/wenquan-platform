@@ -29,6 +29,7 @@
         v-model="node_selection"
         :bankID="bankID ? bankID[0] : tree_bank_id"
         v-show="creation || (_editable && edit_mode)"
+        ref="tree"
       ></tree-view>
 
       <p v-show="!creation && !(_editable && edit_mode)">{{ knowledge_string }}</p>
@@ -135,6 +136,12 @@ export default {
         .then(response => {
           this.initData = response.data;
           this.tree_bank_id = response.data.parents_node[0];
+          axios
+            .get("/api/nodes_list/" + this.tree_bank_id + "/")
+            .then(response => {
+              this.$refs.tree.updateData(response.data);
+            })
+            .catch(error => {});
         })
         .catch(error => {
           console.log(error);
