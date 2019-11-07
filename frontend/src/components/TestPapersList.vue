@@ -16,8 +16,17 @@
 	  <v-card-text class="pt-0">
 	    <p class="caption grey--text text-right mt-0 mb-0 pr-1" transition="fade-transition"
 		>{{ process }}</p>
-		<v-list>
-		</v-list>
+	  <v-row justify="center">
+	    <v-col
+		  v-for="(paper, key) in test_papers"
+		  :key="key"
+		  cols="12"
+		  lg="4"
+		  sm="12"
+		>
+		<test-papers-list-item :test_paper="paper"><v-btn icon dark><v-icon>mdi-heart</v-icon></v-btn></test-papers-list-item>
+		</v-col>
+	  </v-row>
 	  </v-card-text>
 	</v-card>
 
@@ -30,7 +39,7 @@
 		    <v-icon>mdi-close</v-icon>
 		  </v-btn>
 		</v-toolbar>
-	    <test-paper create />
+	    <test-paper create v-on:create-response="create_response"/>
 	  </v-card>
 	</v-dialog>
   </div>
@@ -38,6 +47,7 @@
 
 <script>
 import TestPaper from "@/components/TestPaper.vue";
+import TestPapersListItem from "@/components/TestPapersListItem.vue";
 import axios from "axios";
 export default {
   name: "test-papers-list",
@@ -48,7 +58,8 @@ export default {
 	}
   },
   components: {
-	"test-paper": TestPaper
+	"test-paper": TestPaper,
+	"test-papers-list-item": TestPapersListItem
   },
   data: function() {
 	return {
@@ -58,8 +69,28 @@ export default {
 	};
   },
   mounted() {
-
-  }
+	this.update_data();	
+  },
+methods: {
+	update_data() {
+	  this.process="fetching data ..."
+	  axios
+	    .get("/api/papers/")
+	    .then(response => {
+	  	this.test_papers = response.data;
+	  	this.process="total count: " + this.test_papers.length;
+	  	console.log(this.test_papers)
+	    })
+	    .catch(error => {
+	  	this.process=error;
+	    });
+	},
+	create_response(result) {
+	  if(result)
+		this.update_data();
+	  this.create_test_paper = false;
+	}
+	}
 }
 </script>
 

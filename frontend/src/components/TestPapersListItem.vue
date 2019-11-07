@@ -4,8 +4,8 @@
 	  <v-card-title>{{ test_paper.title }}</v-card-title>
 	  <v-divider></v-divider>
 	  <v-card-text>
-	    <p>Total Points: {{ test_paper.total_point }}</p>
-		<p>Time Limit: {{ test_paper.time_limit }}</p>
+	    <p>Total Points: {{ test_paper.total_point }} points</p>
+		<p>Time Limit: {{ test_paper.time_limit }} min</p>
 		<p>Status: {{ test_paper.status }}</p>
 	  </v-card-text>
 
@@ -34,7 +34,7 @@
 		</v-card-text>
 		<v-card-actions>
 		  <v-btn text @click="delete_confirmed">Confirm</v-btn>
-		  <v-btn text @clic="delete_test_paper=false">Cancel</v-btn>
+		  <v-btn text @click="delete_test_paper=false">Cancel</v-btn>
 		</v-card-actions>
 	  </v-card>
 	</v-dialog>
@@ -66,6 +66,9 @@ data: function() {
 		})
 	    .catch(error => {
 		  console.log(error);
+		})
+		.then(() => {
+		  this.delete_test_paper = false;
 		})
 	}
   }  
