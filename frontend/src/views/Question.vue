@@ -185,8 +185,8 @@ export default {
     parse_node() {
       let result = [this.tree_bank_id];
       this.node_selection.forEach(item => {
-        if(result.indexOf(item)==-1)
-          result.push(item);
+        if(result.indexOf(item.id)==-1)
+          result.push(item.id);
       })
       return result;
     },
