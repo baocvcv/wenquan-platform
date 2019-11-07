@@ -286,7 +286,7 @@ import QuestionListItem from "@/components/QuestionListItem.vue";
 import axios from "axios";
 
 export default {
-  name: "",
+  name: "test-paper",
   props: {
     paper: {
       type: Object,
