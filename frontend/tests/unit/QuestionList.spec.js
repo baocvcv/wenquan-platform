@@ -34,7 +34,7 @@ describe("QuestionList.vue", () => {
       done();
     }, 500);
   });
-
+  /*
   it("Fails to fetch data from questions", async done => {
     const wrapper = mount(QuestionList, {
       localVue,
@@ -50,7 +50,7 @@ describe("QuestionList.vue", () => {
       done();
     }, 500);
   });
-  /*
+  
   it("Renders the component successfully", async done => {
     const wrapper = mount(QuestionList, {
       localVue,
