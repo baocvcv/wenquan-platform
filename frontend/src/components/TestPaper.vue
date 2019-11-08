@@ -68,9 +68,11 @@
               <v-list-item-title class="headline mb-1">
                 Sections
               </v-list-item-title>
-              <v-list-item-subtitle :style="'color:' + section_sum_up.color">{{
-                section_sum_up.content
-              }}</v-list-item-subtitle>
+              <v-list-item-subtitle
+                v-show="!readonly"
+                :style="'color:' + section_sum_up.color"
+                >{{ section_sum_up.content }}</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
 
@@ -103,6 +105,7 @@
                   </v-row>
                 </v-list-item-title>
                 <v-list-item-subtitle
+                  v-show="!readonly"
                   :style="'color: ' + question_sum_up(key).color"
                 >
                   {{ question_sum_up(key).content }}
