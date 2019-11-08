@@ -137,7 +137,7 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
-          this.tree_bank_id = response.data.parents_node[0];
+          this.tree_bank_id = response.data.question_bank;
           axios
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
