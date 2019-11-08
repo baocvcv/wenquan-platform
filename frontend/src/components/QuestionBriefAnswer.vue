@@ -1,78 +1,92 @@
 <template>
   <div class="brief-answer-component">
     <v-form ref="form" v-model="valid">
-      <v-text-field
-        label="Title"
-        v-model="edited_data.title"
-        outlined
-        :readonly="readonly"
-      ></v-text-field>
-      <v-textarea
-        label="Content"
-        v-model="edited_data.content"
-        :rules="[v => !!v || 'Question content is required!']"
-        outlined
-        auto-grow
-        :readonly="readonly"
-      ></v-textarea>
-      <br />
-      <image-uploader
-        ref="uploader"
-        v-model="edited_data.image"
-        width="50%"
-        label="picture"
-        :readonly="readonly"
-        multiple
-        placeholder="Upload an image if necessary"
-      ></image-uploader>
-      <br />
-      <v-textarea
-        label="Answer"
-        v-model="edited_data.answer"
-        :rules="[v => !!v || 'Answer is required!']"
-        outlined
-        auto-grow
-        :readonly="readonly"
-      ></v-textarea>
-      <br />
-      <v-textarea
-        label="Analysis"
-        v-model="edited_data.analysis"
-        :rules="[v => !!v || 'Analysis is required!']"
-        outlined
-        auto-grow
-        :readonly="readonly"
-      ></v-textarea>
-      <v-list-item>
-        <span>Difficulty:</span>
-        <v-rating
-          v-model="edited_data.difficulty"
-          color="yellow darken-3"
-          background-color="grey darken-1"
-          :readonly="readonly"
-          hover
-        ></v-rating>
-      </v-list-item>
-      <v-btn
-        class="mr-4"
-        color="success"
-        @click="submit()"
-        :disabled="!canSubmit"
-        v-if="!readonly"
-      >
-        Submit
-      </v-btn>
-      <v-btn
-        class="mr-4"
-        color="error"
-        @click="reset()"
-        v-if="!readonly && creation"
-      >
-        Reset
-      </v-btn>
-      <v-btn v-if="!readonly" @click="cancel">
-        Cancel
-      </v-btn>
+      <v-row>
+        <v-col cols="12" md="9">
+          <v-row>
+            <v-col cols="12" md="8">
+              <v-textarea
+                label="Content*"
+                v-model="edited_data.content"
+                :rules="[v => !!v || 'Question content is required!']"
+                outlined
+                auto-grow
+                :readonly="readonly"
+              ></v-textarea>
+            </v-col>
+            <v-col>
+              <image-uploader
+                ref="uploader"
+                v-model="edited_data.image"
+                label="picture"
+                :readonly="readonly"
+                multiple
+                placeholder="Upload an image if necessary"
+              ></image-uploader>
+            </v-col>
+          </v-row>
+          <v-textarea
+            label="Answer*"
+            v-model="edited_data.answer"
+            :rules="[v => !!v || 'Answer is required!']"
+            outlined
+            auto-grow
+            :readonly="readonly"
+          ></v-textarea>
+          <v-textarea
+            label="Analysis*"
+            v-model="edited_data.analysis"
+            :rules="[v => !!v || 'Analysis is required!']"
+            outlined
+            auto-grow
+            :readonly="readonly"
+          ></v-textarea>
+          <v-textarea
+            label="Notes"
+            v-model="edited_data.title"
+            outlined
+            :readonly="readonly"
+            hint="Write down some notes if necessary"
+          ></v-textarea>
+        </v-col>
+        <v-col>
+          <p class="grey--text caption mb-1">Type:</p>
+          <v-chip class="mb-4 mt-2">Brief Answer</v-chip>
+          <p class="grey--text caption mb-1">Difficulty:</p>
+          <v-rating
+            v-model="edited_data.difficulty"
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            :readonly="readonly"
+            hover
+            small
+          ></v-rating>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-btn v-if="!readonly" @click="cancel" text class="cancel-button">
+          Cancel
+        </v-btn>
+        <v-btn
+          class="mr-4 reset-button"
+          text
+          @click="reset()"
+          v-if="!readonly && creation"
+        >
+          Reset
+        </v-btn>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          outlined
+          @click="submit()"
+          :disabled="!canSubmit"
+          v-if="!readonly"
+        >
+          Submit
+        </v-btn>
+      </v-row>
     </v-form>
   </div>
 </template>
