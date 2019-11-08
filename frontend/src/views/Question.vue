@@ -27,7 +27,7 @@
         <!--tree-view and the words shown in readonly mode-->
         <tree-view
           v-model="node_selection"
-          :bankID="bankID ? bankID[0] : tree_bank_id"
+          :bankID="bankID ? bankID[0] : root_id"
           v-show="creation || (_editable && edit_mode)"
           ref="tree"
         ></tree-view>
@@ -138,9 +138,9 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
-          this.tree_bank_id = response.data.question_bank;
+          this.root_id = response.data.question_bank;
           axios
-            .get("/api/nodes_list/" + this.tree_bank_id + "/")
+            .get("/api/nodes_list/" + this.root_id + "/")
             .then(response => {
               this.tree_data = [response.data];
               this.$refs.tree.updateData(this.tree_data);
@@ -186,7 +186,7 @@ export default {
   },
   methods: {
     parse_node() {
-      let result = [this.tree_bank_id];
+      let result = [this.root_id];
       this.node_selection.forEach(item => {
         if (result.indexOf(item.id) == -1) result.push(item.id);
       });
@@ -244,7 +244,7 @@ export default {
       edit_mode: false,
       initData: null,
       node_selection: [],
-      tree_bank_id: -1,
+      root_id: -1,
       tree_data: null
     };
   }

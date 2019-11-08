@@ -288,7 +288,7 @@ export default {
 /* Elements */
 
 .TreeViewDemo {
-  box-shadow: 0px 0px 10px #dadada;
+  box-shadow: 0px 0px 0px #dadada;
   white-space: nowrap;
 }
 
