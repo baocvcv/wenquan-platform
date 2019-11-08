@@ -18,6 +18,7 @@ class PaperSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "total_point",
             "tips",
             "status",
             "time_limit",

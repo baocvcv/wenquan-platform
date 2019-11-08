@@ -27,6 +27,7 @@
         </v-dialog>
       </v-toolbar>
       <v-card-text class="pt-0">
+        <vue-progress-bar style="position: relative;"></vue-progress-bar>
         <p
           class="caption grey--text text-right mt-0 mb-0 pr-1"
           transition="fade-transition"
@@ -248,7 +249,6 @@ export default {
   },
   mounted: function() {
     let that = this;
-    that.loading = true;
     that.process = "Fetching data from server...";
     axios
       .get("/api/question_banks/")
@@ -256,6 +256,7 @@ export default {
         let all_count = response.data.length;
         let count = 0;
         let lock = false;
+        that.$Progress.set(0);
         for (var i = 0; i < response.data.length; i++) {
           axios
             .get("/api/question_banks/" + response.data[i] + "/")
@@ -267,8 +268,11 @@ export default {
               lock = false;
               that.process =
                 "Loading question banks: " + count + " / " + all_count;
-              if (count == all_count)
+              that.$Progress.increase((1 / all_count) * 100);
+              if (count == all_count) {
                 that.process = "Total Count: " + all_count;
+                that.$Progress.finish();
+              }
             });
         }
       })

@@ -101,7 +101,7 @@ export default {
     hide_content: false,
     content_too_long: false,
     width: 0,
-    max_height: 120,
+    max_height: 250,
     max_height_cache: 0,
     content: "",
     viewing_question: false
