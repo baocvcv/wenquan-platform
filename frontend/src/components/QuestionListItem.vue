@@ -128,7 +128,7 @@ export default {
     }
     let node;
     for (node in this.question.parents_node) {
-      if (node === this.question.question_bank_node) continue;
+      if (node === this.question.root_id) continue;
       axios
         .get("/api/knowledge_nodes/" + node + "/")
         .then(response => {
