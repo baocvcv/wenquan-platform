@@ -349,11 +349,11 @@ export default {
     cancel_select() {
       this.selected_questions = [];
       this.$emit("cancel-select");
-      this.is_selecting = false;
+      //this.is_selecting = false;
     },
     done_select() {
       this.$emit("done-select", this.selected_questions);
-      this.is_selecting = false;
+      //this.is_selecting = false;
     }
   }
 };
