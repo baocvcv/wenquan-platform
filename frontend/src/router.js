@@ -54,6 +54,11 @@ const router = new Router({
       component: () => import("./views/TestPapers.vue")
     },
     {
+      path: "/admin/testpapers/:id",
+      name: "test-paper",
+      component: () => import("./views/TestPaperView.vue")
+    },
+    {
       path: "/admin/questionbanks",
       name: "question-banks",
       component: () => import("./views/QuestionBanks.vue")
