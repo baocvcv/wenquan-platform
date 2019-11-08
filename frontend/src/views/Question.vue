@@ -13,70 +13,71 @@
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-card-title>
-      <v-row>
-        <v-col cols="6">
-          <v-select
-            :items="typeSelection"
-            v-model="typeSelected"
-            label="Choose Type"
-            v-if="creation"
-          ></v-select>
-        </v-col>
-      </v-row>
+      <v-container class="ml-0 mr-0" fluid>
+        <v-row>
+          <v-col cols="12" md="6" sm="8" v-if="creation">
+            <v-select
+              :items="typeSelection"
+              v-model="typeSelected"
+              label="Choose Type"
+            ></v-select>
+          </v-col>
+        </v-row>
 
-      <!--tree-view and the words shown in readonly mode-->
-      <tree-view
-        v-model="node_selection"
-        :bankID="bankID ? bankID[0] : tree_bank_id"
-        v-show="creation || (_editable && edit_mode)"
-        ref="tree"
-      ></tree-view>
+        <!--tree-view and the words shown in readonly mode-->
+        <tree-view
+          v-model="node_selection"
+          :bankID="bankID ? bankID[0] : tree_bank_id"
+          v-show="creation || (_editable && edit_mode)"
+          ref="tree"
+        ></tree-view>
 
-      <p v-show="!creation && !(_editable && edit_mode)">
-        {{ knowledge_string }}
-      </p>
+        <p v-show="!creation && !(_editable && edit_mode)">
+          {{ knowledge_string }}
+        </p>
 
-      <question-multiple-choice
-        ref="multiple"
-        v-if="typeSelected == 'multiple'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-multiple-choice>
-      <question-single-choice
-        ref="single"
-        v-if="typeSelected == 'single'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-single-choice>
-      <question-single-choice
-        ref="TorF"
-        v-if="typeSelected == 'TorF'"
-        TF
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-single-choice>
-      <question-brief-answer
-        ref="brief_ans"
-        v-if="typeSelected == 'brief_ans'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-brief-answer>
-      <question-fill-in-blank
-        ref="fill_blank"
-        v-if="typeSelected == 'fill_blank'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-fill-in-blank>
+        <question-multiple-choice
+          ref="multiple"
+          v-if="typeSelected == 'multiple'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-multiple-choice>
+        <question-single-choice
+          ref="single"
+          v-if="typeSelected == 'single'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-single-choice>
+        <question-single-choice
+          ref="TorF"
+          v-if="typeSelected == 'TorF'"
+          TF
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-single-choice>
+        <question-brief-answer
+          ref="brief_ans"
+          v-if="typeSelected == 'brief_ans'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-brief-answer>
+        <question-fill-in-blank
+          ref="fill_blank"
+          v-if="typeSelected == 'fill_blank'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-fill-in-blank>
+      </v-container>
     </v-card>
   </div>
 </template>
@@ -141,13 +142,13 @@ export default {
           axios
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
-              this.tree_data=[response.data];
+              this.tree_data = [response.data];
               this.$refs.tree.updateData(this.tree_data);
               this.node_selection = [];
-              let travelSubnode=item => {
-                if(this.initData.parents_node.indexOf(item.id)!=-1)
+              let travelSubnode = item => {
+                if (this.initData.parents_node.indexOf(item.id) != -1)
                   this.node_selection.push(item);
-                  item.subnodes.forEach(travelSubnode);
+                item.subnodes.forEach(travelSubnode);
               };
               this.tree_data[0].subnodes.forEach(travelSubnode);
             })
@@ -170,8 +171,8 @@ export default {
     },
     knowledge_string() {
       let result = "";
-      this.node_selection.forEach(item => result += "  " + item.name);
-      if(!result) return "Uncategorized";
+      this.node_selection.forEach(item => (result += "  " + item.name));
+      if (!result) return "Uncategorized";
       return result;
     }
   },
@@ -187,9 +188,8 @@ export default {
     parse_node() {
       let result = [this.tree_bank_id];
       this.node_selection.forEach(item => {
-        if(result.indexOf(item.id)==-1)
-          result.push(item.id);
-      })
+        if (result.indexOf(item.id) == -1) result.push(item.id);
+      });
       return result;
     },
     submit(info) {
