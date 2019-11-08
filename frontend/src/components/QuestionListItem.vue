@@ -104,7 +104,8 @@ export default {
     max_height: 250,
     max_height_cache: 0,
     content: "",
-    viewing_question: false
+    viewing_question: false,
+    nodes: []
   }),
   components: {
     "question-view": Question
@@ -125,6 +126,19 @@ export default {
           this.question.question_choice[index];
       }
     }
+    let node;
+    for (node in this.question.parents_node) {
+      if (node === this.question.question_bank_node) continue;
+      axios
+        .get("/api/knowledge_nodes/" + node + "/")
+        .then(response => {
+          this.nodes.push(response.data.name);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    if (this.nodes.length === 0) this.nodes.push("Uncategorized");
   },
   watch: {
     width: function() {
@@ -148,26 +162,6 @@ export default {
                 this.content += "\n" + this.question.question_choice;
         }
         */
-  },
-  computed: {
-    nodes() {
-      let nodes = [];
-      let node;
-      for (node in this.question.parents_node) {
-        /*
-                axios
-                    .get("/api/nodes_list/" + node + "/")
-                    .then((response) => {
-                        nodes.push(response.data.name);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                    */
-        nodes.push(node);
-      }
-      return nodes;
-    }
   },
   methods: {
     handleResize() {
