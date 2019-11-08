@@ -138,8 +138,12 @@ export default {
           console.log(error);
         })
         .then(() => {
-          if (this.nodes.length === 0 && node === this.question.parents_node.length - 1) this.nodes.push("Uncategorized");
-        })
+          if (
+            this.nodes.length === 0 &&
+            node === this.question.parents_node.length - 1
+          )
+            this.nodes.push("Uncategorized");
+        });
     }
   },
   watch: {

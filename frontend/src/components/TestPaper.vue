@@ -464,7 +464,7 @@ export default {
           };
         }
       }
-      if (this.paper.id == -1) {
+      if (!this.paper || this.paper.id == -1) {
         //must be creating a test paper
         axios
           .post("/api/papers/", result)
