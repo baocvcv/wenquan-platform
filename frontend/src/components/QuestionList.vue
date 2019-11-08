@@ -245,26 +245,23 @@ export default {
       this.process = "Fetching data from server...";
       let selected_node_id = [];
       let i;
-      for (i in this.tree_selection)
-      {
+      for (i in this.tree_selection) {
         selected_node_id.push(this.tree_selection[i].id);
       }
-      if (selected_node_id.length === 0)
-      {
+      if (selected_node_id.length === 0) {
         this.shown_questions = [];
         let index;
-        for (index in this.question_list)
-        {
+        for (index in this.question_list) {
           this.shown_questions.push(this.question_list[index]);
         }
         this.process = "Total Count: " + this.shown_questions.length;
         return;
       }
       axios
-        .post("/api/nodes_question/", {"nodes_id": selected_node_id})
+        .post("/api/nodes_question/", { nodes_id: selected_node_id })
         .then(response => {
           this.question_indices = response.data;
-        })
+        });
     },
     question_indices() {
       this.shown_questions = [];
@@ -278,37 +275,29 @@ export default {
         while (lock);
         lock = true;
         count++;
-        this.$Progress.increase(1 / (all_count + 0.0001) * 100);
+        this.$Progress.increase((1 / (all_count + 0.0001)) * 100);
         this.process = "Loading questions: " + count + " / " + all_count;
         if (count == all_count) {
           this.process = "Total Count: " + all_count;
           this.$Progress.finish();
         }
         lock = false;
-      }
-      console.log(this.process);
-      if (this.question_indices.length === 0)
-      {
+      };
+      if (this.question_indices.length === 0) {
         this.$Progress.finish();
         this.process = "Total Count: " + 0;
       }
-      for (i in this.question_indices)
-      {
+      for (i in this.question_indices) {
         let index = this.question_indices[i];
-        if (this.question_list.hasOwnProperty(index))
-        {
+        if (this.question_list.hasOwnProperty(index)) {
           this.shown_questions.push(this.question_list[index]);
           process_on();
-        }
-        else
-        {
-          axios
-            .get("/api/questions/" + index + "/")
-            .then(response => {
-              this.shown_questions.push(response.data);
-              this.question_list[index] = response.data;
-              process_on();
-            })
+        } else {
+          axios.get("/api/questions/" + index + "/").then(response => {
+            this.shown_questions.push(response.data);
+            this.question_list[index] = response.data;
+            process_on();
+          });
         }
       }
     }
@@ -341,12 +330,13 @@ export default {
         .then(response => {
           this.question_list[question_id] = response.data;
           let node_index;
-          for (node_index in response.data.parent_nodes)
-          {
+          for (node_index in response.data.parent_nodes) {
             let selected_index;
-            for (selected_index in this.tree_selection)
-            {
-              if (this.tree_selection[selected_index] === response.data.parent_nodes[node_index])
+            for (selected_index in this.tree_selection) {
+              if (
+                this.tree_selection[selected_index] ===
+                response.data.parent_nodes[node_index]
+              )
                 this.shown_questions.push(response.data);
             }
           }
