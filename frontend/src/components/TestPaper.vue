@@ -27,18 +27,19 @@
             required
           ></v-text-field>
           <v-row>
-            <v-col cols="12" xs="12" lg="6">
+            <v-col cols="12" lg="6" sm="12">
               <v-text-field
                 v-model="edited_paper.total_point"
                 prepend-icon="mdi-counter"
                 :rules="total_point_rules"
                 label="Total points"
                 :readonly="readonly"
+                suffix="points"
                 outlined
                 required
               ></v-text-field>
             </v-col>
-            <v-col cols="12" xs="12" lg="6">
+            <v-col cols="12" sm="12" lg="6">
               <v-text-field
                 v-model="edited_paper.time_limit"
                 prepend-icon="mdi-alarm"
@@ -84,7 +85,7 @@
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-row align="center">
-                    <v-col cols="12" xs="6" lg="4">
+                    <v-col cols="12" lg="4" sm="6">
                       <v-text-field
                         v-model="section.title"
                         label="Title"
@@ -92,7 +93,7 @@
                         :readonly="readonly"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" xs="3" lg="2">
+                    <v-col cols="12" lg="2" sm="3">
                       <v-text-field
                         v-model="section.total_point"
                         label="Total points"
@@ -100,10 +101,10 @@
                         :readonly="readonly"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" xs="3" lg="1">
+                    <v-col cols="12" lg="1" sm="3">
                       <v-label>points</v-label>
                     </v-col>
-                    <v-col cols="12" xs="5" lg="4">
+                    <v-col cols="12" sm="5" lg="4">
                       <span :style="'color: ' + question_sum_up(key).color">
                         {{ question_sum_up(key).content }}
                       </span>
@@ -370,7 +371,6 @@ export default {
           return false;
         }
       }
-      console.log("here");
       return true;
     }
   },
@@ -381,18 +381,18 @@ export default {
         .get("/api/papers/" + this.id + "/")
         .then(response => {
           that.edited_paper = response.data;
-		  console.log(that.edited_paper);
+          console.log(that.edited_paper);
           //to be continue
         })
         .catch(error => {
           console.log(error);
         });
     }
-	if (this.paper) {
-	  this.edited_paper = this.paper;
-	  console.log("edited_paper");
-	  console.log(this.edited_paper);
-	}
+  },
+  watch: {
+    paper: function(new_paper, old_paper) {
+      this.edited_paper = JSON.parse(JSON.stringify(this.paper));
+    }
   },
   methods: {
     create_section() {

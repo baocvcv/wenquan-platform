@@ -53,11 +53,11 @@ const router = new Router({
       name: "test-papers",
       component: () => import("./views/TestPapers.vue")
     },
-	{
-		path: "/admin/testpapers/:id",
-		name: "test-paper",
-		component: () => import("./views/TestPaper.vue")
-	},
+    {
+      path: "/admin/testpapers/:id",
+      name: "test-paper",
+      component: () => import("./views/TestPaperView.vue")
+    },
     {
       path: "/admin/questionbanks",
       name: "question-banks",
