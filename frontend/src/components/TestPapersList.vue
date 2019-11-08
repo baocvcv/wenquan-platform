@@ -98,7 +98,6 @@ export default {
         .then(response => {
           this.test_papers = response.data;
           this.process = "total count: " + this.test_papers.length;
-          console.log(this.test_papers);
         })
         .catch(error => {
           this.process = error;

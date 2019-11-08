@@ -363,14 +363,10 @@ export default {
     },
     judge_points_sum: function() {
       if (this.section_sum_up.content != "valid") {
-        console.log("section");
-        console.log(this.section_sum_up);
         return false;
       }
       for (var i = 0; i < this.edited_paper.sections.length; i++) {
         if (this.question_sum_up(i).content != "valid") {
-          console.log("question");
-          console.log(this.question_sum_up(i));
           return false;
         }
       }
@@ -385,12 +381,18 @@ export default {
         .get("/api/papers/" + this.id + "/")
         .then(response => {
           that.edited_paper = response.data;
+		  console.log(that.edited_paper);
           //to be continue
         })
         .catch(error => {
           console.log(error);
         });
     }
+	if (this.paper) {
+	  this.edited_paper = this.paper;
+	  console.log("edited_paper");
+	  console.log(this.edited_paper);
+	}
   },
   methods: {
     create_section() {
@@ -465,7 +467,7 @@ export default {
           };
         }
       }
-      if (this.id == -1) {
+      if (this.paper.id == -1) {
         //must be creating a test paper
         axios
           .post("/api/papers/", result)
@@ -479,9 +481,9 @@ export default {
           });
       } else {
         axios
-          .put("/api/papers/" + this.id + "/", result)
+          .put("/api/papers/" + this.paper.id + "/", result)
           .then(response => {
-            alert("OK" + response.data);
+            alert("OK");
           })
           .catch(error => {
             alert(error);

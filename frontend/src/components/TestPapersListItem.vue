@@ -32,7 +32,7 @@
               <v-btn
                 icon
                 v-on="on"
-                @click="$router.push('/testpaper/' + test_paper.id)"
+                @click="$router.push('/admin/testpapers/' + test_paper.id)"
                 ><v-icon :color="hover ? 'primary' : 'grey lighten-1'"
                   >mdi-file-eye-outline</v-icon
                 ></v-btn
@@ -93,9 +93,6 @@ export default {
   },
   computed: {
     change_paper_status_btn_text: function() {
-      console.log(
-        this.test_paper["status"] == "drafted" ? "publish" : "drafted"
-      );
       return this.test_paper["status"] == "drafted" ? "publish" : "drafted";
     }
   },
