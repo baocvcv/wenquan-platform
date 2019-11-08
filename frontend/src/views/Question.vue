@@ -141,13 +141,13 @@ export default {
           axios
             .get("/api/nodes_list/" + this.tree_bank_id + "/")
             .then(response => {
-              this.tree_data=[response.data];
+              this.tree_data = [response.data];
               this.$refs.tree.updateData(this.tree_data);
               this.node_selection = [];
-              let travelSubnode=item => {
-                if(this.initData.parents_node.indexOf(item.id)!=-1)
+              let travelSubnode = item => {
+                if (this.initData.parents_node.indexOf(item.id) != -1)
                   this.node_selection.push(item);
-                  item.subnodes.forEach(travelSubnode);
+                item.subnodes.forEach(travelSubnode);
               };
               this.tree_data[0].subnodes.forEach(travelSubnode);
             })
@@ -170,8 +170,8 @@ export default {
     },
     knowledge_string() {
       let result = "";
-      this.node_selection.forEach(item => result += "  " + item.name);
-      if(!result) return "Uncategorized";
+      this.node_selection.forEach(item => (result += "  " + item.name));
+      if (!result) return "Uncategorized";
       return result;
     }
   },
@@ -187,9 +187,8 @@ export default {
     parse_node() {
       let result = [this.tree_bank_id];
       this.node_selection.forEach(item => {
-        if(result.indexOf(item.id)==-1)
-          result.push(item.id);
-      })
+        if (result.indexOf(item.id) == -1) result.push(item.id);
+      });
       return result;
     },
     submit(info) {
