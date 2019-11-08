@@ -309,7 +309,7 @@ export default {
       axios
         .get("/api/question_banks/" + this.id + "/")
         .then(response => {
-          this.question_indices = JSON.parse(JSON.stringify(this.questions));
+          this.question_indices = JSON.parse(JSON.stringify(response.data.questions));
         })
         .catch(error => {
           console.log(error);
