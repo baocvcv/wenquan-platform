@@ -168,7 +168,7 @@ export default {
     },
     knowledge_string() {
       let result = "";
-      this.node_selection.forEach(item => result += item.name);
+      this.node_selection.forEach(item => result += "  " + item.name);
       if(!result) return "Uncategorized";
       return result;
     }
