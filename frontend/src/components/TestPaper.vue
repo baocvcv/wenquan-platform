@@ -63,29 +63,29 @@
           ></v-textarea>
 
           <!--list of sections-->
-          <v-list>
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title>Sections</v-list-item-title>
-                <v-list-item-subtitle
-                  :style="'color:' + section_sum_up.color"
-                  >{{ section_sum_up.content }}</v-list-item-subtitle
-                >
-              </v-list-item-content>
-            </v-list-item>
+          <v-list-item two-line>
+            <v-list-item-content>
+              <v-list-item-title class="headline mb-1">
+                Sections
+              </v-list-item-title>
+              <v-list-item-subtitle
+                v-show="!readonly"
+                :style="'color:' + section_sum_up.color"
+                >{{ section_sum_up.content }}</v-list-item-subtitle
+              >
+            </v-list-item-content>
+          </v-list-item>
 
-            <!--sections-->
-            <v-list-item-group
-              v-for="(section, key) in edited_paper.sections"
-              :key="key"
-            >
-              <v-list-item>
-                <v-list-item-avatar>
-                  <v-icon>{{ roman(key + 1) }}</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
+          <!--sections-->
+          <v-card v-for="(section, key) in edited_paper.sections" :key="key">
+            <v-list-item two-line>
+              <v-list-item-avatar>
+                <v-icon>{{ roman(key + 1) }}</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>
                   <v-row align="center">
-                    <v-col cols="12" lg="4" sm="6">
+                    <v-col cols="12" sm="3" lg="4">
                       <v-text-field
                         v-model="section.title"
                         label="Title"
@@ -93,24 +93,74 @@
                         :readonly="readonly"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" lg="2" sm="3">
+                    <v-col cols="12" sm="3" lg="3">
                       <v-text-field
                         v-model="section.total_point"
                         label="Total points"
                         :rules="total_point_rules"
                         :readonly="readonly"
+                        suffix="points"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" lg="1" sm="3">
-                      <v-label>points</v-label>
-                    </v-col>
-                    <v-col cols="12" sm="5" lg="4">
-                      <span :style="'color: ' + question_sum_up(key).color">
-                        {{ question_sum_up(key).content }}
-                      </span>
-                    </v-col>
                   </v-row>
-                </v-list-item-content>
+                </v-list-item-title>
+                <v-list-item-subtitle
+                  v-show="!readonly"
+                  :style="'color: ' + question_sum_up(key).color"
+                >
+                  {{ question_sum_up(key).content }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-spacer></v-spacer>
+              <v-list-item-action>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="!readonly"
+                      icon
+                      v-on="on"
+                      @click.stop="
+                        adding_question = true;
+                        cur_section = section;
+                      "
+                      ><v-icon color="green" dark>mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Add question</span>
+                </v-tooltip>
+              </v-list-item-action>
+              <v-list-item-action>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="!readonly"
+                      icon
+                      v-on="on"
+                      @click.stop="drop_section(key)"
+                      ><v-icon color="red" dark>mdi-trash-can-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>remove</span>
+                </v-tooltip>
+              </v-list-item-action>
+            </v-list-item>
+
+            <!--questions-->
+            <v-card-text v-for="(question, id) in section.questions" :key="id">
+              <!--each question-->
+              <v-list-item>
+                <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
+                <v-list-content>
+                  <v-col cols="12" sm="10" lg="5">
+                    <v-text-field
+                      v-model="question.question_point"
+                      suffix="points"
+                      :rules="total_point_rules"
+                      :readonly="readonly"
+                    ></v-text-field>
+                  </v-col>
+                </v-list-content>
                 <v-list-item-action>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
@@ -118,86 +168,33 @@
                         v-if="!readonly"
                         icon
                         v-on="on"
-                        @click.stop="
-                          adding_question = true;
-                          cur_section = section;
-                        "
-                        ><v-icon color="green" dark>mdi-plus</v-icon>
+                        @click="drop_question(section, id)"
+                        ><v-icon color="red">mdi-trash-can-outline</v-icon>
                       </v-btn>
                     </template>
-                    <span>Add question</span>
-                  </v-tooltip>
-                </v-list-item-action>
-                <v-list-item-action>
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-if="!readonly"
-                        icon
-                        v-on="on"
-                        @click.stop="drop_section(key)"
-                        ><v-icon color="red" dark>mdi-trash-can-outline</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>remove</span>
+                    <span>Remove this question</span>
                   </v-tooltip>
                 </v-list-item-action>
               </v-list-item>
+              <question-list-item :question="question.content" dialog="true" />
+            </v-card-text>
+          </v-card>
 
-              <!--questions-->
-              <v-list-item-group
-                v-for="(question, id) in section.questions"
-                :key="id"
+          <v-list-item>
+            <v-list-item-content>
+              <v-btn
+                v-if="!readonly"
+                class="mx-2"
+                block
+                tile
+                dark
+                color="green"
+                @click="create_section()"
+                >Create new</v-btn
               >
-                <!--each question-->
-                <v-list-item>
-                  <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
-                  <v-list-content>
-                    <v-col cols="12" xs="8" lg="6">
-                      <v-text-field
-                        v-model="question.question_point"
-                        suffix="points"
-                        :rules="total_point_rules"
-                        :readonly="readonly"
-                      ></v-text-field>
-                    </v-col>
-                  </v-list-content>
-                  <v-list-item-action>
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          v-if="!readonly"
-                          icon
-                          v-on="on"
-                          @click="drop_question(section, id)"
-                          ><v-icon color="red">mdi-trash-can-outline</v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Remove this question</span>
-                    </v-tooltip>
-                  </v-list-item-action>
-                </v-list-item>
-                <question-list-item
-                  :question="question.content"
-                  dialog="true"
-                />
-              </v-list-item-group>
-            </v-list-item-group>
-            <v-list-item>
-              <v-list-item-content>
-                <v-btn
-                  v-if="!readonly"
-                  class="mx-2"
-                  block
-                  tile
-                  dark
-                  color="green"
-                  @click="create_section()"
-                  >Create new</v-btn
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+            </v-list-item-content>
+          </v-list-item>
+          <br />
           <v-select
             v-model="edited_paper.status"
             prepend-icon="mdi-draw"

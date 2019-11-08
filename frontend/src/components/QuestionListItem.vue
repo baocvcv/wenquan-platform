@@ -79,7 +79,7 @@
           </v-tooltip>
           <v-toolbar-title>Viewing Question</v-toolbar-title>
         </v-toolbar>
-        <question-view :questionID="question.id" />
+        <question-view :questionID="question.id" editable="true" />
       </v-card>
     </v-dialog>
   </div>
