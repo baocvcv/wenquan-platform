@@ -19,5 +19,21 @@ class FillBlankQ(Question):
     question_ans = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_solution = models.CharField(max_length=MAX_CONTENT)
 
-    def checker(self, ans, setion_id=None):
-        pass
+    def checker(self, ans, section_id=None):
+        """Checker for FillBlankQ"""
+        point = -1
+        if section_id is not None:
+            point = []
+            section = SectionDetail.get_object(section_id)
+            q_on_paper = section.questionversion_set.get(question=self, section=section)
+            for i in range(0, len(self.question_ans)):
+                if i >= len(ans):
+                    break
+                if ans[i] == self.question_ans[i] and i < len(q_on_paper.point_every_blank):
+                    point.append(q_on_paper.point_every_blank[i])
+                if ans == self.question_ans:
+                    return True, point
+                return False, point
+        if ans == self.question_ans:
+            return True, []
+        return False, []

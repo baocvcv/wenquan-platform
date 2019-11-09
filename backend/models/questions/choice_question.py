@@ -27,6 +27,7 @@ class SingleChoiceQ(ChoiceQ):
     question_ans = models.CharField(max_length=10)
 
     def checker(self, ans, section_id=None):
+        """Checker for SingleChoiceQ"""
         point = -1
         if section_id is not None:
             section = SectionDetail.get_object(section_id)
@@ -49,6 +50,7 @@ class MultpChoiceQ(ChoiceQ):
     question_ans_num = models.IntegerField()
 
     def checker(self, ans, setion_id=None):
+        """Checker for MultpChoiceQ"""
         point = -1
         correct = 0
         correct_ans = set(self.question_ans)

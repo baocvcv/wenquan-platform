@@ -23,6 +23,7 @@ class Paper(PolymorphicModel):
     tips = models.CharField(max_length=MAX_NAME, default="")
     status = models.CharField(max_length=MAX_NAME, default="drafted")
     is_latest = models.BooleanField(default=True)
+    have_brief_ans = models.BooleanField(default=True)
 
 
 class Section(PolymorphicModel):

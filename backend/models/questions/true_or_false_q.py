@@ -18,6 +18,7 @@ class TrueOrFalseQ(Question):
     question_solution = models.CharField(max_length=MAX_CONTENT)
 
     def checker(self, ans, section_id=None):
+        """Checker for TrueOrFalseQ"""
         point = -1
         if section_id is not None:
             point = 0
