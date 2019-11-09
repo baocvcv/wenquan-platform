@@ -13,57 +13,71 @@
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </v-card-title>
-      <v-row>
-        <v-col cols="6">
-          <v-select
-            :items="typeSelection"
-            v-model="typeSelected"
-            label="Choose Type"
-            v-if="creation"
-          ></v-select>
-        </v-col>
-      </v-row>
-      <question-multiple-choice
-        ref="multiple"
-        v-if="typeSelected == 'multiple'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-multiple-choice>
-      <question-single-choice
-        ref="single"
-        v-if="typeSelected == 'single'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-single-choice>
-      <question-single-choice
-        ref="TorF"
-        v-if="typeSelected == 'TorF'"
-        TF
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-single-choice>
-      <question-brief-answer
-        ref="brief_ans"
-        v-if="typeSelected == 'brief_ans'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-brief-answer>
-      <question-fill-in-blank
-        ref="fill_blank"
-        v-if="typeSelected == 'fill_blank'"
-        :readonly="!creation && !(_editable && edit_mode)"
-        v-on:submit="submit"
-        v-on:cancel="cancel"
-        :creation="creation"
-      ></question-fill-in-blank>
+      <v-container class="ml-0 mr-0" fluid>
+        <v-row>
+          <v-col cols="12" md="6" sm="8" v-if="creation">
+            <v-select
+              :items="typeSelection"
+              v-model="typeSelected"
+              label="Choose Type"
+            ></v-select>
+          </v-col>
+        </v-row>
+
+        <!--tree-view and the words shown in readonly mode-->
+        <tree-view
+          v-model="node_selection"
+          :bankID="bankID ? bankID[0] : root_id"
+          v-show="creation || (_editable && edit_mode)"
+          ref="tree"
+        ></tree-view>
+
+        <p v-show="!creation && !(_editable && edit_mode)">
+          {{ knowledge_string }}
+        </p>
+
+        <question-multiple-choice
+          ref="multiple"
+          v-if="typeSelected == 'multiple'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-multiple-choice>
+        <question-single-choice
+          ref="single"
+          v-if="typeSelected == 'single'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-single-choice>
+        <question-single-choice
+          ref="TorF"
+          v-if="typeSelected == 'TorF'"
+          TF
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-single-choice>
+        <question-brief-answer
+          ref="brief_ans"
+          v-if="typeSelected == 'brief_ans'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-brief-answer>
+        <question-fill-in-blank
+          ref="fill_blank"
+          v-if="typeSelected == 'fill_blank'"
+          :readonly="!creation && !(_editable && edit_mode)"
+          v-on:submit="submit"
+          v-on:cancel="cancel"
+          :creation="creation"
+        ></question-fill-in-blank>
+      </v-container>
     </v-card>
   </div>
 </template>
@@ -73,6 +87,7 @@ import QuestionMultipleChoice from "@/components/QuestionMultipleChoice.vue";
 import QuestionSingleChoice from "@/components/QuestionSingleChoice.vue";
 import QuestionBriefAnswer from "@/components/QuestionBriefAnswer.vue";
 import QuestionFillInBlank from "@/components/QuestionFillInBlank.vue";
+import TreeView from "@/components/TreeView.vue";
 import axios from "axios";
 
 export default {
@@ -81,7 +96,8 @@ export default {
     "question-multiple-choice": QuestionMultipleChoice,
     "question-single-choice": QuestionSingleChoice,
     "question-brief-answer": QuestionBriefAnswer,
-    "question-fill-in-blank": QuestionFillInBlank
+    "question-fill-in-blank": QuestionFillInBlank,
+    "tree-view": TreeView
   },
   props: {
     bankID: {
@@ -122,6 +138,21 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
+          this.root_id = response.data.question_bank;
+          axios
+            .get("/api/nodes_list/" + this.root_id + "/")
+            .then(response => {
+              this.tree_data = [response.data];
+              this.$refs.tree.updateData(this.tree_data);
+              this.node_selection = [];
+              let travelSubnode = item => {
+                if (this.initData.parents_node.indexOf(item.id) != -1)
+                  this.node_selection.push(item);
+                item.subnodes.forEach(travelSubnode);
+              };
+              this.tree_data[0].subnodes.forEach(travelSubnode);
+            })
+            .catch(error => {});
         })
         .catch(error => {
           console.log(error);
@@ -137,6 +168,12 @@ export default {
       )
         return true;
       return this.editable;
+    },
+    knowledge_string() {
+      let result = "";
+      this.node_selection.forEach(item => (result += "  " + item.name));
+      if (!result) return "Uncategorized";
+      return result;
     }
   },
   mounted() {
@@ -148,10 +185,17 @@ export default {
     }
   },
   methods: {
+    parse_node() {
+      let result = [this.root_id];
+      this.node_selection.forEach(item => {
+        if (result.indexOf(item.id) == -1) result.push(item.id);
+      });
+      return result;
+    },
     submit(info) {
       if (info.parents_node.length == 0 && this.bankID) {
         //New question
-        info.parents_node = this.bankID;
+        info.parents_node = this.parse_node();
         axios
           .post("/api/questions/", [info])
           .then(response => {
@@ -164,6 +208,7 @@ export default {
           });
       } else {
         //Edit question
+        info.parents_node = this.parse_node();
         axios
           .put("/api/questions/" + info.id.toString() + "/", [info])
           .then(response => {
@@ -197,7 +242,10 @@ export default {
       ],
       typeSelected: null,
       edit_mode: false,
-      initData: null
+      initData: null,
+      node_selection: [],
+      root_id: -1,
+      tree_data: null
     };
   }
 };

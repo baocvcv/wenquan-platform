@@ -79,7 +79,7 @@
           </v-tooltip>
           <v-toolbar-title>Viewing Question</v-toolbar-title>
         </v-toolbar>
-        <question-view :questionID="question.id" />
+        <question-view :questionID="question.id" editable="true" />
       </v-card>
     </v-dialog>
   </div>
@@ -101,10 +101,11 @@ export default {
     hide_content: false,
     content_too_long: false,
     width: 0,
-    max_height: 120,
+    max_height: 250,
     max_height_cache: 0,
     content: "",
-    viewing_question: false
+    viewing_question: false,
+    nodes: []
   }),
   components: {
     "question-view": Question
@@ -124,6 +125,25 @@ export default {
           ". " +
           this.question.question_choice[index];
       }
+    }
+    let node;
+    for (node in this.question.parents_node) {
+      if (node === this.question.root_id) continue;
+      axios
+        .get("/api/knowledge_nodes/" + node + "/")
+        .then(response => {
+          this.nodes.push(response.data.name);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .then(() => {
+          if (
+            this.nodes.length === 0 &&
+            node === this.question.parents_node.length - 1
+          )
+            this.nodes.push("Uncategorized");
+        });
     }
   },
   watch: {
@@ -148,26 +168,6 @@ export default {
                 this.content += "\n" + this.question.question_choice;
         }
         */
-  },
-  computed: {
-    nodes() {
-      let nodes = [];
-      let node;
-      for (node in this.question.parents_node) {
-        /*
-                axios
-                    .get("/api/nodes_list/" + node + "/")
-                    .then((response) => {
-                        nodes.push(response.data.name);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                    */
-        nodes.push(node);
-      }
-      return nodes;
-    }
   },
   methods: {
     handleResize() {

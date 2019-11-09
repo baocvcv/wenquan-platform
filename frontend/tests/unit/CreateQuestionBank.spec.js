@@ -34,7 +34,7 @@ describe("CreateQuestionBank.vue", () => {
     wrapper.vm.$refs.form.validate();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.valid).toBe(true);
-    const submit_btn = wrapper.findAll("button").at(1);
+    const submit_btn = wrapper.findAll("button").at(2);
     submit_btn.trigger("click");
     setTimeout(() => {
       expect(wrapper.vm.$route.path).toBe("/questionbanks/1");
@@ -66,7 +66,7 @@ describe("CreateQuestionBank.vue", () => {
     wrapper.vm.$refs.form.validate();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.valid).toBe(true);
-    const submit_btn = wrapper.findAll("button").at(1);
+    const submit_btn = wrapper.findAll("button").at(2);
     submit_btn.trigger("click");
     setTimeout(() => {
       expect(wrapper.vm.$route.path).toBe("/questionbanks/1");
@@ -87,7 +87,7 @@ describe("CreateQuestionBank.vue", () => {
       image: [""]
     });
     await wrapper.vm.$nextTick();
-    const reset_btn = wrapper.findAll("button").at(2);
+    const reset_btn = wrapper.findAll("button").at(1);
     reset_btn.trigger("click");
     await wrapper.vm.$nextTick();
     expect(!wrapper.vm.name).toBe(true);
@@ -111,7 +111,7 @@ describe("CreateQuestionBank.vue", () => {
     });
     const cur_route = wrapper.vm.$route.path;
     await wrapper.vm.$nextTick();
-    const submit_btn = wrapper.findAll("button").at(1);
+    const submit_btn = wrapper.findAll("button").at(2);
     submit_btn.trigger("click");
     setTimeout(() => {
       expect(wrapper.vm.$route.path).toBe(cur_route);

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <br />
     <v-card id="create-form">
-      <v-toolbar color="blue" dark>
+      <v-toolbar color="primary" dark elevation="0" dense>
         <v-toolbar-title>Create a Question Bank</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -52,20 +51,18 @@
             outlined
             required
           ></v-textarea>
-
-          <v-btn
-            color="success"
-            :disabled="!valid"
-            class="mr-4"
-            @click="create()"
-            >Create</v-btn
-          >
-
-          <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
+          <v-layout class="mt-2">
+            <v-spacer></v-spacer>
+            <v-btn class="mr-4 cancel-button" text @click="reset()"
+              >Reset</v-btn
+            >
+            <v-btn color="primary" :disabled="!valid" outlined @click="create()"
+              >Create</v-btn
+            >
+          </v-layout>
         </v-form>
       </v-card-text>
     </v-card>
-    <br />
   </div>
 </template>
 
@@ -128,11 +125,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#create-form {
-  width: 50%;
-  margin: auto;
-}
-</style>
