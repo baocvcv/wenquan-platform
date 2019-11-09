@@ -92,7 +92,7 @@ class SectionDetail(APIView):
         """Get Section objects whose id=section_id"""
         try:
             return Section.objects.get(id=section_id)
-        except Paper.DoesNotExist:
+        except Section.DoesNotExist:
             raise Http404
 
     def get(self, request, section_id):

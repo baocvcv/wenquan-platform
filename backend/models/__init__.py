@@ -1,6 +1,7 @@
 """import all models here to make models package"""
 from . import questions
-from .paper import Paper, QuestionVersion
+from .question_version import QuestionVersion
+from .paper import Paper, Section
 from .knowledge_node import KnowledgeNode
 from .question_bank import QuestionBank
 

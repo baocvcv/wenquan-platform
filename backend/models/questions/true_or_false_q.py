@@ -1,6 +1,8 @@
 """This code defines the model of ture of false questions"""
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
+from backend.models.paper import Section
 from .question import Question, MAX_URL, MAX_CONTENT
 
 
@@ -22,10 +24,12 @@ class TrueOrFalseQ(Question):
         point = -1
         if section_id is not None:
             point = 0
-            section = SectionDetail.get_object(section_id)
+            section = Section.objects.get(id=section_id)
+            if not section:
+                return "Not Found"
             q_on_paper = section.questionversion_set.get(question=self, section=section)
         if ans == self.question_ans:
-            if paper_id is not None:
+            if section_id is not None:
                 point = q_on_paper.question_point
             return True, [point]
         return False, [point]

@@ -1,6 +1,8 @@
 """This code defines the model of fill blank questions"""
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
+from backend.models.paper import Section
 from .question import Question, MAX_URL, MAX_CONTENT
 
 
@@ -24,7 +26,9 @@ class FillBlankQ(Question):
         point = -1
         if section_id is not None:
             point = []
-            section = SectionDetail.get_object(section_id)
+            section = Section.objects.get(id=section_id)
+            if not section:
+                return "Not Found"
             q_on_paper = section.questionversion_set.get(question=self, section=section)
             for i in range(0, len(self.question_ans)):
                 if i >= len(ans):
