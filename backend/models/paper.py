@@ -1,6 +1,7 @@
 '''Code for models: paper'''
 from django.db import models
 from polymorphic.models import PolymorphicModel
+from django.contrib.postgres.fields import ArrayField
 from .questions.question import Question
 
 MAX_NAME = 200
@@ -53,4 +54,5 @@ class QuestionVersion(PolymorphicModel):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, default=None)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     question_point = models.IntegerField(default=0)
+    point_every_blank = ArrayField(models.IntegerField(), default=list)
     question_num = models.IntegerField()
