@@ -16,3 +16,15 @@ class TrueOrFalseQ(Question):
     question_image = ArrayField(models.CharField(max_length=MAX_URL))
     question_ans = models.BooleanField()
     question_solution = models.CharField(max_length=MAX_CONTENT)
+
+    def checker(self, ans, section_id=None):
+        point = -1
+        if section_id is not None:
+            point = 0
+            section = SectionDetail.get_object(section_id)
+            q_on_paper = section.questionversion_set.get(question=self, section=section)
+        if ans == self.question_ans:
+            if paper_id is not None:
+                point = q_on_paper.question_point
+            return True, [point]
+        return False, [point]

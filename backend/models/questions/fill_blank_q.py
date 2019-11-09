@@ -18,3 +18,6 @@ class FillBlankQ(Question):
     question_image = ArrayField(models.CharField(max_length=MAX_URL))
     question_ans = ArrayField(models.CharField(max_length=MAX_CONTENT))
     question_solution = models.CharField(max_length=MAX_CONTENT)
+
+    def checker(self, ans, setion_id=None):
+        pass
