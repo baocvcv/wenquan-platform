@@ -128,11 +128,16 @@ export default {
     }
     let node;
     for (node in this.question.parents_node) {
-      if (node === this.question.root_id) continue;
       axios
-        .get("/api/knowledge_nodes/" + node + "/")
+        .get("/api/knowledge_nodes/" + this.question.parents_node[node] + "/")
         .then(response => {
-          this.nodes.push(response.data.name);
+          if (this.question.parents_node[node] != this.question.root_id)
+            this.nodes.push(response.data.name);
+          if (
+            this.nodes.length == 0 &&
+            node == this.question.parents_node.length - 1
+          )
+            this.nodes.push("Uncategorized");
         })
         .catch(error => {
           console.log(error);
