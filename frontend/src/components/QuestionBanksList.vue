@@ -12,8 +12,8 @@
           clearable
         ></v-text-field>
         <v-dialog
-          v-if="!readonly"
           v-model="create_bank_dialog"
+          v-if="!readonly"
           max-width="600px"
         >
           <template v-slot:activator="{ on }">
@@ -24,6 +24,19 @@
           <create-question-bank
             ref="create-question-bank"
           ></create-question-bank>
+        </v-dialog>
+
+        <v-dialog
+          v-else
+          v-model="activation_dialog"
+          max-width="600px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" elevation="0" class="ml-2" v-on="on">
+              Activate
+            </v-btn>
+          </template>
+          <activation-card></activation-card>
         </v-dialog>
       </v-toolbar>
       <v-card-text class="pt-0">
@@ -124,6 +137,7 @@
               <div class="flex-grow-1"></div>
               <v-btn
                 color="primary"
+                v-if="!readonly"
                 outlined
                 @click="
                   select
@@ -132,6 +146,12 @@
                 "
               >
                 View
+              </v-btn>
+              <v-btn color="primary" v-if="readonly && cur_qst_bank.details.Authority == 'private'" outlined>
+                Buy
+              </v-btn>
+              <v-btn color="primary" v-if="readonly && cur_qst_bank.details.Authority == 'public'" outlined>
+                Add
               </v-btn>
               <v-btn class="cancel-button" text @click="detail = false"
                 >Done</v-btn
@@ -181,6 +201,7 @@
 <script>
 import axios from "axios";
 import CreateQuestionBank from "@/components/CreateQuestionBank.vue";
+import ActivationCard from "@/components/ActivationCard.vue";
 
 export default {
   name: "question-banks-list",
@@ -203,7 +224,8 @@ export default {
     }
   },
   components: {
-    "create-question-bank": CreateQuestionBank
+    "create-question-bank": CreateQuestionBank,
+    "activation-card": ActivationCard
   },
   data: function() {
     return {
@@ -212,7 +234,8 @@ export default {
       question_banks: [],
       cur_qst_bank: {},
       process: "",
-      create_bank_dialog: false
+      create_bank_dialog: false,
+      activation_dialog: false
     };
   },
   methods: {
@@ -255,7 +278,7 @@ export default {
     let that = this;
     that.process = "Fetching data from server...";
     axios
-      .get("/api/question_banks/")
+      .get("http://localhost:8000/api/question_banks/")
       .then(response => {
         let all_count = response.data.length;
         let count = 0;
@@ -263,7 +286,7 @@ export default {
         that.$Progress.set(0);
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get("/api/question_banks/" + response.data[i] + "/")
+            .get("http://localhost:8000/api/question_banks/" + response.data[i] + "/")
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);
