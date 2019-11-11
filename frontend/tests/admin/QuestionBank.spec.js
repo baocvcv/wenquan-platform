@@ -1,11 +1,11 @@
 import { mount, createLocalVue } from "@vue/test-utils";
-import QuestionBank from "@/views/QuestionBank.vue";
+import QuestionBank from "@/views/admin/QuestionBank.vue";
 import Home from "@/views/Home.vue";
 import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
-import "./mock/QuestionBankMock.js";
+import "../unit/mock/QuestionBankMock.js";
 
 const localVue = createLocalVue();
 Vue.use(Vuex);
