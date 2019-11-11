@@ -136,6 +136,12 @@ export default {
         ],
         student: [
           {
+            name: "Question Banks",
+            text: "Question Banks",
+            link: "/questionbanks",
+            icon: "mdi-bank"
+          },
+          {
             name: "Account",
             text: "Account",
             link: "/account",

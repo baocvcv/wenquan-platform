@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card :flat="flat">
       <v-toolbar flat>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -196,6 +196,10 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    flat: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
