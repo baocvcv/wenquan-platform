@@ -21,7 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/QuestionBanks.vue")
+        import(/* webpackChunkName: "about" */ "./views/admin/QuestionBanks.vue")
     },
     {
       path: "/account",
@@ -31,12 +31,12 @@ const router = new Router({
     {
       path: "/admin",
       name: "admin",
-      component: () => import("./views/Admin.vue")
+      component: () => import("./views/admin/Admin.vue")
     },
     {
       path: "/admin/usermanagement",
       name: "user-management",
-      component: () => import("./views/UserManagement.vue")
+      component: () => import("./views/admin/UserManagement.vue")
     },
     {
       path: "/signup",
@@ -51,22 +51,22 @@ const router = new Router({
     {
       path: "/admin/testpapers",
       name: "test-papers",
-      component: () => import("./views/TestPapers.vue")
+      component: () => import("./views/admin/TestPapers.vue")
     },
     {
       path: "/admin/testpapers/:id",
       name: "test-paper",
-      component: () => import("./views/TestPaperView.vue")
+      component: () => import("./views/admin/TestPaperView.vue")
     },
     {
       path: "/admin/questionbanks",
       name: "question-banks",
-      component: () => import("./views/QuestionBanks.vue")
+      component: () => import("./views/admin/QuestionBanks.vue")
     },
     {
       path: "/admin/questionbanks/:id",
       name: "question-bank",
-      component: () => import("./views/QuestionBank.vue")
+      component: () => import("./views/admin/QuestionBank.vue")
     },
     {
       path: "/questions/:id",
