@@ -116,7 +116,7 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      v-if="!readonly"
+                      v-show="!readonly"
                       icon
                       v-on="on"
                       @click.stop="
