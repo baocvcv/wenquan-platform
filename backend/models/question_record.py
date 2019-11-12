@@ -6,15 +6,19 @@ from .questions import MultpChoiceQ
 from .questions import FillBlankQ
 from .questions import TrueOrFalseQ
 
+from .paper_record import PaperRecord
+
 class QuestionRecord(models.Model):
     """ Question record entry """
     question_id = models.IntegerField()
-    question_type = models.CharField(max_length=20)
+    question_type = models.CharField(max_length=20, default="")
     record_time = models.DateTimeField(auto_now=True)
     #TODO: same format for question answers???
     ans = models.CharField(max_length=200, default="")
     score = models.IntegerField(blank=True)
     is_correct = models.BooleanField(blank=True)
+    # key to paper record
+    paper_record = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         " Stringify "
@@ -32,6 +36,10 @@ class QuestionRecord(models.Model):
             return FillBlankQ.objects.get(id=self.question_id)
         elif self.question_type == 'brief_ans':
             return BriefAnswerQ.objects.get(id=self.question_id)
+
+    def set_ans(self, ans):
+        #TODO: add this
+        pass
 
     def judge(self):
         "Judge whether the answer is correct and set the score"
