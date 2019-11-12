@@ -9,6 +9,7 @@ class PaperRecord(models.Model):
     """ Question record entry """
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     record_time = models.DateTimeField(auto_now=True)
+    need_judging = models.BooleanField(default=True)
     # time fields
     is_timed = models.BooleanField(default=False)
     start_time = models.DateTimeField(auto_now=True)
@@ -16,7 +17,6 @@ class PaperRecord(models.Model):
     is_active = models.BooleanField(default=True)
     # point fields
     user_total_points = models.IntegerField(default=0)
-
     def update_time(self):
         "Update time"
         if not self.is_active:
