@@ -1,104 +1,145 @@
 <template>
   <div id="question-bank">
     <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
-    <v-card v-show="!loading">
-      <v-card-title
-        >Profile
-        <v-btn absolute right icon @click="edit_button_clicked"
-          ><v-icon>mdi-pencil</v-icon></v-btn
-        >
-      </v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="9" sm="9">
-            <v-text-field
-              label="Name"
-              :readonly="!edit_mode"
-              outlined
-              v-model="edited_question_bank.name"
-            ></v-text-field>
+    <v-row>
+      <v-col cols="12" sm="8" md="8">
+        <v-card v-show="!loading">
+          <v-card-title
+            >Profile
+            <v-btn absolute right icon @click="edit_button_clicked"
+              ><v-icon>mdi-pencil</v-icon></v-btn
+            >
+          </v-card-title>
+          <v-card-text>
             <v-row>
-              <v-col>
+              <v-col cols="12" md="9">
                 <v-text-field
-                  label="Created Time"
-                  :readonly="true"
+                  label="Name"
+                  :readonly="!edit_mode"
                   outlined
-                  v-model="edited_question_bank.createTime"
+                  v-model="edited_question_bank.name"
+                ></v-text-field>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      label="Created Time"
+                      :readonly="true"
+                      outlined
+                      v-model="edited_question_bank.createTime"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      label="Last Update"
+                      :readonly="true"
+                      outlined
+                      v-model="edited_question_bank.lastUpdate"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      label="Question Count"
+                      :readonly="true"
+                      outlined
+                      hint="How many questions there are in this question bank"
+                      v-model="edited_question_bank.question_count"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-textarea
+                  label="Brief"
+                  :readonly="!edit_mode"
+                  outlined
+                  hint="A short brief for this question bank to help others identify it more easily"
+                  v-model="edited_question_bank.brief"
                 >
-                </v-text-field>
+                </v-textarea>
               </v-col>
               <v-col>
-                <v-text-field
-                  label="Last Update"
-                  :readonly="true"
-                  outlined
-                  v-model="edited_question_bank.lastUpdate"
+                <span class="grey--text caption">Picture</span>
+                <image-uploader
+                  v-model="edited_question_bank_image"
+                  :readonly="!edit_mode"
+                  placeholder="No picture"
                 >
-                </v-text-field>
-              </v-col>
-              <v-col>
-                <v-text-field
-                  label="Question Count"
-                  :readonly="true"
-                  outlined
-                  hint="How many questions there are in this question bank"
-                  v-model="edited_question_bank.question_count"
-                >
-                </v-text-field>
+                </image-uploader>
               </v-col>
             </v-row>
-            <v-textarea
-              label="Brief"
-              :readonly="!edit_mode"
-              outlined
-              hint="A short brief for this question bank to help others identify it more easily"
-              v-model="edited_question_bank.brief"
+          </v-card-text>
+          <v-expand-transition>
+            <v-card-actions v-show="edit_mode">
+              <div class="flex-grow-1"></div>
+              <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save" :disabled="edited"
+                >Save</v-btn
+              >
+            </v-card-actions>
+          </v-expand-transition>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card v-show="!loading" style="height: 100%">
+          <v-card-title>
+            Activation Code
+            <v-menu
+              bottom
+              offset-y
+              transition="slide-y-transition"
+              :close-on-content-click="false"
             >
-            </v-textarea>
+              <template v-slot:activator="{ on }">
+                <v-btn right absolute icon color="primary" v-on="on"
+                  ><v-icon>mdi-plus</v-icon></v-btn
+                >
+              </template>
+              <create-auth-code-card
+                :bankID="this.question_bank.id"
+                @add-auth-code="add_auth_code"
+              ></create-auth-code-card>
+            </v-menu>
+          </v-card-title>
+          <v-card-text>
             <v-row>
-              <v-col>
+              <v-col cols="12" md="6" class="pb-0">
                 <v-text-field
                   label="Invitation Code Count"
-                  v-model="question_bank.invitation_code_count"
+                  v-model="invitation_code_count"
                   :readonly="true"
                   outlined
-                  hint="The total count of the invitation code"
                 >
                 </v-text-field>
               </v-col>
-              <v-col>
+              <v-col cols="12" md="6" class="pb-0">
                 <v-text-field
-                  label="Activated Code Count"
-                  v-model="question_bank.activated_code_count"
+                  label="Available Code Count"
+                  v-model="Available_code_count"
                   :readonly="true"
                   outlined
-                  hint="The total count of the activated invitation code"
                 >
                 </v-text-field>
               </v-col>
             </v-row>
-          </v-col>
-          <v-col>
-            <span class="grey--text caption">Picture</span>
-            <image-uploader
-              v-model="edited_question_bank_image"
-              :readonly="!edit_mode"
-              placeholder="No picture"
-            >
-            </image-uploader>
-          </v-col>
-        </v-row>
-      </v-card-text>
-      <v-expand-transition>
-        <v-card-actions v-show="edit_mode">
-          <div class="flex-grow-1"></div>
-          <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="save" :disabled="edited"
-            >Save</v-btn
-          >
-        </v-card-actions>
-      </v-expand-transition>
-    </v-card>
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text--left">Available Codes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="code in codes" :key="code">
+                    <td>{{ code }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <question-list
       v-show="!loading"
       v-if="question_bank.id"
@@ -114,22 +155,29 @@ import question_list from "@/components/QuestionList.vue";
 import image_uploader from "@/components/ImageUploader.vue";
 import axios from "axios";
 import VueElementLoading from "vue-element-loading";
+import CreateAuthCodeCard from "@/components/CreateAuthCodeCard.vue";
 
 export default {
   name: "question-bank",
   components: {
     "question-list": question_list,
     "image-uploader": image_uploader,
-    "vue-element-loading": VueElementLoading
+    "vue-element-loading": VueElementLoading,
+    "create-auth-code-card": CreateAuthCodeCard
   },
   data: () => ({
-    question_bank: {},
+    question_bank: {
+      id: -1
+    },
     edited_question_bank: {},
     edit_mode: false,
     question_bank_image: [],
     edited_question_bank_image: [],
     edited: false,
-    loading: false
+    loading: false,
+    codes: [],
+    invitation_code_count: "",
+    available_code_count: ""
   }),
   watch: {
     edited_question_bank: {
@@ -163,6 +211,11 @@ export default {
     }
   },
   methods: {
+    add_auth_code(info) {
+      this.codes = info.auth_code;
+      this.invitation_code_count = info.total_num;
+      this.available_code_count = info.valid_num;
+    },
     cancel() {
       this.edit_mode = false;
       this.edited_question_bank = JSON.parse(
@@ -218,6 +271,16 @@ export default {
           JSON.stringify(this.question_bank_image)
         );
         this.loading = false;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    axios
+      .post("/api/auth_code/", { question_bank_id: id })
+      .then(response => {
+        this.codes = response.data.auth_code;
+        this.invitation_code_count = response.data.total_num;
+        this.available_code_count = response.data.valid_num;
       })
       .catch(error => {
         console.log(error);

@@ -2,7 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionBanks from "@/views/admin/QuestionBanks.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import "../unit/mock/QuestionBanksMock.js";
+import "./mock/QuestionBanksMock.js";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 
