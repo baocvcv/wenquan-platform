@@ -121,7 +121,7 @@
             <v-card-text>
               <question
                 :initData="null"
-                :bankID="[id]"
+                :root_id="root_id"
                 creation
                 @submit="create"
                 @cancel="create_question_dialog = false"

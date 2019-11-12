@@ -100,9 +100,9 @@ export default {
     "tree-view": TreeView
   },
   props: {
-    bankID: {
-      type: Array,
-      default: null
+    root_id: {
+      type: Number,
+      default: -1
     },
     editable: {
       type: Boolean,
@@ -138,7 +138,7 @@ export default {
         .get(url)
         .then(response => {
           this.initData = response.data;
-          this.root_id = response.data.question_bank;
+          this.root_id = response.data.root_id;
           axios
             .get("/api/nodes_list/" + this.root_id + "/")
             .then(response => {
@@ -193,7 +193,7 @@ export default {
       return result;
     },
     submit(info) {
-      if (info.parents_node.length == 0 && this.bankID) {
+      if (info.parents_node.length == 0) {
         //New question
         info.parents_node = this.parse_node();
         axios
@@ -244,7 +244,6 @@ export default {
       edit_mode: false,
       initData: null,
       node_selection: [],
-      root_id: -1,
       tree_data: null
     };
   }
