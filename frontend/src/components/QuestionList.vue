@@ -121,7 +121,7 @@
             <v-card-text>
               <question
                 :initData="null"
-                :bankID="[id]"
+                :root_id="root_id"
                 creation
                 @submit="create"
                 @cancel="create_question_dialog = false"
@@ -200,10 +200,6 @@ export default {
     select: {
       type: Boolean,
       default: false
-    },
-    questions: {
-      type: Array,
-      default: () => []
     },
     dialog: {
       type: Boolean,
@@ -306,19 +302,15 @@ export default {
   created() {
     if (this.select) this.is_selecting = true;
     this.process = "Fetching data from server...";
-    if (this.questions.length == 0) {
-      axios
-        .get("/api/question_banks/" + this.id + "/")
-        .then(response => {
-          this.question_indices = JSON.parse(JSON.stringify(response.data.questions));
-          this.root_id = response.data.root_id;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    } else {
-      this.question_indices = JSON.parse(JSON.stringify(this.questions));
-    }
+    axios
+      .get("/api/question_banks/" + this.id + "/")
+      .then(response => {
+        this.question_indices = JSON.parse(JSON.stringify(response.data.questions));
+        this.root_id = response.data.root_id;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   methods: {
     reset_filter() {

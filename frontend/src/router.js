@@ -21,7 +21,9 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/QuestionBanks.vue")
+        import(
+          /* webpackChunkName: "about" */ "./views/admin/QuestionBanks.vue"
+        )
     },
     {
       path: "/account",
@@ -31,12 +33,12 @@ const router = new Router({
     {
       path: "/admin",
       name: "admin",
-      component: () => import("./views/Admin.vue")
+      component: () => import("./views/admin/Admin.vue")
     },
     {
       path: "/admin/usermanagement",
-      name: "user-management",
-      component: () => import("./views/UserManagement.vue")
+      name: "admin-user-management",
+      component: () => import("./views/admin/UserManagement.vue")
     },
     {
       path: "/signup",
@@ -50,23 +52,23 @@ const router = new Router({
     },
     {
       path: "/admin/testpapers",
-      name: "test-papers",
-      component: () => import("./views/TestPapers.vue")
+      name: "admin-test-papers",
+      component: () => import("./views/admin/TestPapers.vue")
     },
     {
       path: "/admin/testpapers/:id",
-      name: "test-paper",
-      component: () => import("./views/TestPaperView.vue")
+      name: "admin-test-paper",
+      component: () => import("./views/admin/TestPaperView.vue")
     },
     {
       path: "/admin/questionbanks",
-      name: "question-banks",
-      component: () => import("./views/QuestionBanks.vue")
+      name: "admin-question-banks",
+      component: () => import("./views/admin/QuestionBanks.vue")
     },
     {
       path: "/admin/questionbanks/:id",
-      name: "question-bank",
-      component: () => import("./views/QuestionBank.vue")
+      name: "admin-question-bank",
+      component: () => import("./views/admin/QuestionBank.vue")
     },
     {
       path: "/questions/:id",
@@ -82,6 +84,11 @@ const router = new Router({
       path: "/edit_question/:id",
       name: "question-edit",
       component: () => import("./views/Question.vue")
+    },
+    {
+      path: "/questionbanks/",
+      name: "question-banks",
+      component: () => import("./views/student/QuestionBanks.vue")
     },
     {
       path: "*",
