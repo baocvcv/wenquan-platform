@@ -9,7 +9,8 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     record_time = serializers.DateTimeField(required=False)
     score = serializers.IntegerField(required=False)
-    is_correct =serializers.BooleanField(required=False)
+    is_correct = serializers.BooleanField(required=False)
+    question_type = serializers.CharField(required=False)
 
 
     class Meta:
