@@ -1,5 +1,5 @@
 <template>
-    <question-show :id="3">
+    <question-show :id="id">
         <template v-slot:answer="{ question_data }">
             <v-list-item v-if="question_data.question_type == 'fill_blank'">
                 <v-row>
@@ -91,6 +91,10 @@ export default {
                     comment: ""
                 };
             }
+        },
+        id: {
+            type: Number,
+            default: null
         }
     },
     model: {
