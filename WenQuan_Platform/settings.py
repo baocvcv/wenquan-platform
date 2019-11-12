@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'corsheaders',
     # 'mailer',
-    ]
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
