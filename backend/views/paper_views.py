@@ -18,6 +18,8 @@ class PaperList(APIView):
         """Create Section objects from json"""
         section_objects = []
         for i in data:
+            if "id" in i:
+                i.pop("id")
             question_list = i.pop("questions", [])
             new_section = Section.objects.create(**i)
             for j in question_list:
@@ -136,8 +138,6 @@ class PaperDetail(APIView):
         paper.is_latest = False
         paper.save()
         put_data = JSONParser().parse(request)
-        if "id" in put_data:
-            put_data.pop("id")
         new_paper = PaperList.create_paper_from_data(put_data)
         response = PaperList.create_response_from_paper(new_paper)
         return Response(response)
