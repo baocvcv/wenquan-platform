@@ -22,11 +22,15 @@ class PaperList(APIView):
             new_section = Section.objects.create(**i)
             for j in question_list:
                 target = QuestionDetail.get_object(j['id'])
+                point_every_blank = []
+                if "point_every_blank" in j:
+                    point_every_blank = j['point_every_blank']
                 new_section.questions.add(
                     target,
                     through_defaults={
                         "question_point": j['question_point'],
                         "question_num": j["question_num"],
+                        "point_every_blank": point_every_blank
                     },
                 )
                 section_objects.append(new_section)
@@ -88,7 +92,7 @@ class SectionDetail(APIView):
         """Get Section objects whose id=section_id"""
         try:
             return Section.objects.get(id=section_id)
-        except Paper.DoesNotExist:
+        except Section.DoesNotExist:
             raise Http404
 
     def get(self, request, section_id):
@@ -103,6 +107,7 @@ class SectionDetail(APIView):
             question_data['id'] = i.id
             question_data['question_point'] = q_on_paper.question_point
             question_data['question_num'] = q_on_paper.question_num
+            question_data['point_every_blank'] = q_on_paper.point_every_blank
             questions.append(question_data)
         questions.sort(key=lambda x: x['question_num'])
         response['questions'] = questions
