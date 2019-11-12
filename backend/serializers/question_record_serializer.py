@@ -1,6 +1,5 @@
 """ Serializers for Question Record """
 from rest_framework import serializers
-from django.http import Http404
 
 from backend.models import QuestionRecord
 

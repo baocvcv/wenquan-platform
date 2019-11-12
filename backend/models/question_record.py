@@ -30,14 +30,15 @@ class QuestionRecord(models.Model):
         "Get the question instance of this record"
         if self.question_type == 'single':
             return SingleChoiceQ.objects.get(id=self.question_id)
-        elif self.question_type == 'multiple':
+        if self.question_type == 'multiple':
             return MultpChoiceQ.objects.get(id=self.question_id)
-        elif self.question_type == 'TorF':
+        if self.question_type == 'TorF':
             return TrueOrFalseQ.objects.get(id=self.question_id)
-        elif self.question_type == 'fill_blank':
+        if self.question_type == 'fill_blank':
             return FillBlankQ.objects.get(id=self.question_id)
-        elif self.question_type == 'brief_ans':
+        if self.question_type == 'brief_ans':
             return BriefAnswerQ.objects.get(id=self.question_id)
+        return None
 
     def set_ans(self, ans):
         "Set the answer to the question"

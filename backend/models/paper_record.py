@@ -1,13 +1,9 @@
 """ Paper history records """
 from django.db import models
-from .questions import BriefAnswerQ
-from .questions import SingleChoiceQ
-from .questions import MultpChoiceQ
-from .questions import FillBlankQ
-from .questions import TrueOrFalseQ
-from .paper import Paper
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
+
+from .paper import Paper
 
 class PaperRecord(models.Model):
     """ Question record entry """
@@ -39,8 +35,8 @@ class PaperRecord(models.Model):
         question_records = self.question_record_set.all()
         self.user_total_points = 0
         for q_record in question_records:
-            for s in q_record.score:
-                self.user_total_points += s
+            for score in q_record.score:
+                self.user_total_points += score
         return self.user_total_points
 
     # def compile_sections(self):
