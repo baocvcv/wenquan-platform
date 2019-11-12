@@ -148,10 +148,10 @@
             <!--questions-->
             <v-card-text v-for="(question, id) in section.questions" :key="id">
               <!--each question-->
-              <v-list-item>
+              <v-list-item dense>
                 <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
                 <v-list-item-content>
-                  <v-row align="center">
+                  <v-row align="center" dense>
                     <v-col cols="12" sm="4" lg="3">
                       <v-text-field
                         v-model="question.question_point"
