@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import QuestionBanksList from "../components/QuestionBanksList.vue";
+import QuestionBanksList from "@/components/QuestionBanksList.vue";
 
 export default {
   name: "",
