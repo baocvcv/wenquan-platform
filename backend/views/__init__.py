@@ -16,3 +16,8 @@ from .question_bank_views import QuestionBankDetail
 from .paper_views import PaperList
 from .paper_views import PaperDetail
 from .paper_views import SectionDetail
+
+from .question_record_view import QuestionRecordList
+from .question_record_view import QuestionRecordDetail
+from .paper_record_views import PaperRecordList
+from .paper_record_views import PaperRecordDetail
