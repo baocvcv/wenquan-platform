@@ -6,6 +6,7 @@ from rest_framework import status
 from django.utils import timezone
 from django.http import Http404
 
+from backend.models.questions import Question
 from backend.models import QuestionRecord
 from backend.serializers import QuestionRecordSerializer
 
@@ -17,12 +18,17 @@ class QuestionRecordList(generics.ListAPIView):
     def post(self, request):
         "Create a record"
         data = request.data
+        # judge
+        question = Question.objects.get(id=data['question_id'])
+        is_correct, _ = question.checker(data['ans'])
+        # add record
         record = QuestionRecord(
             question_id=data['question_id'],
             questions_type=data['question_type'],
+            is_correct=is_correct,
+            score=-1,
         )
         record.set_ans(data['ans'])
-        record.judge()
         if record.save():
             data = QuestionRecordSerializer(record)
             return Response(data, status=status.HTTP_201_CREATED)

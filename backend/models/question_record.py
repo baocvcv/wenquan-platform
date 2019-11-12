@@ -40,6 +40,7 @@ class QuestionRecord(models.Model):
             return BriefAnswerQ.objects.get(id=self.question_id)
 
     def set_ans(self, ans):
+        "Set the answer to the question"
         if self.question_type == 'single':
             self.ans = [ans]
         elif self.question_type == 'multiple':
@@ -53,11 +54,3 @@ class QuestionRecord(models.Model):
             self.ans = ans
         elif self.question_type == 'brief_ans':
             self.ans = [ans]
-
-    def judge(self):
-        "Judge whether the answer is correct and set the score"
-        question = self.get_question()
-        #TODO: judge not implemented
-        result = question.judge(self.ans)
-        self.score = result.score
-        self.is_correct = result.is_correct
