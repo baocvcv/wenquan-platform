@@ -112,17 +112,18 @@ export default {
   },
   mounted() {
     this.drag_drop.draggable = false;
-    if (this.rootID != -1) this.updateDataFromID(this.rootID)
+    if (this.rootID != -1) this.updateDataFromID(this.rootID);
   },
   watch: {
     rootID() {
-      if(this.rootID != -1) this.updateDataFromID(rootID)
-      else this.treeData = [
-        {
-          id: 0,
-          name: "Loading..."
-        }
-      ];
+      if (this.rootID != -1) this.updateDataFromID(this.rootID);
+      else
+        this.treeData = [
+          {
+            id: 0,
+            name: "Loading..."
+          }
+        ];
     }
   },
   computed: {
@@ -142,7 +143,7 @@ export default {
           this.treeData = [
             {
               id: 0,
-              name: error.toString(),
+              name: error.toString()
             }
           ];
         });
