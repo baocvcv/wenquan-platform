@@ -11,13 +11,15 @@
                     >
                         <v-text-field
                             :label="index.toString()"
-                            v-model="answer[index-1]">
+                            v-model="result.answer[index-1]">
                         </v-text-field>
+                        <!-- index starts from 1 -->
+                        <slot :name="'correct-'+index.toString()" :question_data="question_data"></slot>
                     </v-col>
                 </v-row>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'single'">
-                <v-radio-group v-model="answer[0]">
+                <v-radio-group v-model="result.answer[0]">
                     <v-radio
                         v-for="(item,index) in question_data.question_choice"
                         :key="item"
@@ -27,7 +29,7 @@
                 </v-radio-group>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'TorF'">
-                <v-radio-group v-model="answer[0]">
+                <v-radio-group v-model="result.answer[0]">
                     <v-radio
                         :value="true"
                         label="T"
@@ -38,9 +40,35 @@
                     ></v-radio>
                 </v-radio-group>
             </v-list-item>
+            <v-list-item v-if="question_data.question_type == 'multiple'">
+                <v-container>
+                    <v-checkbox
+                        v-for="(item,index) in question_data.question_choice"
+                        :key="item"
+                        :value="String.fromCharCode(index + 65)"
+                        :label="String.fromCharCode(index + 65) + '. ' + item"
+                        v-model="result.answer"
+                    ></v-checkbox>
+                </v-container>
+            </v-list-item>
+            <v-list-item v-if="question_data.question_type == 'brief_ans'">
+                <v-textarea
+                    label="Answer"
+                    v-model="result.answer[0]"
+                    outlined
+                    auto-grow
+                ></v-textarea>
+            </v-list-item>
+            <slot name="correct" :question_data="question_data"></slot>
         </template>
-        <template v-slot:button="{ question_data }">
-            <v-btn class="mx-2 my-2" color="success">Submit</v-btn>
+        <template v-slot:score="{ question_data }">
+            <slot name="score" :question_data="question_data"></slot>
+        </template>
+        <template v-slot:comment="{ question_data }">
+            <slot name="comment" :question_data="question_data"></slot>
+        </template>
+        <template v-slot:others="{ question_data }">
+            <slot name="others" :question_data="question_data"></slot>
         </template>
     </question-show>
 </template>
@@ -53,12 +81,21 @@ export default {
     components: {
         "question-show": QuestionShow
     },
-    data: function() {
-        return {
-            answer: [],
-            score: [],
-            comment: ""
+    props: {
+        result: {
+            type: Object,
+            default: () => {
+                return {
+                    answer: [],
+                    score: [],
+                    comment: ""
+                };
+            }
         }
+    },
+    model: {
+        props: "result",
+        event: "change"
     }
 }
 </script>
