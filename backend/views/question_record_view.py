@@ -9,6 +9,7 @@ from django.http import Http404
 from backend.models.questions import Question
 from backend.models import QuestionRecord
 from backend.serializers import QuestionRecordSerializer
+from backend.models.questions.question import INT2TYPE
 
 class QuestionRecordList(generics.ListAPIView):
     "Create and retrieve question records"
@@ -24,7 +25,7 @@ class QuestionRecordList(generics.ListAPIView):
         # add record
         record = QuestionRecord(
             question_id=data['question_id'],
-            questions_type=data['question_type'],
+            question_type=INT2TYPE[question.question_type],
             is_correct=is_correct,
             score=-1,
         )
