@@ -16,14 +16,20 @@ class QuestionRecordList(generics.ListAPIView):
 
     def post(self, request):
         "Create a record"
-        serializer = QuestionRecordSerializer(data=request.data)
-        if serializer.is_valid():
-            record = serializer.save()
-            if record:
-                record.judge()
-                data = QuestionRecordSerializer(record)
-                return Response(data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        record = QuestionRecord(
+            question_id=data['question_id'],
+            questions_type=data['question_type'],
+        )
+        record.set_ans(data['ans'])
+        record.judge()
+        if record.save():
+            data = QuestionRecordSerializer(record)
+            return Response(data, status=status.HTTP_201_CREATED)
+        return Response(
+            {'error': 'Error saving the record'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 class QuestionRecordDetail(generics.RetrieveAPIView):
     "Retrieve detail info of a record"

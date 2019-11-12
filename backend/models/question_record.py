@@ -1,5 +1,6 @@
 """ Question history records """
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from .questions import BriefAnswerQ
 from .questions import SingleChoiceQ
 from .questions import MultpChoiceQ
@@ -10,11 +11,12 @@ from .paper_record import PaperRecord
 
 class QuestionRecord(models.Model):
     """ Question record entry """
+    # basic info
     question_id = models.IntegerField()
     question_type = models.CharField(max_length=20, default="")
     record_time = models.DateTimeField(auto_now=True)
-    #TODO: same format for question answers???
-    ans = models.CharField(max_length=200, default="")
+    # answer and scores
+    ans = ArrayField(models.CharField(max_length=20000, default=""))
     score = models.IntegerField(blank=True)
     is_correct = models.BooleanField(blank=True)
     # key to paper record
@@ -38,8 +40,19 @@ class QuestionRecord(models.Model):
             return BriefAnswerQ.objects.get(id=self.question_id)
 
     def set_ans(self, ans):
-        #TODO: add this
-        pass
+        if self.question_type == 'single':
+            self.ans = [ans]
+        elif self.question_type == 'multiple':
+            self.ans = ans
+        elif self.question_type == 'TorF':
+            if ans:
+                self.ans = ["true"]
+            else:
+                self.ans = ["false"]
+        elif self.question_type == 'fill_blank':
+            self.ans = ans
+        elif self.question_type == 'brief_ans':
+            self.ans = [ans]
 
     def judge(self):
         "Judge whether the answer is correct and set the score"
