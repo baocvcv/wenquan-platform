@@ -33,7 +33,7 @@
             <slot name="answer" :question_data="question_data"></slot>
             <slot name="score" :question_data="question_data"></slot>
             <slot name="comment" :question_data="question_data"></slot>
-            <slot name="button" :question_data="question_data"></slot>
+            <slot name="others" :question_data="question_data"></slot>
         </v-list>
     </v-card>
 </template>
