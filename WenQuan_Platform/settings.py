@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'polymorphic',
     'corsheaders',
     # 'mailer',
-    ]
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,8 +89,8 @@ DATABASES = {
         'NAME': 'wen_quan',
         'USER': 'postgres',
         'PASSWORD': '123',
-        'HOST': 'postgres.Never404.secoder.local',
-        # 'HOST': 'localhost',
+        # 'HOST': 'postgres.Never404.secoder.local',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
