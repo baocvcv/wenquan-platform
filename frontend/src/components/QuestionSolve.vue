@@ -11,7 +11,9 @@
                     >
                         <v-text-field
                             :label="index.toString()"
-                            v-model="result.answer[index-1]">
+                            v-model="result.answer[index-1]"
+                            :readonly="readonly"
+                        >
                         </v-text-field>
                         <!-- index starts from 1 -->
                         <slot :name="'correct-'+index.toString()" :question_data="question_data"></slot>
@@ -25,6 +27,7 @@
                         :key="item"
                         :value="String.fromCharCode(index + 65)"
                         :label="String.fromCharCode(index + 65) + '. ' + item"
+                        :readonly="readonly"
                     ></v-radio>
                 </v-radio-group>
             </v-list-item>
@@ -48,6 +51,7 @@
                         :value="String.fromCharCode(index + 65)"
                         :label="String.fromCharCode(index + 65) + '. ' + item"
                         v-model="result.answer"
+                        :readonly="readonly"
                     ></v-checkbox>
                 </v-container>
             </v-list-item>
@@ -57,6 +61,7 @@
                     v-model="result.answer[0]"
                     outlined
                     auto-grow
+                    :readonly="readonly"
                 ></v-textarea>
             </v-list-item>
             <slot name="correct" :question_data="question_data"></slot>
@@ -95,6 +100,10 @@ export default {
         id: {
             type: Number,
             default: null
+        },
+        readonly: {
+            type: Boolean,
+            default: false
         }
     },
     model: {
