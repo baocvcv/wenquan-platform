@@ -23,6 +23,7 @@ class PaperRecord(models.Model):
     user_section_points = ArrayField(models.IntegerField(), default=list)
 
     def update_time(self):
+        "Update time"
         if not self.is_active:
             return
         time_delta = timezone.now().fromtimestamp(self.start_time)
@@ -31,8 +32,13 @@ class PaperRecord(models.Model):
             self.is_active = False
 
     def can_update(self):
+        "Is paper still modifiable"
         return self.is_active and self.time_left > 0
 
-    def judge(self):
-        " Calculate section and whole paper points "
-        pass
+    # def compile_sections(self):
+    #     "Compile sections into a json"
+    #     question_records = self.question_record_set.all()
+    #     sections = self.paper.section_set.all()
+    #     section_points = []
+    #     paper_points =
+    #     for section
