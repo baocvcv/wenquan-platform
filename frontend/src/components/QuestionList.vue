@@ -135,7 +135,7 @@
         <v-row>
           <v-col v-show="drawer" cols="12" md="4" sm="6" id="drawer-col">
             <tree-view
-              :bankID="id"
+              :rootID="root_id"
               v-model="tree_selection"
               editable
             ></tree-view>
@@ -237,7 +237,8 @@ export default {
       is_selecting: false,
       process: "",
       shown_questions: [],
-      question_indices: []
+      question_indices: [],
+      root_id: -1
     };
   },
   watch: {
@@ -302,7 +303,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     if (this.select) this.is_selecting = true;
     this.process = "Fetching data from server...";
     if (this.questions.length == 0) {
@@ -310,6 +311,7 @@ export default {
         .get("/api/question_banks/" + this.id + "/")
         .then(response => {
           this.question_indices = JSON.parse(JSON.stringify(response.data.questions));
+          this.root_id = response.data.root_id;
         })
         .catch(error => {
           console.log(error);
@@ -349,11 +351,11 @@ export default {
     cancel_select() {
       this.selected_questions = [];
       this.$emit("cancel-select");
-      this.is_selecting = false;
+      //this.is_selecting = false;
     },
     done_select() {
       this.$emit("done-select", this.selected_questions);
-      this.is_selecting = false;
+      //this.is_selecting = false;
     }
   }
 };
