@@ -6,7 +6,15 @@
         <v-list>
             <slot name="content" :question_data="question_data">
                 <v-list-item>
-                    {{ question_data.question_content }}
+                    <span v-if="question_data.question_type == 'fill_blank'">
+                        <span v-for="(item,index) in question_data.question_content" :key="item">
+                            {{ item }}
+                            <span v-if="index < question_data.question_blank_num">______</span>
+                        </span>
+                    </span>
+                    <span v-else>
+                        {{ question_data.question_content }}
+                    </span>
                 </v-list-item>
             </slot>
             <slot name="image">
