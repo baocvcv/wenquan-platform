@@ -13,6 +13,23 @@
                 </span>
             </v-list-item>
         </template>
+        <template v-slot:answer="{ question_data }">
+            <v-list-item v-if="question_data.question_type == 'fill_blank'">
+                <v-row>
+                    <v-col
+                        v-for="index in question_data.question_blank_num" :key="index"
+                        cols="12"
+                        md="4"
+                        lg="3"
+                    >
+                        <v-text-field
+                            :label="index.toString()"
+                            v-model="answer[index-1]">
+                        </v-text-field>
+                    </v-col>
+                </v-row>
+            </v-list-item>
+        </template>
         <template v-slot:button="{ question_data }">
             <v-btn class="mx-2 my-2" color="success">Submit</v-btn>
         </template>
@@ -26,6 +43,13 @@ export default {
     name: "question-solve",
     components: {
         "question-show": QuestionShow
+    },
+    data: function() {
+        return {
+            answer: [],
+            score: [],
+            comment: ""
+        }
     }
 }
 </script>

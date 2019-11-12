@@ -8,6 +8,8 @@
                 <v-list-item>
                     {{ question_data.question_content }}
                 </v-list-item>
+            </slot>
+            <slot name="image">
                 <v-list-item v-if="question_data.question_image && question_data.question_image.length > 0">
                     <image-uploader
                         v-model="question_data.question_image"
