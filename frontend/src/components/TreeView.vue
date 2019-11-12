@@ -105,16 +105,16 @@ export default {
       type: Array,
       default: () => []
     },
-    bankID: {
-      tyre: Number,
+    rootID: {
+      type: Number,
       default: -1
     }
   },
   mounted() {
     this.drag_drop.draggable = false;
-    if (this.bankID != -1) {
+    if (this.rootID != -1) {
       axios
-        .get("/api/nodes_list/" + this.bankID + "/")
+        .get("/api/nodes_list/" + this.rootID + "/")
         .then(response => {
           this.treeData = [response.data];
         })
@@ -163,7 +163,7 @@ export default {
 
       //submit changes
       axios
-        .put("/api/nodes_list/" + this.bankID + "/", {
+        .put("/api/nodes_list/" + this.rootID + "/", {
           delete: this.deletedID,
           modify: this.treeData[0]
         })
@@ -288,7 +288,7 @@ export default {
 /* Elements */
 
 .TreeViewDemo {
-  box-shadow: 0px 0px 10px #dadada;
+  box-shadow: 0px 0px 0px #dadada;
   white-space: nowrap;
 }
 

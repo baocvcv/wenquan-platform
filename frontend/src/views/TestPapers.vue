@@ -1,39 +1,18 @@
 <template>
   <div>
     <v-card>
-      <v-toolbar flat color="primary" dark>
-        <v-toolbar-title>Test Papers</v-toolbar-title>
-      </v-toolbar>
-
-      <v-tabs vertical>
-        <v-tab align="left">
-          <v-icon>mdi-book-open</v-icon>
-          Browse
-        </v-tab>
-        <v-tab align="left" :disabled="read_only">
-          <v-icon>mdi-folder-plus</v-icon>
-          Create
-        </v-tab>
-
-        <v-tab-item>
-          <h1>developing...</h1>
-        </v-tab-item>
-        <v-tab-item>
-          <br />
-          <test-paper-generation />
-        </v-tab-item>
-      </v-tabs>
+      <test-papers-list title="Test Papers" />
     </v-card>
   </div>
 </template>
 
 <script>
-import TestPaperGeneration from "@/components/TestPaperGeneration.vue";
+import TestPapersList from "@/components/TestPapersList.vue";
 export default {
   name: "test-papers",
   props: {},
   components: {
-    "test-paper-generation": TestPaperGeneration
+    "test-papers-list": TestPapersList
   }
 };
 </script>

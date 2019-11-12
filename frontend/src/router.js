@@ -21,12 +21,17 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
+        import(/* webpackChunkName: "about" */ "./views/QuestionBanks.vue")
     },
     {
       path: "/account",
       name: "account",
       component: () => import("./views/Account.vue")
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("./views/Admin.vue")
     },
     {
       path: "/admin/usermanagement",
@@ -47,6 +52,11 @@ const router = new Router({
       path: "/admin/testpapers",
       name: "test-papers",
       component: () => import("./views/TestPapers.vue")
+    },
+    {
+      path: "/admin/testpapers/:id",
+      name: "test-paper",
+      component: () => import("./views/TestPaperView.vue")
     },
     {
       path: "/admin/questionbanks",

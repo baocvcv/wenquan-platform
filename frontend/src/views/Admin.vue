@@ -1,7 +1,11 @@
 <template>
-  <h1>This is the home for Admin.</h1>
+  <div id="admin">
+    <h1 class="text-center">Welcome back, {{ $store.state.user.username }}.</h1>
+  </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name: "admin"
+};
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div id="question-bank">
-    <v-card>
+    <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
+    <v-card v-show="!loading">
       <v-card-title
         >Profile
         <v-btn absolute right icon @click="edit_button_clicked"
@@ -99,6 +100,7 @@
       </v-expand-transition>
     </v-card>
     <question-list
+      v-show="!loading"
       v-if="question_bank.id"
       :questions="question_bank.questions"
       editable
@@ -111,12 +113,14 @@
 import question_list from "@/components/QuestionList.vue";
 import image_uploader from "@/components/ImageUploader.vue";
 import axios from "axios";
+import VueElementLoading from "vue-element-loading";
 
 export default {
   name: "question-bank",
   components: {
     "question-list": question_list,
-    "image-uploader": image_uploader
+    "image-uploader": image_uploader,
+    "vue-element-loading": VueElementLoading
   },
   data: () => ({
     question_bank: {},
@@ -124,7 +128,8 @@ export default {
     edit_mode: false,
     question_bank_image: [],
     edited_question_bank_image: [],
-    edited: false
+    edited: false,
+    loading: false
   }),
   watch: {
     edited_question_bank: {
@@ -200,6 +205,7 @@ export default {
   },
   created() {
     let id = this.$route.params.id;
+    this.loading = true;
     axios
       .get("/api/question_banks/" + id + "/")
       .then(response => {
@@ -211,6 +217,7 @@ export default {
         this.edited_question_bank_image = JSON.parse(
           JSON.stringify(this.question_bank_image)
         );
+        this.loading = false;
       })
       .catch(error => {
         console.log(error);
