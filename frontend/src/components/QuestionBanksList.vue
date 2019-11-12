@@ -26,17 +26,13 @@
           ></create-question-bank>
         </v-dialog>
 
-        <v-dialog
-          v-else
-          v-model="activation_dialog"
-          max-width="600px"
-        >
+        <v-dialog v-else v-model="activation_dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" elevation="0" class="ml-2" v-on="on">
               Activate
             </v-btn>
           </template>
-          <activation-card></activation-card>
+          <activation-card ref="activation-card"></activation-card>
         </v-dialog>
       </v-toolbar>
       <v-card-text class="pt-0">
@@ -147,10 +143,18 @@
               >
                 View
               </v-btn>
-              <v-btn color="primary" v-if="readonly && cur_qst_bank.details.Authority == 'private'" outlined>
+              <v-btn
+                color="primary"
+                v-if="readonly && cur_qst_bank.details.Authority == 'private'"
+                outlined
+              >
                 Buy
               </v-btn>
-              <v-btn color="primary" v-if="readonly && cur_qst_bank.details.Authority == 'public'" outlined>
+              <v-btn
+                color="primary"
+                v-if="readonly && cur_qst_bank.details.Authority == 'public'"
+                outlined
+              >
                 Add
               </v-btn>
               <v-btn class="cancel-button" text @click="detail = false"
@@ -232,7 +236,11 @@ export default {
       detail: false,
       show_del_dialog: false,
       question_banks: [],
-      cur_qst_bank: {},
+      cur_qst_bank: {
+        details: {
+          Authority: ""
+        }
+      },
       process: "",
       create_bank_dialog: false,
       activation_dialog: false
@@ -272,13 +280,16 @@ export default {
   watch: {
     create_bank_dialog: function() {
       if (!this.create_bank_dialog) this.$refs["create-question-bank"].reset();
+    },
+    activation_dialog: function() {
+      if (!this.activation_dialog) this.$refs["activation-card"].reset();
     }
   },
   mounted: function() {
     let that = this;
     that.process = "Fetching data from server...";
     axios
-      .get("http://localhost:8000/api/question_banks/")
+      .get("/api/question_banks/")
       .then(response => {
         let all_count = response.data.length;
         let count = 0;
@@ -286,7 +297,11 @@ export default {
         that.$Progress.set(0);
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get("http://localhost:8000/api/question_banks/" + response.data[i] + "/")
+            .get(
+              "/api/question_banks/" +
+                response.data[i] +
+                "/"
+            )
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);
