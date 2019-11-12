@@ -78,14 +78,14 @@
 
           <!--sections-->
           <v-card v-for="(section, key) in edited_paper.sections" :key="key">
-            <v-list-item two-line>
+            <v-list-item>
               <v-list-item-avatar>
                 <v-icon>{{ roman(key + 1) }}</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
                   <v-row align="center">
-                    <v-col cols="12" sm="3" lg="4">
+                    <v-col cols="12" sm="4" lg="4">
                       <v-text-field
                         v-model="section.title"
                         label="Title"
@@ -93,7 +93,7 @@
                         :readonly="readonly"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="3" lg="3">
+                    <v-col cols="12" sm="4" lg="3">
                       <v-text-field
                         v-model="section.total_point"
                         label="Total points"
@@ -112,7 +112,6 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
 
-              <v-spacer></v-spacer>
               <v-list-item-action>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -151,16 +150,56 @@
               <!--each question-->
               <v-list-item>
                 <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
-                <v-list-content>
-                  <v-col cols="12" sm="10" lg="5">
-                    <v-text-field
-                      v-model="question.question_point"
-                      suffix="points"
-                      :rules="total_point_rules"
-                      :readonly="readonly"
-                    ></v-text-field>
-                  </v-col>
-                </v-list-content>
+                <v-list-item-content>
+                  <v-row align="center">
+                    <v-col cols="12" sm="4" lg="3">
+                      <v-text-field
+                        v-model="question.question_point"
+                        suffix="points"
+                        :rules="total_point_rules"
+                        :readonly="readonly"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      v-if="question.content.question_type == 'fill_blank'"
+                      cols="12"
+                      sm="8"
+                      lg="9"
+                    >
+                      <span
+                        :style="'color: ' + blank_point_sum_up(key, id).color"
+                        >{{ blank_point_sum_up(key, id).content }}</span
+                      >
+                    </v-col>
+                    <v-col v-else cols="0" sm="7" lg="9"
+                      ><v-spacer></v-spacer
+                    ></v-col>
+                    <v-col
+                      v-if="question.content.question_type == 'fill_blank'"
+                      cols="12"
+                      sm="4"
+                      lg="3"
+                    >
+                      <span>Points Assignment(optional)</span>
+                    </v-col>
+                    <v-col
+                      v-for="(point, key) in question.point_every_blank"
+                      :key="key"
+                      cols="4"
+                      sm="2"
+                      lg="1"
+                    >
+                      <v-text-field
+                        v-model="question.point_every_blank[key]"
+                        :rules="[
+                          v => /[0-9]+/.test(v) || 'An integer is expected'
+                        ]"
+                        :readonly="readonly"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+
                 <v-list-item-action>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
@@ -419,6 +458,28 @@ export default {
             };
       return tip;
     },
+    blank_point_sum_up(section_id, question_id) {
+      //sum up of blank points
+      let question = this.edited_paper.sections[section_id].questions[
+        question_id
+      ];
+      let sum = 0;
+      for (var i = 0; i < question.point_every_blank.length; i++) {
+        sum += parseInt(question.point_every_blank[i]);
+      }
+      var tip =
+        sum == parseInt(question.question_point) || sum == 0
+          ? { color: "green", content: "valid" }
+          : {
+              color: "red",
+              content:
+                "Sum-up of points of blanks: " +
+                sum +
+                " |Points assigned to this question: " +
+                question.question_point
+            };
+      return tip;
+    },
     drop_section(index) {
       //delete a section
       this.edited_paper.sections.splice(index, 1);
@@ -437,8 +498,16 @@ export default {
       let that = this;
       for (var i = 0; i < questions.length; i++) {
         axios.get("/api/questions/" + questions[i] + "/").then(response => {
+          var tmp_point_every_blank = [];
+          var question = response.data;
+          if (question.question_type == "fill_blank") {
+            for (var i = 0; i < question.question_blank_num; i++) {
+              tmp_point_every_blank.push(0);
+            }
+          }
           that.cur_section.questions.push({
             question_point: "",
+            point_every_blank: tmp_point_every_blank,
             content: response.data
           });
           //after at least one question has been loaded, close the dialog
