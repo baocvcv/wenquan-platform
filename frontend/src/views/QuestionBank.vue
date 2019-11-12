@@ -102,7 +102,6 @@
     <question-list
       v-show="!loading"
       v-if="question_bank.id"
-      :questions="question_bank.questions"
       editable
       :id="question_bank.id"
     ></question-list>
