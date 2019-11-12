@@ -112,21 +112,17 @@ export default {
   },
   mounted() {
     this.drag_drop.draggable = false;
-    if (this.rootID != -1) {
-      axios
-        .get("/api/nodes_list/" + this.rootID + "/")
-        .then(response => {
-          this.treeData = [response.data];
-        })
-        .catch(error => {
-          this.treeData = [
-            {
-              id: 0,
-              name: error.toString(),
-              subnodes: []
-            }
-          ];
-        });
+    if (this.rootID != -1) this.updateDataFromID(this.rootID)
+  },
+  watch: {
+    rootID() {
+      if(this.rootID != -1) this.updateDataFromID(rootID)
+      else this.treeData = [
+        {
+          id: 0,
+          name: "Loading..."
+        }
+      ];
     }
   },
   computed: {
@@ -136,6 +132,21 @@ export default {
     }
   },
   methods: {
+    updateDataFromID(id) {
+      axios
+        .get("/api/nodes_list/" + id + "/")
+        .then(response => {
+          this.treeData = [response.data];
+        })
+        .catch(error => {
+          this.treeData = [
+            {
+              id: 0,
+              name: error.toString(),
+            }
+          ];
+        });
+    },
     updateData(data) {
       //load data
       this.treeData = data;
