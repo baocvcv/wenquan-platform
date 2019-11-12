@@ -133,7 +133,7 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      v-if="!readonly"
+                      v-show="!readonly"
                       icon
                       v-on="on"
                       @click.stop="drop_section(key)"
@@ -204,7 +204,7 @@
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn
-                        v-if="!readonly"
+                        v-show="!readonly"
                         icon
                         v-on="on"
                         @click="drop_question(section, id)"
@@ -222,7 +222,7 @@
           <v-list-item>
             <v-list-item-content>
               <v-btn
-                v-if="!readonly"
+                v-show="!readonly"
                 class="mx-2"
                 block
                 tile
@@ -276,7 +276,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
-                v-if="process == 'question'"
+                v-show="process == 'question'"
                 v-on="on"
                 icon
                 @click="process = 'question bank'"
