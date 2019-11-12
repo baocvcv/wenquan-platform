@@ -1,6 +1,7 @@
 """ Base model for User """
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField
 # from .permissions import UserPermissions
 from .profile import Profile
 
@@ -30,6 +31,9 @@ class User(AbstractUser):
 
     user_permissions = models.ForeignKey('UserPermissions', on_delete=models.CASCADE)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
+    # quesiton banks owned by the user
+    question_banks = ArrayField(models.IntegerField())
 
     def __str__(self):
         "Stringify"
