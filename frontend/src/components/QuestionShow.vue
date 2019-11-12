@@ -11,10 +11,15 @@
             </slot>
             <slot name="image">
                 <v-list-item v-if="question_data.question_image && question_data.question_image.length > 0">
-                    <image-uploader
-                        v-model="question_data.question_image"
-                        readonly
-                    ></image-uploader>
+                    <v-row justify="center">
+                        <v-col cols="12" lg="4" md="6">
+                            <image-uploader
+                                width=100%
+                                v-model="question_data.question_image"
+                                readonly
+                            ></image-uploader>
+                        </v-col>
+                    </v-row>
                 </v-list-item>
             </slot>
             <slot name="answer" :question_data="question_data"></slot>
