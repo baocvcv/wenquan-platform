@@ -17,7 +17,7 @@ class QuestionRecord(models.Model):
     record_time = models.DateTimeField(auto_now=True)
     # answer and scores
     ans = ArrayField(models.CharField(max_length=20000, default=""))
-    score = models.IntegerField(blank=True)
+    score = ArrayField(models.IntegerField())
     is_correct = models.BooleanField(blank=True)
     # key to paper record
     paper_record = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True)

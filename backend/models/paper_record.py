@@ -20,7 +20,6 @@ class PaperRecord(models.Model):
     is_active = models.BooleanField(default=True)
     # point fields
     user_total_points = models.IntegerField(default=0)
-    user_section_points = ArrayField(models.IntegerField(), default=list)
 
     def update_time(self):
         "Update time"
@@ -34,6 +33,15 @@ class PaperRecord(models.Model):
     def can_update(self):
         "Is paper still modifiable"
         return self.is_active and self.time_left > 0
+
+    def judge(self):
+        " Add up the scores "
+        question_records = self.question_record_set.all()
+        self.user_total_points = 0
+        for q_record in question_records:
+            for s in q_record.score:
+                self.user_total_points += s
+        return self.user_total_points
 
     # def compile_sections(self):
     #     "Compile sections into a json"

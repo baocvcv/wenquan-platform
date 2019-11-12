@@ -27,7 +27,7 @@ class QuestionRecordList(generics.ListAPIView):
             question_id=data['question_id'],
             question_type=INT2TYPE[question.question_type],
             is_correct=is_correct,
-            score=-1,
+            score=[],
         )
         record.set_ans(data['ans'])
         if record.save():
