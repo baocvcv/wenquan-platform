@@ -1,27 +1,35 @@
 <template>
   <div>
     <v-card>
-	  <v-tabs show-arrows>
-	    <v-tab-slider></v-tab-slider>
-		<v-tab>
-		  <v-icon left>mdi-earth</v-icon>
-		    Manage
-	    </v-tab>
-		<v-tab>
-		  <v-icon left>mdi-pen-plus</v-icon>
-		  Marking
-		</v-tab>
-		<v-tab-item>
-	      <test-papers-list :title="
-			$vuetify.breakpoint.smAndUp ? 'Browse and Create Test Papers' : 'Test Papers'
-		  " />
-		</v-tab-item>
-		<v-tab-item>
-		  <test-paper-marking-list :title="
-			$vuetify.breakpoint.smAndUp ? 'Give marks and comment on students\' submits' : 'Mark'
-		  "/>
-		</v-tab-item>
-	  </v-tabs>
+      <v-tabs show-arrows>
+        <v-tab-slider></v-tab-slider>
+        <v-tab>
+          <v-icon left>mdi-earth</v-icon>
+          Manage
+        </v-tab>
+        <v-tab>
+          <v-icon left>mdi-pen-plus</v-icon>
+          Marking
+        </v-tab>
+        <v-tab-item>
+          <test-papers-list
+            :title="
+              $vuetify.breakpoint.smAndUp
+                ? 'Browse and Create Test Papers'
+                : 'Test Papers'
+            "
+          />
+        </v-tab-item>
+        <v-tab-item>
+          <test-paper-marking-list
+            :title="
+              $vuetify.breakpoint.smAndUp
+                ? 'Give marks and comment on students\' submits'
+                : 'Mark'
+            "
+          />
+        </v-tab-item>
+      </v-tabs>
     </v-card>
   </div>
 </template>
@@ -34,7 +42,7 @@ export default {
   props: {},
   components: {
     "test-papers-list": TestPapersList,
-	"test-paper-marking-list": TestPaperMarkingList
+    "test-paper-marking-list": TestPaperMarkingList
   }
 };
 </script>
