@@ -96,6 +96,11 @@ const router = new Router({
       component: () => import("./views/student/QuestionBanks.vue")
     },
     {
+      path: "/test/:id",
+      name: "test",
+      component:() => import("./views/Test.vue")
+    },
+    {
       path: "*",
       name: "404",
       component: () => import("./views/404Error.vue")
