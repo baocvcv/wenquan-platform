@@ -1,6 +1,6 @@
 """ QuestionRecord View """
 from rest_framework.response import Response
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import status
 # from django.utils import timezone
@@ -10,10 +10,19 @@ from backend.models import QuestionRecord
 from backend.serializers import QuestionRecordSerializer
 from backend.models.questions.question import INT2TYPE
 
-class QuestionRecordList(generics.ListAPIView):
+class QuestionRecordList(APIView):
     "Create and retrieve question records"
-    queryset = QuestionRecord.objects.all()
-    serializer_class = QuestionRecordSerializer
+    def get(self, request):
+        "Return user record"
+        user = request.user
+        if user.user_group == "Student":
+            # wrong questions only
+            question_records = user.questionrecord_set.filter(is_correct=False)
+        else:
+            question_records = QuestionRecord.objects.all()
+        data = QuestionRecordSerializer(question_records, many=True).data
+        return Response(data, status.HTTP_200_OK)
+
 
     def post(self, request):
         "Create a record"
@@ -26,19 +35,16 @@ class QuestionRecordList(generics.ListAPIView):
             is_correct = True
         # add record
         record = QuestionRecord(
+            user=request.user,
             question_id=data['question_id'],
-            question_type=INT2TYPE[question.question_type],
+            question_type=INT2TYPE[str(question.question_type)],
             is_correct=is_correct,
             score=[],
         )
         record.set_ans(data['ans'])
-        if record.save():
-            data = QuestionRecordSerializer(record)
-            return Response(data, status=status.HTTP_201_CREATED)
-        return Response(
-            {'error': 'Error saving the record'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        record.save()
+        data = QuestionRecordSerializer(record).data
+        return Response(data, status=status.HTTP_201_CREATED)
 
 class QuestionRecordDetail(generics.RetrieveAPIView):
     "Retrieve detail info of a record"
