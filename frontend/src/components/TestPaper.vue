@@ -93,7 +93,7 @@
                         :readonly="readonly"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="4" lg="3">
+                    <v-col cols="12" sm="4" lg="2">
                       <v-text-field
                         v-model="section.total_point"
                         label="Total points"
@@ -152,7 +152,7 @@
                 <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
                 <v-list-item-content>
                   <v-row align="center" dense>
-                    <v-col cols="12" sm="4" lg="3">
+                    <v-col cols="12" sm="4" lg="2">
                       <v-text-field
                         v-model="question.question_point"
                         suffix="points"
@@ -192,6 +192,7 @@
                       <v-text-field
                         v-model="question.point_every_blank[key]"
                         :rules="[
+                          v => !!v || 'Separate Point is required',
                           v => /[0-9]+/.test(v) || 'An integer is expected'
                         ]"
                         :readonly="readonly"
@@ -356,7 +357,7 @@ export default {
       valid: false,
       edited_paper: {
         title: "",
-        total_point: "0",
+        total_point: "",
         tips: "",
         time_limit: "",
         status: "drafted",
@@ -502,7 +503,7 @@ export default {
           var question = response.data;
           if (question.question_type == "fill_blank") {
             for (var i = 0; i < question.question_blank_num; i++) {
-              tmp_point_every_blank.push(0);
+              tmp_point_every_blank.push("");
             }
           }
           that.cur_section.questions.push({

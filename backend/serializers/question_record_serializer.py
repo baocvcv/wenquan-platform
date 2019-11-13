@@ -10,6 +10,8 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
     score = serializers.ListField(required=False)
     is_correct = serializers.BooleanField(required=False)
     question_type = serializers.CharField(required=False)
+    user_id = serializers.IntegerField(source="user.id", read_only=True)
+    username = serializers.CharField(source="user.username", read_only=True)
 
 
     class Meta:
@@ -23,4 +25,6 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
             'ans',
             'score',
             'is_correct',
+            'user_id',
+            'username',
         ]

@@ -63,7 +63,12 @@ urlpatterns = [
         name="paper_record_list"
     ),
     path(
-        r'api/paper_records/<int:pk>',
+        r'api/paper_records',
+        views.PaperRecordList.as_view(),
+        name="paper_record_list"
+    ),
+    path(
+        r'api/paper_records/<int:record_id>',
         views.PaperRecordDetail.as_view(),
         name="paper_record_detail"
     ),

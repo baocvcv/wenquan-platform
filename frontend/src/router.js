@@ -22,13 +22,18 @@ const router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(
-          /* webpackChunkName: "about" */ "./components/QuestionSolve.vue"
+          /* webpackChunkName: "about" */ "./components/PaperSolve.vue"
         )
     },
     {
       path: "/account",
       name: "account",
       component: () => import("./views/Account.vue")
+    },
+    {
+      path: "/learn",
+      name: "learn",
+      component: () => import("./views/student/Learn.vue")
     },
     {
       path: "/admin",

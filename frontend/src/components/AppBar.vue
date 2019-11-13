@@ -142,6 +142,12 @@ export default {
             icon: "mdi-bank"
           },
           {
+            name: "Learn",
+            text: "Learn",
+            link: "/learn",
+            icon: "mdi-book-open-variant"
+          },
+          {
             name: "Account",
             text: "Account",
             link: "/account",
