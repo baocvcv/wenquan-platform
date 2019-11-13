@@ -133,7 +133,7 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      v-if="!readonly"
+                      v-show="!readonly"
                       icon
                       v-on="on"
                       @click.stop="drop_section(key)"
@@ -148,10 +148,10 @@
             <!--questions-->
             <v-card-text v-for="(question, id) in section.questions" :key="id">
               <!--each question-->
-              <v-list-item>
+              <v-list-item dense>
                 <v-list-item-avatar>{{ id + 1 + "." }}</v-list-item-avatar>
                 <v-list-item-content>
-                  <v-row align="center">
+                  <v-row align="center" dense>
                     <v-col cols="12" sm="4" lg="3">
                       <v-text-field
                         v-model="question.question_point"
@@ -204,7 +204,7 @@
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn
-                        v-if="!readonly"
+                        v-show="!readonly"
                         icon
                         v-on="on"
                         @click="drop_question(section, id)"
@@ -222,7 +222,7 @@
           <v-list-item>
             <v-list-item-content>
               <v-btn
-                v-if="!readonly"
+                v-show="!readonly"
                 class="mx-2"
                 block
                 tile
@@ -276,7 +276,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
-                v-if="process == 'question'"
+                v-show="process == 'question'"
                 v-on="on"
                 icon
                 @click="process = 'question bank'"
