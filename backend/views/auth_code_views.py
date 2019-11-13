@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+import psycopg2
 
 from backend.models import AuthCode
 from backend.serializers import AuthCodeSerializer
@@ -27,16 +28,18 @@ class AuthCodeView(APIView):
 
         if 'num' in request.data:
             # generate new codes
-            #TODO: problem! codes may duplicate and cause errors
             num = request.data['num']
-            for _i in range(num):
+            for i in range(num):
                 key = generate_token()
                 code = AuthCode(
                     key=key,
                     question_bank=q_bank
                 )
-                code.save()
-                codes.append(key)
+                try:
+                    code.save()
+                    codes.append(key)
+                except psycopg2.Error:
+                    i -= 1
         valid_num = len(codes)
         return Response(
             {
