@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-stepper v-model="step">
+    <v-stepper v-model="step" v-show="!practicing">
       <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1"
           >Choose Question Bank</v-stepper-step
@@ -86,6 +86,7 @@ export default {
       loading_content: "Generating Practice Paper ...",
       error: "",
       warning: "",
+      practicing: false,
       question_number_rules: [
         v => !!v || "Question number is required!",
         v => /[0-9]+/.test(v) || "An integer is expected!",
@@ -121,6 +122,7 @@ export default {
             all_question.splice(rand, 1);
           }
           console.log(selected_question_id);
+          this.practicing = true;
         })
         .catch(error => {
           this.error = "Oops!" + error;
