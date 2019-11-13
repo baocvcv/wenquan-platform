@@ -23,7 +23,7 @@ class QuestionRecord(models.Model):
     # key to paper record
     paper_record = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True)
     # user
-    #TODO: remove blank true
+    #!!!!!!!!!!to do: remove blank true
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
