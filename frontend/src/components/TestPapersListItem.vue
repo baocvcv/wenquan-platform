@@ -13,6 +13,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn
+              v-show="!readonly"
               text
               color="primary"
               v-on="on"
@@ -32,6 +33,22 @@
               <v-btn
                 icon
                 v-on="on"
+                @click="$router.push('/test/' + test_paper.id)"
+                ><v-icon :color="hover ? 'primary' : 'grey lighten-1'"
+                  >mdi-fountain-pen-tip</v-icon
+                ></v-btn
+              >
+            </v-hover>
+          </template>
+          <span>Test</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-hover v-slot:default="{ hover }">
+              <v-btn
+                v-show="!readonly"
+                icon
+                v-on="on"
                 @click="$router.push('/admin/testpapers/' + test_paper.id)"
                 ><v-icon :color="hover ? 'primary' : 'grey lighten-1'"
                   >mdi-file-eye-outline</v-icon
@@ -44,7 +61,11 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-hover v-slot:default="{ hover }">
-              <v-btn icon v-on="on" @click="delete_test_paper = true"
+              <v-btn
+                v-show="!readonly"
+                icon
+                v-on="on"
+                @click="delete_test_paper = true"
                 ><v-icon :color="hover ? 'error' : 'grey lighten-1'"
                   >mdi-trash-can-outline</v-icon
                 ></v-btn
@@ -84,6 +105,10 @@ export default {
     test_paper: {
       type: Object,
       default: () => {}
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
