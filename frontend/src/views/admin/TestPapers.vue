@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-tabs show-arrows>
-        <v-tab-slider></v-tab-slider>
+        <v-tabs-slider></v-tabs-slider>
         <v-tab>
           <v-icon left>mdi-earth</v-icon>
           Manage
@@ -37,6 +37,7 @@
 <script>
 import TestPapersList from "@/components/TestPapersList.vue";
 import TestPaperMarkingList from "@/components/TestPaperMarkingList.vue";
+
 export default {
   name: "test-papers",
   props: {},

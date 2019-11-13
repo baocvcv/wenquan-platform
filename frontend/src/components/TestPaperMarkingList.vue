@@ -19,7 +19,11 @@
         {{ process }}
       </p>
       <v-list>
-        <test-paper-marking-list-item />
+        <test-paper-marking-list-item
+          v-for="(paper, key) in papers"
+          :key="key"
+          :id="paper.id"
+        />
       </v-list>
     </v-card-text>
   </v-card>
@@ -27,8 +31,9 @@
 
 <script>
 import TestPaperMarkingListItem from "@/components/TestPaperMarkingListItem.vue";
+import axios from "axios";
 export default {
-  name: "",
+  name: "test-paper-marking-list",
   props: {
     title: {
       type: String,
@@ -40,8 +45,20 @@ export default {
   },
   data: function() {
     return {
-      process: "loading"
+      process: "loading",
+      papers: []
     };
+  },
+  created() {
+    axios
+      .get("/api/papers/")
+      .then(response => {
+        this.papers = response.data;
+        this.process = "Total count: " + this.papers.length;
+      })
+      .catch(error => {
+        this.process = "Oops!" + error;
+      });
   }
 };
 </script>
