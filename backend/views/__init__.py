@@ -21,3 +21,6 @@ from .question_record_view import QuestionRecordList
 from .question_record_view import QuestionRecordDetail
 from .paper_record_views import PaperRecordList
 from .paper_record_views import PaperRecordDetail
+
+from .auth_code_views import AuthCodeView
+from .auth_code_views import AuthCodeDetailView
