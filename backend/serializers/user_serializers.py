@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_banned = serializers.BooleanField(default=False)
     user_group = serializers.CharField(default="Student")
     password = serializers.CharField(required=False)
+    question_banks = serializers.ListField(required=False)
 
     def create(self, validated_data):
         """ create user """
@@ -46,6 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
             profile=profile,
             user_permissions=user_permissions,
             is_active=False,
+            question_banks=[],
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -62,6 +64,8 @@ class UserSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
+        # NEED to be changed for better permission control
+        instance.question_banks = validated_data.get('question_banks', instance.question_banks)
         instance.save()
 
         if 'profile' in validated_data:
