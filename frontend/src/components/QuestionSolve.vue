@@ -106,8 +106,17 @@ export default {
             default: false
         }
     },
+    watch: {
+        result: {
+            handler(newVal) {
+                this.$emit("change",newVal);
+                console.log("change");
+            },
+            deep: true
+        }
+    },
     model: {
-        props: "result",
+        prop: "result",
         event: "change"
     }
 }
