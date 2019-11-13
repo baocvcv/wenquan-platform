@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import psycopg2
 
 from backend.models import AuthCode
-from backend.serializers import AuthCodeSerializer
+# from backend.serializers import AuthCodeSerializer
 from backend.models import QuestionBank
 from backend.scripts.email_verification import generate_token
 
@@ -56,6 +56,7 @@ class AuthCodeDetailView(APIView):
     """ Activate auth code """
     @staticmethod
     def get(request, code):
+        " Activate auth code "
         user = request.user
         try:
             auth_code = AuthCode.objects.get(key=code)
@@ -66,5 +67,5 @@ class AuthCodeDetailView(APIView):
             auth_code.save()
             user.question_banks.append(auth_code.question_bank.id)
             user.save()
-            return Response({},status.HTTP_200_OK)
+            return Response({}, status.HTTP_200_OK)
         return Response({'error': 'Code is invalid'}, status.HTTP_400_BAD_REQUEST)

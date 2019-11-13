@@ -1,6 +1,6 @@
 """ Authorization code """
 from django.db import models
-from django.utils import timezone
+# from django.utils import timezone
 
 from backend.models import QuestionBank
 
