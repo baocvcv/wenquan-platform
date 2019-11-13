@@ -3,12 +3,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-import psycopg2
+from psycopg2 import Error
 
 from backend.models import AuthCode
 # from backend.serializers import AuthCodeSerializer
 from backend.models import QuestionBank
-from backend.scripts.email_verification import generate_token
+from backend.scripts.generate_token import generate_token
 
 class AuthCodeView(APIView):
     """ Handle auth code """
@@ -38,7 +38,7 @@ class AuthCodeView(APIView):
                 try:
                     code.save()
                     codes.append(key)
-                except psycopg2.Error:
+                except Error: # psycopg2 error
                     i -= 1
             total_num += num
         valid_num = len(codes)

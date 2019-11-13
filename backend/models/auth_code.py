@@ -2,7 +2,7 @@
 from django.db import models
 # from django.utils import timezone
 
-from backend.models import QuestionBank
+from .question_bank import QuestionBank
 
 class AuthCode(models.Model):
     """ Auth code model """
