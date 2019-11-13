@@ -79,7 +79,7 @@ urlpatterns = [
         name="auth_code_create"
     ),
     path(
-        r'api/auth/code/<str:code>',
+        r'api/auth_code/<str:code>',
         views.AuthCodeDetailView.as_view(),
         name="auth_code_activate"
     )

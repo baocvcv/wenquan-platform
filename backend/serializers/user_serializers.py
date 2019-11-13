@@ -76,5 +76,5 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'username', 'password',
                   'last_login_time', 'last_login_ip', 'is_banned', 'is_active',
-                  'user_group', 'user_permissions', 'profile']
-        read_only_fields = ['last_login_time', 'last_login_ip']
+                  'user_group', 'user_permissions', 'profile', 'question_banks']
+        read_only_fields = ['last_login_time', 'last_login_ip',]

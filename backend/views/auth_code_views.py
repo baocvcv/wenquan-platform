@@ -18,7 +18,7 @@ class AuthCodeView(APIView):
         """ generate auth codes """
         q_bank_id = request.data['question_bank_id']
         q_bank = QuestionBank.objects.get(pk=q_bank_id)
-        auth_codes = q_bank.auth_code_set.all()
+        auth_codes = q_bank.authcode_set.all()
         total_num = len(auth_codes)
         # collect usable codes
         codes = []
@@ -40,6 +40,7 @@ class AuthCodeView(APIView):
                     codes.append(key)
                 except psycopg2.Error:
                     i -= 1
+            total_num += num
         valid_num = len(codes)
         return Response(
             {
@@ -65,5 +66,5 @@ class AuthCodeDetailView(APIView):
             auth_code.save()
             user.question_banks.append(auth_code.question_bank.id)
             user.save()
-            return Response(status.HTTP_200_OK)
+            return Response({},status.HTTP_200_OK)
         return Response({'error': 'Code is invalid'}, status.HTTP_400_BAD_REQUEST)
