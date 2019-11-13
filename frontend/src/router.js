@@ -22,7 +22,7 @@ const router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(
-          /* webpackChunkName: "about" */ "./components/QuestionCorrect.vue"
+          /* webpackChunkName: "about" */ "./components/PaperSolve.vue"
         )
     },
     {
