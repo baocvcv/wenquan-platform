@@ -112,4 +112,15 @@ urlpatterns = [
         views.PaperRecordDetail.as_view(),
         name="paper_record_detail"
     ),
+    # auth-code
+    path(
+        r'api/auth_code/',
+        views.AuthCodeView.as_view(),
+        name="auth_code_create"
+    ),
+    path(
+        r'api/auth_code/<str:code>',
+        views.AuthCodeDetailView.as_view(),
+        name="auth_code_activate"
+    )
 ]
