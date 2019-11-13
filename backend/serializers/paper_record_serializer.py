@@ -8,12 +8,14 @@ from backend.models import Paper
 class PaperRecordSerializer(serializers.ModelSerializer):
     "Serializer for PaperRecord"
     paper_id = serializers.IntegerField(source="paper.id")
+    paper_name = serializers.CharField(source="paper.title")
     is_active = serializers.BooleanField(default=True)
     record_time = serializers.DateTimeField(read_only=True)
     time_left = serializers.IntegerField(read_only=True)
     paper_total_points = serializers.IntegerField(source="paper.total_point")
     user_total_points = serializers.IntegerField(read_only=True)
     need_judging = serializers.BooleanField(read_only=True)
+    owner = serializers.IntegerField(source="user.id")
 
     def create(self, validated_data):
         " Creat paper record "
@@ -39,12 +41,13 @@ class PaperRecordSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "paper_id",
+            "paper_name",
             "record_time",
             "is_timed",
             "is_active",
             "time_left",
             "paper_total_points",
             "user_total_points",
-            "user_section_points",
             "need_judging",
+            "owner",
         ]

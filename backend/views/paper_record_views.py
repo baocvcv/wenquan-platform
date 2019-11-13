@@ -1,7 +1,7 @@
 """ PaperRecord View """
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+# from rest_framework import generics
 from rest_framework import status
 # from django.utils import timezone
 # from django.http import Http404
@@ -9,16 +9,49 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from backend.models import QuestionRecord
 from backend.models import PaperRecord
-# from backend.models import Paper
+from backend.models import Paper
 from backend.models.questions import Question
 from backend.models.questions.question import INT2TYPE
 from backend.serializers import QuestionRecordSerializer
 from backend.serializers import PaperRecordSerializer
 
-class PaperRecordList(generics.ListAPIView):
+class PaperRecordList(APIView):
     "Create and retrieve paper record"
-    queryset = PaperRecord.objects.all()
-    serializer_class = PaperRecordSerializer
+    @staticmethod
+    def get(request):
+        "retrieve records"
+        user = request.user
+        if user.user_group == 'Student':
+            if 'paper' in request.GET:
+                paper_records = user.paperrecord_set.filter(paper__id=request.GET['paper'])
+            else:
+                paper_records = user.paperrecord_set.all()
+        else:
+            if 'paper' in request.GET:
+                paper_records = PaperRecord.objects.filter(paper__id=request.GET['paper'])
+            else:
+                paper_records = PaperRecord.objects.all()
+        return Response(
+            PaperRecordSerializer(paper_records, many=True).data,
+            status.HTTP_200_OK
+        )
+
+    @staticmethod
+    def post(request):
+        " create record "
+        paper = Paper.objects.get(pk=request.data['paper_id'])
+        paper_record = PaperRecord(
+            user=request.user,
+            paper=paper,
+            is_timed=request.data['is_timed'],
+            time_left=paper.time_limit,
+            need_judging=paper.have_brief_ans,
+        )
+        paper_record.save()
+        return Response(
+            PaperRecordSerializer(paper_record).data,
+            status.HTTP_201_CREATED
+        )
 
 class PaperRecordDetail(APIView):
     "Update and retrieve paper record"
@@ -30,10 +63,10 @@ class PaperRecordDetail(APIView):
         paper_record_data = PaperRecordSerializer(paper_record).data
         # compile questions
         question_data = {}
-        paper = paper_record.paper
-        for question in paper.question_record_set.all():
-            q_data = QuestionRecordSerializer(question)
-            question_data[str(q_data.question_id)] = q_data
+        # paper = paper_record.paper
+        for question in paper_record.questionrecord_set.all():
+            q_data = QuestionRecordSerializer(question).data
+            question_data[question.id] = q_data
         paper_record_data['questions'] = question_data
         return Response(paper_record_data, status.HTTP_200_OK)
 
@@ -63,13 +96,13 @@ class PaperRecordDetail(APIView):
                     is_correct = True
                     scores = []
                 try:
-                    question_record = paper_record.question_record_set.get(
+                    question_record = paper_record.questionrecord_set.get(
                         question_id=q_data['id'],
                     )
                 except ObjectDoesNotExist:
                     question_record = QuestionRecord(
                         question_id=q_data['id'],
-                        question_type=INT2TYPE[question.question_type],
+                        question_type=INT2TYPE[str(question.question_type)],
                         is_correct=is_correct,
                         score=scores,
                         paper_record=paper_record
@@ -96,7 +129,7 @@ class PaperRecordDetail(APIView):
         "Modify a question record"
         paper_record = PaperRecord.objects.get(id=record_id)
         q_id = request.data['question_id']
-        question_record = paper_record.question_record_set.get(
+        question_record = paper_record.questionrecord_set.get(
             question_id=q_id
         )
         score = request.data['score']
