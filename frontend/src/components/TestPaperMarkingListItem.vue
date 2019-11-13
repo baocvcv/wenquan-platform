@@ -5,11 +5,21 @@
     </template>
     <v-list-item v-for="(record, key) in paper_records" :key="key">
       <v-list-item-content>
+	    <v-list-item-title v-text="record.owner"></v-list-item-title>
+		<v-list-item-subtitle v-text="record.record_timer"></v-list-item-subtitle>
         <v-row align="center">
-          <v-col>{{ record.id }}</v-col>
+          <v-col cols="4" sm="3" lg="2">
+		    <span>{{ record.owner }}</span>
+		  </v-col>
+		  <v-col cols="4" sm="3" lg="2">
+		    <span>{{ record.record_time }}</span>
+		  </v-col>
+		  <v-col cols="3" sm="2" lg="1">
+		    <span>published</span>
+		  </v-col>
         </v-row>
       </v-list-item-content>
-      <v-list-item-action> </v-list-item-action>
+      <v-list-item-action></v-list-item-action>
     </v-list-item>
   </v-list-group>
 </template>
