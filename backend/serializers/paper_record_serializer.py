@@ -8,6 +8,7 @@ from backend.models import Paper
 class PaperRecordSerializer(serializers.ModelSerializer):
     "Serializer for PaperRecord"
     paper_id = serializers.IntegerField(source="paper.id")
+    paper_name = serializers.CharField(source="paper.title")
     is_active = serializers.BooleanField(default=True)
     record_time = serializers.DateTimeField(read_only=True)
     time_left = serializers.IntegerField(read_only=True)
