@@ -54,10 +54,14 @@ class PaperRecordDetail(APIView):
             question_datas = section_data['questions']
             for q_data in question_datas:
                 question = Question.objects.get(id=q_data['id'])
-                is_correct, scores = question.checker(
-                    q_data['ans'],
-                    section_data['id']
-                )
+                if question.question_type != 5:
+                    is_correct, scores = question.checker(
+                        q_data['ans'],
+                        section_data['id']
+                    )
+                else:
+                    is_correct = True
+                    scores = []
                 try:
                     question_record = paper_record.question_record_set.get(
                         question_id=q_data['id'],

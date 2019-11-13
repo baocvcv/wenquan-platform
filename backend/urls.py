@@ -2,7 +2,6 @@
 # from django.urls import include
 from django.urls import path
 # from rest_framework import routers
-from rest_framework.authtoken import views as auth_views
 from backend import views
 
 # router = routers.DefaultRouter()
@@ -10,13 +9,32 @@ from backend import views
 urlpatterns = [
     # path('', include(router.urls)),
     # auth
-    path(r'api/jwt-auth/', views.auth_views.CustomAuthToken.as_view(), name='account-auth'),
-    path(r'jwt-auth2/', auth_views.obtain_auth_token),
+    path(
+        r'api/jwt-auth/',
+        views.auth_views.CustomAuthToken.as_view(),
+        name='account-auth'
+    ),
     # users
-    path(r'api/accounts/users/', views.UserList.as_view(), name='user-list'),
-    path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
-    path(r'api/verification/', views.EmailVerificationView.as_view(), name='verification'),
-    path(r'api/password/', views.ChangePasswordView.as_view(), name='password'),
+    path(
+        r'api/accounts/users/',
+        views.UserList.as_view(),
+        name='user-list'
+    ),
+    path(
+        r'api/accounts/users/<int:pk>/',
+        views.UserDetail.as_view(),
+        name='user-detail'
+    ),
+    path(
+        r'api/verification/',
+        views.EmailVerificationView.as_view(),
+        name='verification'
+    ),
+    path(
+        r'api/password/',
+        views.ChangePasswordView.as_view(),
+        name='password'
+    ),
     # questions
     path(
         r'api/questions/',
@@ -78,5 +96,15 @@ urlpatterns = [
         r'api/question_records/<int:pk>',
         views.QuestionRecordDetail.as_view(),
         name='question_record_detail',
+    ),
+    path(
+        r'api/paper_records/',
+        views.PaperRecordList.as_view(),
+        name="paper_record_list"
+    ),
+    path(
+        r'api/paper_records/<int:pk>',
+        views.PaperRecordDetail.as_view(),
+        name="paper_record_detail"
     ),
 ]

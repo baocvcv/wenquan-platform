@@ -20,7 +20,10 @@ class QuestionRecordList(generics.ListAPIView):
         data = request.data
         # judge
         question = Question.objects.get(id=data['question_id'])
-        is_correct, _ = question.checker(data['ans'])
+        if question.question_type != 5:
+            is_correct, _ = question.checker(data['ans'])
+        else:
+            is_correct = True
         # add record
         record = QuestionRecord(
             question_id=data['question_id'],

@@ -13,6 +13,7 @@ class PaperRecordSerializer(serializers.ModelSerializer):
     time_left = serializers.IntegerField(read_only=True)
     paper_total_points = serializers.IntegerField(source="paper.total_point")
     user_total_points = serializers.IntegerField(read_only=True)
+    need_judging = serializers.BooleanField(read_only=True)
 
     def create(self, validated_data):
         " Creat paper record "
@@ -21,6 +22,7 @@ class PaperRecordSerializer(serializers.ModelSerializer):
             paper=paper,
             is_timed=validated_data['is_timed'],
             time_left=paper.time_limit,
+            need_judging=paper.have_brief_ans,
         )
         paper_record.save()
         return paper_record
@@ -44,4 +46,5 @@ class PaperRecordSerializer(serializers.ModelSerializer):
             "paper_total_points",
             "user_total_points",
             "user_section_points",
+            "need_judging",
         ]
