@@ -41,6 +41,7 @@ class PaperRecordSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "paper_id",
+            "paper_name",
             "record_time",
             "is_timed",
             "is_active",
