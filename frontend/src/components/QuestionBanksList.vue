@@ -297,11 +297,7 @@ export default {
         that.$Progress.set(0);
         for (var i = 0; i < response.data.length; i++) {
           axios
-            .get(
-              "/api/question_banks/" +
-                response.data[i] +
-                "/"
-            )
+            .get("/api/question_banks/" + response.data[i] + "/")
             .then(sub_response => {
               that.question_banks.push(that.parse(sub_response.data));
               while (lock);

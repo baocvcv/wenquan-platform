@@ -11,11 +11,7 @@
           Test
         </v-tab>
         <v-tab-item>
-          <question-banks-list
-            :flat="true"
-            :readonly="true"
-            select
-          ></question-banks-list>
+          <practice />
         </v-tab-item>
         <v-tab-item>
           <test-papers-list
@@ -32,12 +28,12 @@
 </template>
 
 <script>
-import QuestionBanksList from "@/components/QuestionBanksList.vue";
+import Practice from "@/components/Practice.vue";
 import TestPapersList from "@/components/TestPapersList.vue";
 export default {
   name: "learn",
   components: {
-    "question-banks-list": QuestionBanksList,
+    practice: Practice,
     "test-papers-list": TestPapersList
   }
 };
