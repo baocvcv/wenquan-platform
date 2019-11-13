@@ -91,7 +91,8 @@ export default {
         v => !!v || "Question number is required!",
         v => /[0-9]+/.test(v) || "An integer is expected!",
         v => v > 0 || "Question number cannot be under 1!"
-      ]
+      ],
+      practice_paper: undefined
     };
   },
   methods: {
@@ -108,6 +109,7 @@ export default {
         .get("/api/question_banks/" + this.bank_id + "/")
         .then(response => {
           let all_question = response.data.questions;
+
           if (all_question.length < this.question_number) {
             this.warning =
               "There are only " +
@@ -115,14 +117,34 @@ export default {
               " questions in this question banks, so we have reduced question number to the limit.";
             this.question_number = all_question.length;
           }
+
           let selected_question_id = [];
+          this.practice_paper = {
+            title: "Self-practice",
+            total_point: this.question_num,
+            sections: [
+              {
+                title: "Pracitice",
+                total_point: this.question_num,
+                section_num: "1",
+                questions: []
+              }
+            ]
+          };
           for (var i = 0; i < this.question_number; i++) {
             let rand = Math.floor(Math.random() * all_question.length);
             selected_question_id.push(all_question[rand]);
+            this.practice_paper.sections[0].questions.push({
+              id: all_question[rand],
+              question_point: 1,
+              question_num: i + 1
+            });
             all_question.splice(rand, 1);
           }
-          console.log(selected_question_id);
+          console.log(this.practice_paper);
+
           this.practicing = true;
+          this.$emit("practicing", this.practicing);
         })
         .catch(error => {
           this.error = "Oops!" + error;

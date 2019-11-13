@@ -48,7 +48,7 @@ export default {
       );
       if (answer) next();
       else next(false);
-    }
+    } else next();
   }
 };
 </script>
