@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-stepper v-model="step" v-show="!practicing">
+    <v-stepper v-model="step">
       <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1"
           >Choose Question Bank</v-stepper-step
@@ -61,6 +61,7 @@
           <span absolute center v-if="warning" style="color: grey">{{
             warning
           }}</span>
+          <paper-solve v-if="!!practice_paper" :initData="practice_paper" />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -69,12 +70,14 @@
 
 <script>
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
+import PaperSolve from "@/components/PaperSolve.vue";
 import axios from "axios";
 export default {
   name: "practice",
   props: {},
   components: {
-    "question-banks-list": QuestionBanksList
+    "question-banks-list": QuestionBanksList,
+    "paper-solve": PaperSolve
   },
   data: function() {
     return {
