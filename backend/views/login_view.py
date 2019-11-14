@@ -28,7 +28,7 @@ class LoginView(KnoxLoginView):
         user.save()
 
         if not user.is_active:
-            return Response({'error': 'Account not activated'}, status.HTTP_401_UNAUTHORIZED)
+            return Response({'non_field_errors': ['Account not activated']}, status.HTTP_401_UNAUTHORIZED)
 
         login(request, user)
         return super(LoginView, self).post(request, format=None)
