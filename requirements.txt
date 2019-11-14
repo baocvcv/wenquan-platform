@@ -11,5 +11,4 @@ pylint-plugin-utils==0.6
 pytest==5.0.1
 pytest-django==3.5.1
 django-ipware==2.1.0
-djangorestframework-simplejwt==4.3.0
-pyjwt==1.7.1
+django-rest-knox==4.1.0

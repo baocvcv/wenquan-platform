@@ -2,7 +2,7 @@
 
 from .users_views import UserList
 from .users_views import UserDetail
-from .auth_views import CustomAuthToken
+from .login_view import LoginView
 from .verification_views import EmailVerificationView
 from .change_password_view import ChangePasswordView
 

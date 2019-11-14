@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend',
     'rest_framework',
-    'rest_framework.authtoken',
+    'knox',
     'polymorphic',
     'corsheaders',
-    # 'mailer',
 ]
 
 MIDDLEWARE = [
@@ -89,8 +88,8 @@ DATABASES = {
         'NAME': 'wen_quan',
         'USER': 'postgres',
         'PASSWORD': '123',
-        # 'HOST': 'postgres.Never404.secoder.local',
-        'HOST': 'localhost',
+        'HOST': 'postgres.Never404.secoder.local',
+        # 'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -137,12 +136,7 @@ STATICFILES_DIRS = [
 
 # Rest framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ( 'knox.auth.TokenAuthentication',),
     #  'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
@@ -150,10 +144,9 @@ REST_FRAMEWORK = {
 
 # authentication settings
 AUTH_USER_MODEL = 'backend.User'
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', )
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.AllowAllUsersModelBackend', )
 
 # email backend
-# EMAIL_BACKEND = 'mailer.backend.DbBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_MAX_DEFERRED = 5
 
