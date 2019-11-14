@@ -18,7 +18,7 @@ class TestAuthview(APITestCase):
         """ test authentication """
         # add user
         url1 = reverse('user-list')
-        response1 = self.client.post(url1, USER_DATA, format='json')
+        self.client.post(url1, USER_DATA, format='json')
         # activate
         activate_all_users()
         # auth
