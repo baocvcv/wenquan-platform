@@ -23,7 +23,7 @@ class TestVerificationView(APITestCase):
         url2 = reverse('account-auth')
         response1 = self.client.post(url2, USER_DATA, format='json')
         # not activated
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response1.status_code, status.HTTP_401_UNAUTHORIZED)
         # activate
         url3 = reverse('verification')
         verification_token = EmailVerificationRecord.objects.get().token

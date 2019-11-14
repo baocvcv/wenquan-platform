@@ -25,7 +25,7 @@ class User(AbstractUser):
     )
 
     last_login_time = models.DateTimeField(auto_now=True)
-    last_login_ip = models.GenericIPAddressField(default="127.0.0.1")
+    last_login_ip = models.GenericIPAddressField(null=True)
 
     is_banned = models.BooleanField(default=False)
 

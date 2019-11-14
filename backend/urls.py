@@ -1,18 +1,26 @@
 """Url config for django rest framework"""
-# from django.urls import include
 from django.urls import path
-# from rest_framework import routers
+from knox import views as knox_views
 from backend import views
 
-# router = routers.DefaultRouter()
 
 urlpatterns = [
     # path('', include(router.urls)),
     # auth
     path(
         r'api/jwt-auth/',
-        views.auth_views.CustomAuthToken.as_view(),
+        views.LoginView.as_view(),
         name='account-auth'
+    ),
+    path(
+        r'api/logout/',
+        knox_views.LogoutView.as_view(),
+        name='knox_logout'
+    ),
+    path(
+        r'api/logoutall/',
+        knox_views.LogoutAllView.as_view(),
+        name='knox_logoutall'
     ),
     # users
     path(
