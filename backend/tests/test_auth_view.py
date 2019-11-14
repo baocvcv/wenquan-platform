@@ -25,4 +25,3 @@ class TestAuthview(APITestCase):
         url2 = reverse('account-auth')
         response2 = self.client.post(url2, USER_DATA, format='json')
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response1.data['token'], response2.data['token'])
