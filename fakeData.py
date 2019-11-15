@@ -38,6 +38,7 @@ def createUser(
         user_permissions=permission,
         profile=profile,
         is_banned=is_banned,
+        question_banks=[],
     )
     return user
 
