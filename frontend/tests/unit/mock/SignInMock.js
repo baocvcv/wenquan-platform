@@ -5,7 +5,8 @@ nock(/.*/)
     return body.username == "testusr" && body.password == "testpsw";
   })
   .reply(200, {
-    token: "ok"
+    token: "ok",
+    user: {}
   });
 nock(/.*/)
   .post("/api/jwt-auth/", body => {
@@ -13,7 +14,8 @@ nock(/.*/)
   })
   .reply(200, {
     token: "ban",
-    is_banned: true
+    is_banned: true,
+    user: {}
   });
 nock(/.*/)
   .post("/api/jwt-auth/", body => {
