@@ -5,7 +5,7 @@ import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
 import RouterRule from "@/router";
-import UserFactory from "../unit/utils/UserFactory.js";
+import UserFactory from "./utils/UserFactory.js";
 
 const localVue = createLocalVue();
 Vue.use(Vuex);
