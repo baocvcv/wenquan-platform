@@ -109,7 +109,7 @@ export default {
             user.user_group = response.data.user.user_group;
             user.token = response.data.token;
 
-            this.$store.commit("login", {
+            this.$store.commit("updateUser", {
               user: user
             });
 
