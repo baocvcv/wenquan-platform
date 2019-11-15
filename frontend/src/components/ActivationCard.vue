@@ -29,16 +29,46 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "activation-card",
   data: function() {
     return {
-      code: "",
+      code: null,
       valid: false
     };
   },
   methods: {
-    activate() {},
+    activate() {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      axios({
+        method: "get",
+        url: "http://localhost:8000/api/auth_code/" + String(this.code),
+        headers: headers
+      })
+        .then(response => {
+          let msg =
+            "The bank has been activated. You can now find it in 'MYBANK'.";
+          this.$emit("activated", {
+            status: true,
+            msg: msg
+          });
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 400) {
+            let msg = "The code has expired or been used or is invalid.";
+            this.$emit("activated", {
+              status: false,
+              msg: msg
+            });
+          } else {
+            console.log(error);
+          }
+        });
+    },
     reset() {
       this.$refs["form"].reset();
     }

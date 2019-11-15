@@ -122,12 +122,17 @@
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-data-table :headers="[{
-              text:'Availabe Codes',
-              align: 'left',
-              sortable: false,
-              value: 'code'
-            }]" :items="td_codes"></v-data-table>
+            <v-data-table
+              :headers="[
+                {
+                  text: 'Availabe Codes',
+                  align: 'left',
+                  sortable: false,
+                  value: 'code'
+                }
+              ]"
+              :items="td_codes"
+            ></v-data-table>
           </v-card-text>
         </v-card>
       </v-col>
@@ -175,7 +180,7 @@ export default {
       let ret_codes = [];
       let index;
       for (index in this.codes) {
-        ret_codes.push({code: this.codes[index]});
+        ret_codes.push({ code: this.codes[index] });
       }
       return ret_codes;
     }
