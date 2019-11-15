@@ -19,6 +19,7 @@
             select
             readonly
             title="Question Banks"
+            :admin="false"
             v-on:done-select="done_select_bank"
           />
         </v-stepper-content>

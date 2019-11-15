@@ -13,7 +13,7 @@
         ></v-text-field>
         <v-dialog
           v-model="create_bank_dialog"
-          v-if="!readonly"
+          v-if="admin"
           max-width="600px"
         >
           <template v-slot:activator="{ on }">
@@ -26,7 +26,7 @@
           ></create-question-bank>
         </v-dialog>
 
-        <v-dialog v-else v-model="activation_dialog" max-width="600px">
+        <v-dialog v-if="explore" v-model="activation_dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" elevation="0" class="ml-2" v-on="on">
               Activate
@@ -92,7 +92,7 @@
             </v-list-item-action>
 
             <v-list-item-action
-              v-bind:style="readonly ? 'display:none' : ''"
+              v-bind:style="!explore ? 'display:none' : ''"
               @click.stop="
                 show_del_dialog = true;
                 cur_qst_bank = qst_bank;
@@ -136,7 +136,7 @@
               <div class="flex-grow-1"></div>
               <v-btn
                 color="primary"
-                v-if="!readonly"
+                v-if="!explore"
                 outlined
                 @click="
                   select
@@ -148,14 +148,14 @@
               </v-btn>
               <v-btn
                 color="primary"
-                v-if="readonly && cur_qst_bank.details.Authority == 'private'"
+                v-if="explore && cur_qst_bank.details.Authority == 'private'"
                 outlined
               >
                 Buy
               </v-btn>
               <v-btn
                 color="primary"
-                v-if="readonly && cur_qst_bank.details.Authority == 'public'"
+                v-if="explore && cur_qst_bank.details.Authority == 'public'"
                 outlined
               >
                 Add
@@ -223,10 +223,6 @@ export default {
       type: Boolean,
       default: false
     },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
     title: {
       type: String,
       default: ""
@@ -234,6 +230,22 @@ export default {
     flat: {
       type: Boolean,
       default: false
+    },
+    explore: {
+      type: Boolean,
+      default: false
+    },
+    mybank: {
+      type: Boolean,
+      default: false
+    },
+    bankIDs: {
+      type: Array,
+      default: null
+    },
+    admin: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -304,35 +316,48 @@ export default {
   mounted: function() {
     let that = this;
     that.process = "Fetching data from server...";
-    axios
-      .get("/api/question_banks/")
-      .then(response => {
-        let all_count = response.data.length;
-        let count = 0;
-        let lock = false;
-        that.$Progress.set(0);
-        for (var i = 0; i < response.data.length; i++) {
-          axios
-            .get("/api/question_banks/" + response.data[i] + "/")
-            .then(sub_response => {
-              that.question_banks.push(that.parse(sub_response.data));
-              while (lock);
-              lock = true;
-              count++;
-              lock = false;
-              that.process =
-                "Loading question banks: " + count + " / " + all_count;
-              that.$Progress.increase((1 / all_count) * 100);
-              if (count == all_count) {
-                that.process = "Total Count: " + all_count;
-                that.$Progress.finish();
-              }
-            });
-        }
-      })
-      .catch(error => {
-        that.process = "Failed to access data: " + error;
-      });
+    let load_question_banks = async (question_banks) => {
+      let all_count = question_banks.length;
+      let count = 0;
+      let lock = false;
+      that.$Progress.set(0);
+      if (all_count === 0) {
+        that.$Progress.finish();
+        that.process = "Total Count: " + all_count;
+      }
+      for (var i = 0; i < question_banks.length; i++) {
+        axios
+          .get("/api/question_banks/" + question_banks[i] + "/")
+          .then(sub_response => {
+            that.question_banks.push(that.parse(sub_response.data));
+            while (lock);
+            lock = true;
+            count++;
+            lock = false;
+            that.process =
+              "Loading question banks: " + count + " / " + all_count;
+            that.$Progress.increase((1 / all_count) * 100);
+            if (count == all_count) {
+              that.process = "Total Count: " + all_count;
+              that.$Progress.finish();
+            }
+          });
+      }
+    }
+    if (!this.bankIDs) {
+      axios
+        .get("/api/question_banks/")
+        .then(response => {
+          let question_banks = response.data;
+          load_question_banks(question_banks);
+        })
+        .catch(error => {
+          that.process = "Failed to access data: " + error;
+        });
+    }
+    else {
+      load_question_banks(this.bankIDs);
+    }
   }
 };
 </script>

@@ -8,9 +8,13 @@ export default new Vuex.Store({
     user: null
   },
   mutations: {
-    login(state, payload) {
+    updateUser(state, payload) {
       state.user = payload.user;
       sessionStorage.setItem("user", JSON.stringify(payload.user));
+    },
+    updateUserWithKey(state, payload) {
+      state.user[payload.key] = payload.value;
+      sessionStorage.setItem("user", JSON.stringify(state.user));
     }
   },
   actions: {}

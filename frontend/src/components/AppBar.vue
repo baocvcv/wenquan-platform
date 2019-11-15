@@ -188,7 +188,7 @@ export default {
       var _user = this.$store.state.user;
       if (!_user && sessionStorage.getItem("user")) {
         _user = JSON.parse(sessionStorage.getItem("user"));
-        this.$store.commit("login", {
+        this.$store.commit("updateUser", {
           user: _user
         });
       }
