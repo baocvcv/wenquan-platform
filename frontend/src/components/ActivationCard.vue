@@ -46,7 +46,7 @@ export default {
       };
       axios({
         method: "get",
-        url: "http://localhost:8000/api/auth_code/" + String(this.code),
+        url: "/api/auth_code/" + String(this.code),
         headers: headers
       })
         .then(response => {
@@ -56,6 +56,14 @@ export default {
             status: true,
             msg: msg
           });
+          axios
+            .get("/api/accounts/users/" + this.$store.state.user.id + "/")
+            .then(response => {
+              this.$store.commit("updateUserWithKey", {
+                key: "question_banks",
+                value: response.data.question_banks
+              })
+            })
         })
         .catch(error => {
           if (error.response && error.response.status === 400) {
