@@ -105,8 +105,7 @@ export default {
               return;
             }
 
-            user.user_permissions = response.data.user.user_permissions;
-            user.user_group = response.data.user.user_group;
+            user = response.data.user;
             user.token = response.data.token;
 
             this.$store.commit("updateUser", {
