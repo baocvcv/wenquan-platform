@@ -62,23 +62,38 @@
           <span absolute center v-if="warning" style="color: grey">{{
             warning
           }}</span>
-          <paper-solve v-if="!!practice_paper" :initData="practice_paper" />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+
+    <!--dialog for warning-->
+    <v-dialog v-model="warning" hide-overlay persistent width="300">
+      <v-card>
+        <v-card-title>Sorry</v-card-title>
+        <v-card-text align="center">{{ warning }}</v-card-text>
+        <v-card-actions>
+          <v-btn
+            text
+            @click="
+              practing = true;
+              $emit('practicing', practice_paper);
+            "
+            >OK</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
-import PaperSolve from "@/components/PaperSolve.vue";
 import axios from "axios";
 export default {
   name: "practice",
   props: {},
   components: {
-    "question-banks-list": QuestionBanksList,
-    "paper-solve": PaperSolve
+    "question-banks-list": QuestionBanksList
   },
   data: function() {
     return {
@@ -145,10 +160,9 @@ export default {
             });
             all_question.splice(rand, 1);
           }
-          console.log(this.practice_paper);
 
-          this.practicing = true;
-          this.$emit("practicing", this.practicing);
+          //this.practicing = true;
+          //this.$emit("practicing", this.practice_paper);
         })
         .catch(error => {
           this.error = "Oops!" + error;
