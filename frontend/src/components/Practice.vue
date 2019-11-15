@@ -62,23 +62,40 @@
           <span absolute center v-if="warning" style="color: grey">{{
             warning
           }}</span>
-          <paper-solve v-if="!!practice_paper" :initData="practice_paper" />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
+
+    <!--dialog for warning-->
+    <v-dialog v-model="warning_dialog" hide-overlay persistent width="300">
+      <v-card>
+        <v-card-title>Tip</v-card-title>
+        <v-card-text align="center">{{ warning }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            @click="
+              warning_dialog = false;
+              practing = true;
+              $emit('practicing', practice_paper);
+            "
+            >Ok</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
-import PaperSolve from "@/components/PaperSolve.vue";
 import axios from "axios";
 export default {
   name: "practice",
   props: {},
   components: {
-    "question-banks-list": QuestionBanksList,
-    "paper-solve": PaperSolve
+    "question-banks-list": QuestionBanksList
   },
   data: function() {
     return {
@@ -90,6 +107,7 @@ export default {
       loading_content: "Generating Practice Paper ...",
       error: "",
       warning: "",
+      warning_dialog: false,
       practicing: false,
       question_number_rules: [
         v => !!v || "Question number is required!",
@@ -120,6 +138,8 @@ export default {
               all_question.length +
               " questions in this question banks, so we have reduced question number to the limit.";
             this.question_number = all_question.length;
+          } else {
+            this.warning = "Let's go! practice !";
           }
 
           let selected_question_id = [];
@@ -145,10 +165,7 @@ export default {
             });
             all_question.splice(rand, 1);
           }
-          console.log(this.practice_paper);
-
-          this.practicing = true;
-          this.$emit("practicing", this.practicing);
+          this.warning_dialog = true;
         })
         .catch(error => {
           this.error = "Oops!" + error;
