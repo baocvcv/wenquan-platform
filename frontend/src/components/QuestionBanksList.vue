@@ -32,7 +32,10 @@
               Activate
             </v-btn>
           </template>
-          <activation-card ref="activation-card"></activation-card>
+          <activation-card
+            ref="activation-card"
+            @activated="activated"
+          ></activation-card>
         </v-dialog>
       </v-toolbar>
       <v-card-text class="pt-0">
@@ -199,6 +202,12 @@
         </v-dialog>
       </v-card-text>
     </v-card>
+    <v-snackbar v-model="snack_bar" :timeout="2000">
+      <p>
+        {{ snack_bar_msg }}
+      </p>
+      <v-btn text @click="snack_bar = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -243,7 +252,9 @@ export default {
       },
       process: "",
       create_bank_dialog: false,
-      activation_dialog: false
+      activation_dialog: false,
+      snack_bar: false,
+      snack_bar_msg: null
     };
   },
   methods: {
@@ -257,6 +268,11 @@ export default {
     },
     select_action(id) {
       this.$emit("done-select", id);
+    },
+    activated(info) {
+      if (info.status) this.activation_dialog = false;
+      this.snack_bar = true;
+      this.snack_bar_msg = info.msg;
     },
     parse(input) {
       var result = {
