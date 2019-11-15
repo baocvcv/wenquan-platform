@@ -157,6 +157,7 @@
                 color="primary"
                 v-if="explore && cur_qst_bank.details.Authority == 'public'"
                 outlined
+                @click="add_to_my_bank(cur_qst_bank.id)"
               >
                 Add
               </v-btn>
@@ -303,6 +304,21 @@ export default {
         }
       };
       return result;
+    },
+    add_to_my_bank(bankID) {
+      let user = this.$state.store.user;
+      user.question_banks.push(bankID);
+      axios
+        .get("/api/account/users/" + user.id + "/", user)
+        .then(response => {
+          this.$store.commit("updateUserWithKey", {
+            key: "question_banks",
+            value: user.question_banks
+          })
+        })
+        .catch(error => {
+          console.log(error);
+        })
     }
   },
   watch: {
