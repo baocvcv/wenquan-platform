@@ -34,7 +34,7 @@
             lg="4"
             sm="12"
           >
-            <test-papers-list-item :test_paper="paper"
+            <test-papers-list-item :test_paper="paper" :readonly="readonly"
               ><v-btn icon dark
                 ><v-icon>mdi-heart</v-icon></v-btn
               ></test-papers-list-item
@@ -74,6 +74,10 @@ export default {
     title: {
       type: String,
       default: "Test Papers"
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   components: {

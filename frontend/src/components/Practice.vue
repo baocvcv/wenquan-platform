@@ -67,18 +67,20 @@
     </v-stepper>
 
     <!--dialog for warning-->
-    <v-dialog v-model="warning" hide-overlay persistent width="300">
+    <v-dialog v-model="warning_dialog" hide-overlay persistent width="300">
       <v-card>
-        <v-card-title>Sorry</v-card-title>
+        <v-card-title>Tip</v-card-title>
         <v-card-text align="center">{{ warning }}</v-card-text>
         <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
             text
             @click="
+              warning_dialog = false;
               practing = true;
               $emit('practicing', practice_paper);
             "
-            >OK</v-btn
+            >Ok</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -105,6 +107,7 @@ export default {
       loading_content: "Generating Practice Paper ...",
       error: "",
       warning: "",
+      warning_dialog: false,
       practicing: false,
       question_number_rules: [
         v => !!v || "Question number is required!",
@@ -135,6 +138,8 @@ export default {
               all_question.length +
               " questions in this question banks, so we have reduced question number to the limit.";
             this.question_number = all_question.length;
+          } else {
+            this.warning = "Let's go! practice !";
           }
 
           let selected_question_id = [];
@@ -160,9 +165,7 @@ export default {
             });
             all_question.splice(rand, 1);
           }
-
-          //this.practicing = true;
-          //this.$emit("practicing", this.practice_paper);
+          this.warning_dialog = true;
         })
         .catch(error => {
           this.error = "Oops!" + error;
