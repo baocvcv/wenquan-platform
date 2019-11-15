@@ -126,16 +126,17 @@ export default {
           this.question.question_choice[index];
       }
     }
-    let node;
-    for (node in this.question.parents_node) {
+    let index;
+    for (index in this.question.parents_node) {
+      let node = this.question.parents_node[index];
       axios
-        .get("/api/knowledge_nodes/" + this.question.parents_node[node] + "/")
+        .get("/api/knowledge_nodes/" + node + "/")
         .then(response => {
-          if (this.question.parents_node[node] != this.question.root_id)
+          if (node != this.question.root_id)
             this.nodes.push(response.data.name);
           if (
             this.nodes.length == 0 &&
-            node == this.question.parents_node.length - 1
+            index == this.question.parents_node.length - 1
           )
             this.nodes.push("Uncategorized");
         })
