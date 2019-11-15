@@ -48,10 +48,10 @@ export default {
     submit() {
       const post = {
         question_bank_id: this.bankID,
-        number: Number(this.number),
+        num: Number(this.number),
         length: Number(this.length)
       };
-      axios.post("/api/auth_codes/", post).then(response => {
+      axios.post("/api/auth_code/", post).then(response => {
         this.$refs["form"].reset();
         this.$emit("add-auth-code", response.data);
       });

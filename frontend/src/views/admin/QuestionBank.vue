@@ -3,7 +3,7 @@
     <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     <v-row>
       <v-col cols="12" sm="8" md="8">
-        <v-card v-show="!loading">
+        <v-card v-show="!loading" style="height: 100%">
           <v-card-title
             >Profile
             <v-btn absolute right icon @click="edit_button_clicked"
@@ -115,27 +115,19 @@
               <v-col cols="12" md="6" class="pb-0">
                 <v-text-field
                   label="Available Code Count"
-                  v-model="Available_code_count"
+                  v-model="available_code_count"
                   :readonly="true"
                   outlined
                 >
                 </v-text-field>
               </v-col>
             </v-row>
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text--left">Available Codes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="code in codes" :key="code">
-                    <td>{{ code }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
+            <v-data-table :headers="[{
+              text:'Availabe Codes',
+              align: 'left',
+              sortable: false,
+              value: 'code'
+            }]" :items="td_codes"></v-data-table>
           </v-card-text>
         </v-card>
       </v-col>
@@ -166,7 +158,7 @@ export default {
   },
   data: () => ({
     question_bank: {
-      id: -1
+      id: null
     },
     edited_question_bank: {},
     edit_mode: false,
@@ -175,9 +167,19 @@ export default {
     edited: false,
     loading: false,
     codes: [],
-    invitation_code_count: "",
-    available_code_count: ""
+    invitation_code_count: null,
+    available_code_count: null
   }),
+  computed: {
+    td_codes() {
+      let ret_codes = [];
+      let index;
+      for (index in this.codes) {
+        ret_codes.push({code: this.codes[index]});
+      }
+      return ret_codes;
+    }
+  },
   watch: {
     edited_question_bank: {
       handler: function() {
