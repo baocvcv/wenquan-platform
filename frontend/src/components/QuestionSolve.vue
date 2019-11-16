@@ -21,7 +21,7 @@
                 </v-row>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'single'">
-                <v-radio-group v-model="result.answer[0]">
+                <v-radio-group v-model="result.answer">
                     <v-radio
                         v-for="(item,index) in question_data.question_choice"
                         :key="item"
@@ -32,7 +32,7 @@
                 </v-radio-group>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'TorF'">
-                <v-radio-group v-model="result.answer[0]">
+                <v-radio-group v-model="result.answer">
                     <v-radio
                         :value="true"
                         label="T"
@@ -58,7 +58,7 @@
             <v-list-item v-if="question_data.question_type == 'brief_ans'">
                 <v-textarea
                     label="Answer"
-                    v-model="result.answer[0]"
+                    v-model="result.answer"
                     outlined
                     auto-grow
                     :readonly="readonly"
@@ -93,7 +93,8 @@ export default {
                 return {
                     answer: [],
                     score: [],
-                    comment: ""
+                    comment: "",
+                    answered: false
                 };
             }
         },
@@ -109,8 +110,8 @@ export default {
     watch: {
         result: {
             handler(newVal) {
+                newVal.answered = true;
                 this.$emit("change",newVal);
-                console.log("change");
             },
             deep: true
         }
