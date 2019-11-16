@@ -1,6 +1,6 @@
 <template>
     <div class="test">
-        <paper-solve v-if="paper_data" :initData="paper_data"></paper-solve>
+        <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit"></paper-solve>
         <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     </div>
 </template>
@@ -37,6 +37,15 @@ export default {
             }
             }
             this.paper_data = result;
+
+            //start a new record
+            let record = await axios.post("/api/paper_records/",{
+                paper_id: id,
+                is_timed: true
+            });
+
+            this.record_id = record.data.id;
+
             this.loading = false;
         })
         .catch(error => {
@@ -49,8 +58,17 @@ export default {
     data: function() {
         return {
             loading: false,
-            paper_data: null
+            paper_data: null,
+            record_id: null
         };
+    },
+    methods: {
+        submit(result) {
+            result.paper_id = this.$route.params.id;
+            result.action = "finish";
+            axios.post("/api/paper_records/" + this.record_id + "/",result)
+                .catch(err => console.log(err));
+        }
     }
 }
 </script>

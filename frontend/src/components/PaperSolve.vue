@@ -65,7 +65,7 @@
             </v-list-item>
             <v-list-item>
               <v-spacer></v-spacer>
-              <v-btn outlined>Submit</v-btn>
+              <v-btn outlined @click="submit">Submit</v-btn>
               <v-spacer></v-spacer>
             </v-list-item>
           </v-list>
@@ -175,6 +175,33 @@ export default {
         this.current_question =
           this.paper.sections[this.current_section].questions.length - 1;
       }
+    },
+    parse_answer(result) {
+      if(result.answer instanceof Array)
+        result.answer.forEach(element => {
+          if(!element) element = "";
+        });
+      return result.answer;
+    },
+    submit() {
+      let result = {
+        sections: []
+      };
+      for(var i = 0;i < this.paper.sections.length;i++){
+        result.sections[i] = {
+          id: this.paper.sections[i].id,
+          questions: []
+        };
+        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
+          console.log(this.current_total_index(i,j));
+          result.sections[i].questions[j] = {
+            id: this.paper.sections[i].questions[j].id,
+            ans: this.parse_answer(this.answers[this.current_total_index(i,j)])
+          }
+        }
+      }
+      this.$emit("submit", result);
+      console.log(result)
     }
   }
 };
