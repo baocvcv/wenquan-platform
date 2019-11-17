@@ -306,7 +306,7 @@ export default {
       return result;
     },
     add_to_my_bank(bankID) {
-      let user = this.$state.store.user;
+      let user = this.$store.state.user;
       user.question_banks.push(bankID);
       axios
         .get("/api/account/users/" + user.id + "/", user)
