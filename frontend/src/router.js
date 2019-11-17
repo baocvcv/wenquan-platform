@@ -101,6 +101,11 @@ const router = new Router({
       component:() => import("./views/Test.vue")
     },
     {
+      path: "/activate/:token",
+      name: "activate",
+      component: () => import("./views/Activate.vue")
+    },
+    {
       path: "*",
       name: "404",
       component: () => import("./views/404Error.vue")
@@ -119,7 +124,8 @@ router.beforeEach((to, from, next) => {
         to.path != "/" &&
         to.path != "/about" &&
         to.path != "/signin" &&
-        to.path != "/signup"
+        to.path != "/signup" &&
+        to.name != "activate"
       ) {
         next("/signin");
       } else {
