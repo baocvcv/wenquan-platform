@@ -309,7 +309,7 @@ export default {
       let user = this.$store.state.user;
       user.question_banks.push(bankID);
       axios
-        .get("/api/account/users/" + user.id + "/", user)
+        .put("/api/account/users/" + user.id + "/", user)
         .then(response => {
           this.$store.commit("updateUserWithKey", {
             key: "question_banks",
