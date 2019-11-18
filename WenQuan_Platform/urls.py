@@ -23,8 +23,9 @@ from . import frontend
 urlpatterns = [
     path('admin/', admin.site.urls),
     # This line is added temporarily to test whether Django and Vue combines well
-    #path('', TemplateView.as_view(template_name="index.html")),
+    # path('', TemplateView.as_view(template_name="index.html")),
     path('', include('backend.urls')),
+    re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
 
 urlpatterns += staticfiles_urlpatterns()
