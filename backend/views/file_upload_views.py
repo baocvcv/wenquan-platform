@@ -1,3 +1,4 @@
+"""Views for upload files"""
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils import timezone
@@ -12,8 +13,7 @@ class ImageUploadView(APIView):
         if 'imagefile' in request.FILES:
             image = request.FILES["imagefile"]
             image.name = str(request.user) + str(timezone.now()) + '.jpg'
-            s = ImageModel(image=image)
-            s.save()
-            return Response({'url': str(s.image.url)})
-        else:
-            return Response('Error')
+            instance = ImageModel(image=image)
+            instance.save()
+            return Response({'url': str(instance.image.url)})
+        return Response('Error')
