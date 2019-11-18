@@ -18,6 +18,8 @@ from django.urls import path, include, re_path
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.static import serve
+from WenQuan_Platform import settings
 from . import frontend
 
 urlpatterns = [
