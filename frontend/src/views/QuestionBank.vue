@@ -80,7 +80,7 @@
           </v-expand-transition>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4" md="4">
+      <v-col cols="12" sm="4" md="4" v-if="editable">
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title>
             Activation Code
