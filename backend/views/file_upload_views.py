@@ -19,4 +19,4 @@ class ImageUploadView(APIView):
             instance = ImageModel(image=image)
             instance.save()
             return Response({'url': str(instance.image.url)})
-        return Response('Error')
+        return Response('Error', status=400)
