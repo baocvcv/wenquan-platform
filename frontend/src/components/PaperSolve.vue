@@ -213,10 +213,10 @@ export default {
         for(var j = 0;j < this.paper.sections[i].questions.length;j++){
           let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
           if(current_answer)
-            result.sections[i].questions[j] = {
+            result.sections[i].questions.push({
               id: this.paper.sections[i].questions[j].id,
               ans: current_answer
-            };
+            });
           else all_answered = false;
         }
       }
