@@ -32,11 +32,12 @@
             <br />
             <v-label>{{ placeholder }}</v-label>
           </v-col>
-          <v-col v-else align="center">
+          <v-col v-if="loading" align="center">
             <v-progress-circular
               indeterminate
               color="primary"
             ></v-progress-circular>
+			<br />
             <v-label>Uploading ... </v-label>
           </v-col>
         </v-row>
