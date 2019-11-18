@@ -25,22 +25,29 @@
               <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
           </v-col>
-          <v-col v-if="check_create()" align="center">
+          <v-col v-if="check_create() && !loading" align="center">
             <v-btn icon large @click="upload()">
               <v-icon color="green">mdi-plus</v-icon>
             </v-btn>
             <br />
             <v-label>{{ placeholder }}</v-label>
           </v-col>
+          <v-col v-else align="center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+            <v-label>Uploading ... </v-label>
+          </v-col>
         </v-row>
       </v-container>
-        <input
-          ref="upload"
-          type="file"
-          @change="preview_image($event)"
-          accept="image/*"
-          style="display: none"
-        />
+      <input
+        ref="upload"
+        type="file"
+        @change="preview_image($event)"
+        accept="image/*"
+        style="display: none"
+      />
     </v-card>
 
     <v-dialog v-model="not_an_image" max-width="250px">
@@ -109,7 +116,7 @@ export default {
   },
   data: function() {
     return {
-      //img: [],
+      loading: false,
       not_an_image: false,
       img_style: {
         width: this.width,
@@ -119,6 +126,7 @@ export default {
   },
   methods: {
     preview_image(src) {
+      this.loading = true;
       var file = src.target.files[0];
       let that = this;
       let reader = new FileReader();
@@ -131,14 +139,19 @@ export default {
         if (/^data:image.*?base64/.test(this.result)) {
           let formData = new FormData();
           formData.append("imagefile", file);
-          console.log(formData);
-          var url = await axios.post("/api/upload/image/", formData);
+          var url = await axios
+            .post("/api/upload/image/", formData)
+            .catch(error => {
+              alert(error);
+              that.loading = false;
+            });
           url = url.data.url;
           that.img.push(url);
           that.$emit("change", that.img);
         } else {
           that.not_an_image = true;
         }
+        that.loading = false;
       };
     },
     delete_image(index) {
