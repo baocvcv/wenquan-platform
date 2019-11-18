@@ -133,7 +133,7 @@ export default {
           formData.append("imagefile", file);
           console.log(formData);
           var url = await axios.post("/api/upload/image/", formData);
-		  url = url.data.url;
+          url = url.data.url;
           that.img.push(url);
           that.$emit("change", that.img);
         } else {
