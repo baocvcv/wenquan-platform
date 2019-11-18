@@ -91,7 +91,7 @@
         </span>
       </v-col>
     </v-row>
-    <v-dialog v-model="warning_dialog">
+    <v-dialog v-model="warning_dialog" max-width=600px>
       <v-card>
         <v-card-title>Warning!</v-card-title>
         <v-card-text align="center">
@@ -195,8 +195,8 @@ export default {
     parse_answer(result) {
       if(!result) return undefined; 
       if(result.answer instanceof Array)
-        result.answer.forEach(element => {
-          if(!element) element = "";
+        result.answer.forEach((element,index) => {
+          if(!element) result.answer[index] = "";
         });
       return result.answer;
     },
@@ -213,10 +213,10 @@ export default {
         for(var j = 0;j < this.paper.sections[i].questions.length;j++){
           let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
           if(current_answer)
-            result.sections[i].questions[j] = {
+            result.sections[i].questions.push({
               id: this.paper.sections[i].questions[j].id,
               ans: current_answer
-            };
+            });
           else all_answered = false;
         }
       }
