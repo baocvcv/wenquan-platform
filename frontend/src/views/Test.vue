@@ -42,6 +42,10 @@ export default {
             let record = await axios.post("/api/paper_records/",{
                 paper_id: id,
                 is_timed: true
+            },{
+                headers:{
+                    Authorization: "Token " + this.$store.state.user.token
+                }
             });
 
             this.record_id = record.data.id;

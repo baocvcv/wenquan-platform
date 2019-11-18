@@ -91,6 +91,20 @@
         </span>
       </v-col>
     </v-row>
+    <v-dialog v-model="warning_dialog" max-width=600px>
+      <v-card>
+        <v-card-title>Warning!</v-card-title>
+        <v-card-text align="center">
+          You have unanswered question(s). Are you sure you want to submit?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn outlined color="error" @click="submit_confirm">Submit</v-btn>
+          <v-btn outlined @click="warning_dialog = false">Cancel</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -123,7 +137,9 @@ export default {
       },
       answers: [],
       current_section: 0,
-      current_question: 0
+      current_question: 0,
+      warning_dialog: false,
+      submit_cache: null
     };
   },
   computed: {
@@ -177,9 +193,10 @@ export default {
       }
     },
     parse_answer(result) {
+      if(!result) return undefined; 
       if(result.answer instanceof Array)
-        result.answer.forEach(element => {
-          if(!element) element = "";
+        result.answer.forEach((element,index) => {
+          if(!element) result.answer[index] = "";
         });
       return result.answer;
     },
@@ -187,21 +204,29 @@ export default {
       let result = {
         sections: []
       };
+      let all_answered = true;
       for(var i = 0;i < this.paper.sections.length;i++){
         result.sections[i] = {
           id: this.paper.sections[i].id,
           questions: []
         };
         for(var j = 0;j < this.paper.sections[i].questions.length;j++){
-          console.log(this.current_total_index(i,j));
-          result.sections[i].questions[j] = {
-            id: this.paper.sections[i].questions[j].id,
-            ans: this.parse_answer(this.answers[this.current_total_index(i,j)])
-          }
+          let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
+          if(current_answer)
+            result.sections[i].questions.push({
+              id: this.paper.sections[i].questions[j].id,
+              ans: current_answer
+            });
+          else all_answered = false;
         }
       }
-      this.$emit("submit", result);
-      console.log(result)
+      this.submit_cache = result;
+      if(!all_answered) this.warning_dialog = true;
+      else this.submit_confirm();
+    },
+    submit_confirm() {
+      if(this.submit_cache)
+        this.$emit("submit",this.submit_cache);
     }
   }
 };
