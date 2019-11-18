@@ -16,7 +16,7 @@
             align="center"
           >
             <v-img
-              v-if="/.*?media.*?/.test(image)"
+              v-if="/^\/media\/pictures\/.*?/.test(image)"
               :aspect-ratio="aspectRatio"
               :src="image"
               contain
@@ -34,13 +34,6 @@
           </v-col>
         </v-row>
       </v-container>
-      <form
-        ref="form"
-        action="/api/upload/image/"
-        method="post"
-        enctype="multipart/form-data"
-      >
-        {% csrf_token %}
         <input
           ref="upload"
           type="file"
@@ -48,7 +41,6 @@
           accept="image/*"
           style="display: none"
         />
-      </form>
     </v-card>
 
     <v-dialog v-model="not_an_image" max-width="250px">
@@ -138,15 +130,11 @@ export default {
       reader.onload = async function() {
         if (/^data:image.*?base64/.test(this.result)) {
           let formData = new FormData();
-          formData.append(0, file);
+          formData.append("imagefile", file);
           console.log(formData);
-          var url = await axios.post("/api/upload/image/", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            },
-          });
-          console.log(url);
-          that.img.push(this.result);
+          var url = await axios.post("/api/upload/image/", formData);
+		  url = url.data.url;
+          that.img.push(url);
           that.$emit("change", that.img);
         } else {
           that.not_an_image = true;
