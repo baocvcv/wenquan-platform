@@ -91,7 +91,7 @@
         </span>
       </v-col>
     </v-row>
-    <v-dialog v-model="warning_dialog">
+    <v-dialog v-model="warning_dialog" max-width=600px>
       <v-card>
         <v-card-title>Warning!</v-card-title>
         <v-card-text align="center">
