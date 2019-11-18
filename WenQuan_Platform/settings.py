@@ -132,6 +132,7 @@ STATIC_URL = '/frontend/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/dist'),
+    os.path.join(BASE_DIR, 'media'),
 ]
 
 # Rest framework settings
@@ -163,7 +164,7 @@ REST_KNOX = {
 }
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 try:
     from config.local_settings import *
