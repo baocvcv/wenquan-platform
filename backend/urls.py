@@ -1,40 +1,19 @@
 """Url config for django rest framework"""
-# from django.urls import include
 from django.urls import path
-# from rest_framework import routers
+from knox import views as knox_views
 from backend import views
-
-# router = routers.DefaultRouter()
 
 urlpatterns = [
     # path('', include(router.urls)),
     # auth
-    path(
-        r'api/jwt-auth/',
-        views.auth_views.CustomAuthToken.as_view(),
-        name='account-auth'
-    ),
+    path(r'api/jwt-auth/', views.LoginView.as_view(), name='account-auth'),
+    path(r'api/logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
+    path(r'api/logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     # users
-    path(
-        r'api/accounts/users/',
-        views.UserList.as_view(),
-        name='user-list'
-    ),
-    path(
-        r'api/accounts/users/<int:pk>/',
-        views.UserDetail.as_view(),
-        name='user-detail'
-    ),
-    path(
-        r'api/verification/',
-        views.EmailVerificationView.as_view(),
-        name='verification'
-    ),
-    path(
-        r'api/password/',
-        views.ChangePasswordView.as_view(),
-        name='password'
-    ),
+    path(r'api/accounts/users/', views.UserList.as_view(), name='user-list'),
+    path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
+    path(r'api/verification/', views.EmailVerificationView.as_view(), name='verification'),
+    path(r'api/password/', views.ChangePasswordView.as_view(), name='password'),
     # questions
     path(
         r'api/questions/',
@@ -100,11 +79,33 @@ urlpatterns = [
     path(
         r'api/paper_records/',
         views.PaperRecordList.as_view(),
-        name="paper_record_list"
+        name="paper_record_list",
     ),
     path(
-        r'api/paper_records/<int:pk>',
-        views.PaperRecordDetail.as_view(),
-        name="paper_record_detail"
+        r'api/paper_records',
+        views.PaperRecordList.as_view(),
+        name="paper_record_list",
     ),
+    path(
+        r'api/paper_records/<int:record_id>',
+        views.PaperRecordDetail.as_view(),
+        name="paper_record_detail",
+    ),
+    # auth-code
+    path(
+        r'api/auth_code/',
+        views.AuthCodeView.as_view(),
+        name="auth_code_create",
+    ),
+    path(
+        r'api/auth_code/<str:code>',
+        views.AuthCodeDetailView.as_view(),
+        name="auth_code_activate",
+    ),
+    # file-upload
+    path(
+        r'api/upload/image/',
+        views.ImageUploadView.as_view(),
+        name="upload_image",
+    )
 ]

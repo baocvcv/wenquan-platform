@@ -2,9 +2,11 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionBanks from "@/views/admin/QuestionBanks.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import "../unit/mock/QuestionBanksMock.js";
+import "./mock/QuestionBanksMock.js";
+import VueProgressBar from "vue-progressbar";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
+Vue.use(VueProgressBar, {});
 
 describe("QuestionBanks", () => {
   let vuetify;

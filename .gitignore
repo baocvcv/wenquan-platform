@@ -39,5 +39,5 @@ frontend/coverage/
 #config
 config/
 
-backend*.md
 local_settings.py
+Never404.wiki/

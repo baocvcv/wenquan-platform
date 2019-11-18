@@ -3,8 +3,6 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
-# from django.http import Http404
 
 from backend.models import User
 from backend.serializers.user_serializers import UserSerializer
@@ -24,11 +22,15 @@ class UserList(APIView):
         if serializer.is_valid():
             user = serializer.save()
             if user:
+                if not request.user.is_anonymous:
+                    if request.user.is_staff or request.user.is_superuser:
+                        user.is_active = True
+                        user.save()
+                        json = UserSerializer(user).data
+                        return Response(json, status=status.HTTP_201_CREATED)
                 # send the email verificaton record
                 create_email_verification_record(user)
-                token = Token.objects.create(user=user)
                 json = serializer.data
-                json['token'] = token.key
                 return Response(json, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

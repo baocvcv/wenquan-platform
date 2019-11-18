@@ -91,7 +91,7 @@ export default {
   computed: {
     user() {
       if (!this.$store.state.user && sessionStorage.getItem("user")) {
-        this.$store.commit("login", JSON.parse(sessionStorage.getItem("user")));
+        this.$store.commit("updateUser", JSON.parse(sessionStorage.getItem("user")));
       }
       return this.$store.state.user;
     }

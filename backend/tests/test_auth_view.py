@@ -18,11 +18,10 @@ class TestAuthview(APITestCase):
         """ test authentication """
         # add user
         url1 = reverse('user-list')
-        response1 = self.client.post(url1, USER_DATA, format='json')
+        self.client.post(url1, USER_DATA, format='json')
         # activate
         activate_all_users()
         # auth
         url2 = reverse('account-auth')
         response2 = self.client.post(url2, USER_DATA, format='json')
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        self.assertEqual(response1.data['token'], response2.data['token'])

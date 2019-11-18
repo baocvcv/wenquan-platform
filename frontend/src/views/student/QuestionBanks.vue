@@ -14,7 +14,8 @@
           <v-tab-item>
             <question-banks-list
               :flat="true"
-              :readonly="true"
+              :explore="true"
+              :admin="false"
               :title="
                 $vuetify.breakpoint.smAndUp
                   ? 'Explore Your Favourite Question Banks'
@@ -23,7 +24,13 @@
             ></question-banks-list>
           </v-tab-item>
           <v-tab-item>
-            <h1 class="text--center display-4">Developing...</h1>
+            <question-banks-list
+              :flat="true"
+              :mybank="true"
+              :admin="false"
+              :bankIDs="$store.state.user.question_banks"
+              :title="'MyBank'"
+            ></question-banks-list>
           </v-tab-item>
         </v-tabs>
       </v-card-text>

@@ -2,7 +2,7 @@
 
 from .users_views import UserList
 from .users_views import UserDetail
-from .auth_views import CustomAuthToken
+from .login_view import LoginView
 from .verification_views import EmailVerificationView
 from .change_password_view import ChangePasswordView
 
@@ -21,3 +21,8 @@ from .question_record_view import QuestionRecordList
 from .question_record_view import QuestionRecordDetail
 from .paper_record_views import PaperRecordList
 from .paper_record_views import PaperRecordDetail
+
+from .auth_code_views import AuthCodeView
+from .auth_code_views import AuthCodeDetailView
+
+from .file_upload_views import ImageUploadView

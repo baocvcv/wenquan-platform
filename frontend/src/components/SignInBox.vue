@@ -105,11 +105,10 @@ export default {
               return;
             }
 
-            user.user_permissions = response.data.user_permissions;
-            user.user_group = response.data.user_group;
+            user = response.data.user;
             user.token = response.data.token;
 
-            this.$store.commit("login", {
+            this.$store.commit("updateUser", {
               user: user
             });
 
@@ -117,9 +116,20 @@ export default {
 
             this.$router.push("/").catch(err => console.log(err));
           })
-          .catch(response => {
+          .catch(error => {
+            if (error.response) {
+              const status = error.response.status;
+              if (status === 400) {
+                this.sign_in_response = "Username or password incorrect. Please try again.";
+              }
+              else if (status === 401) {
+                this.sign_in_response = "User has not been activated. Please check the email you use when signing in and click the link to activate your account.";
+              }
+            }
+            else {
+              this.sign_in_response = "Network error";
+            }
             this.sign_in_result = "Error";
-            this.sign_in_response = response;
             this.show_dialog = true;
           })
           .then(() => {});

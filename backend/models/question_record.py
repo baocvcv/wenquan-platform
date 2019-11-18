@@ -8,6 +8,7 @@ from .questions import FillBlankQ
 from .questions import TrueOrFalseQ
 
 from .paper_record import PaperRecord
+from .user import User
 
 class QuestionRecord(models.Model):
     """ Question record entry """
@@ -21,6 +22,9 @@ class QuestionRecord(models.Model):
     is_correct = models.BooleanField(blank=True)
     # key to paper record
     paper_record = models.ForeignKey(PaperRecord, on_delete=models.CASCADE, null=True)
+    # user
+    #!!!!!!!!!!to do: remove blank true
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         " Stringify "

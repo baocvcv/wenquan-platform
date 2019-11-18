@@ -22,13 +22,18 @@ const router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(
-          /* webpackChunkName: "about" */ "./components/QuestionSolve.vue"
+          /* webpackChunkName: "about" */ "./components/PaperSolve.vue"
         )
     },
     {
       path: "/account",
       name: "account",
       component: () => import("./views/Account.vue")
+    },
+    {
+      path: "/learn",
+      name: "learn",
+      component: () => import("./views/student/Learn.vue")
     },
     {
       path: "/admin",
@@ -91,6 +96,16 @@ const router = new Router({
       component: () => import("./views/student/QuestionBanks.vue")
     },
     {
+      path: "/test/:id",
+      name: "test",
+      component:() => import("./views/Test.vue")
+    },
+    {
+      path: "/activate/:token",
+      name: "activate",
+      component: () => import("./views/Activate.vue")
+    },
+    {
       path: "*",
       name: "404",
       component: () => import("./views/404Error.vue")
@@ -109,7 +124,8 @@ router.beforeEach((to, from, next) => {
         to.path != "/" &&
         to.path != "/about" &&
         to.path != "/signin" &&
-        to.path != "/signup"
+        to.path != "/signup" &&
+        to.name != "activate"
       ) {
         next("/signin");
       } else {

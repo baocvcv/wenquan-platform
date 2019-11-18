@@ -92,11 +92,12 @@ class UserDetailTest(APITestCase):
         }
         response2 = self.client.post(url2, data, format='json')
         # get student detail
-        user_id = response2.data['id']
+        print(response2.data)
+        user_id = response2.data['user']['id']
         url3 = reverse('user-detail', args=[user_id])
         response3 = self.client.get(url3)
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
-        self.assertEqual(response3.data['username'], response2.data['username'])
+        self.assertEqual(response3.data['username'], response2.data['user']['username'])
 
     def test_update(self):
         """ test update user """

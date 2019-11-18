@@ -38,6 +38,7 @@ def createUser(
         user_permissions=permission,
         profile=profile,
         is_banned=is_banned,
+        question_banks=[],
     )
     return user
 
@@ -144,7 +145,7 @@ def createQuestion(question_data, kind, bank):
     q_group.save()
     q_group.parents_node.set([bank.root_id])
     q_group.save()
-    question_data[0]['question_change_time'] = timezone.now()
+    question_data[0]['question_change_time'] = q_group.current_version
     if kind == TYPEDIC['multiple']:
         question_data[0]['question_type'] = TYPEDIC['multiple']
         question = MultpChoiceQ.objects.create(

@@ -23,21 +23,25 @@ class FillBlankQ(Question):
 
     def checker(self, ans, section_id=None):
         """Checker for FillBlankQ"""
-        point = -1
-        if section_id is not None:
-            point = []
-            section = Section.objects.get(id=section_id)
-            if not section:
-                return "Not Found"
-            q_on_paper = section.questionversion_set.get(question=self, section=section)
-            for i in range(0, len(self.question_ans)):
-                if i >= len(ans):
-                    break
-                if ans[i] == self.question_ans[i] and i < len(q_on_paper.point_every_blank):
-                    point.append(q_on_paper.point_every_blank[i])
-                if ans == self.question_ans:
-                    return True, point
-                return False, point
+        if not section_id:
+            if ans == self.question_ans:
+                return True, []
+            return False, []
+
+        point = []
+        section = Section.objects.get(id=section_id)
+
+        if not section:
+            return "Not Found"
+
+        q_on_paper = section.questionversion_set.get(question=self, section=section)
+
+        for i in range(0, len(self.question_ans)):
+            if i >= len(ans):
+                break
+            if ans[i] == self.question_ans[i] and i < len(q_on_paper.point_every_blank):
+                point.append(q_on_paper.point_every_blank[i])
+
         if ans == self.question_ans:
-            return True, []
-        return False, []
+            return True, point
+        return False, point
