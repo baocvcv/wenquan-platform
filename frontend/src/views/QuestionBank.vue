@@ -2,11 +2,11 @@
   <div id="question-bank">
     <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     <v-row>
-      <v-col cols="12" sm="8" md="8">
+      <v-col>
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title
             >Profile
-            <v-btn absolute right icon @click="edit_button_clicked"
+            <v-btn absolute right icon @click="edit_button_clicked" v-if="editable"
               ><v-icon>mdi-pencil</v-icon></v-btn
             >
           </v-card-title>
@@ -80,7 +80,7 @@
           </v-expand-transition>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col cols="12" sm="4" md="4">
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title>
             Activation Code
@@ -140,7 +140,7 @@
     <question-list
       v-show="!loading"
       v-if="question_bank.id"
-      editable
+      :editable="editable"
       :id="question_bank.id"
     ></question-list>
   </div>
@@ -173,7 +173,8 @@ export default {
     loading: false,
     codes: [],
     invitation_code_count: null,
-    available_code_count: null
+    available_code_count: null,
+    editable: null
   }),
   computed: {
     td_codes() {
@@ -265,6 +266,7 @@ export default {
   created() {
     let id = this.$route.params.id;
     this.loading = true;
+    this.editable = this.$route.fullPath.search("/admin/") == -1 ? false : true;
     axios
       .get("/api/question_banks/" + id + "/")
       .then(response => {

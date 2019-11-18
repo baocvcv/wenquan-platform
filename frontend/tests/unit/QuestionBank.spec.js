@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from "@vue/test-utils";
-import QuestionBank from "@/views/admin/QuestionBank.vue";
+import QuestionBank from "@/views/QuestionBank.vue";
 import Home from "@/views/Home.vue";
 import Vue from "vue";
 import Vuex from "vuex";

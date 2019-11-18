@@ -73,7 +73,7 @@ const router = new Router({
     {
       path: "/admin/questionbanks/:id",
       name: "admin-question-bank",
-      component: () => import("./views/admin/QuestionBank.vue")
+      component: () => import("./views/QuestionBank.vue")
     },
     {
       path: "/questions/:id",
@@ -104,6 +104,11 @@ const router = new Router({
       path: "/activate/:token",
       name: "activate",
       component: () => import("./views/Activate.vue")
+    },
+    {
+      path: "/question_banks/:int",
+      name: "question-bank",
+      component: () => import("./views/QuestionBank.vue")
     },
     {
       path: "*",
