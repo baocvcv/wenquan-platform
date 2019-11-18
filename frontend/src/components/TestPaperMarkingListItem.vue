@@ -1,15 +1,19 @@
 <template>
   <v-list-group v-if="!!paper_name">
     <template v-slot:activator>
-      <v-list-item-title>{{ paper_name }}</v-list-item-title>
+      <v-list-item-title
+        >{{ paper_name }} | Total records:
+        {{ paper_records.length }}</v-list-item-title
+      >
     </template>
     <v-list-item v-for="(record, key) in paper_records" :key="key">
       <v-list-item-content>
         <v-list-item-title
           ><span>{{ record.username }}</span> |
-          <span v-if="record.need_judging" class="unmarked">Unmarked</span
-          ><span v-else class="marked">Marked</span> |
-          <span class="score"
+          <span v-if="record.need_judging" style="color: red; font-size: 80%"
+            >Unmarked</span
+          ><span v-else style="color: green; font-size: 80%;">Marked</span> |
+          <span style="font-size: 80%"
             >Score: {{ record.user_total_point }}/{{
               record.paper_total_point
             }}</span
@@ -22,7 +26,7 @@
       <v-list-item-action>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on" @click="$router.push('/')"
+            <v-btn icon v-on="on" @click="$router.push('/admin/testmark/' + id)"
               ><v-icon>mdi-pen-plus</v-icon></v-btn
             >
           </template>
@@ -42,17 +46,17 @@ export default {
   },
   data: function() {
     return {
-      paper_name: "",
+      paper_name: "test-paper-list-item",
       paper_records: []
     };
   },
   created() {
     axios
       .get("/api/paper_records?paper=" + this.id, {
-				headers: {
-					Authorization: "Token " + this.$store.state.user.token
-				}
-			  })
+        headers: {
+          Authorization: "Token " + this.$store.state.user.token
+        }
+      })
       .then(response => {
         let all_records = response.data;
         for (var i = 0; i < all_records.length; i++) {
@@ -71,16 +75,4 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-.unmarked: {
-  color: red;
-  font-size: 70%;
-}
-.marked: {
-  color: green;
-  font-size: 70%;
-}
-.score: {
-  font-size: 70%;
-}
-</style>
+<style></style>

@@ -52,10 +52,10 @@ export default {
   created() {
     axios
       .get("/api/papers/", {
-				"headers": {
-					Authorization: "Token " + this.$store.state.user.token
-				}
-			  })
+        headers: {
+          Authorization: "Token " + this.$store.state.user.token
+        }
+      })
       .then(response => {
         this.papers = response.data;
         this.process = "Total count: " + this.papers.length;
