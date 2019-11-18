@@ -136,7 +136,7 @@ STATICFILES_DIRS = [
 
 # Rest framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ( 'knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
     #  'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
@@ -153,14 +153,17 @@ MAILER_EMAIL_MAX_DEFERRED = 5
 from datetime import timedelta
 # from rest_framework.settings import api_settings
 REST_KNOX = {
-  'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(hours=10),
-  'USER_SERIALIZER': 'backend.serializers.UserSerializer',
-  'TOKEN_LIMIT_PER_USER': 30,
-  'AUTO_REFRESH': False,
-#   'EXPIRY_DATETIME_FORMAT': api_settings.DATETME_FORMAT,
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'TOKEN_TTL': timedelta(hours=10),
+    'USER_SERIALIZER': 'backend.serializers.UserSerializer',
+    'TOKEN_LIMIT_PER_USER': 30,
+    'AUTO_REFRESH': False,
+    #   'EXPIRY_DATETIME_FORMAT': api_settings.DATETME_FORMAT,
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 
 try:
     from config.local_settings import *
