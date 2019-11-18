@@ -106,6 +106,11 @@ const router = new Router({
       component: () => import("./views/Activate.vue")
     },
     {
+      path: "/question_banks/:int",
+      name: "question-bank",
+      component: () => import("./views/QuestionBanks=.vue")
+    },
+    {
       path: "*",
       name: "404",
       component: () => import("./views/404Error.vue")
