@@ -12,7 +12,10 @@ class ImageUploadView(APIView):
         """upload_image"""
         if 'imagefile' in request.FILES:
             image = request.FILES["imagefile"]
-            image.name = str(request.user) + str(timezone.now()) + '.jpg'
+            name = str(request.user) + str(timezone.now()) + '.jpg'
+            print(name)
+            image.name = name.replace("_", "").replace(" ", "")
+            print(image.name)
             instance = ImageModel(image=image)
             instance.save()
             return Response({'url': str(instance.image.url)})
