@@ -48,7 +48,11 @@ export default {
   },
   created() {
     axios
-      .get("/api/paper_records?paper=" + this.id)
+      .get("/api/paper_records?paper=" + this.id, {
+				headers: {
+					Authorization: "Token " + this.$store.state.user.token
+				}
+			  })
       .then(response => {
         let all_records = response.data;
         for (var i = 0; i < all_records.length; i++) {
