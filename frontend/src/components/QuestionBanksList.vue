@@ -59,7 +59,7 @@
           >
             <v-list-item-avatar>
               <v-img
-                v-if="/^data:image\/.*?base64/.test(qst_bank.icon)"
+                v-if="/^\/media\/pictures\/.*?/.test(qst_bank.icon)"
                 :src="qst_bank.icon"
               ></v-img>
             </v-list-item-avatar>

@@ -16,7 +16,7 @@
             align="center"
           >
             <v-img
-              v-if="/^data:image.*?base64/.test(image)"
+              v-if="/^\/media\/pictures\/.*?/.test(image)"
               :aspect-ratio="aspectRatio"
               :src="image"
               contain
@@ -34,13 +34,13 @@
           </v-col>
         </v-row>
       </v-container>
-      <input
-        ref="upload"
-        type="file"
-        @change="preview_image($event)"
-        accept="image/*"
-        style="display: none"
-      />
+        <input
+          ref="upload"
+          type="file"
+          @change="preview_image($event)"
+          accept="image/*"
+          style="display: none"
+        />
     </v-card>
 
     <v-dialog v-model="not_an_image" max-width="250px">
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "image-uploader",
   model: {
@@ -126,9 +127,14 @@ export default {
         reader.readAsDataURL(file);
       }
 
-      reader.onload = function() {
+      reader.onload = async function() {
         if (/^data:image.*?base64/.test(this.result)) {
-          that.img.push(this.result);
+          let formData = new FormData();
+          formData.append("imagefile", file);
+          console.log(formData);
+          var url = await axios.post("/api/upload/image/", formData);
+          url = url.data.url;
+          that.img.push(url);
           that.$emit("change", that.img);
         } else {
           that.not_an_image = true;
