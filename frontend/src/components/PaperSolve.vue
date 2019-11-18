@@ -195,8 +195,8 @@ export default {
     parse_answer(result) {
       if(!result) return undefined; 
       if(result.answer instanceof Array)
-        result.answer.forEach(element => {
-          if(!element) element = "";
+        result.answer.forEach((element,index) => {
+          if(!element) result.answer[index] = "";
         });
       return result.answer;
     },
