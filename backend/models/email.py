@@ -38,7 +38,7 @@ class EmailVerificationRecord(models.Model):
         domain = "https://never404-never404.app.secoder.net"
         if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
-            url = domain + "/activate/{0}".format(self.token)
+            url = domain + "/#/activate/{0}".format(self.token)
             email_body = "Please click this link to activate your account: " + url
             # send email
             print(self.email)
@@ -52,7 +52,7 @@ class EmailVerificationRecord(models.Model):
             # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
-            url = domain + "/forget_password/{0}".format(self.token)
+            url = domain + "/#/forget_password/{0}".format(self.token)
             email_body = "Please click this link to change your password: " + url
             # send email
             # self.user.email_user(email_title, email_body)
