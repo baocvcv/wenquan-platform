@@ -221,8 +221,8 @@ export default {
         }
       }
       this.submit_cache = result;
-      if(!all_answered) warning_dialog = true;
-      else submit_confirm();
+      if(!all_answered) this.warning_dialog = true;
+      else this.submit_confirm();
     },
     submit_confirm() {
       if(this.submit_cache)
