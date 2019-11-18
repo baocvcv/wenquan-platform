@@ -14,3 +14,5 @@ from .question_record import QuestionRecord
 from .paper_record import PaperRecord
 
 from .auth_code import AuthCode
+
+from .file_upload import ImageModel

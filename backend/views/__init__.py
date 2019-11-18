@@ -24,3 +24,5 @@ from .paper_record_views import PaperRecordDetail
 
 from .auth_code_views import AuthCodeView
 from .auth_code_views import AuthCodeDetailView
+
+from .file_upload_views import ImageUploadView
