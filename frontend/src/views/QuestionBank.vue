@@ -283,16 +283,19 @@ export default {
       .catch(error => {
         console.log(error);
       });
-    axios
-      .post("/api/auth_code/", { question_bank_id: id })
-      .then(response => {
-        this.codes = response.data.auth_code;
-        this.invitation_code_count = response.data.total_num;
-        this.available_code_count = response.data.valid_num;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    if (this.editable) {
+      axios
+        .post("/api/auth_code/", { question_bank_id: id })
+        .then(response => {
+          this.codes = response.data.auth_code;
+          this.invitation_code_count = response.data.total_num;
+          this.available_code_count = response.data.valid_num;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
   }
 };
 </script>
