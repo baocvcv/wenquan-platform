@@ -108,7 +108,7 @@ export default {
   },
   data: function() {
     return {
-	  answer: undefined,
+	  answer: [],
       score: 0,
       comment: "",
       correct_or_not: [false]
@@ -118,7 +118,9 @@ export default {
     "question-solve": QuestionSolve
   },
   created() {
-	if (this.question && this.question.question_record_id != -1) {
+	console.log("question-correct");
+	console.log(this.question);
+	if (this.question.question_record_id != -1) {
 	  axios
 		.get("/api/question_records/" + this.record_id + "/", {
 			headers: {
@@ -131,8 +133,12 @@ export default {
 		  this.comment = response.data.comment;
 		  var correct_bool = response.data.correct_or_not;
 		  this.correct_or_not = correct_bool ? correct_bool : [response.data.is_correct];
+		  console.log("question correct");
+		  console.log(response);
+		  console.log(this.answer);
 		})
 		.catch(error => {
+		  console.log("question correct");
 		  console.log(error);
 		})
 	} 

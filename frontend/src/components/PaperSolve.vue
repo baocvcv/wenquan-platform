@@ -72,11 +72,12 @@
         </v-card>
       </v-col>
       <v-col cols="12" lg="9" sm="8">
+	    <slot name="shit"></slot>
+		<slot name="comment" :paper="paper">
         <span
           v-for="(section, section_index) in paper.sections"
           :key="section_index"
         >
-		<slot name="comment" :section="section">
           <question-solve
             v-for="(question, question_index) in section.questions"
             :key="question_index"
@@ -89,8 +90,8 @@
               answers[current_total_index(section_index, question_index)]
             "
           ></question-solve>
-		</slot>
         </span>
+		</slot>
       </v-col>
     </v-row>
     <v-dialog v-model="warning_dialog" max-width=600px>
@@ -130,7 +131,14 @@ export default {
     }
   },
   created() {
-    if (this.initData) this.paper = this.initData;
+    if (this.initData) {
+		this.paper = this.initData;
+		for(var i = 0;i < this.paper.sections.length;i++){
+        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
+          this.answers[this.current_total_index(i,j)] = [];
+        }
+      }
+	}
   },
   data: function() {
     return {
@@ -195,6 +203,7 @@ export default {
       }
     },
     parse_answer(answer) {
+	  if(answer == []) return undefined;	
       if(answer instanceof Array)
         answer.forEach((element,index) => {
           if(!element) answer[index] = "";
@@ -213,12 +222,11 @@ export default {
         };
         for(var j = 0;j < this.paper.sections[i].questions.length;j++){
           let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
-          if(current_answer)
-            result.sections[i].questions.push({
-              id: this.paper.sections[i].questions[j].id,
-              ans: current_answer
-            });
-          else all_answered = false;
+          if(!current_answer) all_answered = false;
+          result.sections[i].questions.push({
+            id: this.paper.sections[i].questions[j].id,
+            ans: current_answer ? current_answer : ""
+          });
         }
       }
       this.submit_cache = result;
