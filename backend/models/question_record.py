@@ -25,6 +25,9 @@ class QuestionRecord(models.Model):
     # user
     #!!!!!!!!!!to do: remove blank true
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    # for judging
+    correct_or_not = ArrayField(models.BooleanField())
+    comment = models.CharField(max_length=500, default="")
 
     def __str__(self):
         " Stringify "

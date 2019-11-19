@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-card outlined>
+    <v-card outlined v-show="!tool">
       <v-card-text v-if="!!label">
         {{ label }}
       </v-card-text>
@@ -112,6 +112,10 @@ export default {
       type: Array,
       default: () => []
     },
+    tool: {
+      type: Boolean,
+      default: false
+    },
     width: String,
     height: String
   },
@@ -127,6 +131,7 @@ export default {
   },
   methods: {
     preview_image(src) {
+      this.$emit("upload-start");
       this.loading = true;
       var file = src.target.files[0];
       let that = this;
@@ -149,6 +154,7 @@ export default {
           url = url.data.url;
           that.img.push(url);
           that.$emit("change", that.img);
+          that.$emit("upload-finish", url);
         } else {
           that.not_an_image = true;
         }

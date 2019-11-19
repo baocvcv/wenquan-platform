@@ -192,13 +192,12 @@ export default {
           this.paper.sections[this.current_section].questions.length - 1;
       }
     },
-    parse_answer(result) {
-      if (!result) return undefined;
-      if (result.answer instanceof Array)
-        result.answer.forEach((element, index) => {
-          if (!element) result.answer[index] = "";
+    parse_answer(answer) {
+      if(answer instanceof Array)
+        answer.forEach((element,index) => {
+          if(!element) answer[index] = "";
         });
-      return result.answer;
+      return answer;
     },
     submit() {
       let result = {

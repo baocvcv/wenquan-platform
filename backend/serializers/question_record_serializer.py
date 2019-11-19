@@ -12,7 +12,8 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
     question_type = serializers.CharField(required=False)
     user_id = serializers.IntegerField(source="user.id", read_only=True)
     username = serializers.CharField(source="user.username", read_only=True)
-
+    correct_or_not = serializers.ListField(read_only=True)
+    comment = serializers.CharField(read_only=True)
 
     class Meta:
         "Meta"
@@ -27,4 +28,6 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
             'is_correct',
             'user_id',
             'username',
+            'correct_or_not',
+            'comment',
         ]
