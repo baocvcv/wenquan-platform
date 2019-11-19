@@ -30,9 +30,7 @@
         <v-tab-item>
           <test-paper-record-list
             :title="
-              $vuetify.breakpoint.smAndUp
-                ? 'View All Paper Records'
-                : 'Records'
+              $vuetify.breakpoint.smAndUp ? 'View All Paper Records' : 'Records'
             "
           ></test-paper-record-list>
         </v-tab-item>

@@ -21,7 +21,10 @@
                   ? 'Explore Your Favourite Question Banks'
                   : 'Explore'
               "
-              @force-update="$refs['my-bank'].$forceUpdate(); console.log('updated!')"
+              @force-update="
+                $refs['my-bank'].$forceUpdate();
+                console.log('updated!');
+              "
             ></question-banks-list>
           </v-tab-item>
           <v-tab-item>

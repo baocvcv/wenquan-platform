@@ -120,13 +120,13 @@ export default {
             if (error.response) {
               const status = error.response.status;
               if (status === 400) {
-                this.sign_in_response = "Username or password incorrect. Please try again.";
+                this.sign_in_response =
+                  "Username or password incorrect. Please try again.";
+              } else if (status === 401) {
+                this.sign_in_response =
+                  "User has not been activated. Please check the email you use when signing in and click the link to activate your account.";
               }
-              else if (status === 401) {
-                this.sign_in_response = "User has not been activated. Please check the email you use when signing in and click the link to activate your account.";
-              }
-            }
-            else {
+            } else {
               this.sign_in_response = "Network error";
             }
             this.sign_in_result = "Error";

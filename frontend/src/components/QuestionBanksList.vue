@@ -11,11 +11,7 @@
           prepend-inner-icon="mdi-magnify"
           clearable
         ></v-text-field>
-        <v-dialog
-          v-model="create_bank_dialog"
-          v-if="admin"
-          max-width="600px"
-        >
+        <v-dialog v-model="create_bank_dialog" v-if="admin" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" elevation="0" class="ml-2" v-on="on">
               Create
@@ -314,15 +310,16 @@ export default {
           this.$store.commit("updateUserWithKey", {
             key: "question_banks",
             value: user.question_banks
-          })
+          });
           this.$emit("force-update");
           this.detail = false;
-          this.snack_bar_msg = "The question bank has been added. You can find it in 'MYBANK' now.";
+          this.snack_bar_msg =
+            "The question bank has been added. You can find it in 'MYBANK' now.";
           this.snack_bar = true;
         })
         .catch(error => {
           console.log(error);
-        })
+        });
     }
   },
   watch: {
@@ -336,7 +333,7 @@ export default {
   mounted: function() {
     let that = this;
     that.process = "Fetching data from server...";
-    let load_question_banks = async (question_banks) => {
+    let load_question_banks = async question_banks => {
       let all_count = question_banks.length;
       let count = 0;
       let lock = false;
@@ -363,7 +360,7 @@ export default {
             }
           });
       }
-    }
+    };
     if (!this.bankIDs) {
       axios
         .get("/api/question_banks/")
@@ -374,8 +371,7 @@ export default {
         .catch(error => {
           that.process = "Failed to access data: " + error;
         });
-    }
-    else {
+    } else {
       load_question_banks(this.bankIDs);
     }
   }

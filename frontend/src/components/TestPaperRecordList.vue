@@ -27,7 +27,10 @@
           <template v-slot:button="{ record_id }">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on" @click="$router.push('/paper_record/' + record_id)"
+                <v-btn
+                  icon
+                  v-on="on"
+                  @click="$router.push('/paper_record/' + record_id)"
                   ><v-icon>mdi-eye</v-icon></v-btn
                 >
               </template>
@@ -71,7 +74,8 @@ export default {
         let raw = response.data;
         this.papers = [];
         raw.forEach(element => {
-          if(this.papers.indexOf(element.paper_id) == -1) this.papers.push(element.paper_id);
+          if (this.papers.indexOf(element.paper_id) == -1)
+            this.papers.push(element.paper_id);
         });
         this.process = "Total count: " + this.papers.length;
       })

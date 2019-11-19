@@ -91,7 +91,10 @@ export default {
   computed: {
     user() {
       if (!this.$store.state.user && sessionStorage.getItem("user")) {
-        this.$store.commit("updateUser", JSON.parse(sessionStorage.getItem("user")));
+        this.$store.commit(
+          "updateUser",
+          JSON.parse(sessionStorage.getItem("user"))
+        );
       }
       return this.$store.state.user;
     }
@@ -99,13 +102,17 @@ export default {
   methods: {
     submit_new_psw() {
       axios
-        .put("/api/password/", {
-          password: this.new_psw
-        },{
-          headers:{
-            Authorization: "Token " + this.user.token
+        .put(
+          "/api/password/",
+          {
+            password: this.new_psw
+          },
+          {
+            headers: {
+              Authorization: "Token " + this.user.token
+            }
           }
-        })
+        )
         .then(response => {
           this.password_editing = false;
           this.msg = "Success!";

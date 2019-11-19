@@ -37,7 +37,7 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
-			<br />
+            <br />
             <v-label>Uploading ... </v-label>
           </v-col>
         </v-row>

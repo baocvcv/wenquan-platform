@@ -6,7 +6,12 @@
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title
             >Profile
-            <v-btn absolute right icon @click="edit_button_clicked" v-if="editable"
+            <v-btn
+              absolute
+              right
+              icon
+              @click="edit_button_clicked"
+              v-if="editable"
               ><v-icon>mdi-pencil</v-icon></v-btn
             >
           </v-card-title>
@@ -295,7 +300,6 @@ export default {
           console.log(error);
         });
     }
-
   }
 };
 </script>

@@ -62,8 +62,8 @@ export default {
               this.$store.commit("updateUserWithKey", {
                 key: "question_banks",
                 value: response.data.question_banks
-              })
-            })
+              });
+            });
         })
         .catch(error => {
           if (error.response && error.response.status === 400) {

@@ -91,7 +91,7 @@
         </span>
       </v-col>
     </v-row>
-    <v-dialog v-model="warning_dialog" max-width=600px>
+    <v-dialog v-model="warning_dialog" max-width="600px">
       <v-card>
         <v-card-title>Warning!</v-card-title>
         <v-card-text align="center">
@@ -193,10 +193,10 @@ export default {
       }
     },
     parse_answer(result) {
-      if(!result) return undefined; 
-      if(result.answer instanceof Array)
-        result.answer.forEach((element,index) => {
-          if(!element) result.answer[index] = "";
+      if (!result) return undefined;
+      if (result.answer instanceof Array)
+        result.answer.forEach((element, index) => {
+          if (!element) result.answer[index] = "";
         });
       return result.answer;
     },
@@ -205,14 +205,16 @@ export default {
         sections: []
       };
       let all_answered = true;
-      for(var i = 0;i < this.paper.sections.length;i++){
+      for (var i = 0; i < this.paper.sections.length; i++) {
         result.sections[i] = {
           id: this.paper.sections[i].id,
           questions: []
         };
-        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
-          let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
-          if(current_answer)
+        for (var j = 0; j < this.paper.sections[i].questions.length; j++) {
+          let current_answer = this.parse_answer(
+            this.answers[this.current_total_index(i, j)]
+          );
+          if (current_answer)
             result.sections[i].questions.push({
               id: this.paper.sections[i].questions[j].id,
               ans: current_answer
@@ -221,12 +223,11 @@ export default {
         }
       }
       this.submit_cache = result;
-      if(!all_answered) this.warning_dialog = true;
+      if (!all_answered) this.warning_dialog = true;
       else this.submit_confirm();
     },
     submit_confirm() {
-      if(this.submit_cache)
-        this.$emit("submit",this.submit_cache);
+      if (this.submit_cache) this.$emit("submit", this.submit_cache);
     }
   }
 };
