@@ -6,6 +6,7 @@
         <router-view />
       </v-container>
     </v-content>
+    <notifications></notifications>
   </v-app>
 </template>
 

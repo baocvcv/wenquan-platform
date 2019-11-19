@@ -100,6 +100,9 @@ export default {
     },
     start_upload() {
       console.log("Start uploading!");
+      this.$notify({
+        title: "Start uploading the picutre..."
+      })
     },
     finish_upload(url) {
       let quill = this.$refs.TextEditor.quill;
@@ -109,6 +112,10 @@ export default {
       quill.insertEmbed(length, 'image', url);
       // 调整光标到最后
       quill.setSelection(length + 1);
+      this.$notify({
+        title: "Finish uploading the picture!",
+        type: "success"
+      })
     }
   }
 };

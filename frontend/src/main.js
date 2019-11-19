@@ -6,6 +6,9 @@ import store from "./store";
 import "./registerServiceWorker";
 import vuetify from "./plugins/vuetify";
 import VueProgressBar from "vue-progressbar";
+import Notifications from "vue-notification";
+
+Vue.use(Notifications);
 
 Vue.config.productionTip = false;
 
