@@ -131,11 +131,28 @@ class KnowledgeNodeDetail(APIView):
 
 class NodeQuestionView(APIView):
     """View for question set in nodes"""
+    @classmethod
+    def go_through_tree(cls, root_id):
+        """KnowledgeNode tree level order traversal"""
+        root = KnowledgeNodeList.get_object(root_id)
+        nodes = []
+        child = list(root.subnodes.all())
+        for i in child:
+            nodes += cls.go_through_tree(i.id)
+        nodes.append(root_id)
+        return nodes
+
     def post(self, request):
         """Get question belong to some nodes"""
         response = set()
         post_data = JSONParser().parse(request)
-        for i in post_data['nodes_id']:
+        nodes = post_data['nodes_id']
+        temp = []
+        for i in nodes:
+            temp += self.go_through_tree(i)
+
+        nodes += temp
+        for i in nodes:
             node = KnowledgeNodeList.get_object(i)
             questions = []
             for j in node.questiongroup_set.all():
