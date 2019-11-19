@@ -40,6 +40,7 @@ class QuestionRecordList(APIView):
             question_type=INT2TYPE[str(question.question_type)],
             is_correct=is_correct,
             score=[],
+            correct_or_not=[],
         )
         record.set_ans(data['ans'])
         record.save()
