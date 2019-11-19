@@ -1,7 +1,7 @@
 <template>
   <div id="rich-text-editor">
-    <v-container class="pl-0 pr-0 ml-0 mr-0">
-      <span class="grey--text caption">{{ label }}</span>
+    <span class="grey--text caption">{{ label }}</span>
+    <v-card class="pl-0 pr-0 ml-0 mr-0 mb-4 mt-2" :outlined="readonly" flat>
       <image-uploader
         ref="uploader"
         multiple
@@ -17,11 +17,12 @@
         @blur="blur"
         @focus="focus"
         :options="editorOption"
+        :class="readonly? 'quill-editor-disabled' : ''"
       >
       </quill-editor>
       <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
       <span v-show="is_empty && required" class="caption error--text pl-2 pr-2">{{get_label}} is required.</span>
-    </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -67,7 +68,7 @@ export default {
     return {
       is_empty: false,
       editorOption: {
-        theme: "bubble",
+        theme: "snow",
         placeholder: "",
         modules: {
           toolbar: {
@@ -100,8 +101,6 @@ export default {
     event: "change"
   },
   created() {
-    if (this.readonly) this.editorOption.theme = "bubble";
-    else this.editorOption.theme = "snow";
     this.editorOption.placeholder = this.placeholder;
   },
   computed: {
@@ -150,3 +149,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.quill-editor-disabled .ql-toolbar {
+  display: none;
+}
+.ql-editor {
+  min-height: 200px;
+}
+</style>

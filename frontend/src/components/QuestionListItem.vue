@@ -26,15 +26,7 @@
         ref="content"
         v-bind:style="{ 'max-height': max_height + 'px' }"
       >
-        <v-textarea
-          outlined
-          readonly
-          label="Question"
-          v-model="content"
-          auto-grow
-          rows="1"
-        >
-        </v-textarea>
+        <rich-text-editor readonly label="Question" v-model="content"></rich-text-editor>
         <v-textarea
           outlined
           readonly
@@ -88,6 +80,8 @@
 <script>
 import axios from "axios";
 import Question from "@/views/Question.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
+
 export default {
   name: "question-list-item",
   props: {
@@ -108,7 +102,8 @@ export default {
     nodes: []
   }),
   components: {
-    "question-view": Question
+    "question-view": Question,
+    "rich-text-editor": RichTextEditor
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
