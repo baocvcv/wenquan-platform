@@ -10,6 +10,10 @@
           <v-icon left>mdi-clock-outline</v-icon>
           Test
         </v-tab>
+        <v-tab>
+          <v-icon left>mdi-pen</v-icon>
+          Records
+        </v-tab>
         <v-tab-item>
           <practice v-on:practicing="start_practice" />
         </v-tab-item>
@@ -23,6 +27,15 @@
             readonly
           />
         </v-tab-item>
+        <v-tab-item>
+          <test-paper-record-list
+            :title="
+              $vuetify.breakpoint.smAndUp
+                ? 'View All Paper Records'
+                : 'Records'
+            "
+          ></test-paper-record-list>
+        </v-tab-item>
       </v-tabs>
       <paper-solve v-if="practicing" :initData="paper" />
     </v-card-text>
@@ -33,6 +46,8 @@
 import Practice from "@/components/Practice.vue";
 import TestPapersList from "@/components/TestPapersList.vue";
 import PaperSolve from "@/components/PaperSolve.vue";
+import TestPaperRecordList from "@/components/TestPaperRecordList.vue";
+
 export default {
   name: "learn",
   data: function() {
@@ -44,7 +59,8 @@ export default {
   components: {
     practice: Practice,
     "test-papers-list": TestPapersList,
-    "paper-solve": PaperSolve
+    "paper-solve": PaperSolve,
+    "test-paper-record-list": TestPaperRecordList
   },
   methods: {
     start_practice(paper) {
