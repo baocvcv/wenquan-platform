@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-card outlined v-show="tool">
+    <v-card outlined v-show="!tool">
       <v-card-text v-if="!!label">
         {{ label }}
       </v-card-text>
