@@ -31,7 +31,7 @@
               :admin="false"
               :bankIDs="$store.state.user.question_banks"
               :title="'MyBank'"
-              refs="my-bank"
+              ref="my-bank"
             ></question-banks-list>
           </v-tab-item>
         </v-tabs>
