@@ -203,11 +203,12 @@ export default {
       }
     },
     parse_answer(answer) {
-	  if(answer == []) return undefined;	
-      if(answer instanceof Array)
+      if(answer instanceof Array) {
+	    if(answer.length == 0) return undefined;
         answer.forEach((element,index) => {
           if(!element) answer[index] = "";
         });
+	  }
       return answer;
     },
     submit() {

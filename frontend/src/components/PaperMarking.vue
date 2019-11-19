@@ -39,17 +39,21 @@ export default {
 	  paper_record: undefined
 	};
   },
-  computed: {
+  methods: {
 	question_info(section, question) {
-	  var questionRecordId = this.paper_record.questions[question.id].id;
+	  console.log("function question_info");
+	  console.log(section);
+	  console.log(question);
+	  console.log(this.paper_record);
+	  var questionRecordId = this.paper_record.questions["7"].id;
 	  var result = {
 		paper_record_id: this.paper_record_id,
 		question_record_id: questionRecordId,
 		paper_id: this.paper_record.paper_id,
 		section_id: section.id,
 		question_id: question.id,
-		question_point: 0,
-		point_every_blank:[0, 0, 0]
+		question_point: question.question_point,
+		point_every_blank: question.point_every_blank
 	  };
 	  return result;
 	}

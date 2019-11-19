@@ -96,7 +96,7 @@ export default {
             result.paper_id = this.$route.params.id;
             result.action = "finish";
             this.loading = true;
-            axios.post("/api/paper_records/" + this.record_id + "/",result)
+            axios.post("/api/paper_records/" + this.record_id,result)
                 .then(response => {
                     this.loading = false;
                     this.$router.push("/learn");

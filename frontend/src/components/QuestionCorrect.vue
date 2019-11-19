@@ -122,7 +122,7 @@ export default {
 	console.log(this.question);
 	if (this.question.question_record_id != -1) {
 	  axios
-		.get("/api/question_records/" + this.record_id + "/", {
+		.get("/api/question_records/" + this.record_id, {
 			headers: {
 			  Authorization: "Token " + this.$store.state.user.token
 			}
@@ -185,7 +185,7 @@ export default {
 		correct_or_not: this.correct_or_not
 	  }
 	  axios
-		.put("/api/paper_records/" + this.question.paper_record_id +  "/", marking_result)
+		.put("/api/paper_records/" + this.question.paper_record_id, marking_result)
 		.then((response) => {
 		  var res = {
 			status: true,
