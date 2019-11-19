@@ -1,25 +1,27 @@
 <template>
   <div id="rich-text-editor">
-    <span class="grey--text caption">{{ label }}</span>
-    <image-uploader
-      ref="uploader"
-      multiple
-      tool
-      @upload-start="start_upload"
-      @upload-finish="finish_upload"
-    ></image-uploader>
-    <quill-editor
-      ref="TextEditor"
-      :content="content"
-      :disabled="readonly"
-      @change="onEditorChange($event)"
-      @blur="blur"
-      @focus="focus"
-      :options="editorOption"
-    >
-    </quill-editor>
-    <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
-    <span v-if="is_empty && required" class="caption error--text">The {{label}} is required.</span>
+    <v-container class="pl-0 pr-0 ml-0 mr-0">
+      <span class="grey--text caption">{{ label }}</span>
+      <image-uploader
+        ref="uploader"
+        multiple
+        tool
+        @upload-start="start_upload"
+        @upload-finish="finish_upload"
+      ></image-uploader>
+      <quill-editor
+        ref="TextEditor"
+        :content="content"
+        :disabled="readonly"
+        @change="onEditorChange($event)"
+        @blur="blur"
+        @focus="focus"
+        :options="editorOption"
+      >
+      </quill-editor>
+      <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
+      <span v-show="is_empty && required" class="caption error--text pl-2 pr-2">{{get_label}} is required.</span>
+    </v-container>
   </div>
 </template>
 
@@ -102,6 +104,15 @@ export default {
     else this.editorOption.theme = "snow";
     this.editorOption.placeholder = this.placeholder;
   },
+  computed: {
+    get_label() {
+      let str = this.label;
+      if (str && str.endsWith('*'))
+        return str.substr(0, str.length - 1);
+      return str;
+    }
+
+  },
   methods: {
     onEditorChange({ editor, html, text }) {
       this.$emit("change", html);
@@ -132,6 +143,9 @@ export default {
     },
     focus() {
       this.is_empty = false;
+    },
+    reset() {
+      this.$refs.TextEditor.deleteText();
     }
   }
 };

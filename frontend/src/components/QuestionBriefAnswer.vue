@@ -3,28 +3,13 @@
     <v-form ref="form" v-model="valid">
       <v-row>
         <v-col cols="12" md="9">
-          <v-row>
-            <v-col cols="12" md="8">
-              <v-textarea
-                label="Content*"
-                v-model="edited_data.content"
-                :rules="[v => !!v || 'Question content is required!']"
-                outlined
-                auto-grow
-                :readonly="readonly"
-              ></v-textarea>
-            </v-col>
-            <v-col>
-              <image-uploader
-                ref="uploader"
-                v-model="edited_data.image"
-                label="picture"
-                :readonly="readonly"
-                multiple
-                placeholder="Upload an image if necessary"
-              ></image-uploader>
-            </v-col>
-          </v-row>
+          <rich-text-editor
+            label="Content*"
+            v-model="edited_data.content"
+            :readonly="readonly"
+            required
+            ref="richtext"
+          ></rich-text-editor>
           <v-textarea
             label="Answer*"
             v-model="edited_data.answer"
@@ -92,11 +77,12 @@
 </template>
 
 <script>
-import ImageUploader from "./ImageUploader.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
+
 export default {
   name: "brief-answer",
   components: {
-    "image-uploader": ImageUploader
+    "rich-text-editor": RichTextEditor
   },
   props: {
     readonly: {
@@ -110,7 +96,7 @@ export default {
   },
   computed: {
     canSubmit() {
-      return this.valid;
+      return this.valid && this.edited_data.content.length != 0;
     }
   },
   created() {
@@ -122,7 +108,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-      this.$refs.uploader.reset();
+      this.$refs.richtext.reset();
     },
     cancel() {
       this.edited_data = JSON.parse(JSON.stringify(this.data));
