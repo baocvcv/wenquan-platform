@@ -11,7 +11,7 @@
                     >
                         <v-text-field
                             :label="index.toString()"
-                            v-model="result.answer[index-1]"
+                            v-model="answer[index-1]"
                             :readonly="readonly"
                         >
                         </v-text-field>
@@ -21,7 +21,7 @@
                 </v-row>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'single'">
-                <v-radio-group v-model="result.answer">
+                <v-radio-group v-model="answer">
                     <v-radio
                         v-for="(item,index) in question_data.question_choice"
                         :key="item"
@@ -32,7 +32,7 @@
                 </v-radio-group>
             </v-list-item>
             <v-list-item v-if="question_data.question_type == 'TorF'">
-                <v-radio-group v-model="result.answer">
+                <v-radio-group v-model="answer">
                     <v-radio
                         :value="true"
                         label="T"
@@ -50,7 +50,7 @@
                         :key="item"
                         :value="String.fromCharCode(index + 65)"
                         :label="String.fromCharCode(index + 65) + '. ' + item"
-                        v-model="result.answer"
+                        v-model="answer"
                         :readonly="readonly"
                     ></v-checkbox>
                 </v-container>
@@ -58,7 +58,7 @@
             <v-list-item v-if="question_data.question_type == 'brief_ans'">
                 <v-textarea
                     label="Answer"
-                    v-model="result.answer"
+                    v-model="answer"
                     outlined
                     auto-grow
                     :readonly="readonly"
@@ -87,17 +87,7 @@ export default {
         "question-show": QuestionShow
     },
     props: {
-        result: {
-            type: Object,
-            default: () => {
-                return {
-                    answer: [],
-                    score: [],
-                    comment: "",
-                    answered: false
-                };
-            }
-        },
+        answer: [],
         id: {
             type: Number,
             default: null
@@ -108,16 +98,15 @@ export default {
         }
     },
     watch: {
-        result: {
+        answer: {
             handler(newVal) {
-                newVal.answered = true;
                 this.$emit("change",newVal);
             },
             deep: true
         }
     },
     model: {
-        prop: "result",
+        prop: "answer",
         event: "change"
     }
 }

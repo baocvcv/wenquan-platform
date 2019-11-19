@@ -21,6 +21,7 @@
                   ? 'Explore Your Favourite Question Banks'
                   : 'Explore'
               "
+              @force-update="$refs['my-bank'].$forceUpdate(); console.log('updated!')"
             ></question-banks-list>
           </v-tab-item>
           <v-tab-item>
@@ -30,6 +31,7 @@
               :admin="false"
               :bankIDs="$store.state.user.question_banks"
               :title="'MyBank'"
+              ref="my-bank"
             ></question-banks-list>
           </v-tab-item>
         </v-tabs>
