@@ -26,7 +26,10 @@
       <v-list-item-action>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on" @click="$router.push('/admin/testmark/' + id)"
+            <v-btn
+              icon
+              v-on="on"
+              @click="$router.push('/admin/testmarks/' + record.id)"
               ><v-icon>mdi-pen-plus</v-icon></v-btn
             >
           </template>

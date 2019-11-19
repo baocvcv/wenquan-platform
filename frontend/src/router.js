@@ -66,6 +66,11 @@ const router = new Router({
       component: () => import("./views/admin/TestPaperView.vue")
     },
     {
+      path: "/admin/testmarks/:id",
+      name: "test-paper-marking",
+      component: () => import("./views/admin/TestPaperMarking.vue")
+    },
+    {
       path: "/admin/questionbanks",
       name: "admin-question-banks",
       component: () => import("./views/admin/QuestionBanks.vue")
