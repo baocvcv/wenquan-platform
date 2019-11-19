@@ -1,0 +1,115 @@
+<template>
+  <div id="rich-text-editor">
+    <span class="grey--text caption">{{ label }}</span>
+    <image-uploader
+      ref="uploader"
+      multiple
+      tool
+      @upload-start="start_upload"
+      @upload-finish="finish_upload"
+    ></image-uploader>
+    <quill-editor
+      ref="TextEditor"
+      :content="content"
+      :disabled="readonly"
+      @change="onEditorChange($event)"
+      :options="editorOption"
+    >
+    </quill-editor>
+    <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
+  </div>
+</template>
+
+<script>
+// require styles
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+
+import { quillEditor } from "vue-quill-editor";
+
+import ImageUploader from "@/components/ImageUploader.vue";
+
+export default {
+  name: "rich-text-editor",
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ""
+    },
+    label: {
+      type: String,
+      default: ""
+    },
+    content: {
+      type: String,
+      default: ""
+    }
+  },
+  components: {
+    quillEditor,
+    "image-uploader": ImageUploader
+  },
+  data: function() {
+    return {
+      editorOption: {
+        theme: "bubble",
+        placeholder: "",
+        modules: {
+          toolbar: {
+            container: [
+              ["bold", "italic", "underline", "strike"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [{ color: [] }, { background: [] }],
+              [{ font: [] }],
+              [{ align: [] }],
+              ["link", "image"],
+              ["clean"]
+            ],
+            handlers: {
+              image: function(value) {
+                if (value) {
+                  document.querySelector('#virtual-upload-button').click()
+                } else {
+                  this.quill.format("image", false);
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+  },
+  model: {
+    prop: "content",
+    event: "change"
+  },
+  created() {
+    if (this.readonly) this.editorOption.theme = "bubble";
+    else this.editorOption.theme = "snow";
+    this.editorOption.placeholder = this.placeholder;
+  },
+  methods: {
+    onEditorChange({ editor, html, text }) {
+      this.$emit("change", html);
+    },
+    start_upload() {
+      console.log("Start uploading!");
+    },
+    finish_upload(url) {
+      let quill = this.$refs.TextEditor.quill;
+      // 获取光标所在位置
+      let length = quill.getSelection().index;
+      // 插入图片  res.info为服务器返回的图片地址
+      quill.insertEmbed(length, 'image', url);
+      // 调整光标到最后
+      quill.setSelection(length + 1);
+    }
+  }
+};
+</script>
