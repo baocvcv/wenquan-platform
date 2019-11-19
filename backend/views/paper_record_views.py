@@ -66,7 +66,7 @@ class PaperRecordDetail(APIView):
         # paper = paper_record.paper
         for question in paper_record.questionrecord_set.all():
             q_data = QuestionRecordSerializer(question).data
-            question_data[question.id] = q_data
+            question_data[question.question_id] = q_data
         paper_record_data['questions'] = question_data
         return Response(paper_record_data, status.HTTP_200_OK)
 
