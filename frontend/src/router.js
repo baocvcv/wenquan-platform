@@ -106,7 +106,7 @@ const router = new Router({
       component: () => import("./views/Activate.vue")
     },
     {
-      path: "/questionbanks/:int",
+      path: "/questionbanks/:id",
       name: "question-bank",
       component: () => import("./views/QuestionBank.vue")
     },
