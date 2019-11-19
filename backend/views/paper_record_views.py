@@ -105,7 +105,8 @@ class PaperRecordDetail(APIView):
                         question_type=INT2TYPE[str(question.question_type)],
                         is_correct=is_correct,
                         score=scores,
-                        paper_record=paper_record
+                        paper_record=paper_record,
+                        correct_or_not=[],
                     )
                 question_record.set_ans(q_data['ans'])
                 question_record.save()
@@ -141,6 +142,10 @@ class PaperRecordDetail(APIView):
                 question_record.score = [score]
         else:
             question_record.score = score
+        if 'comment' in request.data:
+            question_record.comment = request.data['comment']
+        if 'correct_or_not' in request.data:
+            question_record.correct_or_not = request.data['correct_or_not']
         question_record.save()
 
         return Response(status=status.HTTP_200_OK)
