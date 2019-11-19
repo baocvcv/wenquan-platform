@@ -2,6 +2,21 @@
     <div class="test">
         <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit"></paper-solve>
         <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
+        <v-dialog v-model="msg_dialog" max-width=600px>
+            <v-card>
+                <v-card-title>
+                    Warning
+                </v-card-title>
+                <v-card-text>
+                    {{ msg }}
+                </v-card-text>
+                <v-card-action>
+                    <v-btn outlined @click="msg_dialog = false">
+                        OK
+                    </v-btn>
+                </v-card-action>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -63,15 +78,27 @@ export default {
         return {
             loading: false,
             paper_data: null,
-            record_id: null
+            record_id: null,
+            msg_dialog: false,
+            msg: ""
         };
     },
     methods: {
         submit(result) {
             result.paper_id = this.$route.params.id;
             result.action = "finish";
+            this.loading = true;
             axios.post("/api/paper_records/" + this.record_id + "/",result)
-                .catch(err => console.log(err));
+                .then(response => {
+                    this.loading = false;
+                    this.$router.push("/learn");
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.msg = "Due to network error, submit failed. Please try again later.";
+                    this.msg_dialog = true;
+                    this.loading = false;
+                });
         }
     }
 }
