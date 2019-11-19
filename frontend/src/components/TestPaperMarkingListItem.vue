@@ -24,17 +24,16 @@
         ></v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              v-on="on"
-              @click="$router.push('/admin/testmarks/' + record.id)"
-              ><v-icon>mdi-pen-plus</v-icon></v-btn
-            >
-          </template>
-          <span>Mark</span>
-        </v-tooltip>
+        <slot name="button" :record_id="record.id">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on" @click="$router.push('/admin/testmarks/' + record.id)"
+                ><v-icon>mdi-pen-plus</v-icon></v-btn
+              >
+            </template>
+            <span>Mark</span>
+          </v-tooltip>
+        </slot>
       </v-list-item-action>
     </v-list-item>
   </v-list-group>
