@@ -14,13 +14,19 @@ import axios from "axios";
 
 export default {
     name: "test",
+	props: {
+	  id: {
+		type: Number,
+		default: -1
+	  }
+	},
     components: {
         "paper-solve": PaperSolve,
         "vue-element-loading": VueElementLoading
     },
     created() {
         this.loading = true;
-        let id = this.$route.params.id;
+        let id = this.id == -1 ? this.$route.params.id : this.id;
         axios
         .get("/api/papers/" + id + "/")
         .then(async response => {

@@ -1,5 +1,5 @@
 <template>
-  <paper-solve :initData="paper">
+  <paper-solve :initData="paper_data">
     <template v-slot:comment="{ section }">
 	  <question-correct
 	    v-for="(question, key) in section.questions"
@@ -15,13 +15,13 @@ import PaperSolve from "@/components/PaperSolve.vue";
 import QuestionCorrect from "@/components/QuestionCorrect.vue";
 import axios from "axios";
 export default {
-  name: "",
+  name: "paper-marking",
   props: {
 	paper_record_id: {
 	  type: Number,
 	  default: -1
 	},
-	paper: {
+	paper_data: {
 	  type: Object,
 	  default: null,
 	}
@@ -56,6 +56,8 @@ export default {
 		})
 	    .then(response => {
 		  this.paper_record = response.data;
+		  console.log("record");
+		  console.log(response);
 		})
 		.catch(error => {
 		  console.log(error);
