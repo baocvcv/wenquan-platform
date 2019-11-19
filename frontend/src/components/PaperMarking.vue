@@ -1,11 +1,19 @@
 <template>
-  <paper-solve :initData="paper_data">
-    <template v-slot:comment="{ section }">
+  <paper-solve v-if="paper_data && paper_record" :initData="paper_data">
+    <template v-slot:shit>
+	  <h1>shitttttt</h1>
+	</template>
+    <template v-slot:comment="{ paper }">
+	  <span
+	    v-for="(section, section_index) in paper.sections"
+		:key="section_index"
+		>
 	  <question-correct
 	    v-for="(question, key) in section.questions"
 		:key="key"
 		:question="question_info(section, question)"
 	  ></question-correct>
+	  </span>
 	</template>
   </paper-solve>
 </template>
@@ -49,7 +57,7 @@ export default {
   created() {
 	if (this.paper_record_id != -1) {
 	  axios
-		.get("/api/paper_records/" + this.paper_record_id + "/", {
+		.get("/api/paper_records/" + this.paper_record_id, {
 			headers: {
 			  Authorization: "Token " + this.$store.state.user.token
 			}
