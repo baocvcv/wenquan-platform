@@ -13,10 +13,13 @@
       :content="content"
       :disabled="readonly"
       @change="onEditorChange($event)"
+      @blur="blur"
+      @focus="focus"
       :options="editorOption"
     >
     </quill-editor>
     <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
+    <span v-if="is_empty && required" class="caption error--text">The {{label}} is required.</span>
   </div>
 </template>
 
@@ -48,6 +51,10 @@ export default {
     content: {
       type: String,
       default: ""
+    },
+    required: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -56,6 +63,7 @@ export default {
   },
   data: function() {
     return {
+      is_empty: false,
       editorOption: {
         theme: "bubble",
         placeholder: "",
@@ -116,6 +124,14 @@ export default {
         title: "Finish uploading the picture!",
         type: "success"
       })
+    },
+    blur() {
+      if (this.content.length === 0) {
+        this.is_empty = true;
+      }
+    },
+    focus() {
+      this.is_empty = false;
     }
   }
 };
