@@ -315,6 +315,7 @@ export default {
             key: "question_banks",
             value: user.question_banks
           })
+          this.$emit("force-update");
           this.detail = false;
           this.snack_bar_msg = "The question bank has been added. You can find it in 'MYBANK' now.";
           this.snack_bar = true;
