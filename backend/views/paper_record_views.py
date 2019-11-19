@@ -82,7 +82,10 @@ class PaperRecordDetail(APIView):
                 )
         # paper = Paper.objects.get(id=request.data['paper_id'])
         # sections = paper.section_set.all()
-        section_datas = request.data['sections']
+        if 'sections' in request.data:
+            section_datas = request.data['sections']
+        else:
+            section_datas = []
         for section_data in section_datas:
             question_datas = section_data['questions']
             for q_data in question_datas:
