@@ -13,26 +13,53 @@
 <script>
 import PaperSolve from "@/components/PaperSolve.vue";
 import QuestionCorrect from "@/components/QuestionCorrect.vue";
+import axios from "axios";
 export default {
   name: "",
   props: {
 	paper_record_id: {
 	  type: Number,
 	  default: -1
+	},
+	paper: {
+	  type: Object,
+	  default: null,
 	}
+  },
+  data: function() {
+	return {
+	  paper_record: undefined
+	};
   },
   computed: {
 	question_info(section, question) {
+	  var questionRecordId = this.paper_record.questions[question.id].id;
 	  var result = {
 		paper_record_id: this.paper_record_id,
-		question_record_id: -1,
-		paper_id: -1,
+		question_record_id: questionRecordId,
+		paper_id: this.paper_record.paper_id,
 		section_id: section.id,
 		question_id: question.id,
 		question_point: 0,
 		point_every_blank:[0, 0, 0]
 	  };
 	  return result;
+	}
+  },
+  created() {
+	if (this.paper_record_id != -1) {
+	  axios
+		.get("/api/paper_records/" + this.paper_record_id + "/", {
+			headers: {
+			  Authorization: "Token " + this.$store.state.user.token
+			}
+		})
+	    .then(response => {
+		  this.paper_record = response.data;
+		})
+		.catch(error => {
+		  console.log(error);
+		})
 	}
   },
   components: {

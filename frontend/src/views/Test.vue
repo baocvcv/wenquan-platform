@@ -1,6 +1,8 @@
 <template>
     <div class="test">
+	    <slot name="marking" :paper_data="paper_data">
         <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit"></paper-solve>
+		</slot>
         <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     </div>
 </template>

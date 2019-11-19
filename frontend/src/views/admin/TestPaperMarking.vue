@@ -1,20 +1,19 @@
 <template>
-  <v-card>
-  Oh shit
-    <v-card-text>
-	  <paper-marking />
-	</v-card-text>
-  </v-card>
+  <test-view>
+    <template v-slot:comment="{ paper_data }">
+	  <paper-marking :paper_record_id="$route.params.id" :paper_data="paper_data"/>
+	</template>
+  </test-view>
 </template>
 
 <script>
-import PaperMarking from "@/components/PaperMarking.vue"
+import PaperMarking from "@/components/PaperMarking.vue";
+import TestView from "@/views/Test.vue";
 export default {
   name: "test-paper-marking",
-  props: {
-  },
   components: {
-	"paper-marking": PaperMarking
+	"paper-marking": PaperMarking,
+	"test-view": TestView
   },
 }
 </script>
