@@ -102,6 +102,7 @@ class PaperRecordDetail(APIView):
                     question_record = paper_record.questionrecord_set.get(
                         question_id=q_data['id'],
                     )
+                    question_record.score = scores
                 except ObjectDoesNotExist:
                     question_record = QuestionRecord(
                         question_id=q_data['id'],
