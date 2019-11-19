@@ -1,6 +1,8 @@
 <template>
     <div class="test">
+	    <slot name="marking" :paper_data="paper_data">
         <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit"></paper-solve>
+		</slot>
         <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     </div>
 </template>
@@ -12,13 +14,19 @@ import axios from "axios";
 
 export default {
     name: "test",
+	props: {
+	  id: {
+		type: Number,
+		default: -1
+	  }
+	},
     components: {
         "paper-solve": PaperSolve,
         "vue-element-loading": VueElementLoading
     },
     created() {
         this.loading = true;
-        let id = this.$route.params.id;
+        let id = this.id == -1 ? this.$route.params.id : this.id;
         axios
         .get("/api/papers/" + id + "/")
         .then(async response => {

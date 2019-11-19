@@ -1,5 +1,5 @@
 <template>
-  <question-solve readonly>
+  <question-solve readonly :id="question.question_id" v-model="answer">
     <template v-slot:correct="{ question_data }">
       <v-list-item
         v-if="
@@ -83,6 +83,7 @@
 
 <script>
 import QuestionSolve from "@/components/QuestionSolve.vue";
+import axios from "axios";
 export default {
   name: "",
   props: {
@@ -90,9 +91,13 @@ export default {
       type: Object,
       default: () => {
         return {
-          id: -1,
+		  paper_record_id: -1,
+		  question_record_id: -1,
+		  paper_id: -1,
+		  section_id: -1,
+          question_id: -1,
           question_point: 20,
-          point_every_blank: [1, 2, 3]
+          point_every_blank: [1, 2, 3],
         };
       }
     },
@@ -103,6 +108,7 @@ export default {
   },
   data: function() {
     return {
+	  answer: undefined,
       score: 0,
       comment: "",
       correct_or_not: [false]
@@ -110,6 +116,26 @@ export default {
   },
   components: {
     "question-solve": QuestionSolve
+  },
+  created() {
+	if (this.question && this.question.question_record_id != -1) {
+	  axios
+		.get("/api/question_records/" + this.record_id + "/", {
+			headers: {
+			  Authorization: "Token " + this.$store.state.user.token
+			}
+		})
+	    .then(response => {
+		  this.answer = response.data.ans;
+		  this.score = response.data.score;
+		  this.comment = response.data.comment;
+		  var correct_bool = response.data.correct_or_not;
+		  this.correct_or_not = correct_bool ? correct_bool : [response.data.is_correct];
+		})
+		.catch(error => {
+		  console.log(error);
+		})
+	} 
   },
   methods: {
     score_overflow_check(question_data) {
@@ -142,7 +168,35 @@ export default {
     },
     slot_name(index) {
       return "correct-" + index.toString();
-    }
+    },
+	save() {
+	  var marking_result = {
+		paper_id: this.question.paper_id,
+		section_id: this.question.section_id,
+		question_id: this.question.question_id,
+		comment: this.comment,
+		score: this.score,
+		correct_or_not: this.correct_or_not
+	  }
+	  axios
+		.put("/api/paper_records/" + this.question.paper_record_id +  "/", marking_result)
+		.then((response) => {
+		  var res = {
+			status: true,
+			result: response
+		  }
+		  this.$emit("result", res);
+		  console.log(response);
+		})
+		.catch(error => {
+		  var res = {
+			status: false,
+			result: error
+		  }
+		  this.$emit("result", res);
+		  console.log(error);
+		})
+	}
   }
 };
 </script>

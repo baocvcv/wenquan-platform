@@ -76,6 +76,7 @@
           v-for="(section, section_index) in paper.sections"
           :key="section_index"
         >
+		<slot name="comment" :section="section">
           <question-solve
             v-for="(question, question_index) in section.questions"
             :key="question_index"
@@ -88,6 +89,7 @@
               answers[current_total_index(section_index, question_index)]
             "
           ></question-solve>
+		</slot>
         </span>
       </v-col>
     </v-row>
