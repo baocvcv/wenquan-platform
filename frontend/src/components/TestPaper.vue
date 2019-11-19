@@ -216,7 +216,7 @@
                   </v-tooltip>
                 </v-list-item-action>
               </v-list-item>
-              <question-list-item :question="question.content" dialog="true" />
+              <question-list-item :question="question.content" :dialog="true" />
             </v-card-text>
           </v-card>
 
