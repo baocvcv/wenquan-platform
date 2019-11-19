@@ -31,7 +31,7 @@
                   ><v-icon>mdi-eye</v-icon></v-btn
                 >
               </template>
-              <span>Mark</span>
+              <span>View</span>
             </v-tooltip>
           </template>
         </test-paper-marking-list-item>
