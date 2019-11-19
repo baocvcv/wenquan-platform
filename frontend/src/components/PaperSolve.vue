@@ -72,8 +72,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" lg="9" sm="8">
-	    <slot name="shit"></slot>
-		<slot name="comment" :paper="paper">
+		<slot name="comment" :paper="paper" :current_section="current_section" :current_question="current_question">
         <span
           v-for="(section, section_index) in paper.sections"
           :key="section_index"

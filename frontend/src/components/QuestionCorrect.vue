@@ -85,7 +85,7 @@
 import QuestionSolve from "@/components/QuestionSolve.vue";
 import axios from "axios";
 export default {
-  name: "",
+  name: "question-correct",
   props: {
     question: {
       type: Object,
@@ -103,7 +103,7 @@ export default {
     },
     readonly: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data: function() {
@@ -120,9 +120,10 @@ export default {
   created() {
 	console.log("question-correct");
 	console.log(this.question);
-	if (this.question.question_record_id != -1) {
+	var record_id = this.question.question_record_id;
+	if (record_id != -1) {
 	  axios
-		.get("/api/question_records/" + this.record_id, {
+		.get("/api/question_records/" + record_id, {
 			headers: {
 			  Authorization: "Token " + this.$store.state.user.token
 			}
@@ -133,9 +134,10 @@ export default {
 		  this.comment = response.data.comment;
 		  var correct_bool = response.data.correct_or_not;
 		  this.correct_or_not = correct_bool ? correct_bool : [response.data.is_correct];
-		  console.log("question correct");
+		  console.log("question correct record got");
 		  console.log(response);
 		  console.log(this.answer);
+		  console.log(this.correct_or_not);
 		})
 		.catch(error => {
 		  console.log("question correct");

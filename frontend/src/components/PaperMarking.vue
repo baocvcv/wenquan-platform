@@ -3,7 +3,7 @@
     <template v-slot:shit>
 	  <h1>shitttttt</h1>
 	</template>
-    <template v-slot:comment="{ paper }">
+    <template v-slot:comment="{ paper, current_section, current_question }">
 	  <span
 	    v-for="(section, section_index) in paper.sections"
 		:key="section_index"
@@ -12,6 +12,7 @@
 	    v-for="(question, key) in section.questions"
 		:key="key"
 		:question="question_info(section, question)"
+		v-show="current_section == section_index && current_question == key"
 	  ></question-correct>
 	  </span>
 	</template>
@@ -42,10 +43,10 @@ export default {
   methods: {
 	question_info(section, question) {
 	  console.log("function question_info");
-	  console.log(section);
+	  //console.log(section);
 	  console.log(question);
-	  console.log(this.paper_record);
-	  var questionRecordId = this.paper_record.questions["7"].id;
+	  //console.log(this.paper_record);
+	  var questionRecordId = this.paper_record.questions[question.id].id;
 	  var result = {
 		paper_record_id: this.paper_record_id,
 		question_record_id: questionRecordId,
@@ -55,6 +56,12 @@ export default {
 		question_point: question.question_point,
 		point_every_blank: question.point_every_blank
 	  };
+	  var blank_num = question.content.question_blank_num;
+	  if (blank_num != undefined && result.point_every_blank.length != blank_num) {
+		for (var i = 0; i < blank_num; i++) {
+			result.point_every_blank.push(0);
+		}
+	  }
 	  return result;
 	}
   },
@@ -68,8 +75,8 @@ export default {
 		})
 	    .then(response => {
 		  this.paper_record = response.data;
-		  console.log("record");
-		  console.log(response);
+		  //console.log("record");
+		  //console.log(response);
 		})
 		.catch(error => {
 		  console.log(error);
