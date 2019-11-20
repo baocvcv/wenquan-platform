@@ -91,7 +91,7 @@
                 class="mx-2 create-choice-button ml-4 mr-4"
                 @click="choice_num_up()"
                 color="grey"
-                >+</v-btn
+                >create new</v-btn
               >
             </v-row>
           </v-list>
