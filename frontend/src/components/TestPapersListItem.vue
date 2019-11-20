@@ -119,7 +119,10 @@ export default {
   computed: {
     change_paper_status_btn_text: function() {
       return this.test_paper["status"] == "drafted" ? "publish" : "drafted";
-    }
+    },
+    opposite_status() {
+	  return this.test_paper["status"] == "drafted" ? "published" : "drafted";
+	}
   },
   methods: {
     delete_confirmed() {
@@ -135,7 +138,27 @@ export default {
         .then(() => {
           this.delete_test_paper = false;
         });
-    }
+    },
+	change_paper_status() {
+	  axios
+		.put("/api/papers/" + this.test_paper.id + "/", {
+		  change_status: this.opposite_status
+		})
+	    .then(() => {
+		  this.test_paper["status"] = this.opposite_status;
+		  this.$notify({
+			text: "Change test paper state to " + this.opposite_status,
+			type: "success"
+		  })
+		})
+		.catch(error => {
+		  this.$notify({
+			title: "error",
+			text: "Oops..." + error,
+			type: "error"
+		  })
+		})
+	}
   }
 };
 </script>

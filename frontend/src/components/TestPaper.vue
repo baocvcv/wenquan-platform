@@ -180,7 +180,7 @@
                       sm="4"
                       lg="3"
                     >
-                      <span>Points Assignment(optional)</span>
+                      <span>Points Assignment</span>
                     </v-col>
                     <v-col
                       v-for="(point, key) in question.point_every_blank"
