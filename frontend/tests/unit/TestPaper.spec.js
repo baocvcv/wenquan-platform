@@ -12,10 +12,23 @@ Vue.use(Vuetify);
 Vue.use(Router);
 
 describe("TestPaper.vue", () => {
-  let vuetify, router;
+  let vuetify, router, store;
 
   beforeEach(() => {
     vuetify = new Vuetify();
+    store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
   });
 
   it("travel through all funcs", () => {
@@ -23,6 +36,7 @@ describe("TestPaper.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false,
       propsData: {
         paper: {

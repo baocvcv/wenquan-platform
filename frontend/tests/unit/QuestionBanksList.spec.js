@@ -2,24 +2,40 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionBanksList from "@/components/QuestionBanksList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import Vuex from "vuex";
 import "./mock/QuestionBanksListMock.js";
 import Router from "vue-router";
 import RouterRule from "@/router";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Vuex);
 
 describe("SignUp.vue", () => {
-  let vuetify, router;
+  let vuetify, router, store;
   beforeEach(() => {
     vuetify = new Vuetify();
     router = new Router({ RouterRule });
+    store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
   });
   it("render correctly", async done => {
     const wrapper = mount(QuestionBanksList, {
       vuetify,
       localVue,
       router,
+      store,
       sync: false,
       attachToDocument: true
     });
@@ -64,6 +80,7 @@ describe("SignUp.vue", () => {
     const wrapper = mount(QuestionBanksList, {
       vuetify,
       localVue,
+      store,
       sync: false,
       attachToDocument: true
     });
@@ -95,6 +112,7 @@ describe("SignUp.vue", () => {
     const wrapper = mount(QuestionBanksList, {
       vuetify,
       localVue,
+      store,
       sync: false,
       attachToDocument: true
     });

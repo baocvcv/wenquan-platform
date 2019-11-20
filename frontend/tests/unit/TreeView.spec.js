@@ -12,10 +12,23 @@ Vue.use(Vuetify);
 Vue.use(Router);
 
 describe("TreeView.vue", () => {
-  let vuetify, router;
+  let vuetify, router, store;
 
   beforeEach(() => {
     vuetify = new Vuetify();
+    store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
   });
 
   it("travel through all funcs", () => {
@@ -23,6 +36,7 @@ describe("TreeView.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     wrapper.vm.select([wrapper.vm.treeData[0]]);
@@ -39,6 +53,7 @@ describe("TreeView.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     wrapper.vm.removeNode();

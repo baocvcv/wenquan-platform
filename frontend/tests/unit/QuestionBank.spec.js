@@ -35,10 +35,24 @@ describe("QuestionBank.vue", () => {
       user_group: "Admin"
     });
     router.push({ name: "question-bank", params: { id: 500 } });
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
     let wrapper = mount(QuestionBank, {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     setTimeout(() => {
@@ -51,10 +65,24 @@ describe("QuestionBank.vue", () => {
       user_group: "Admin"
     });
     router.push({ name: "question-bank", params: { id: 200 } });
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
     let wrapper = mount(QuestionBank, {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     setTimeout(async () => {
@@ -111,10 +139,24 @@ describe("QuestionBank.vue", () => {
       user_group: "Admin"
     });
     router.push({ name: "question-bank", params: { id: 200 } });
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
     let wrapper = mount(QuestionBank, {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     setTimeout(async () => {
@@ -153,10 +195,24 @@ describe("QuestionBank.vue", () => {
       user_group: "Admin"
     });
     router.push({ name: "question-bank", params: { id: 200 } });
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {
+        },
+        updateUserWithKey(state, payload) {
+        }
+      },
+    })
     let wrapper = mount(QuestionBank, {
       localVue,
       vuetify,
       router,
+      store,
       sync: false
     });
     setTimeout(async () => {
