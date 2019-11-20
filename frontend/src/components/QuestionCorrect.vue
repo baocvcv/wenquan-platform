@@ -85,7 +85,7 @@
 import QuestionSolve from "@/components/QuestionSolve.vue";
 import axios from "axios";
 export default {
-  name: "",
+  name: "question-correct",
   props: {
     question: {
       type: Object,
@@ -103,7 +103,7 @@ export default {
     },
     readonly: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data: function() {
@@ -120,22 +120,25 @@ export default {
   created() {
 	console.log("question-correct");
 	console.log(this.question);
-	if (this.question.question_record_id != -1) {
+	var record_id = this.question.question_record_id;
+	if (record_id != -1) {
 	  axios
-		.get("/api/question_records/" + this.record_id + "/", {
+		.get("/api/question_records/" + record_id, {
 			headers: {
 			  Authorization: "Token " + this.$store.state.user.token
 			}
 		})
 	    .then(response => {
 		  this.answer = response.data.ans;
-		  this.score = response.data.score;
+		  var score = response.data.score;
+		  this.score = score instanceof Array ? score[0] : score;
 		  this.comment = response.data.comment;
 		  var correct_bool = response.data.correct_or_not;
-		  this.correct_or_not = correct_bool ? correct_bool : [response.data.is_correct];
-		  console.log("question correct");
+		  this.correct_or_not = correct_bool.length != 0 ? correct_bool : [response.data.is_correct];
+		  console.log("question correct record got");
 		  console.log(response);
 		  console.log(this.answer);
+		  console.log(this.correct_or_not);
 		})
 		.catch(error => {
 		  console.log("question correct");
@@ -157,6 +160,9 @@ export default {
       ];
     },
     check_ans(index, question_data) {
+	  console.log("check")
+	  console.log(index)
+	  console.log(question_data)
       this.correct_or_not[index] = !this.correct_or_not[index];
       let type = question_data.question_type;
       if (type != "fill_blank") {
@@ -181,11 +187,11 @@ export default {
 		section_id: this.question.section_id,
 		question_id: this.question.question_id,
 		comment: this.comment,
-		score: this.score,
+		score: parseInt(this.score),
 		correct_or_not: this.correct_or_not
 	  }
 	  axios
-		.put("/api/paper_records/" + this.question.paper_record_id +  "/", marking_result)
+		.put("/api/paper_records/" + this.question.paper_record_id, marking_result)
 		.then((response) => {
 		  var res = {
 			status: true,

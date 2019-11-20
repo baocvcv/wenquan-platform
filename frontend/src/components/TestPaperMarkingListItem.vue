@@ -65,9 +65,11 @@ export default {
       .then(response => {
         let all_records = response.data;
         for (var i = 0; i < all_records.length; i++) {
-          if (all_records[i].need_judging)
-            this.paper_records.unshift(all_records[i]);
-          else this.paper_records.push(all_records[i]);
+		  if (!all_records[i].is_active) {
+			if (all_records[i].need_judging)
+				this.paper_records.unshift(all_records[i]);
+			else this.paper_records.push(all_records[i]);
+		  }
         }
         if (all_records.length != 0)
           this.paper_name = all_records[0].paper_name;
