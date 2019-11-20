@@ -5,7 +5,7 @@
             <template v-slot:timer>
                 <v-list-item>
                     <v-spacer></v-spacer>
-                    <p :class="time_left < 600 ? 'text--error' : ''">
+                    <p :class="time_left < 600 ? 'error--text' : ''">
                         {{ timer }}
                     </p>
                     <v-spacer></v-spacer>
