@@ -65,15 +65,16 @@
             </v-list-item>
             <v-list-item>
               <v-spacer></v-spacer>
+			  <slot name="submit">
               <v-btn outlined @click="submit">Submit</v-btn>
+			  </slot>
               <v-spacer></v-spacer>
             </v-list-item>
           </v-list>
         </v-card>
       </v-col>
       <v-col cols="12" lg="9" sm="8">
-	    <slot name="shit"></slot>
-		<slot name="comment" :paper="paper">
+		<slot name="comment" :paper="paper" :current_section="current_section" :current_question="current_question">
         <span
           v-for="(section, section_index) in paper.sections"
           :key="section_index"
@@ -203,11 +204,12 @@ export default {
       }
     },
     parse_answer(answer) {
-	  if(answer == []) return undefined;	
-      if(answer instanceof Array)
+      if(answer instanceof Array) {
+	    if(answer.length == 0) return undefined;
         answer.forEach((element,index) => {
           if(!element) answer[index] = "";
         });
+	  }
       return answer;
     },
     submit() {
