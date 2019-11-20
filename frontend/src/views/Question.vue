@@ -212,7 +212,7 @@ export default {
         axios
           .put("/api/questions/" + info.id.toString() + "/", [info])
           .then(response => {
-            if (this.$route.path.find("/questions/") == -1)
+            if (this.$route.fullPath.search("/questions/") == -1)
             {
               this.$refs[this.typeSelected].submitted();
               this.edit_mode = false;
