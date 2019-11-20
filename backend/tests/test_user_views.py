@@ -1,13 +1,11 @@
 """test module for users_views"""
 from copy import copy
 
-# from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from backend.models import User
-# from backend.models import UserPermissions
 
 from backend.tests.utils import reset_database_permissions
 from backend.tests.utils import activate_all_users
@@ -119,7 +117,6 @@ class UserDetailTest(APITestCase):
             'username': 'Bryant',
             'email': 'c@d.com',
             'is_banned': True,
-            'user_group': 'Admin',
             'profile': {
                 'school_name': 'PKU',
             }

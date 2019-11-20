@@ -62,7 +62,6 @@ class PaperRecordDetail(APIView):
         paper_record_data = PaperRecordSerializer(paper_record).data
         # compile questions
         question_data = {}
-        # paper = paper_record.paper
         for question in paper_record.questionrecord_set.all():
             q_data = QuestionRecordSerializer(question).data
             question_data[question.question_id] = q_data

@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from psycopg2 import Error
 
 from backend.models import AuthCode
-# from backend.serializers import AuthCodeSerializer
 from backend.models import QuestionBank
 from backend.scripts.generate_token import generate_token
 

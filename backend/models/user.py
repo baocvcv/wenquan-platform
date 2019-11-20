@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
-# from .permissions import UserPermissions
 from .profile import Profile
 
 class User(AbstractUser):
