@@ -10,7 +10,7 @@ from ipware import get_client_ip
 
 class LoginView(KnoxLoginView):
     """ Custom auth backend"""
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = [permissions.AllowAny, ]
 
 
     def post(self, request, format=None): # pylint: disable=redefined-builtin

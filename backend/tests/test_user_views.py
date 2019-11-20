@@ -1,13 +1,11 @@
 """test module for users_views"""
 from copy import copy
 
-# from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from backend.models import User
-# from backend.models import UserPermissions
 
 from backend.tests.utils import reset_database_permissions
 from backend.tests.utils import activate_all_users
@@ -58,6 +56,10 @@ class UserListViewTest(APITestCase):
         self.client.post(url, data, format='json')
         data['username'] = 'Lebron'
         self.client.post(url, data, format='json')
+        user = User.objects.get(username='Lebron')
+        user.user_group = 'Admin'
+        user.save()
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -92,9 +94,10 @@ class UserDetailTest(APITestCase):
         }
         response2 = self.client.post(url2, data, format='json')
         # get student detail
-        print(response2.data)
         user_id = response2.data['user']['id']
         url3 = reverse('user-detail', args=[user_id])
+        user = User.objects.get(username='Kobe')
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response3 = self.client.get(url3)
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['username'], response2.data['user']['username'])
@@ -114,14 +117,14 @@ class UserDetailTest(APITestCase):
             'username': 'Bryant',
             'email': 'c@d.com',
             'is_banned': True,
-            'user_group': 'Admin',
             'profile': {
                 'school_name': 'PKU',
             }
         }
         # response = self.client.put(url2, data, format='json')
+        user = User.objects.get(username='Kobe')
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response = self.client.put(url2, data, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], 'Bryant')
         self.assertEqual(response.data['email'], 'c@d.com')

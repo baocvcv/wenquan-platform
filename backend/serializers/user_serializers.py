@@ -10,9 +10,6 @@ class UserPermissionsSerializer(serializers.ModelSerializer):
     """ Serializer for usertype """
     class Meta:
         model = UserPermissions
-        # fields = ['edit_students', 'view_students', 'create_students', 'ban_students',
-        #           'promote_students', 'view_admins', 'create_admins', 'edit_admins',
-        #           'ban_admins', ]
         exclude = ['group_name']
 
 

@@ -2,6 +2,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 from django.http import Http404
 from psycopg2 import Error
 
@@ -37,6 +38,8 @@ class QuestionBankList(APIView):
 
     def post(self, request):
         """Create a new QuestionBank"""
+        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         post_data = JSONParser().parse(request)
         if "id" in post_data:
             post_data.pop("id")
@@ -67,6 +70,9 @@ class QuestionBankDetail(APIView):
 
     def get(self, request, bank_id):
         """Get infomation of QuestionBank whose id=root_id"""
+        if request.user.user_group == 'Student':
+            if bank_id not in request.user.question_banks:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         bank = self.get_object(bank_id)
         serializer = QuestionBankSerializer(bank)
         response = serializer.data
@@ -84,6 +90,8 @@ class QuestionBankDetail(APIView):
 
     def put(self, request, bank_id):
         """Update the infomation of QuestionBank whose id=root_id"""
+        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         bank = self.get_object(bank_id)
         put_data = JSONParser().parse(request)
         serializer = QuestionBankSerializer(bank, put_data)

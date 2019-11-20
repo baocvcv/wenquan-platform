@@ -40,6 +40,10 @@ def createUser(
         is_banned=is_banned,
         question_banks=[],
     )
+    if user_group == 'Admin':
+        user.is_staff = True
+    if user_group == 'SuperAdmin':
+        user.is_superuser = True
     return user
 
 
