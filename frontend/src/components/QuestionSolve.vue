@@ -82,21 +82,9 @@
 import QuestionShow from "./QuestionShow.vue";
 
 export default {
-  name: "question-solve",
-  components: {
-    "question-show": QuestionShow
-  },
-  props: {
-    result: {
-      type: Object,
-      default: () => {
-        return {
-          answer: [],
-          score: [],
-          comment: "",
-          answered: false
-        };
-      }
+    name: "question-solve",
+    components: {
+        "question-show": QuestionShow
     },
     props: {
         answer: [],
@@ -121,10 +109,5 @@ export default {
         prop: "answer",
         event: "change"
     }
-  },
-  model: {
-    prop: "result",
-    event: "change"
-  }
 };
 </script>
