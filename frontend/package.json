@@ -100,9 +100,10 @@
       "^.+\\.jsx?$": "babel-jest"
     },
     "transformIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/(?!quill)"
     ],
     "moduleNameMapper": {
+      "^@/components/RichTextEditor.vue": "<rootDir>/tests/unit/mock/RichTextEditorMock.vue",
       "^@/(.*)$": "<rootDir>/src/$1"
     },
     "snapshotSerializers": [
