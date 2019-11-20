@@ -164,7 +164,7 @@ def createQuestion(question_data, kind, bank):
             **question_data[0],
             history_version=q_group,
         )
-    question.save()
+        question.save()
     return question
 
 
@@ -218,8 +218,12 @@ def createPaper(multi, fill, brief):
     section2.save()
 
 
-test_bank = createBank(name="test_bank")
-multi = createQuestion(multi_example, TYPEDIC['multiple'], test_bank)
-fill = createQuestion(fill_blank_example, TYPEDIC['fill_blank'], test_bank)
-brief = createQuestion(brief_q_example, TYPEDIC['brief_ans'], test_bank)
-createPaper(multi, fill, brief)
+def create_related_q():
+    test_bank = createBank(name="test_bank")
+    multi = createQuestion(multi_example, TYPEDIC['multiple'], test_bank)
+    fill = createQuestion(fill_blank_example, TYPEDIC['fill_blank'], test_bank)
+    brief = createQuestion(brief_q_example, TYPEDIC['brief_ans'], test_bank)
+    createPaper(multi, fill, brief)
+
+
+create_related_q()
