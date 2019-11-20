@@ -133,23 +133,28 @@ class PaperRecordDetail(APIView):
     def put(request, record_id):
         "Modify a question record"
         paper_record = PaperRecord.objects.get(id=record_id)
-        q_id = request.data['question_id']
-        question_record = paper_record.questionrecord_set.get(
-            question_id=q_id
-        )
-        score = request.data['score']
-        if isinstance(score, int):
-            if question_record.question_type == "fill_blank":
-                question = Question.objects.get(id=q_id)
-                question_record.score = [score] * question.question_blank_num
+        if 'action' in request.data:
+            paper_record.need_judging = False
+            paper_record.save()
+
+        if 'question_id' in request.data:
+            q_id = request.data['question_id']
+            question_record = paper_record.questionrecord_set.get(
+                question_id=q_id
+            )
+            score = request.data['score']
+            if isinstance(score, int):
+                if question_record.question_type == "fill_blank":
+                    question = Question.objects.get(id=q_id)
+                    question_record.score = [score] * question.question_blank_num
+                else:
+                    question_record.score = [score]
             else:
-                question_record.score = [score]
-        else:
-            question_record.score = score
-        if 'comment' in request.data:
-            question_record.comment = request.data['comment']
-        if 'correct_or_not' in request.data:
-            question_record.correct_or_not = request.data['correct_or_not']
-        question_record.save()
+                question_record.score = score
+            if 'comment' in request.data:
+                question_record.comment = request.data['comment']
+            if 'correct_or_not' in request.data:
+                question_record.correct_or_not = request.data['correct_or_not']
+            question_record.save()
 
         return Response(status=status.HTTP_200_OK)
