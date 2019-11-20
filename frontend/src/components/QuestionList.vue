@@ -325,6 +325,15 @@ export default {
         .get("/api/questions/" + question_id + "/")
         .then(response => {
           this.question_list[question_id] = response.data;
+          console.log(this.question_list[question_id]);
+          console.log(response.data.parents_node);
+          console.log(this.tree_selection);
+          if (this.tree_selection.length == 0)
+          {
+            this.shown_questions.push(response.data);
+            this.create_question_dialog = false;
+            return;
+          }
           let node_index;
           for (node_index in response.data.parents_node) {
             let selected_index;
