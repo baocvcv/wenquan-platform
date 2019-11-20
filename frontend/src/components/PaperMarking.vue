@@ -16,8 +16,8 @@
 	  ></question-correct>
 	  </span>
 	</template>
-	<template v-slot:submit v-show="!readonly">
-	  <v-btn outlined @click="submit">Submit</v-btn>
+	<template v-slot:submit> 
+	  <v-btn v-show="!readonly" outlined @click="submit">Submit</v-btn>
 	</template>
   </paper-solve>
   <vue-element-loading :active="loading" is-full-screen></vue-element-loading>

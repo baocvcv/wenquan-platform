@@ -23,6 +23,7 @@
           v-for="(paper, key) in papers"
           :key="key"
           :id="paper"
+          readonly
         >
           <template v-slot:button="{ record_id }">
             <v-tooltip bottom>
