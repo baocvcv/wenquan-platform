@@ -21,9 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(
-          /* webpackChunkName: "about" */ "./components/PaperSolve.vue"
-        )
+        import(/* webpackChunkName: "about" */ "./components/PaperSolve.vue")
     },
     {
       path: "/account",
@@ -103,12 +101,12 @@ const router = new Router({
     {
       path: "/test/:id",
       name: "test",
-      component:() => import("./views/Test.vue")
+      component: () => import("./views/Test.vue")
     },
     {
       path: "/paper_record/:id",
       name: "paper-record",
-      component:() => import("./views/student/TestPaperMarkingView.vue")
+      component: () => import("./views/student/TestPaperMarkingView.vue")
     },
     {
       path: "/activate/:token",

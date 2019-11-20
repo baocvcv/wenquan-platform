@@ -33,12 +33,10 @@ describe("QuestionListItem.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("read_more and collapse feature work properly", async () => {

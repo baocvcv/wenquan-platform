@@ -27,23 +27,20 @@ describe("CreateAuthCodeCard.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateAuthCodeCard, {
       localVue,
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     wrapper.vm.submit();
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
-
 });

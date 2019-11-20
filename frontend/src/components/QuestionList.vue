@@ -254,11 +254,15 @@ export default {
         this.process = "Total Count: " + this.shown_questions.length;
         return;
       }
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .post("/api/nodes_question/", { nodes_id: selected_node_id }, {headers: headers})
+        .post(
+          "/api/nodes_question/",
+          { nodes_id: selected_node_id },
+          { headers: headers }
+        )
         .then(response => {
           this.question_indices = response.data;
         });
@@ -293,14 +297,16 @@ export default {
           this.shown_questions.push(this.question_list[index]);
           process_on();
         } else {
-                const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
-          axios.get("/api/questions/" + index + "/", {headers: headers}).then(response => {
-            this.shown_questions.push(response.data);
-            this.question_list[index] = response.data;
-            process_on();
-          });
+          const headers = {
+            Authorization: "Token " + this.$store.state.user.token
+          };
+          axios
+            .get("/api/questions/" + index + "/", { headers: headers })
+            .then(response => {
+              this.shown_questions.push(response.data);
+              this.question_list[index] = response.data;
+              process_on();
+            });
         }
       }
     }
@@ -308,11 +314,11 @@ export default {
   created() {
     if (this.select) this.is_selecting = true;
     this.process = "Fetching data from server...";
-          const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
     axios
-      .get("/api/question_banks/" + this.id + "/", {headers: headers})
+      .get("/api/question_banks/" + this.id + "/", { headers: headers })
       .then(response => {
         this.question_indices = JSON.parse(
           JSON.stringify(response.data.questions)
@@ -330,18 +336,17 @@ export default {
       this.level_max_filter = 5;
     },
     create(question_id) {
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .get("/api/questions/" + question_id + "/", {headers: headers})
+        .get("/api/questions/" + question_id + "/", { headers: headers })
         .then(response => {
           this.question_list[question_id] = response.data;
           console.log(this.question_list[question_id]);
           console.log(response.data.parents_node);
           console.log(this.tree_selection);
-          if (this.tree_selection.length == 0)
-          {
+          if (this.tree_selection.length == 0) {
             this.shown_questions.push(response.data);
             this.create_question_dialog = false;
             return;

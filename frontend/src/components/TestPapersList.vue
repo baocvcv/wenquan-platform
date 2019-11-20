@@ -97,11 +97,11 @@ export default {
   methods: {
     update_data() {
       this.process = "fetching data ...";
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .get("/api/papers/", {headers: headers})
+        .get("/api/papers/", { headers: headers })
         .then(response => {
           this.test_papers = response.data;
           this.process = "total count: " + this.test_papers.length;

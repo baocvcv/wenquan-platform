@@ -24,12 +24,10 @@ describe("QuestionSolve.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("travel", done => {
@@ -48,5 +46,4 @@ describe("QuestionSolve.vue", () => {
     });
     wrapper.vm.$nextTick(() => done());
   });
-
 });

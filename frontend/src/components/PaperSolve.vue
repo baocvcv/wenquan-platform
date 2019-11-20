@@ -66,34 +66,41 @@
             </v-list-item>
             <v-list-item>
               <v-spacer></v-spacer>
-			  <slot name="submit">
-              <v-btn v-show="!readonly" outlined @click="submit">Submit</v-btn>
-			  </slot>
+              <slot name="submit">
+                <v-btn v-show="!readonly" outlined @click="submit"
+                  >Submit</v-btn
+                >
+              </slot>
               <v-spacer></v-spacer>
             </v-list-item>
           </v-list>
         </v-card>
       </v-col>
       <v-col cols="12" lg="9" sm="8">
-		<slot name="comment" :paper="paper" :current_section="current_section" :current_question="current_question">
-        <span
-          v-for="(section, section_index) in paper.sections"
-          :key="section_index"
+        <slot
+          name="comment"
+          :paper="paper"
+          :current_section="current_section"
+          :current_question="current_question"
         >
-          <question-solve
-            v-for="(question, question_index) in section.questions"
-            :key="question_index"
-            :id="question.id"
-            v-show="
-              current_section == section_index &&
-                current_question == question_index
-            "
-            v-model="
-              answers[current_total_index(section_index, question_index)]
-            "
-          ></question-solve>
-        </span>
-		</slot>
+          <span
+            v-for="(section, section_index) in paper.sections"
+            :key="section_index"
+          >
+            <question-solve
+              v-for="(question, question_index) in section.questions"
+              :key="question_index"
+              :id="question.id"
+              v-show="
+                current_section == section_index &&
+                  current_question == question_index
+              "
+              v-model="
+                answers[current_total_index(section_index, question_index)]
+              "
+            ></question-solve>
+          </span>
+        </slot>
       </v-col>
     </v-row>
     <v-dialog v-model="warning_dialog" max-width="600px">
@@ -126,10 +133,10 @@ export default {
       type: Object,
       default: null
     },
-	readonly: {
-	  type: Boolean,
-	  default: false
-	}
+    readonly: {
+      type: Boolean,
+      default: false
+    }
   },
   watch: {
     initData(newVal) {
@@ -138,13 +145,13 @@ export default {
   },
   created() {
     if (this.initData) {
-		this.paper = this.initData;
-		for(var i = 0;i < this.paper.sections.length;i++){
-        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
-          this.answers[this.current_total_index(i,j)] = [];
+      this.paper = this.initData;
+      for (var i = 0; i < this.paper.sections.length; i++) {
+        for (var j = 0; j < this.paper.sections[i].questions.length; j++) {
+          this.answers[this.current_total_index(i, j)] = [];
         }
       }
-	}
+    }
   },
   data: function() {
     return {
@@ -209,12 +216,12 @@ export default {
       }
     },
     parse_answer(answer) {
-      if(answer instanceof Array) {
-	    if(answer.length == 0) return undefined;
-        answer.forEach((element,index) => {
-          if(!element) answer[index] = "";
+      if (answer instanceof Array) {
+        if (answer.length == 0) return undefined;
+        answer.forEach((element, index) => {
+          if (!element) answer[index] = "";
         });
-	  }
+      }
       return answer;
     },
     submit() {
@@ -227,9 +234,11 @@ export default {
           id: this.paper.sections[i].id,
           questions: []
         };
-        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
-          let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
-          if(!current_answer) all_answered = false;
+        for (var j = 0; j < this.paper.sections[i].questions.length; j++) {
+          let current_answer = this.parse_answer(
+            this.answers[this.current_total_index(i, j)]
+          );
+          if (!current_answer) all_answered = false;
           result.sections[i].questions.push({
             id: this.paper.sections[i].questions[j].id,
             ans: current_answer ? current_answer : ""
@@ -253,9 +262,11 @@ export default {
           id: this.paper.sections[i].id,
           questions: []
         };
-        for(var j = 0;j < this.paper.sections[i].questions.length;j++){
-          let current_answer=this.parse_answer(this.answers[this.current_total_index(i,j)]);
-          if(!current_answer) all_answered = false;
+        for (var j = 0; j < this.paper.sections[i].questions.length; j++) {
+          let current_answer = this.parse_answer(
+            this.answers[this.current_total_index(i, j)]
+          );
+          if (!current_answer) all_answered = false;
           result.sections[i].questions.push({
             id: this.paper.sections[i].questions[j].id,
             ans: current_answer ? current_answer : ""

@@ -3,81 +3,83 @@
     <v-form ref="form" v-model="valid">
       <v-row>
         <v-col cols="12" md="9">
-        <rich-text-editor
-          label="Content*"
-          v-model="edited_data.content"
-          :readonly="readonly"
-          required
-          ref="richtext"
-        ></rich-text-editor>
-        <v-list flat>
-          <v-list-item two-line>
-            <v-list-item-content align="left">
-              <v-list-item-title>Choices</v-list-item-title>
-              <v-list-item-subtitle
-                :style="answer == 'none' ? 'color:red' : 'color:green'"
-              >
-                {{
-                  answer === "none"
-                    ? "You haven't selected a right answer"
-                    : "You have selected " + answer
-                }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item-group color="primary">
-            <v-list-item
-              v-for="(item, index) in edited_data.choices"
-              :key="item.name"
-            >
-              <v-list-item-icon>
-                {{ item.name }}
-              </v-list-item-icon>
-              <v-text-field
-                placeholder="Enter choice"
-                v-model="item.content"
-                :rules="[v => !!v || 'Choice content is required!']"
-                :readonly="readonly"
-              ></v-text-field>
-              <v-btn
-                icon
-                small
-                @click="readonly ? () => {} : changeRightStatus(item)"
-              >
-                <v-icon color="green" v-if="item.right">mdi-check-circle</v-icon>
-                <v-icon color="red" v-else>mdi-close-circle</v-icon>
-              </v-btn>
-              <v-btn icon small @click="removeChoice(index)" v-if="!readonly">
-                <v-icon color="red">mdi-minus</v-icon>
-              </v-btn>
+          <rich-text-editor
+            label="Content*"
+            v-model="edited_data.content"
+            :readonly="readonly"
+            required
+            ref="richtext"
+          ></rich-text-editor>
+          <v-list flat>
+            <v-list-item two-line>
+              <v-list-item-content align="left">
+                <v-list-item-title>Choices</v-list-item-title>
+                <v-list-item-subtitle
+                  :style="answer == 'none' ? 'color:red' : 'color:green'"
+                >
+                  {{
+                    answer === "none"
+                      ? "You haven't selected a right answer"
+                      : "You have selected " + answer
+                  }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
             </v-list-item>
-          </v-list-item-group>
-          <v-btn
-            text
-            height="50px"
-            class="mx-2 create-choice-button ml-4 mr-4"
-            color="grey"
-            @click="addChoice()"
-            v-if="!readonly"
-          >
-            Create New
-          </v-btn>
-        </v-list>
-        <v-textarea
-          label="Analysis*"
-          v-model="edited_data.analysis"
-          :rules="[v => !!v || 'Analysis is required!']"
-          outlined
-          auto-grow
-          :readonly="readonly"
-        ></v-textarea>
-        <v-textarea
-          label="Notes"
-          v-model="edited_data.title"
-          outlined
-          :readonly="readonly"
-          hint="Write down some notes if necessary"
-        ></v-textarea>
+            <v-list-item-group color="primary">
+              <v-list-item
+                v-for="(item, index) in edited_data.choices"
+                :key="item.name"
+              >
+                <v-list-item-icon>
+                  {{ item.name }}
+                </v-list-item-icon>
+                <v-text-field
+                  placeholder="Enter choice"
+                  v-model="item.content"
+                  :rules="[v => !!v || 'Choice content is required!']"
+                  :readonly="readonly"
+                ></v-text-field>
+                <v-btn
+                  icon
+                  small
+                  @click="readonly ? () => {} : changeRightStatus(item)"
+                >
+                  <v-icon color="green" v-if="item.right"
+                    >mdi-check-circle</v-icon
+                  >
+                  <v-icon color="red" v-else>mdi-close-circle</v-icon>
+                </v-btn>
+                <v-btn icon small @click="removeChoice(index)" v-if="!readonly">
+                  <v-icon color="red">mdi-minus</v-icon>
+                </v-btn>
+              </v-list-item>
+            </v-list-item-group>
+            <v-btn
+              text
+              height="50px"
+              class="mx-2 create-choice-button ml-4 mr-4"
+              color="grey"
+              @click="addChoice()"
+              v-if="!readonly"
+            >
+              Create New
+            </v-btn>
+          </v-list>
+          <v-textarea
+            label="Analysis*"
+            v-model="edited_data.analysis"
+            :rules="[v => !!v || 'Analysis is required!']"
+            outlined
+            auto-grow
+            :readonly="readonly"
+          ></v-textarea>
+          <v-textarea
+            label="Notes"
+            v-model="edited_data.title"
+            outlined
+            :readonly="readonly"
+            hint="Write down some notes if necessary"
+          ></v-textarea>
         </v-col>
         <v-col>
           <p class="grey--text caption mb-1">Type:</p>

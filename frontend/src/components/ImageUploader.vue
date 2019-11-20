@@ -149,7 +149,7 @@ export default {
             Authorization: "Token " + this.$store.state.user.token
           };
           var url = await axios
-            .post("/api/upload/image/", formData, {headers: headers})
+            .post("/api/upload/image/", formData, { headers: headers })
             .catch(error => {
               alert(error);
               that.loading = false;

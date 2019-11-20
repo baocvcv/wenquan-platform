@@ -56,17 +56,17 @@
     </template>
     <template v-slot:score="{ question_data }">
       <v-list-item>
-	    <v-form v-model="score_form">
-        <v-text-field
-          v-model="score"
-          label="Score"
-          :readonly="readonly || question_data.question_type != 'brief_ans'"
-          :rules="score_rules(question_data)"
-          suffix="points"
-          outlined
-          required
-        ></v-text-field>
-		</v-form>
+        <v-form v-model="score_form">
+          <v-text-field
+            v-model="score"
+            label="Score"
+            :readonly="readonly || question_data.question_type != 'brief_ans'"
+            :rules="score_rules(question_data)"
+            suffix="points"
+            outlined
+            required
+          ></v-text-field>
+        </v-form>
       </v-list-item>
     </template>
     <template v-slot:comment="{ question_data }">
@@ -76,7 +76,7 @@
           label="Comment"
           :readonly="readonly"
           outlined
-		  auto-grow
+          auto-grow
           required
         ></v-textarea>
       </v-list-item>
@@ -94,13 +94,13 @@ export default {
       type: Object,
       default: () => {
         return {
-		  paper_record_id: -1,
-		  question_record_id: -1,
-		  paper_id: -1,
-		  section_id: -1,
+          paper_record_id: -1,
+          question_record_id: -1,
+          paper_id: -1,
+          section_id: -1,
           question_id: -1,
           question_point: 20,
-          point_every_blank: [1, 2, 3],
+          point_every_blank: [1, 2, 3]
         };
       }
     },
@@ -111,44 +111,47 @@ export default {
   },
   data: function() {
     return {
-	  answer: [],
+      answer: [],
       score: 0,
       comment: "",
       correct_or_not: [false],
-	  score_form: false
+      score_form: false
     };
   },
   components: {
     "question-solve": QuestionSolve
   },
   created() {
-	console.log("question-correct");
-	console.log(this.question);
-	var record_id = this.question.question_record_id;
-	if (record_id != -1) {
-	  axios
-		.get("/api/question_records/" + record_id, {
-			headers: {
-			  Authorization: "Token " + this.$store.state.user.token
-			}
-		})
-	    .then(response => {
-		  this.answer = response.data.ans;
-		  var score = response.data.score;
-		  this.score = score instanceof Array ? score[0] : score;
-		  this.comment = response.data.comment;
-		  var correct_bool = response.data.correct_or_not;
-		  this.correct_or_not = correct_bool.length != 0 ? correct_bool : [response.data.is_correct];
-		  console.log("question correct record got");
-		  console.log(response);
-		  console.log(this.answer);
-		  console.log(this.correct_or_not);
-		})
-		.catch(error => {
-		  console.log("question correct");
-		  console.log(error);
-		})
-	} 
+    console.log("question-correct");
+    console.log(this.question);
+    var record_id = this.question.question_record_id;
+    if (record_id != -1) {
+      axios
+        .get("/api/question_records/" + record_id, {
+          headers: {
+            Authorization: "Token " + this.$store.state.user.token
+          }
+        })
+        .then(response => {
+          this.answer = response.data.ans;
+          var score = response.data.score;
+          this.score = score instanceof Array ? score[0] : score;
+          this.comment = response.data.comment;
+          var correct_bool = response.data.correct_or_not;
+          this.correct_or_not =
+            correct_bool.length != 0
+              ? correct_bool
+              : [response.data.is_correct];
+          console.log("question correct record got");
+          console.log(response);
+          console.log(this.answer);
+          console.log(this.correct_or_not);
+        })
+        .catch(error => {
+          console.log("question correct");
+          console.log(error);
+        });
+    }
   },
   methods: {
     score_overflow_check(question_data) {
@@ -164,9 +167,9 @@ export default {
       ];
     },
     check_ans(index, question_data) {
-	  console.log("check")
-	  console.log(index)
-	  console.log(question_data)
+      console.log("check");
+      console.log(index);
+      console.log(question_data);
       this.correct_or_not[index] = !this.correct_or_not[index];
       let type = question_data.question_type;
       if (type != "fill_blank") {
@@ -185,39 +188,43 @@ export default {
     slot_name(index) {
       return "correct-" + index.toString();
     },
-	async save() {
-	  var marking_result = {
-		paper_id: this.question.paper_id,
-		section_id: this.question.section_id,
-		question_id: this.question.question_id,
-		comment: this.comment,
-		score: parseInt(this.score),
-		correct_or_not: this.correct_or_not
-	  }
-    var if_success = false;
-          const headers = {
+    async save() {
+      var marking_result = {
+        paper_id: this.question.paper_id,
+        section_id: this.question.section_id,
+        question_id: this.question.question_id,
+        comment: this.comment,
+        score: parseInt(this.score),
+        correct_or_not: this.correct_or_not
+      };
+      var if_success = false;
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
-	  await axios
-		.put("/api/paper_records/" + this.question.paper_record_id, marking_result, {headers: headers})
-		.then((response) => {
-		  var res = {
-			status: true,
-			result: response
-		  }
-		  this.$emit("result", res);
-		  if_success = true;
-		})
-		.catch(error => {
-		  var res = {
-			status: false,
-			result: error
-		  }
-		  this.$emit("result", res);
-		  if_success = false;
-		})
-	  return if_success;
-	}
+      await axios
+        .put(
+          "/api/paper_records/" + this.question.paper_record_id,
+          marking_result,
+          { headers: headers }
+        )
+        .then(response => {
+          var res = {
+            status: true,
+            result: response
+          };
+          this.$emit("result", res);
+          if_success = true;
+        })
+        .catch(error => {
+          var res = {
+            status: false,
+            result: error
+          };
+          this.$emit("result", res);
+          if_success = false;
+        });
+      return if_success;
+    }
   }
 };
 </script>

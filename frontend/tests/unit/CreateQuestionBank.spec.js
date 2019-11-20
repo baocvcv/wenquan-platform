@@ -26,12 +26,10 @@ describe("CreateQuestionBank.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
@@ -66,12 +64,10 @@ describe("CreateQuestionBank.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
@@ -112,12 +108,10 @@ describe("CreateQuestionBank.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
@@ -148,12 +142,10 @@ describe("CreateQuestionBank.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,

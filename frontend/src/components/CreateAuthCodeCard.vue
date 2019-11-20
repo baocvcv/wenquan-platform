@@ -54,10 +54,12 @@ export default {
       const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
-      axios.post("/api/auth_code/", post, {headers: headers}).then(response => {
-        this.$refs["form"].reset();
-        this.$emit("add-auth-code", response.data);
-      });
+      axios
+        .post("/api/auth_code/", post, { headers: headers })
+        .then(response => {
+          this.$refs["form"].reset();
+          this.$emit("add-auth-code", response.data);
+        });
     }
   }
 };

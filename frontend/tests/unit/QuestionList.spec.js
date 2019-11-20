@@ -26,12 +26,10 @@ describe("QuestionList.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("Fails to fetch data from question bank", async done => {

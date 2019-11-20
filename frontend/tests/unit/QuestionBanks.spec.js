@@ -23,12 +23,10 @@ describe("QuestionBanks", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(QuestionBanks, {
       vuetify,
       localVue,
@@ -49,12 +47,10 @@ describe("QuestionBanks", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(QuestionBanks, {
       vuetify,
       localVue,

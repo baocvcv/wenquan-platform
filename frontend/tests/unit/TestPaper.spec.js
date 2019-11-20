@@ -23,12 +23,10 @@ describe("TestPaper.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("travel through all funcs", () => {
@@ -49,11 +47,11 @@ describe("TestPaper.vue", () => {
         }
       }
     });
-    for(var i=0;i<1001;i++) wrapper.vm.roman(i);
+    for (var i = 0; i < 1001; i++) wrapper.vm.roman(i);
     wrapper.vm.reset();
     wrapper.vm.cancel();
     wrapper.vm.create_section();
-    wrapper.vm.$emit("save",{
+    wrapper.vm.$emit("save", {
       title: "",
       total_point: "",
       tips: "",
@@ -63,18 +61,17 @@ describe("TestPaper.vue", () => {
     });
     wrapper.vm.judge_points_sum;
     wrapper.vm.edited_paper.sections[0].questions.push({
-        id: -1,
-        content: {},
-        point_every_blank: [1,2,3]
-      });
+      id: -1,
+      content: {},
+      point_every_blank: [1, 2, 3]
+    });
     wrapper.vm.question_sum_up(0);
-    wrapper.vm.blank_point_sum_up(0,0);
+    wrapper.vm.blank_point_sum_up(0, 0);
     wrapper.vm.submit();
-    wrapper.vm.drop_question(wrapper.vm.edited_paper.sections[0],0);
+    wrapper.vm.drop_question(wrapper.vm.edited_paper.sections[0], 0);
     wrapper.vm.drop_section(0);
     wrapper.vm.get_bank_id(0);
     wrapper.vm.get_selected_questions([1]);
     wrapper.vm.edit_button_clicked();
   });
-
 });

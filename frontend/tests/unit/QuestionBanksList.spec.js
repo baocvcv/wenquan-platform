@@ -23,12 +23,10 @@ describe("SignUp.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
   it("render correctly", async done => {
     const wrapper = mount(QuestionBanksList, {

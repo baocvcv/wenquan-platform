@@ -239,13 +239,14 @@ export default {
     },
     save() {
       this.edited_question_bank.picture = this.edited_question_bank_image[0];
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
         .put(
           "/api/question_banks/" + this.question_bank.id + "/",
-          this.edited_question_bank, {headers: headers}
+          this.edited_question_bank,
+          { headers: headers }
         )
         .then(response => {
           this.edit_mode = false;
@@ -275,11 +276,11 @@ export default {
     let id = this.$route.params.id;
     this.loading = true;
     this.editable = this.$route.fullPath.search("/admin/") == -1 ? false : true;
-          const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
     axios
-      .get("/api/question_banks/" + id + "/", {headers: headers})
+      .get("/api/question_banks/" + id + "/", { headers: headers })
       .then(response => {
         this.question_bank = response.data;
         this.edited_question_bank = JSON.parse(
@@ -295,11 +296,11 @@ export default {
         console.log(error);
       });
     if (this.editable) {
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .post("/api/auth_code/", { question_bank_id: id }, {headers: headers})
+        .post("/api/auth_code/", { question_bank_id: id }, { headers: headers })
         .then(response => {
           this.codes = response.data.auth_code;
           this.invitation_code_count = response.data.total_num;

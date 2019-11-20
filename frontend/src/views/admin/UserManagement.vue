@@ -25,11 +25,11 @@ export default {
   },
   methods: {
     create_user(user) {
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .post("/api/accounts/users/", user, {headers: headers})
+        .post("/api/accounts/users/", user, { headers: headers })
         .then(response => {
           this.users.push(user);
         })
@@ -40,11 +40,13 @@ export default {
     change_user_status(user) {
       let changed_user = user;
       changed_user.is_banned = !changed_user.is_banned;
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .put("/api/accounts/users/" + user.id + "/", changed_user, {headers: headers})
+        .put("/api/accounts/users/" + user.id + "/", changed_user, {
+          headers: headers
+        })
         .then(response => {
           user = changed_user;
         })
@@ -58,11 +60,11 @@ export default {
         changed_user.user_group = "Admin";
       else if (changed_user.user_group === "Admin")
         changed_user.user_group = "Student";
-              const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .put("/api/accounts/users/" + user.id + "/", user, {headers: headers})
+        .put("/api/accounts/users/" + user.id + "/", user, { headers: headers })
         .then(response => {
           user = changed_user;
         })
@@ -72,11 +74,11 @@ export default {
     }
   },
   mounted: function() {
-          const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
     axios
-      .get("/api/accounts/users/", {headers: headers})
+      .get("/api/accounts/users/", { headers: headers })
       .then(response => {
         this.users = response.data;
       })

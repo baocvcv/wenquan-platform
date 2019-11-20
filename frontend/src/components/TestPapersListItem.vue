@@ -121,16 +121,16 @@ export default {
       return this.test_paper["status"] == "drafted" ? "publish" : "drafted";
     },
     opposite_status() {
-	  return this.test_paper["status"] == "drafted" ? "published" : "drafted";
-	}
+      return this.test_paper["status"] == "drafted" ? "published" : "drafted";
+    }
   },
   methods: {
     delete_confirmed() {
-            const headers = {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .delete("/api/papers/" + this.test_paper.id + "/", {headers: headers})
+        .delete("/api/papers/" + this.test_paper.id + "/", { headers: headers })
         .then(response => {
           console.log(response);
           this.$emit("delete");
@@ -142,29 +142,33 @@ export default {
           this.delete_test_paper = false;
         });
     },
-	change_paper_status() {
-          const headers = {
+    change_paper_status() {
+      const headers = {
         Authorization: "Token " + this.$store.state.user.token
       };
-	  axios
-		.put("/api/papers/" + this.test_paper.id + "/", {
-		  change_status: this.opposite_status
-		}, {headers: headers})
-	    .then(() => {
-		  this.test_paper["status"] = this.opposite_status;
-		  this.$notify({
-			text: "Change test paper state to " + this.opposite_status,
-			type: "success"
-		  })
-		})
-		.catch(error => {
-		  this.$notify({
-			title: "error",
-			text: "Oops..." + error,
-			type: "error"
-		  })
-		})
-	}
+      axios
+        .put(
+          "/api/papers/" + this.test_paper.id + "/",
+          {
+            change_status: this.opposite_status
+          },
+          { headers: headers }
+        )
+        .then(() => {
+          this.test_paper["status"] = this.opposite_status;
+          this.$notify({
+            text: "Change test paper state to " + this.opposite_status,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.$notify({
+            title: "error",
+            text: "Oops..." + error,
+            type: "error"
+          });
+        });
+    }
   }
 };
 </script>

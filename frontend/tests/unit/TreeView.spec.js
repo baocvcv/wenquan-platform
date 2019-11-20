@@ -23,12 +23,10 @@ describe("TreeView.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("travel through all funcs", () => {
@@ -64,5 +62,4 @@ describe("TreeView.vue", () => {
     wrapper.vm.renameConfirmation();
     wrapper.vm.removeNode();
   });
-
 });
