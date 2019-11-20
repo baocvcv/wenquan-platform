@@ -326,12 +326,12 @@ export default {
         .then(response => {
           this.question_list[question_id] = response.data;
           let node_index;
-          for (node_index in response.data.parent_nodes) {
+          for (node_index in response.data.parents_node) {
             let selected_index;
             for (selected_index in this.tree_selection) {
               if (
                 this.tree_selection[selected_index] ===
-                response.data.parent_nodes[node_index]
+                response.data.parents_node[node_index]
               )
                 this.shown_questions.push(response.data);
             }

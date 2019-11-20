@@ -212,9 +212,15 @@ export default {
         axios
           .put("/api/questions/" + info.id.toString() + "/", [info])
           .then(response => {
-            this.$refs[this.typeSelected].submitted();
-            this.edit_mode = false;
-            this.$emit("submit");
+            if (this.$route.path.find("/questions/") == -1)
+            {
+              this.$refs[this.typeSelected].submitted();
+              this.edit_mode = false;
+              this.$emit("submit");
+            }
+            else {
+              this.$router.push("/questions/" + response.data.id);
+            }
           })
           .catch(err => {
             console.log(info);
