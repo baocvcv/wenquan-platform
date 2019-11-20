@@ -56,6 +56,7 @@
     </template>
     <template v-slot:score="{ question_data }">
       <v-list-item>
+	    <v-form v-model="score_form">
         <v-text-field
           v-model="score"
           label="Score"
@@ -65,6 +66,7 @@
           outlined
           required
         ></v-text-field>
+		</v-form>
       </v-list-item>
     </template>
     <template v-slot:comment="{ question_data }">
@@ -74,6 +76,7 @@
           label="Comment"
           :readonly="readonly"
           outlined
+		  auto-grow
           required
         ></v-textarea>
       </v-list-item>
@@ -111,7 +114,8 @@ export default {
 	  answer: [],
       score: 0,
       comment: "",
-      correct_or_not: [false]
+      correct_or_not: [false],
+	  score_form: false
     };
   },
   components: {
@@ -181,7 +185,7 @@ export default {
     slot_name(index) {
       return "correct-" + index.toString();
     },
-	save() {
+	async save() {
 	  var marking_result = {
 		paper_id: this.question.paper_id,
 		section_id: this.question.section_id,
@@ -190,7 +194,8 @@ export default {
 		score: parseInt(this.score),
 		correct_or_not: this.correct_or_not
 	  }
-	  axios
+	  var if_success = false;
+	  await axios
 		.put("/api/paper_records/" + this.question.paper_record_id, marking_result)
 		.then((response) => {
 		  var res = {
@@ -198,7 +203,7 @@ export default {
 			result: response
 		  }
 		  this.$emit("result", res);
-		  console.log(response);
+		  if_success = true;
 		})
 		.catch(error => {
 		  var res = {
@@ -206,8 +211,9 @@ export default {
 			result: error
 		  }
 		  this.$emit("result", res);
-		  console.log(error);
+		  if_success = false;
 		})
+	  return if_success;
 	}
   }
 };

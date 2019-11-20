@@ -5,6 +5,16 @@
         >{{ paper_name }} | Total records:
         {{ paper_records.length }}</v-list-item-title
       >
+	  <v-list-item-action>
+	    <v-tooltip bottom>
+		<template v-slot:activator="{ on }">
+	    <v-btn icon v-on="on" @click="upload_all">
+		  <v-icon>mdi-publish</v-icon>
+		</v-btn>
+		</template>
+		<span>Publish Marking Result of This Paper</span>
+		</v-tooltip>
+	  </v-list-item-action>
     </template>
     <v-list-item v-for="(record, key) in paper_records" :key="key">
       <v-list-item-content>
@@ -32,6 +42,18 @@
               >
             </template>
             <span>Mark</span>
+          </v-tooltip>
+        </slot>
+      </v-list-item-action>
+      <v-list-item-action>
+        <slot name="upload">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on" @click="upload_marking(key)"
+                ><v-icon>mdi-publish</v-icon></v-btn
+              >
+            </template>
+            <span>Confirm Marking Result</span>
           </v-tooltip>
         </slot>
       </v-list-item-action>
@@ -74,6 +96,48 @@ export default {
       .catch(error => {
         console.log(error);
       });
+  },
+  methods: {
+	async upload_marking(index, single=true) {
+	  let id = this.paper_records[index].id;
+	  let success = true;
+	  await axios
+		.put("/api/paper_records/" + id, {action: "finish"})
+		.then(() => {
+		  if (single) {
+		  this.$notify({
+			title: "Marking result published!",
+			type: "success"
+		  })
+		  }
+		  this.paper_records[index].need_judging = false;
+		})
+	    .catch(error => {
+		  if (single) {
+		  this.$notify({
+			title: "Oops.Something went wrong.Try again please",
+			type: "error"
+		  })
+		  }
+		  success = false;
+		})
+		return success;
+	},
+	upload_all() {
+	  for (var i = 0; i < this.paper_records.length; i++) {
+		if (!this.upload_marking(i, false)) {
+		  this.$notify({
+			title: "Oops.Something went wrong uploading No." + i + "result",
+			type:"error"
+		  });
+		  return false;
+		}
+	  }
+	  this.$notify({
+		title: "Succeeded!",
+		type: "success"
+	  })
+	}
   }
 };
 </script>
