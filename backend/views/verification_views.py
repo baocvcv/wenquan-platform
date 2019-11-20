@@ -9,7 +9,7 @@ from backend.scripts.email_verification import use_token
 
 class EmailVerificationView(APIView):
     """ Perform email verification """
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = [permissions.AllowAny, ]
 
     def get(self, request):
         """ send verification email """

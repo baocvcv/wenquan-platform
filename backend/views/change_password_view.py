@@ -12,7 +12,7 @@ from backend.models import User
 
 class ChangePasswordView(APIView):
     """ Handle password change """
-    permission_classes = (permissions.AllowAny)
+    permission_classes = [permissions.AllowAny]
 
     @staticmethod
     def post(request):
@@ -23,7 +23,7 @@ class ChangePasswordView(APIView):
 
     @staticmethod
     def put(request):
-        """ change pasword """
+        """ change password """
         data = request.data
         if 'token' in data:
             token = data['token']
