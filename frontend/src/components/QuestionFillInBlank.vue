@@ -1,96 +1,98 @@
 <template>
   <div class="fill-in-blank-component">
     <v-form ref="form" v-model="valid">
-      <v-text-field
-        label="Title"
-        v-model="edited_data.title"
-        outlined
-        :readonly="readonly"
-      ></v-text-field>
-      <v-textarea
-        label="Content"
-        v-model="edited_data.content"
-        :rules="[v => !!v || 'Question content is required!']"
-        placeholder="Use '_' to represent blanks"
-        outlined
-        auto-grow
-        :readonly="readonly"
-      ></v-textarea>
-      <image-uploader
-        ref="uploader"
-        v-model="edited_data.image"
-        width="50%"
-        label="picture"
-        :readonly="readonly"
-        multiple
-        placeholder="Upload an image if necessary"
-      ></image-uploader>
-      <v-list flat>
-        <v-list-item>
-          <v-list-item-content align="left">
-            <v-list-item-title>Answers</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item-group color="primary">
-          <v-list-item v-for="index in blankNum" :key="index">
-            <v-text-field
-              placeholder="Enter answer"
-              v-model="edited_data.answers[index - 1]"
-              :rules="[v => !!v || 'Answer content is required!']"
-              :readonly="readonly"
-            ></v-text-field>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <br />
-      <v-textarea
-        label="Analysis"
-        v-model="edited_data.analysis"
-        :rules="[v => !!v || 'Analysis is required!']"
-        outlined
-        auto-grow
-        :readonly="readonly"
-      ></v-textarea>
-      <v-list-item>
-        <span>Difficulty:</span>
-        <v-rating
-          v-model="edited_data.difficulty"
-          color="yellow darken-3"
-          background-color="grey darken-1"
-          :readonly="readonly"
-          hover
-        ></v-rating>
-      </v-list-item>
-      <v-btn
-        class="mr-4"
-        color="success"
-        @click="submit()"
-        :disabled="!canSubmit"
-        v-if="!readonly"
-      >
-        Submit
-      </v-btn>
-      <v-btn
-        class="mr-4"
-        color="error"
-        @click="reset()"
-        v-if="!readonly && creation"
-      >
-        Reset
-      </v-btn>
-      <v-btn v-if="!readonly">
-        Cancel
-      </v-btn>
+      <v-row>
+        <v-col cols="12" md="9">
+          <rich-text-editor
+            label="Content*"
+            v-model="edited_data.content"
+            :readonly="readonly"
+            required
+            ref="richtext"
+            hint="Please use 5 or more underlines as a blank."
+          ></rich-text-editor>
+          <v-list flat>
+            <v-list-item>
+              <v-list-item-content align="left">
+                <v-list-item-title>Answers</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item-group color="primary">
+              <v-list-item v-for="index in blankNum" :key="index">
+                <v-text-field
+                  placeholder="Enter answer"
+                  v-model="edited_data.answers[index - 1]"
+                  :rules="[v => !!v || 'Answer content is required!']"
+                  :readonly="readonly"
+                ></v-text-field>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+          <br />
+          <v-textarea
+            label="Analysis*"
+            v-model="edited_data.analysis"
+            :rules="[v => !!v || 'Analysis is required!']"
+            outlined
+            auto-grow
+            :readonly="readonly"
+          ></v-textarea>
+          <v-textarea
+            label="Notes"
+            v-model="edited_data.title"
+            outlined
+            :readonly="readonly"
+            hint="Write down some notes if necessary"
+          ></v-textarea>
+        </v-col>
+        <v-col>
+          <p class="grey--text caption mb-1">Type:</p>
+          <v-chip class="mb-4 mt-2">Brief Answer</v-chip>
+          <p class="grey--text caption mb-1">Difficulty:</p>
+          <v-rating
+            v-model="edited_data.difficulty"
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            :readonly="readonly"
+            hover
+            small
+          ></v-rating>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-btn v-if="!readonly" @click="cancel" text class="cancel-button">
+          Cancel
+        </v-btn>
+        <v-btn
+          class="mr-4 reset-button"
+          text
+          @click="reset()"
+          v-if="!readonly && creation"
+        >
+          Reset
+        </v-btn>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          outlined
+          @click="submit()"
+          :disabled="!canSubmit"
+          v-if="!readonly"
+        >
+          {{ creation ? "Create" : "Save" }}
+        </v-btn>
+      </v-row>
     </v-form>
   </div>
 </template>
 
 <script>
-import ImageUploader from "./ImageUploader.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 export default {
   name: "fill-in-blank",
   components: {
-    "image-uploader": ImageUploader
+    "rich-text-editor": RichTextEditor
   },
   props: {
     readonly: {
@@ -105,7 +107,7 @@ export default {
   computed: {
     blankNum() {
       if (this.edited_data.content)
-        return this.edited_data.content.split(/_+/).length - 1;
+        return this.edited_data.content.split(/_____+/).length - 1;
       else return 0;
     },
     canSubmit() {
@@ -121,6 +123,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+      this.$refs.richtext.reset();
       this.edited_data.answers = [];
       this.edited_data.image = [];
       this.data = JSON.parse(JSON.stringify(this.edited_data));
