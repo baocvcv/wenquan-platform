@@ -69,7 +69,7 @@
           :disabled="!canSubmit"
           v-if="!readonly"
         >
-          Submit
+          {{ creation ? "Create" : "Save" }}
         </v-btn>
       </v-row>
     </v-form>

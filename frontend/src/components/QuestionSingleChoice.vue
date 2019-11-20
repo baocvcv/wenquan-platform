@@ -1,160 +1,160 @@
 <template>
-  <div>
+  <div id="single-choice-content">
     <v-form ref="input" v-model="valid">
-      <v-text-field
-        label="Title"
-        v-model="edited_question.question_name"
-        :readonly="readonly"
-        outlined
-      ></v-text-field>
-      <v-textarea
-        label="Content"
-        v-model="edited_question.question_content"
-        :rules="[v => !!v || 'Question content is required!']"
-        :readonly="readonly"
-        auto-grow
-        outlined
-        required
-      ></v-textarea>
-      <image-uploader
-        ref="uploader"
-        v-model="edited_question.question_image"
-        width="50%"
-        label="picture"
-        :readonly="readonly"
-        multiple
-        placeholder="Upload an image if necessary"
-      ></image-uploader>
-      <v-list flat>
-        <v-list-item two-line>
-          <v-list-item-content align="left">
-            <v-list-item-title>Choices</v-list-item-title>
-            <v-list-item-subtitle
-              v-if="!readonly"
-              :style="
-                !!edited_question.question_ans ? 'color: green;' : 'color: red;'
-              "
-            >
-              {{
-                !!edited_question.question_ans
-                  ? "You have selected " +
-                    edited_question.question_ans.name +
-                    " as the right answer"
-                  : "You haven't choose a right answer!"
-              }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item-group color="primary">
-          <v-list-item
-            v-for="(choice, i) in TF
-              ? tf_choice
-              : edited_question.question_choice"
-            :key="i"
-          >
-            <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
-            <v-text-field
-              v-if="!TF"
-              v-model="choice.content"
-              placeholder="Enter content"
-              :rules="[v => !!v || 'Choice content is required!']"
-              :readonly="readonly"
-              required
-            ></v-text-field>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  small
-                  @click="readonly ? () => {} : check_ans(choice)"
-                  v-on="on"
-                  ><v-icon
-                    :color="
-                      edited_question.question_ans == choice ? 'green' : 'red'
-                    "
-                    dark
-                    >{{
-                      edited_question.question_ans == choice
-                        ? "mdi-check-circle"
-                        : "mdi-close-circle"
-                    }}
-                  </v-icon></v-btn
+      <v-row>
+        <v-col cols="12" md="9">
+          <rich-text-editor
+            label="Content*"
+            v-model="edited_question.question_content"
+            :readonly="readonly"
+            required
+            ref="richtext"
+          ></rich-text-editor>
+          <v-list flat>
+            <v-list-item two-line>
+              <v-list-item-content align="left">
+                <v-list-item-title>Choices</v-list-item-title>
+                <v-list-item-subtitle
+                  v-if="!readonly"
+                  :style="
+                    !!edited_question.question_ans ? 'color: green;' : 'color: red;'
+                  "
                 >
-              </template>
-              <span>select as right answer</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-if="!readonly && !TF"
-                  icon
-                  small
-                  @click="delete_choice(i)"
-                  v-on="on"
-                  ><v-icon color="red" dark>mdi-minus</v-icon></v-btn
-                >
-              </template>
-              <span>remove</span>
-            </v-tooltip>
-          </v-list-item>
-        </v-list-item-group>
+                  {{
+                    !!edited_question.question_ans
+                      ? "You have selected " +
+                        edited_question.question_ans.name +
+                        " as the right answer"
+                      : "You haven't choose a right answer!"
+                  }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item-group color="primary">
+              <v-list-item
+                v-for="(choice, i) in TF
+                  ? tf_choice
+                  : edited_question.question_choice"
+                :key="i"
+              >
+                <v-list-item-icon>{{ choice.name }}</v-list-item-icon>
+                <v-text-field
+                  v-if="!TF"
+                  v-model="choice.content"
+                  placeholder="Enter content"
+                  :rules="[v => !!v || 'Choice content is required!']"
+                  :readonly="readonly"
+                  required
+                ></v-text-field>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      icon
+                      small
+                      @click="readonly ? () => {} : check_ans(choice)"
+                      v-on="on"
+                      ><v-icon
+                        :color="
+                          edited_question.question_ans == choice ? 'green' : 'red'
+                        "
+                        dark
+                        >{{
+                          edited_question.question_ans == choice
+                            ? "mdi-check-circle"
+                            : "mdi-close-circle"
+                        }}
+                      </v-icon></v-btn
+                    >
+                  </template>
+                  <span>select as right answer</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="!readonly && !TF"
+                      icon
+                      small
+                      @click="delete_choice(i)"
+                      v-on="on"
+                      ><v-icon color="red" dark>mdi-minus</v-icon></v-btn
+                    >
+                  </template>
+                  <span>remove</span>
+                </v-tooltip>
+              </v-list-item>
+            </v-list-item-group>
+            <v-row>
+              <v-btn
+                v-if="!readonly && !TF"
+                text
+                height="50px"
+                class="mx-2 create-choice-button ml-4 mr-4"
+                @click="choice_num_up()"
+                color="grey"
+                >+</v-btn
+              >
+            </v-row>
+          </v-list>
+          <v-textarea
+            label="Analysis*"
+            v-model="edited_question.question_solution"
+            :rules="[v => !!v || 'Analysis is required!']"
+            outlined
+            auto-grow
+            :readonly="readonly"
+          ></v-textarea>
+          <v-textarea
+            label="Notes"
+            v-model="edited_question.title"
+            outlined
+            :readonly="readonly"
+            hint="Write down some notes if necessary"
+          ></v-textarea>
+        </v-col>
+        <v-col>
+          <p class="grey--text caption mb-1">Type:</p>
+          <v-chip class="mb-4 mt-2">Single Choice</v-chip>
+          <p class="grey--text caption mb-1">Difficulty:</p>
+          <v-rating
+            v-model="edited_question.difficulty"
+            color="yellow darken-3"
+            background-color="grey darken-1"
+            :readonly="readonly"
+            hover
+            small
+          ></v-rating>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-btn v-if="!readonly" @click="cancel" text class="cancel-button">
+          Cancel
+        </v-btn>
         <v-btn
-          v-if="!readonly && !TF"
-          class="mx-2"
-          block
-          tile
-          dark
-          color="green"
-          @click="choice_num_up()"
-          >create new</v-btn
+          class="mr-4 reset-button"
+          text
+          @click="reset()"
+          v-if="!readonly && creation"
         >
-      </v-list>
-      <br />
-      <v-textarea
-        label="Analysis"
-        v-model="edited_question.question_solution"
-        :rules="[v => !!v || 'Analysis is required!']"
-        :readonly="readonly"
-        auto-grow
-        outlined
-        required
-      ></v-textarea>
-      <v-list-item>
-        <span>Difficulty:</span>
-        <v-rating
-          v-model="edited_question.question_level"
-          color="yellow darken-3"
-          background-color="grey darken-1"
-          :readonly="readonly"
-          hover
-        ></v-rating>
-      </v-list-item>
-      <div class="flex-grow-1"></div>
-      <v-btn
-        v-if="!readonly"
-        :disabled="!valid || !edited_question.question_ans"
-        color="success"
-        class="mr-4"
-        @click="submit()"
-      >
-        {{ creation ? "Create" : "Save" }}
-      </v-btn>
-      <v-btn
-        v-if="!readonly && creation"
-        color="error"
-        class="mr-4"
-        @click="reset()"
-        >Reset</v-btn
-      >
-      <v-btn v-if="!readonly" @click="cancel">
-        Cancel
-      </v-btn>
+          Reset
+        </v-btn>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          outlined
+          @click="submit()"
+          :disabled="!valid || !edited_question.question_ans || this.edited_question.question_content.length == 0"
+          v-if="!readonly"
+        >
+          {{ creation ? "Create" : "Save" }}
+        </v-btn>
+      </v-row>
     </v-form>
   </div>
 </template>
 
 <script>
-import ImageUploader from "./ImageUploader.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 export default {
   name: "",
   props: {
@@ -172,7 +172,7 @@ export default {
     }
   },
   components: {
-    "image-uploader": ImageUploader
+    "rich-text-editor": RichTextEditor
   },
   data: function() {
     return {
@@ -195,6 +195,11 @@ export default {
   },
   created() {
     this.question = JSON.stringify(this.parse());
+    let i;
+    for (i = 0; i < 4; i++)
+    {
+      this.choice_num_up();
+    }
   },
   methods: {
     choice_num_up() {
@@ -288,8 +293,12 @@ export default {
         0,
         this.edited_question.question_choice.length
       );
+      let i;
+      for (i = 0; i < 4; i++) {
+        this.choice_num_up();
+      }
       this.edited_question.question_ans = undefined;
-      this.$refs.uploader.reset();
+      this.$refs.richtext.reset();
       this.question = JSON.stringify(this.parse());
     },
     cancel() {
@@ -307,4 +316,10 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.create-choice-button {
+  border-style: dashed;
+  border-width: 1px;
+  width: 100%;
+}
+</style>
