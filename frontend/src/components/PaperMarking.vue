@@ -1,8 +1,5 @@
 <template>
   <paper-solve v-if="paper_data && paper_record" :initData="paper_data">
-    <template v-slot:shit>
-	  <h1>shitttttt</h1>
-	</template>
     <template v-slot:comment="{ paper, current_section, current_question }">
 	  <span
 	    v-for="(section, section_index) in paper.sections"
@@ -12,9 +9,13 @@
 	    v-for="(question, key) in section.questions"
 		:key="key"
 		:question="question_info(section, question)"
+		ref="questions"
 		v-show="current_section == section_index && current_question == key"
 	  ></question-correct>
 	  </span>
+	</template>
+	<template v-slot:submit>
+	  <btn outline @click="submit">Submit</btn>
 	</template>
   </paper-solve>
 </template>
@@ -37,7 +38,8 @@ export default {
   },
   data: function() {
 	return {
-	  paper_record: undefined
+	  paper_record: undefined,
+	  sections: []
 	};
   },
   methods: {
@@ -59,10 +61,23 @@ export default {
 	  var blank_num = question.content.question_blank_num;
 	  if (blank_num != undefined && result.point_every_blank.length != blank_num) {
 		for (var i = 0; i < blank_num; i++) {
-			result.point_every_blank.push(0);
+			result.point_every_blank.push(question.question_point/blank_num);
 		}
 	  }
 	  return result;
+	},
+	question_ref(section_index, index) {
+	  if (this.sections.length <= section_index) this.sections.push([]);
+	  this.sections[section_index].push(index);
+	  return "section-" + section_index + "-question-" + index;
+	},
+	submit() {
+	  console.log(this.$refs.questions);
+	  console.log(this.$refs.questions.length);
+	  console.log(this.$refs.questions[0]);
+      for (var i = 0; i < this.$refs.questions.length; i++) {
+		this.$refs.questions[i].save();
+	  }
 	}
   },
   created() {

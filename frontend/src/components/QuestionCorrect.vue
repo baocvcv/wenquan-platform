@@ -130,10 +130,11 @@ export default {
 		})
 	    .then(response => {
 		  this.answer = response.data.ans;
-		  this.score = response.data.score;
+		  var score = response.data.score;
+		  this.score = score instanceof Array ? score[0] : score;
 		  this.comment = response.data.comment;
 		  var correct_bool = response.data.correct_or_not;
-		  this.correct_or_not = correct_bool ? correct_bool : [response.data.is_correct];
+		  this.correct_or_not = correct_bool.length != 0 ? correct_bool : [response.data.is_correct];
 		  console.log("question correct record got");
 		  console.log(response);
 		  console.log(this.answer);
@@ -159,6 +160,9 @@ export default {
       ];
     },
     check_ans(index, question_data) {
+	  console.log("check")
+	  console.log(index)
+	  console.log(question_data)
       this.correct_or_not[index] = !this.correct_or_not[index];
       let type = question_data.question_type;
       if (type != "fill_blank") {
@@ -183,7 +187,7 @@ export default {
 		section_id: this.question.section_id,
 		question_id: this.question.question_id,
 		comment: this.comment,
-		score: this.score,
+		score: parseInt(this.score),
 		correct_or_not: this.correct_or_not
 	  }
 	  axios
