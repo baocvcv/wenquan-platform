@@ -1,7 +1,17 @@
 <template>
     <div class="test">
 	    <slot name="comment" :paper_data="paper_data">
-        <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit"></paper-solve>
+        <paper-solve v-if="paper_data" :initData="paper_data" @submit="submit" ref="solve">
+            <template v-slot:timer>
+                <v-list-item>
+                    <v-spacer></v-spacer>
+                    <p :class="time_left < 600 ? 'text--error' : ''">
+                        {{ timer }}
+                    </p>
+                    <v-spacer></v-spacer>
+                </v-list-item>
+            </template>
+        </paper-solve>
 		</slot>
         <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
         <v-dialog v-model="msg_dialog" max-width=600px>
@@ -39,6 +49,15 @@ export default {
         "paper-solve": PaperSolve,
         "vue-element-loading": VueElementLoading
     },
+    computed: {
+        timer() {
+            let result = "";
+            result += Math.trunc(this.time_left/3600).toString() + " : ";
+            result += Math.trunc(this.time_left%3600/60).toString() + " : ";
+            result += (this.time_left%60).toString();
+            return result;
+        }
+    },
     created() {
         this.loading = true;
         let id = this.id == -1 ? this.$route.params.id : this.id;
@@ -72,6 +91,11 @@ export default {
             });
 
             this.record_id = record.data.id;
+            this.time_left = record.data.time_left;
+            setInterval(() => {
+                if(this.time_left == 0) this.$refs.solve.force_submit(); 
+                this.time_left--;
+            },1000);
 
             this.loading = false;
         })
@@ -88,7 +112,8 @@ export default {
             paper_data: null,
             record_id: null,
             msg_dialog: false,
-            msg: ""
+            msg: "",
+            time_left: -1
         };
     },
     methods: {

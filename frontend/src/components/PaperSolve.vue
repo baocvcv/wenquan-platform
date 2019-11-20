@@ -34,6 +34,7 @@
         </v-tabs>
         <v-card>
           <v-list>
+            <slot name="timer"></slot>
             <v-list-item>
               Current Question:
               {{
@@ -217,6 +218,14 @@ export default {
       return answer;
     },
     submit() {
+      
+      if (!all_answered) this.warning_dialog = true;
+      else this.submit_confirm();
+    },
+    submit_confirm() {
+      if (this.submit_cache) this.$emit("submit", this.submit_cache);
+    },
+    force_submit() {
       let result = {
         sections: []
       };
@@ -236,11 +245,7 @@ export default {
         }
       }
       this.submit_cache = result;
-      if (!all_answered) this.warning_dialog = true;
-      else this.submit_confirm();
-    },
-    submit_confirm() {
-      if (this.submit_cache) this.$emit("submit", this.submit_cache);
+      this.submit_confirm();
     }
   }
 };
