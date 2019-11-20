@@ -144,7 +144,7 @@ export default {
       this.is_empty = false;
     },
     reset() {
-      this.$refs.TextEditor.deleteText();
+      this.$emit("change", "");
     }
   }
 };
