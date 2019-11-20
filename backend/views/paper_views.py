@@ -135,9 +135,16 @@ class PaperDetail(APIView):
     def put(self, request, paper_id):
         """Modify Paper whose id=paper_id"""
         paper = self.get_object(paper_id)
+        put_data = JSONParser().parse(request)
+        if "change_status" in put_data:
+            new_status = put_data["change_status"]
+            if not new_status == "public" and not new_status == "drafted":
+                return Response("Error: status should be \"public\" or \"drafted\"")
+            paper.status = new_status
+            paper.save()
+            return Response(PaperList.create_response_from_paper(paper))
         paper.is_latest = False
         paper.save()
-        put_data = JSONParser().parse(request)
         new_paper = PaperList.create_paper_from_data(put_data)
         response = PaperList.create_response_from_paper(new_paper)
         return Response(response)
