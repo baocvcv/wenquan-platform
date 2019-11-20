@@ -127,8 +127,11 @@ export default {
       this.loading = true;
       this.error = "";
       this.warning = "";
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/question_banks/" + this.bank_id + "/")
+        .get("/api/question_banks/" + this.bank_id + "/", {headers: headers})
         .then(response => {
           let all_question = response.data.questions;
 

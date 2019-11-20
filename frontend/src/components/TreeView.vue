@@ -134,8 +134,11 @@ export default {
   },
   methods: {
     updateDataFromID(id) {
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/nodes_list/" + id + "/")
+        .get("/api/nodes_list/" + id + "/", {headers: headers})
         .then(response => {
           this.treeData = [response.data];
         })
@@ -174,11 +177,14 @@ export default {
       //submit modification
 
       //submit changes
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
         .put("/api/nodes_list/" + this.rootID + "/", {
           delete: this.deletedID,
           modify: this.treeData[0]
-        })
+        }, {headers: headers})
         .then(response => {
           this.treeData = [response.data];
         })

@@ -122,10 +122,13 @@ export default {
       }
     }
     let index;
+          const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
     for (index in this.question.parents_node) {
       let node = this.question.parents_node[index];
       axios
-        .get("/api/knowledge_nodes/" + node + "/")
+        .get("/api/knowledge_nodes/" + node + "/", {headers: headers})
         .then(response => {
           if (node != this.question.root_id)
             this.nodes.push(response.data.name);

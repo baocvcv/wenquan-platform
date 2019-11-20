@@ -126,8 +126,11 @@ export default {
   },
   methods: {
     delete_confirmed() {
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .delete("/api/papers/" + this.test_paper.id + "/")
+        .delete("/api/papers/" + this.test_paper.id + "/", {headers: headers})
         .then(response => {
           console.log(response);
           this.$emit("delete");
@@ -140,10 +143,13 @@ export default {
         });
     },
 	change_paper_status() {
+          const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
 	  axios
 		.put("/api/papers/" + this.test_paper.id + "/", {
 		  change_status: this.opposite_status
-		})
+		}, {headers: headers})
 	    .then(() => {
 		  this.test_paper["status"] = this.opposite_status;
 		  this.$notify({

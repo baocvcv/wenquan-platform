@@ -134,13 +134,16 @@ export default {
       } else {
         url = "/api/questions/" + this.questionID + "/";
       }
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get(url)
+        .get(url, {headers: headers})
         .then(response_outer => {
           this.initData = response_outer.data;
           this.root_id = response_outer.data.root_id;
           axios
-            .get("/api/nodes_list/" + this.root_id + "/")
+            .get("/api/nodes_list/" + this.root_id + "/", {headers: headers})
             .then(response => {
               this.tree_data = [response.data];
               this.$refs.tree.updateData(this.tree_data);
@@ -193,11 +196,14 @@ export default {
       return result;
     },
     submit(info) {
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       if (info.parents_node.length == 0) {
         //New question
         info.parents_node = this.parse_node();
         axios
-          .post("/api/questions/", [info])
+          .post("/api/questions/", [info], {headers: headers})
           .then(response => {
             this.edit_mode = false;
             this.$emit("submit", response.data.id);
@@ -210,7 +216,7 @@ export default {
         //Edit question
         info.parents_node = this.parse_node();
         axios
-          .put("/api/questions/" + info.id.toString() + "/", [info])
+          .put("/api/questions/" + info.id.toString() + "/", [info], {headers: headers})
           .then(response => {
             if (this.$route.fullPath.search("/questions/") == -1)
             {

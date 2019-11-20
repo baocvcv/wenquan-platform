@@ -194,9 +194,12 @@ export default {
 		score: parseInt(this.score),
 		correct_or_not: this.correct_or_not
 	  }
-	  var if_success = false;
+    var if_success = false;
+          const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
 	  await axios
-		.put("/api/paper_records/" + this.question.paper_record_id, marking_result)
+		.put("/api/paper_records/" + this.question.paper_record_id, marking_result, {headers: headers})
 		.then((response) => {
 		  var res = {
 			status: true,

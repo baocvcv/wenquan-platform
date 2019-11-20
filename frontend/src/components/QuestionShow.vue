@@ -40,9 +40,12 @@ export default {
     };
   },
   created() {
+          const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
     if (this.id)
       axios
-        .get("/api/questions/" + this.id + "/")
+        .get("/api/questions/" + this.id + "/", {headers: headers})
         .then(response => {
           this.question_data = response.data;
           this.parse();

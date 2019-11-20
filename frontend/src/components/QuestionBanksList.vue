@@ -269,8 +269,11 @@ export default {
   methods: {
     delete_qst_bank() {
       let that = this;
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .delete("/api/question_banks/" + that.cur_qst_bank.id + "/")
+        .delete("/api/question_banks/" + that.cur_qst_bank.id + "/", {headers: headers})
         .catch(error => {
           alert(error);
         });
@@ -304,8 +307,11 @@ export default {
     add_to_my_bank(bankID) {
       let user = this.$store.state.user;
       user.question_banks.push(bankID);
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .put("/api/account/users/" + user.id + "/", user)
+        .put("/api/account/users/" + user.id + "/", user, {headers: headers})
         .then(response => {
           this.$store.commit("updateUserWithKey", {
             key: "question_banks",
@@ -342,9 +348,12 @@ export default {
         that.$Progress.finish();
         that.process = "Total Count: " + all_count;
       }
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       for (var i = 0; i < question_banks.length; i++) {
         axios
-          .get("/api/question_banks/" + question_banks[i] + "/")
+          .get("/api/question_banks/" + question_banks[i] + "/", {headers: headers})
           .then(sub_response => {
             that.question_banks.push(that.parse(sub_response.data));
             while (lock);
@@ -362,8 +371,11 @@ export default {
       }
     };
     if (!this.bankIDs) {
+            const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/question_banks/")
+        .get("/api/question_banks/", {headers: headers})
         .then(response => {
           let question_banks = response.data;
           load_question_banks(question_banks);

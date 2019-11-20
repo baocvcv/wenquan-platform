@@ -61,19 +61,22 @@ export default {
     created() {
         this.loading = true;
         let id = this.id == -1 ? this.$route.params.id : this.id;
+              const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
         axios
-        .get("/api/papers/" + id + "/")
+        .get("/api/papers/" + id + "/", {headers: headers})
         .then(async response => {
             let result = response.data;
             for (var i = 0; i < result.sections.length; i++) {
             result.sections[i] = await axios.get(
-                "/api/paper_sections/" + result.sections[i].id + "/"
+                "/api/paper_sections/" + result.sections[i].id + "/", {headers: headers}
             );
             result.sections[i] = result.sections[i].data;
             for (var j = 0; j < result.sections[i].questions.length; j++) {
                 let question = result.sections[i].questions[j];
                 let tmp_data = await axios.get(
-                "/api/questions/" + question.id + "/"
+                "/api/questions/" + question.id + "/", {headers: headers}
                 );
                 question["content"] = tmp_data.data;
             }
@@ -121,7 +124,10 @@ export default {
             result.paper_id = this.$route.params.id;
             result.action = "finish";
             this.loading = true;
-            axios.post("/api/paper_records/" + this.record_id,result)
+                  const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+            axios.post("/api/paper_records/" + this.record_id,result, {headers: headers})
                 .then(response => {
                     this.loading = false;
                     this.$router.push("/learn");
