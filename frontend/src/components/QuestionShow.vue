@@ -1,46 +1,11 @@
 <template>
   <v-card>
-    <v-card-title>
-      <slot name="title" :question_data="question_data">{{
-        question_data.question_name
-      }}</slot>
-    </v-card-title>
     <v-list>
       <slot name="content" :question_data="question_data">
-        <v-list-item>
-          <span v-if="question_data.question_type == 'fill_blank'">
-            <span
-              v-for="(item, index) in question_data.question_content"
-              :key="item"
-            >
-              {{ item }}
-              <span v-if="index < question_data.question_blank_num"
-                >______</span
-              >
-            </span>
-          </span>
-          <span v-else>
-            {{ question_data.question_content }}
-          </span>
-        </v-list-item>
-      </slot>
-      <slot name="image">
-        <v-list-item
-          v-if="
-            question_data.question_image &&
-              question_data.question_image.length > 0
-          "
-        >
-          <v-row justify="center">
-            <v-col cols="12" lg="4" md="6">
-              <image-uploader
-                width="100%"
-                v-model="question_data.question_image"
-                readonly
-              ></image-uploader>
-            </v-col>
-          </v-row>
-        </v-list-item>
+        <v-container class="pt-0 pb-0">
+          <rich-text-editor readonly v-model="content">
+          </rich-text-editor>
+        </v-container>
       </slot>
       <slot name="answer" :question_data="question_data"></slot>
       <slot name="score" :question_data="question_data"></slot>
@@ -52,7 +17,7 @@
 
 <script>
 import axios from "axios";
-import ImageUploader from "./ImageUploader.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
 
 export default {
   name: "question-show",
@@ -63,14 +28,15 @@ export default {
     }
   },
   components: {
-    "image-uploader": ImageUploader
+    "rich-text-editor": RichTextEditor
   },
   data: function() {
     return {
       question_data: {
         question_name: "Loading...",
         question_content: ""
-      }
+      },
+      content: null
     };
   },
   created() {
@@ -79,6 +45,7 @@ export default {
         .get("/api/questions/" + this.id + "/")
         .then(response => {
           this.question_data = response.data;
+          this.parse();
         })
         .catch(err => {
           this.question_data = {
@@ -86,6 +53,23 @@ export default {
             question_content: err.toString()
           };
         });
+  },
+  methods: {
+    parse() {
+      let content = "";
+      if (this.question_data.question_type === "fill_blank") {
+        let index;
+        for (index in this.question_data.question_content) {
+          content += this.question_data.question_content[index];
+          if (index != this.question_data.question_content.length - 1) {
+            content += "_____";
+          }
+        }
+      } else {
+        content = this.question_data.question_content;
+      }
+      this.content = content;
+    }
   }
 };
 </script>
