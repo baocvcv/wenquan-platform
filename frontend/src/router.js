@@ -106,6 +106,11 @@ const router = new Router({
       component:() => import("./views/Test.vue")
     },
     {
+      path: "/paper_record/:id",
+      name: "paper-record",
+      component:() => import("./views/student/TestPaperMarkingView.vue")
+    },
+    {
       path: "/activate/:token",
       name: "activate",
       component: () => import("./views/Activate.vue")
