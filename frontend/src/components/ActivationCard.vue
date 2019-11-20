@@ -57,7 +57,7 @@ export default {
             msg: msg
           });
           axios
-            .get("/api/accounts/users/" + this.$store.state.user.id + "/")
+            .get("/api/accounts/users/" + this.$store.state.user.id + "/", {headers: headers})
             .then(response => {
               this.$store.commit("updateUserWithKey", {
                 key: "question_banks",
