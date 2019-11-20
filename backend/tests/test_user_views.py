@@ -5,7 +5,6 @@ from copy import copy
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.test import force_authenticate
 
 from backend.models import User
 # from backend.models import UserPermissions
@@ -62,7 +61,7 @@ class UserListViewTest(APITestCase):
         user = User.objects.get(username='Lebron')
         user.user_group = 'Admin'
         user.save()
-        self.client.force_authenticate(user=user)
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
@@ -100,7 +99,7 @@ class UserDetailTest(APITestCase):
         user_id = response2.data['user']['id']
         url3 = reverse('user-detail', args=[user_id])
         user = User.objects.get(username='Kobe')
-        self.client.force_authenticate(user=user)
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response3 = self.client.get(url3)
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
         self.assertEqual(response3.data['username'], response2.data['user']['username'])
@@ -127,7 +126,7 @@ class UserDetailTest(APITestCase):
         }
         # response = self.client.put(url2, data, format='json')
         user = User.objects.get(username='Kobe')
-        self.client.force_authenticate(user=user)
+        self.client.force_authenticate(user=user) # pylint: disable=no-member
         response = self.client.put(url2, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], 'Bryant')

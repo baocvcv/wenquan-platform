@@ -13,7 +13,7 @@ class OwnerOnly(permissions.BasePermission):
     "Owner only access"
     def has_permission(self, request, view):
         "general permission"
-        return request.user.is_anonymous == False
+        return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         "object permission"
