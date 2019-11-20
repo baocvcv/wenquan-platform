@@ -66,7 +66,7 @@
             <v-list-item>
               <v-spacer></v-spacer>
 			  <slot name="submit">
-              <v-btn outlined @click="submit">Submit</v-btn>
+              <v-btn v-show="!readonly" outlined @click="submit">Submit</v-btn>
 			  </slot>
               <v-spacer></v-spacer>
             </v-list-item>
@@ -124,7 +124,11 @@ export default {
     initData: {
       type: Object,
       default: null
-    }
+    },
+	readonly: {
+	  type: Boolean,
+	  default: false
+	}
   },
   watch: {
     initData(newVal) {

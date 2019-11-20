@@ -1,5 +1,6 @@
 <template>
-  <paper-solve v-if="paper_data && paper_record" :initData="paper_data">
+  <div>
+  <paper-solve v-if="paper_data && paper_record" :initData="paper_data" :readonly="readonly">
     <template v-slot:comment="{ paper, current_section, current_question }">
 	  <span
 	    v-for="(section, section_index) in paper.sections"
@@ -11,18 +12,35 @@
 		:question="question_info(section, question)"
 		ref="questions"
 		v-show="current_section == section_index && current_question == key"
+		:readonly="readonly"
 	  ></question-correct>
 	  </span>
 	</template>
-	<template v-slot:submit>
-	  <btn outline @click="submit">Submit</btn>
+	<template v-slot:submit v-show="!readonly">
+	  <v-btn outlined @click="submit">Submit</v-btn>
 	</template>
   </paper-solve>
+  <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
+
+  <v-dialog v-model="error" max-width="500px">
+    <v-card>
+	  <v-card-title>Error</v-card-title>
+	  <v-card-text align="center">
+		Please check if all scores marked are valid.
+	  </v-card-text>
+	  <v-card-actions>
+	    <v-spacer></v-spacer>
+		<v-btn text @click="error = false">Understand</v-btn>
+	  </v-card-actions>
+	</v-card>
+  </v-dialog>
+  </div>
 </template>
 
 <script>
 import PaperSolve from "@/components/PaperSolve.vue";
 import QuestionCorrect from "@/components/QuestionCorrect.vue";
+import VueElementLoading from "vue-element-loading";
 import axios from "axios";
 export default {
   name: "paper-marking",
@@ -34,12 +52,18 @@ export default {
 	paper_data: {
 	  type: Object,
 	  default: null,
+	},
+	readonly: {
+	  type: Boolean,
+	  default: false
 	}
   },
   data: function() {
 	return {
 	  paper_record: undefined,
-	  sections: []
+	  sections: [],
+	  loading: false,
+	  error: false
 	};
   },
   methods: {
@@ -72,12 +96,18 @@ export default {
 	  return "section-" + section_index + "-question-" + index;
 	},
 	submit() {
-	  console.log(this.$refs.questions);
-	  console.log(this.$refs.questions.length);
-	  console.log(this.$refs.questions[0]);
+	  //console.log(this.$refs.questions);
+	  //console.log(this.$refs.questions.length);
+	  //console.log(this.$refs.questions[0]);
+	  this.loading = true;
       for (var i = 0; i < this.$refs.questions.length; i++) {
-		this.$refs.questions[i].save();
+		if (!this.$refs.questions[i].score_form || !this.$refs.questions[i].save()) {
+			this.error = true;
+			break;
+		}
 	  }
+	  this.loading = false;
+	  if (!this.error) this.$router.push("/admin/testpapers");
 	}
   },
   created() {
@@ -100,7 +130,8 @@ export default {
   },
   components: {
 	"paper-solve": PaperSolve,
-	"question-correct": QuestionCorrect
+	"question-correct": QuestionCorrect,
+	"vue-element-loading": VueElementLoading
   },
 }
 </script>
