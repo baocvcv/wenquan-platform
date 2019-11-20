@@ -41,6 +41,8 @@ class FillBlankQ(Question):
                 break
             if ans[i] == self.question_ans[i] and i < len(q_on_paper.point_every_blank):
                 point.append(q_on_paper.point_every_blank[i])
+            elif i < len(q_on_paper.point_every_blank):
+                point.append(0)
 
         if ans == self.question_ans:
             return True, point

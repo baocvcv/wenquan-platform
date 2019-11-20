@@ -49,16 +49,19 @@ class QuestionRecord(models.Model):
 
     def set_ans(self, ans):
         "Set the answer to the question"
-        if self.question_type == 'single':
-            self.ans = [ans]
-        elif self.question_type == 'multiple':
-            self.ans = ans
-        elif self.question_type == 'TorF':
-            if ans:
-                self.ans = ["true"]
-            else:
-                self.ans = ["false"]
-        elif self.question_type == 'fill_blank':
-            self.ans = ans
-        elif self.question_type == 'brief_ans':
-            self.ans = [ans]
+        if ans == "":
+            self.ans = []
+        else:
+            if self.question_type == 'single':
+                self.ans = [ans]
+            elif self.question_type == 'multiple':
+                self.ans = ans
+            elif self.question_type == 'TorF':
+                if ans:
+                    self.ans = ["true"]
+                else:
+                    self.ans = ["false"]
+            elif self.question_type == 'fill_blank':
+                self.ans = ans
+            elif self.question_type == 'brief_ans':
+                self.ans = [ans]

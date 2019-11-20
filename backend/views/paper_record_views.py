@@ -66,7 +66,7 @@ class PaperRecordDetail(APIView):
         # paper = paper_record.paper
         for question in paper_record.questionrecord_set.all():
             q_data = QuestionRecordSerializer(question).data
-            question_data[question.id] = q_data
+            question_data[question.question_id] = q_data
         paper_record_data['questions'] = question_data
         return Response(paper_record_data, status.HTTP_200_OK)
 
@@ -82,7 +82,10 @@ class PaperRecordDetail(APIView):
                 )
         # paper = Paper.objects.get(id=request.data['paper_id'])
         # sections = paper.section_set.all()
-        section_datas = request.data['sections']
+        if 'sections' in request.data:
+            section_datas = request.data['sections']
+        else:
+            section_datas = []
         for section_data in section_datas:
             question_datas = section_data['questions']
             for q_data in question_datas:
@@ -99,6 +102,7 @@ class PaperRecordDetail(APIView):
                     question_record = paper_record.questionrecord_set.get(
                         question_id=q_data['id'],
                     )
+                    question_record.score = scores
                 except ObjectDoesNotExist:
                     question_record = QuestionRecord(
                         question_id=q_data['id'],
