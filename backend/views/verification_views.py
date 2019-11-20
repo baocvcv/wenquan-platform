@@ -2,12 +2,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import permissions
 
 from backend.scripts.email_verification import create_email_verification_record
 from backend.scripts.email_verification import use_token
 
 class EmailVerificationView(APIView):
     """ Perform email verification """
+    permission_classes = (permissions.AllowAny, )
+
     def get(self, request):
         """ send verification email """
         user = request.user

@@ -3,12 +3,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import status
+from rest_framework import permissions
 # from django.utils import timezone
 
+from .users_views import OwnerOnly
 from backend.models.questions import Question
 from backend.models import QuestionRecord
 from backend.serializers import QuestionRecordSerializer
 from backend.models.questions.question import INT2TYPE
+
 
 class QuestionRecordList(APIView):
     "Create and retrieve question records"
@@ -29,6 +32,9 @@ class QuestionRecordList(APIView):
         data = request.data
         # judge
         question = Question.objects.get(id=data['question_id'])
+        if request.user.user_group == 'Student':
+            if question.history_version.belong_bank.id not in request.user.question_banks:
+                return Response(status.HTTP_403_FORBIDDEN)
         if question.question_type != 5:
             is_correct, _ = question.checker(data['ans'])
         else:
@@ -51,3 +57,4 @@ class QuestionRecordDetail(generics.RetrieveAPIView):
     "Retrieve detail info of a record"
     queryset = QuestionRecord.objects.all()
     serializer_class = QuestionRecordSerializer
+    permission_classes = [permissions.IsAdminUser | OwnerOnly]

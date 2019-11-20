@@ -3,15 +3,34 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import permissions
 
 from backend.models import User
 from backend.serializers.user_serializers import UserSerializer
 from backend.scripts.email_verification import create_email_verification_record
 
+class OwnerOnly(permissions.BasePermission):
+    "Owner only access"
+    def has_permission(self, request, view):
+        "general permission"
+        return request.user.is_anonymous == False
+
+    def has_object_permission(self, request, view, obj):
+        "object permission"
+        if request.user.user_group == 'Admin' or request.user.user_group == 'SuperAdmin':
+            return True
+        if request.user == obj:
+            return True
+        return False
+
 class UserList(APIView):
     """ Create and get Users """
+    permission_classes = [permissions.AllowAny]
+
     def get(self, request):
         """ get a list of users """
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
@@ -39,3 +58,4 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):  # pylint: disable=too-
     """ Get, update or delete a student """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [OwnerOnly]

@@ -60,6 +60,8 @@ class PaperRecordDetail(APIView):
     def get(request, record_id):
         "Get the detail of a paper record"
         paper_record = PaperRecord.objects.get(id=record_id)
+        if request.user.user_group == 'Student' and paper_record.user != request.user:
+            return Response(status.HTTP_403_FORBIDDEN)
         paper_record_data = PaperRecordSerializer(paper_record).data
         # compile questions
         question_data = {}
@@ -74,6 +76,8 @@ class PaperRecordDetail(APIView):
     def post(request, record_id):
         " Update paper record "
         paper_record = PaperRecord.objects.get(id=record_id)
+        if request.user.user_group == 'Student' and paper_record.user != request.user:
+            return Response(status.HTTP_403_FORBIDDEN)
         # error
         if not paper_record.can_update():
             return Response(
@@ -132,6 +136,8 @@ class PaperRecordDetail(APIView):
     @staticmethod
     def put(request, record_id):
         "Modify a question record"
+        if request.user.user_group == 'Student':
+            return Response(status.HTTP_403_FORBIDDEN)
         paper_record = PaperRecord.objects.get(id=record_id)
         if 'action' in request.data:
             paper_record.need_judging = False

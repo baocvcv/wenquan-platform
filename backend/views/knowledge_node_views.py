@@ -2,6 +2,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 from django.http import Http404
 
 from backend.models.knowledge_node import KnowledgeNode
@@ -74,12 +75,18 @@ class KnowledgeNodeList(APIView):
 
     def get(self, request, root_id):
         """Get a tree whose root's id = root_id"""
+        if request.user.user_group == 'Student':
+            bank_id = self.get_object(root_id).question_bank.id
+            if bank_id not in request.user.question_banks:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         response = self.go_through_tree(root_id)
         response['bank_id'] = self.get_object(root_id).question_bank.id
         return Response(response)
 
     def put(self, request, root_id):
         """Edit tree of node"""
+        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         put_data = JSONParser().parse(request)
         modify = put_data['modify']
         delete = put_data['delete']
@@ -109,6 +116,10 @@ class KnowledgeNodeDetail(APIView):
 
     def get(self, request, root_id):
         """Get infomation except subnodes"""
+        if request.user.user_group == 'Student':
+            bank_id = KnowledgeNodeList.get_object(root_id).question_bank.id
+            if bank_id not in request.user.question_banks:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         try:
             node = KnowledgeNode.objects.get(id=root_id)
         except KnowledgeNode.DoesNotExist:
@@ -119,6 +130,8 @@ class KnowledgeNodeDetail(APIView):
 
     def put(self, request, root_id):
         """Modify infomation"""
+        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         put_datas = JSONParser().parse(request)
         response = []
         for put_data in put_datas:
@@ -149,6 +162,10 @@ class NodeQuestionView(APIView):
         nodes = post_data['nodes_id']
         temp = []
         for i in nodes:
+            if request.user.user_group == 'Student':
+                bank_id = KnowledgeNodeList.get_object(i).question_bank.id
+                if bank_id not in request.user.question_banks:
+                    return Response(status=status.HTTP_403_FORBIDDEN)
             temp += self.go_through_tree(i)
 
         nodes += temp
