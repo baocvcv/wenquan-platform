@@ -220,6 +220,7 @@ export default {
             }
             else {
               this.$router.push("/questions/" + response.data.id);
+              location.reload(false);
             }
           })
           .catch(err => {
