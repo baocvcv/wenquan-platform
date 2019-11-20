@@ -136,9 +136,9 @@ export default {
       }
       axios
         .get(url)
-        .then(response => {
-          this.initData = response.data;
-          this.root_id = response.data.root_id;
+        .then(response_outer => {
+          this.initData = response_outer.data;
+          this.root_id = response_outer.data.root_id;
           axios
             .get("/api/nodes_list/" + this.root_id + "/")
             .then(response => {
