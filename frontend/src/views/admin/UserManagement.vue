@@ -31,10 +31,17 @@ export default {
       axios
         .post("/api/accounts/users/", user, { headers: headers })
         .then(response => {
+          this.$$notify({
+            type: "success",
+            title: "Successfully create the user."
+          });
           this.users.push(user);
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to create the user :("
+          });
         });
     },
     change_user_status(user) {
@@ -48,10 +55,24 @@ export default {
           headers: headers
         })
         .then(response => {
+          if (changed_user.is_banned) {
+            this.$notify({
+              type: "success",
+              title: "Successfully ban the user."
+            });
+          } else {
+            this.$notify({
+              type: "error",
+              title: "Successfully enable the user."
+            });
+          }
           user = changed_user;
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to operate :("
+          });
         });
     },
     change_user_group(user) {
@@ -66,10 +87,23 @@ export default {
       axios
         .put("/api/accounts/users/" + user.id + "/", user, { headers: headers })
         .then(response => {
+          this.$notify({
+            type: "success",
+            title: "Successfully change the group",
+            text:
+              "Change the user from " +
+              user.user_group +
+              " to " +
+              changed_user.user_group +
+              "."
+          });
           user = changed_user;
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to change the group"
+          });
         });
     }
   },
@@ -82,9 +116,7 @@ export default {
       .then(response => {
         this.users = response.data;
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => {});
   }
 };
 </script>

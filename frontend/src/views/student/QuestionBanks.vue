@@ -21,10 +21,7 @@
                   ? 'Explore Your Favourite Question Banks'
                   : 'Explore'
               "
-              @force-update="
-                $refs['my-bank'].$forceUpdate();
-                console.log('updated!');
-              "
+              @force-update="forceUpdate"
             ></question-banks-list>
           </v-tab-item>
           <v-tab-item>
@@ -50,6 +47,11 @@ export default {
   name: "question-banks",
   components: {
     "question-banks-list": QuestionBanksList
+  },
+  methods: {
+    forceUpdate() {
+      this.$refs["my-bank"].$forceUpdate();
+    }
   }
 };
 </script>

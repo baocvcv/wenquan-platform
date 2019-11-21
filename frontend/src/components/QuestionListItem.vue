@@ -143,7 +143,12 @@ export default {
             this.nodes.push("Uncategorized");
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title:
+              "Failed to get the knowledge node for question No." +
+              this.question.id
+          });
         })
         .then(() => {
           if (

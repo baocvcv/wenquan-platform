@@ -274,7 +274,7 @@ export default {
       let lock = false;
       let i;
       this.$Progress.start();
-      console.log(this.process);
+      //console.log(this.process);
       let process_on = () => {
         while (lock);
         lock = true;
@@ -326,7 +326,10 @@ export default {
         this.root_id = response.data.root_id;
       })
       .catch(error => {
-        console.log(error);
+        this.$notify({
+          type: "error",
+          title: "Failed to load the question list."
+        });
       });
   },
   methods: {
@@ -343,9 +346,9 @@ export default {
         .get("/api/questions/" + question_id + "/", { headers: headers })
         .then(response => {
           this.question_list[question_id] = response.data;
-          console.log(this.question_list[question_id]);
-          console.log(response.data.parents_node);
-          console.log(this.tree_selection);
+          //console.log(this.question_list[question_id]);
+          //console.log(response.data.parents_node);
+          //console.log(this.tree_selection);
           if (this.tree_selection.length == 0) {
             this.shown_questions.push(response.data);
             this.create_question_dialog = false;
@@ -364,9 +367,7 @@ export default {
           }
           this.create_question_dialog = false;
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => {});
     },
     cancel_select() {
       this.selected_questions = [];

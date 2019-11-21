@@ -4,12 +4,16 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import Vuex from "vuex";
 import "./mock/QuestionBanksListMock.js";
+import Notification from "vue-notification";
+import Progress from "vue-progressbar";
 import Router from "vue-router";
 import RouterRule from "@/router";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
 Vue.use(Vuex);
+Vue.use(Notification);
+Vue.use(Progress);
 
 describe("SignUp.vue", () => {
   let vuetify, router, store;

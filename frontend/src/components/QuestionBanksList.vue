@@ -199,12 +199,6 @@
         </v-dialog>
       </v-card-text>
     </v-card>
-    <v-snackbar v-model="snack_bar" :timeout="2000">
-      <p>
-        {{ snack_bar_msg }}
-      </p>
-      <v-btn text @click="snack_bar = false">Close</v-btn>
-    </v-snackbar>
   </div>
 </template>
 
@@ -261,9 +255,7 @@ export default {
       },
       process: "",
       create_bank_dialog: false,
-      activation_dialog: false,
-      snack_bar: false,
-      snack_bar_msg: null
+      activation_dialog: false
     };
   },
   methods: {
@@ -277,7 +269,10 @@ export default {
           headers: headers
         })
         .catch(error => {
-          alert(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to delete the bank"
+          });
         });
     },
     select_action(id) {
@@ -321,12 +316,18 @@ export default {
           });
           this.$emit("force-update");
           this.detail = false;
-          this.snack_bar_msg =
-            "The question bank has been added. You can find it in 'MYBANK' now.";
-          this.snack_bar = true;
+          this.$notify({
+            type: "success",
+            title: "Success",
+            text:
+              "The question bank has been added. You can find it in 'MYBANK' now. If you can not find it, please refresh the webpage."
+          });
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to add the bank."
+          });
         });
     }
   },
@@ -386,6 +387,10 @@ export default {
         })
         .catch(error => {
           that.process = "Failed to access data: " + error;
+          that.$notify({
+            type: "error",
+            title: "Failed to loa question banks."
+          });
         });
     } else {
       load_question_banks(this.bankIDs);
