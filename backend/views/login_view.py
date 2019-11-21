@@ -30,5 +30,11 @@ class LoginView(KnoxLoginView):
                 status.HTTP_401_UNAUTHORIZED
             )
 
+        if user.is_banned:
+            return Response(
+                {'non_field_errors': ['Account is banned']},
+                status.HTTP_401_UNAUTHORIZED
+            )
+
         login(request, user)
         return super(LoginView, self).post(request, format=format)
