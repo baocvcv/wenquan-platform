@@ -4,11 +4,34 @@
       <v-card-title>{{ test_paper.title }}</v-card-title>
       <v-divider></v-divider>
       <v-card-text>
-        <p>Total Points: {{ test_paper.total_point }} points</p>
-        <p>Time Limit: {{ test_paper.time_limit }} min</p>
-        <p>Status: {{ test_paper.status }}</p>
-        <p>Create Time: {{ test_paper.create_time }}</p>
-        <p>Last Change Time: {{ test_paper.change_time }}</p>
+        <p>
+          <span class="font-weight-bold">Total Points: </span
+          ><span class="mt-0 mb-0 pt-0 pd-0"
+            >{{ test_paper.total_point }} points</span
+          >
+        </p>
+        <p>
+          <span class="font-weight-bold">Time Limit: </span
+          ><span class="mt-0 mb-0 pt-0 pd-0"
+            >{{ test_paper.time_limit }} min</span
+          >
+        </p>
+        <p>
+          <span class="font-weight-bold">Status: </span
+          ><span class="mt-0 mb-0 pt-0 pd-0">{{ test_paper.status }}</span>
+        </p>
+        <p>
+          <span class="font-weight-bold">Create Time: </span
+          ><span class="mt-0 mb-0 pt-0 pd-0">{{
+            new Date(test_paper.create_time)
+          }}</span>
+        </p>
+        <p>
+          <span class="font-weight-bold">Last Change Time: </span
+          ><span class="mt-0 mb-0 pt-0 pd-0">{{
+            new Date(test_paper.change_time)
+          }}</span>
+        </p>
       </v-card-text>
 
       <v-card-actions>
