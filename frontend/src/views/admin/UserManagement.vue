@@ -31,7 +31,7 @@ export default {
       axios
         .post("/api/accounts/users/", user, { headers: headers })
         .then(response => {
-          this.$$notify({
+          this.$notify({
             type: "success",
             title: "Successfully create the user."
           });
@@ -62,7 +62,7 @@ export default {
             });
           } else {
             this.$notify({
-              type: "error",
+              type: "success",
               title: "Successfully enable the user."
             });
           }
