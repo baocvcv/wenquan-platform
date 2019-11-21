@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from django.http import Http404
+from django.utils import timezone
 
 from backend.models.paper import Paper
 from backend.models.paper import Section
@@ -47,6 +48,8 @@ class PaperList(APIView):
             return Response({"errors": "sections is required"}, status=400)
         sections = data.pop("sections")
         section_objects = cls.create_sections_from_data(sections)
+        data['create_time'] = timezone.now()
+        data['change_time'] = data['create_time']
         new_paper = Paper.objects.create(**data)
         new_paper.save()
         for i in section_objects:
@@ -141,6 +144,7 @@ class PaperDetail(APIView):
             if not new_status == "public" and not new_status == "drafted":
                 return Response("Error: status should be \"public\" or \"drafted\"")
             paper.status = new_status
+            paper.change_time = timezone.now()
             paper.save()
             return Response(PaperList.create_response_from_paper(paper))
         paper.is_latest = False

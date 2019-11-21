@@ -128,19 +128,6 @@ class KnowledgeNodeDetail(APIView):
         response = self.serializer(node)
         return Response(response)
 
-    def put(self, request, root_id):
-        """Modify infomation"""
-        if request.user.user_group == 'Student':
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        put_datas = JSONParser().parse(request)
-        response = []
-        for put_data in put_datas:
-            node = KnowledgeNodeList.get_object(root_id)
-            node.name = put_data['name']
-            node.save()
-            response.append(self.serializer(node))
-        return Response(response)
-
 
 class NodeQuestionView(APIView):
     """View for question set in nodes"""

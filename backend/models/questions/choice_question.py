@@ -64,7 +64,9 @@ class MultpChoiceQ(ChoiceQ):
                 return "Not Found"
             q_on_paper = section.questionversion_set.get(question=self, section=section)
             point = 0
-        if ans.issubset(correct_ans):
+        if ans == [""]:
+            point = 0
+        elif ans.issubset(correct_ans):
             correct = 0.5
             if correct_ans.issubset(ans):
                 correct = 1

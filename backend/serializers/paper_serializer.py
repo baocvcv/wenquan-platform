@@ -22,6 +22,8 @@ class PaperSerializer(serializers.ModelSerializer):
             "tips",
             "status",
             "time_limit",
+            "change_time",
+            "create_time",
         ]
 
     def create(self, validated_data):
@@ -48,6 +50,7 @@ class SectionSerializer(serializers.ModelSerializer):
             "title",
             "total_point",
             "section_num",
+            "point_every_blank",
         ]
 
     def create(self, validated_data):
