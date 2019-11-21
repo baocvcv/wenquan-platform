@@ -2,8 +2,9 @@
   <v-list-group v-show="!!paper_name">
     <template v-slot:activator>
       <v-list-item-title
-        >{{ paper_name }}<span v-show="!latest" style="color: warning">(Old Version)</span> | Total records:
-        {{ paper_records.length }}</v-list-item-title
+        >{{ paper_name
+        }}<span v-show="!latest" style="color: warning">(Old Version)</span> |
+        Total records: {{ paper_records.length }}</v-list-item-title
       >
       <v-list-item-action>
         <v-tooltip bottom>
@@ -124,6 +125,7 @@ export default {
         ) {
           this.paper_name = all_records[0].paper_name;
         }
+        this.$emit("show");
       })
       .catch(error => {
         console.log(error);
