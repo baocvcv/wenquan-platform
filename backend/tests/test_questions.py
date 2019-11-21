@@ -124,7 +124,7 @@ class QuestionListViewTest(APITestCase):
         response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
-        new_q.checker(data['question_ans'])
+        new_q.checker(data[0]['question_ans'])
         new_q.checker("")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question1')
@@ -134,13 +134,18 @@ class QuestionListViewTest(APITestCase):
         response2 = self.get_response(new_q.id)
         self.assertEqual(response.data, response2.data)
 
+        url = reverse("questions_detail", args=[new_q.id])
+        data[0]["parents_node"] = [self.bank.root_id]
+        data[0]["question_name"] = "modify"
+        response = self.client.post(url, data, format='json')
+
     def test_multiple(self):
         """ test creating an single choice question"""
         data = copy(self.multi_example)
         response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
-        new_q.checker(data['question_ans'])
+        new_q.checker(data[0]['question_ans'])
         new_q.checker([""])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question2')
@@ -156,8 +161,8 @@ class QuestionListViewTest(APITestCase):
         response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
-        new_q.checker(data['question_ans'])
-        new_q.checker(not data['question_ans'])
+        new_q.checker(data[0]['question_ans'])
+        new_q.checker(not data[0]['question_ans'])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question3')
         self.assertEqual(Question.objects.count(), 1)
@@ -172,7 +177,7 @@ class QuestionListViewTest(APITestCase):
         response = self.create_question(data)
 
         new_q = Question.objects.all()[0]
-        new_q.checker(data['question_ans'])
+        new_q.checker(data[0]['question_ans'])
         new_q.checker(["a"])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question4')
@@ -195,3 +200,16 @@ class QuestionListViewTest(APITestCase):
 
         response2 = self.get_response(new_q.id)
         self.assertEqual(response.data, response2.data)
+
+    def test_question_bank(self):
+        url = reverse("banks_detail", args=[self.bank.id])
+        self.client.get(url)
+        url = reverse("banks_list")
+        bank_post = {
+            "name": "bank1",
+            "picture": "www.a.com",
+            "brief": "nothing here",
+            "authority": "public",
+            "invitation_code_count": 100,
+        }
+        self.client.post(bank_post)
