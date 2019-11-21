@@ -120,7 +120,7 @@
           <v-chip class="mb-4 mt-2">Single Choice</v-chip>
           <p class="grey--text caption mb-1">Difficulty:</p>
           <v-rating
-            v-model="edited_question.difficulty"
+            v-model="edited_question.question_level"
             color="yellow darken-3"
             background-color="grey darken-1"
             :readonly="readonly"
