@@ -24,6 +24,7 @@ class PaperSerializer(serializers.ModelSerializer):
             "time_limit",
             "change_time",
             "create_time",
+            "is_latest",
         ]
 
     def create(self, validated_data):
