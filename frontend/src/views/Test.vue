@@ -108,6 +108,7 @@ export default {
               }
             }
           );
+        }
 
         this.record_id = record.data.id;
         this.time_left = record.data.time_left;
