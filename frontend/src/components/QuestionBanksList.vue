@@ -278,10 +278,9 @@ export default {
     select_action(id) {
       this.$emit("done-select", id);
     },
-    activated(info) {
-      if (info.status) this.activation_dialog = false;
-      this.snack_bar = true;
-      this.snack_bar_msg = info.msg;
+    activated(status) {
+      if (status) this.activation_dialog = false;
+      this.$emit("force-update");
     },
     parse(input) {
       var result = {
@@ -308,7 +307,7 @@ export default {
         Authorization: "Token " + this.$store.state.user.token
       };
       axios
-        .put("/api/account/users/" + user.id + "/", user, { headers: headers })
+        .put("/api/accounts/users/" + user.id + "/", user, { headers: headers })
         .then(response => {
           this.$store.commit("updateUserWithKey", {
             key: "question_banks",
@@ -337,6 +336,44 @@ export default {
     },
     activation_dialog: function() {
       if (!this.activation_dialog) this.$refs["activation-card"].reset();
+    },
+    bankIDs() {
+      let that = this;
+      that.process = "Fetching data from server...";
+    let load_question_banks = async question_banks => {
+      let all_count = question_banks.length;
+      let count = 0;
+      let lock = false;
+      that.$Progress.set(0);
+      if (all_count === 0) {
+        that.$Progress.finish();
+        that.process = "Total Count: " + all_count;
+      }
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      for (var i = 0; i < question_banks.length; i++) {
+        axios
+          .get("/api/question_banks/" + question_banks[i] + "/", {
+            headers: headers
+          })
+          .then(sub_response => {
+            that.question_banks.push(that.parse(sub_response.data));
+            while (lock);
+            lock = true;
+            count++;
+            lock = false;
+            that.process =
+              "Loading question banks: " + count + " / " + all_count;
+            that.$Progress.increase((1 / all_count) * 100);
+            if (count == all_count) {
+              that.process = "Total Count: " + all_count;
+              that.$Progress.finish();
+            }
+          });
+      }
+    };
+      load_question_banks(this.bankIDs);
     }
   },
   mounted: function() {
