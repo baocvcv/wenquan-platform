@@ -48,7 +48,7 @@ urlpatterns = [
     path(
         r'api/question_banks/<int:bank_id>/',
         views.QuestionBankDetail.as_view(),
-        name='banks_list',
+        name='banks_detail',
     ),
     path(
         r'api/papers/',
@@ -58,12 +58,12 @@ urlpatterns = [
     path(
         r'api/papers/<int:paper_id>/',
         views.PaperDetail.as_view(),
-        name='paper_detail',
+        name='papers_detail',
     ),
     path(
         r'api/paper_sections/<int:section_id>/',
         views.SectionDetail.as_view(),
-        name='section_detail',
+        name='sections_detail',
     ),
     # records
     path(
