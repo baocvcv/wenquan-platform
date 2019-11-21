@@ -420,7 +420,7 @@ export default {
       axios
         .get("/api/papers/" + this.id + "/", { headers: headers })
         .then(response => {
-		  response.data.time_limit = response.data.time_limit/60;
+          response.data.time_limit = response.data.time_limit / 60;
           that.edited_paper = response.data;
           console.log(that.edited_paper);
           //to be continue
@@ -543,7 +543,7 @@ export default {
           };
         }
       }
-	  result.time_limit = parseInt(result.time_limit) * 60;
+      result.time_limit = parseInt(result.time_limit) * 60;
       if (!this.paper || this.paper.id == -1) {
         //must be creating a test paper
         const headers = {

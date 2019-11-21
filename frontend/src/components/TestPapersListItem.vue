@@ -21,10 +21,7 @@
               >{{ change_paper_status_btn_text }}</v-btn
             >
           </template>
-          <span
-            >Change status of this test paper to
-            {{ opposite_status }}</span
-          >
+          <span>Change status of this test paper to {{ opposite_status }}</span>
         </v-tooltip>
         <v-spacer></v-spacer>
         <v-tooltip bottom>
