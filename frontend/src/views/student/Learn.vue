@@ -111,7 +111,7 @@ export default {
             parsed_record.question_id.toString()
           ] = parsed_record;
         }
-      this.parsed_record = record;
+      this.practice_record = record;
       this.view_practice_record = true;
       this.loading = false;
     }
