@@ -53,11 +53,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """ update user """
-        user_group = validated_data['user_group']
-        if user_group != instance.user_group:
-            instance.user_group = user_group
-            permissions = UserPermissions.objects.get(group_name=user_group)
-            instance.user_permissions = permissions
+        if 'user_group' in validated_data:
+            user_group = validated_data['user_group']
+            if user_group != instance.user_group:
+                instance.user_group = user_group
+                permissions = UserPermissions.objects.get(group_name=user_group)
+                instance.user_permissions = permissions
 
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)

@@ -38,7 +38,7 @@ class QuestionBankList(APIView):
 
     def post(self, request):
         """Create a new QuestionBank"""
-        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+        if request.user.user_group == 'Student':
             return Response(status=status.HTTP_403_FORBIDDEN)
         post_data = JSONParser().parse(request)
         if "id" in post_data:
@@ -87,7 +87,7 @@ class QuestionBankDetail(APIView):
 
     def put(self, request, bank_id):
         """Update the infomation of QuestionBank whose id=root_id"""
-        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+        if request.user.user_group == 'Student':
             return Response(status=status.HTTP_403_FORBIDDEN)
         bank = self.get_object(bank_id)
         put_data = JSONParser().parse(request)

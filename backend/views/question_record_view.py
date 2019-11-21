@@ -32,7 +32,7 @@ class QuestionRecordList(APIView):
         question = Question.objects.get(id=data['question_id'])
         if request.user.user_group == 'Student':
             if question.history_version.belong_bank.id not in request.user.question_banks:
-                return Response(status.HTTP_403_FORBIDDEN)
+                return Response(status=status.HTTP_403_FORBIDDEN)
         if question.question_type != 5:
             is_correct, _ = question.checker(data['ans'])
         else:
