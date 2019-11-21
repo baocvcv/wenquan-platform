@@ -1,5 +1,6 @@
 '''Code for models: paper'''
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from polymorphic.models import PolymorphicModel
 
 MAX_NAME = 200
@@ -22,6 +23,8 @@ class Paper(PolymorphicModel):
     is_latest = models.BooleanField(default=True)
     time_limit = models.IntegerField(default=0)
     have_brief_ans = models.BooleanField(default=True)
+    create_time = models.DateTimeField()
+    change_time = models.DateTimeField()
 
 
 class Section(PolymorphicModel):
@@ -34,6 +37,7 @@ class Section(PolymorphicModel):
     title = models.CharField(max_length=MAX_NAME)
     total_point = models.IntegerField()
     belong_paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
+    point_every_blank = ArrayField(models.IntegerField())
     section_num = models.IntegerField()
     questions = models.ManyToManyField(
         'Question',
