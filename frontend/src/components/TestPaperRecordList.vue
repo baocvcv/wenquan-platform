@@ -22,6 +22,8 @@
         <test-paper-marking-list-item
           v-for="(paper, key) in papers"
           :key="key"
+          ref="items"
+          v-on:show="count"
           :id="paper"
           readonly
         >
@@ -78,11 +80,21 @@ export default {
           if (this.papers.indexOf(element.paper_id) == -1)
             this.papers.push(element.paper_id);
         });
-        this.process = "Loading Finished"; //"Total count: " + this.papers.length;
+        this.process = "Total count: 0";
       })
       .catch(error => {
         this.process = "Oops!" + error;
       });
+  },
+  methods: {
+    count() {
+      let cnt = 0;
+      for (var i = 0; i < this.$refs.items.length; i++) {
+        if (this.$refs.items[i].show()) cnt++;
+      }
+      this.process = "Total count: " + cnt;
+      return cnt;
+    }
   }
 };
 </script>

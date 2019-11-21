@@ -24,7 +24,9 @@
           <test-paper-marking-list-item
             v-for="(paper, key) in papers"
             :key="key"
+            ref="items"
             :id="paper.id"
+            v-on:show="count"
           />
         </v-list>
       </v-card-text>
@@ -66,7 +68,7 @@ export default {
       })
       .then(response => {
         this.papers = response.data;
-        this.process = "Total count: " + this.papers.length;
+        this.process = "Total count: 0";
       })
       .catch(error => {
         this.process = "Oops!" + error;
@@ -74,6 +76,16 @@ export default {
       .then(() => {
         this.loading = false;
       });
+  },
+  methods: {
+    count() {
+      let cnt = 0;
+      for (var i = 0; i < this.$refs.items.length; i++) {
+        if (this.$refs.items[i].show()) cnt++;
+      }
+      this.process = "Total count: " + cnt;
+      return cnt;
+    }
   }
 };
 </script>
