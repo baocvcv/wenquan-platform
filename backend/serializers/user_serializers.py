@@ -4,6 +4,7 @@ from rest_framework import serializers
 from backend.models import User
 from backend.models import UserPermissions
 from backend.models import Profile
+from backend.models import QuestionBank
 
 
 class UserPermissionsSerializer(serializers.ModelSerializer):
@@ -61,8 +62,11 @@ class UserSerializer(serializers.ModelSerializer):
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.is_banned = validated_data.get('is_banned', instance.is_banned)
-        # NEED to be changed for better permission control
-        instance.question_banks = validated_data.get('question_banks', instance.question_banks)
+        question_banks = validated_data.get('question_banks', instance.question_banks)
+        difference = set(question_banks) - set(instance.question_banks)
+        for i in difference:
+            if QuestionBank.objects.get(pk=i).authority == 'public':
+                instance.question_banks.append(i)
         instance.save()
 
         if 'profile' in validated_data:

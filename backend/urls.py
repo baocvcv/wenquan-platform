@@ -67,12 +67,22 @@ urlpatterns = [
     ),
     # records
     path(
+        r'api/question_records',
+        views.QuestionRecordList.as_view(),
+        name='question_record_list',
+    ),
+    path(
         r'api/question_records/',
         views.QuestionRecordList.as_view(),
         name='question_record_list',
     ),
     path(
         r'api/question_records/<int:pk>',
+        views.QuestionRecordDetail.as_view(),
+        name='question_record_detail',
+    ),
+    path(
+        r'api/question_records/<int:pk>/',
         views.QuestionRecordDetail.as_view(),
         name='question_record_detail',
     ),
