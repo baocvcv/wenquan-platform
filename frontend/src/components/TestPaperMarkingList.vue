@@ -25,6 +25,7 @@
             v-for="(paper, key) in papers"
             :key="key"
             :id="paper.id"
+            :latest="paper.is_latest"
           />
         </v-list>
       </v-card-text>
@@ -52,7 +53,8 @@ export default {
     return {
       process: "loading",
       papers: [],
-      loading: false
+      loading: false,
+      latest: true
     };
   },
   created() {
