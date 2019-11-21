@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-tabs v-if="!practicing">
+      <v-tabs v-if="!practicing && !view_practice_record">
         <v-tab>
           <v-icon left>mdi-finance</v-icon>
           Practice
@@ -36,7 +36,7 @@
         </v-tab-item>
       </v-tabs>
       <paper-solve
-        v-if="practicing"
+        v-if="practicing && !view_practice_record"
         :initData="paper"
         @submit="finish_practicing"
       />
