@@ -16,7 +16,7 @@ class QuestionRecordList(APIView):
     def get(self, request):
         "Return user record"
         user = request.user
-        if user.user_group == "Student":
+        if user.user_group == "Student" or user.user_group == "Admin":
             # wrong questions only
             question_records = user.questionrecord_set.filter(is_correct=False)
         else:
