@@ -51,6 +51,7 @@
         v-if="view_practice_record"
         :record="practice_record"
         readonly
+		practice
         :paper_data="paper"
       />
     </v-card-text>

@@ -65,7 +65,7 @@
       </v-list-item>
     </template>
     <template v-slot:score="{ question_data }">
-      <v-list-item>
+      <v-list-item v-show="!practice">
         <v-form v-model="score_form">
           <v-text-field
             v-model="score"
@@ -80,7 +80,7 @@
       </v-list-item>
     </template>
     <template v-slot:comment="{ question_data }">
-      <v-list-item>
+      <v-list-item v-show="!practice">
         <v-textarea
           v-model="comment"
           label="Comment"
@@ -117,7 +117,11 @@ export default {
     readonly: {
       type: Boolean,
       default: false
-    }
+    },
+	practice: {
+	  type: Boolean,
+	  default: false
+	}
   },
   data: function() {
     return {
