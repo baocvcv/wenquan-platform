@@ -17,6 +17,7 @@
             ref="questions"
             v-show="current_section == section_index && current_question == key"
             :readonly="readonly"
+			:practice="practice"
           ></question-correct>
         </span>
       </template>
@@ -64,7 +65,11 @@ export default {
     record: {
       type: Object,
       default: null
-    }
+    },
+	practice: {
+	  type: Boolean,
+	  default: false
+	}
   },
   data: function() {
     return {
