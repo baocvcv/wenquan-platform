@@ -78,7 +78,7 @@ export default {
           if (this.papers.indexOf(element.paper_id) == -1)
             this.papers.push(element.paper_id);
         });
-        this.process = "Total count: " + this.papers.length;
+        this.process = "Loading Finished"; //"Total count: " + this.papers.length;
       })
       .catch(error => {
         this.process = "Oops!" + error;

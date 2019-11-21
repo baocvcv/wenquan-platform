@@ -25,7 +25,6 @@
             v-for="(paper, key) in papers"
             :key="key"
             :id="paper.id"
-            :latest="paper.is_latest"
           />
         </v-list>
       </v-card-text>
