@@ -14,6 +14,10 @@
           <v-icon left>mdi-pen</v-icon>
           Records
         </v-tab>
+		<v-tab>
+		  <v-icon left>mdi-notebook-outline</v-icon>
+		  Mistakes
+		</v-tab>
         <v-tab-item>
           <practice v-on:practicing="start_practice" />
         </v-tab-item>
@@ -34,6 +38,9 @@
             "
           ></test-paper-record-list>
         </v-tab-item>
+		<v-tab-item>
+		  <wrong-questions-collection />
+		</v-tab-item>
       </v-tabs>
       <paper-solve
         v-if="practicing"
@@ -58,6 +65,7 @@ import PaperSolve from "@/components/PaperSolve.vue";
 import TestPaperRecordList from "@/components/TestPaperRecordList.vue";
 import VueElementLoading from "vue-element-loading";
 import PaperMarking from "@/components/PaperMarking.vue";
+import WrongQuestionsCollection from "@/components/WrongQuestionsCollection.vue";
 import axios from "axios";
 
 export default {
@@ -77,7 +85,8 @@ export default {
     "paper-solve": PaperSolve,
     "test-paper-record-list": TestPaperRecordList,
     "vue-element-loading": VueElementLoading,
-    "paper-marking": PaperMarking
+    "paper-marking": PaperMarking,
+	"wrong-questions-collection": WrongQuestionsCollection
   },
   methods: {
     start_practice(paper) {
