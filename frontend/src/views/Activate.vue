@@ -32,14 +32,10 @@ export default {
     };
   },
   created() {
-    const headers = {
-      Authorization: "Token " + this.$store.state.user.token
-    };
     axios
       .post(
         "/api/verification/",
         { token: this.$route.params.token },
-        { headers: headers }
       )
       .then(response => {
         this.activated = true;
