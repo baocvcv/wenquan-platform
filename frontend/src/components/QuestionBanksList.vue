@@ -316,7 +316,7 @@ export default {
           });
           this.$emit("force-update");
           this.detail = false;
-          this.$$notify({
+          this.$notify({
             type: "success",
             title: "Success",
             text:

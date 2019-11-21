@@ -5,11 +5,13 @@ import Vuetify from "vuetify";
 import Vuex from "vuex";
 import Router from "vue-router";
 import RouterRule from "@/router";
+import Notification from "vue-notification";
 import "./mock/CreateQuestionBankMock.js";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
 Vue.use(Vuex);
+Vue.use(Notification);
 
 describe("CreateQuestionBank.vue", () => {
   let vuetify, router;

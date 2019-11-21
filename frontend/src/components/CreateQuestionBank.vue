@@ -114,7 +114,14 @@ export default {
           { headers: headers }
         )
         .then(response => {
-          alert("Success!");
+          this.$notify({
+            type: "suceess",
+            title: "Success!",
+            text:
+              "Question Bank " +
+              response.data.name +
+              " is created. You can now create new questions in it."
+          });
           that.$router.push("questionbanks/" + response.data.id);
         })
         .catch(error => {

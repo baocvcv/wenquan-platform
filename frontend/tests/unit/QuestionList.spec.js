@@ -4,6 +4,7 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import Vuex from "Vuex";
 import VueProgressBar from "vue-progressbar";
+import Notification from "vue-notification";
 import Router from "vue-router";
 import RouterRule from "@/router";
 import "./mock/QuestionListMock.js";
@@ -12,6 +13,7 @@ const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
 Vue.use(VueProgressBar);
+Vue.use(Notification);
 Vue.use(Vuex);
 
 describe("QuestionList.vue", () => {

@@ -158,7 +158,16 @@ export default {
             .catch(error => {});
         })
         .catch(error => {
-          console.log(error);
+          if (error.response) {
+            let status = error.response.status;
+            if (status === "403") {
+              this.$notify({
+                type: "error",
+                title: "You have no access to this question."
+              });
+              this.$router.push("/");
+            }
+          }
         });
     }
   },
@@ -207,10 +216,16 @@ export default {
           .then(response => {
             this.edit_mode = false;
             this.$emit("submit", response.data.id);
+            this.$notify({
+              type: "success",
+              title: "The new question is created."
+            });
           })
           .catch(err => {
-            console.log(info);
-            console.log(err);
+            this.$notify({
+              type: "error",
+              title: "Failed to create the new question."
+            });
           });
       } else {
         //Edit question
@@ -228,10 +243,17 @@ export default {
               this.$router.push("/questions/" + response.data.id);
               location.reload(false);
             }
+            this.$notify({
+              type: "success",
+              title: "Success",
+              text: "Your change is saved."
+            });
           })
           .catch(err => {
-            console.log(info);
-            console.log(err);
+            this.$notify({
+              type: "error",
+              title: "Failed to edit the question."
+            });
           });
       }
     },
