@@ -70,9 +70,6 @@ class QuestionBankDetail(APIView):
 
     def get(self, request, bank_id):
         """Get infomation of QuestionBank whose id=root_id"""
-        if request.user.user_group == 'Student':
-            if bank_id not in request.user.question_banks:
-                return Response(status=status.HTTP_403_FORBIDDEN)
         bank = self.get_object(bank_id)
         serializer = QuestionBankSerializer(bank)
         response = serializer.data
