@@ -100,7 +100,7 @@ export default {
 
             this.$notify({
               type: "success",
-              title: "Succesffully sign in!"
+              title: "Successfully sign in!"
             });
 
             this.$router.push("/").catch(err => console.log(err));

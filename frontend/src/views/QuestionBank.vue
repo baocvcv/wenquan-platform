@@ -78,7 +78,7 @@
             <v-card-actions v-show="edit_mode">
               <div class="flex-grow-1"></div>
               <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save" :disabled="edited"
+              <v-btn color="blue darken-1" text @click="save" :disabled="!edited"
                 >Save</v-btn
               >
             </v-card-actions>

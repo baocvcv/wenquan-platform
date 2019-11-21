@@ -149,6 +149,10 @@ export default {
               name: error.toString()
             }
           ];
+          this.$notify({
+            type: "error",
+            title: "Failed to get knowledge nodes."
+          })
         });
     },
     updateData(data) {
@@ -191,8 +195,19 @@ export default {
         )
         .then(response => {
           this.treeData = [response.data];
+          this.$notify({
+            type: "success",
+            title: "Success",
+            text: "Your change is saved."
+          })
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.$notify({
+            type: "error",
+            title: "Failed",
+            text: "Failed to save your change on knowledge nodes."
+          })
+        });
 
       this.edit = false;
       this.clearSelection();
