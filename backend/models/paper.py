@@ -37,7 +37,7 @@ class Section(PolymorphicModel):
     title = models.CharField(max_length=MAX_NAME)
     total_point = models.IntegerField()
     belong_paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
-    point_every_blank = ArrayField(models.IntegerField())
+    point_every_blank = ArrayField(models.IntegerField(), null=True, blank=True)
     section_num = models.IntegerField()
     questions = models.ManyToManyField(
         'Question',
