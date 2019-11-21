@@ -31,25 +31,16 @@ export default {
 		  Authorization: "Token " + this.$store.state.user.token
 		}
 	  })
-	  .then(async response => {
+	  .then(response => {
 		for (var i = 0; i < response.data.length; i++) {
-		  let question = response.data[i];
-		  await axios
-		    .get("/api/questions/" + question.question_id + "/", {
-			  headers: {
-				Authorization: "Token " + this.$store.state.user.token
-			  }
-			})
-			.then(question_response => {
-			   if (question_response.data.question_type == "multiple") {
-			     question["point_every_blank"] = [];
-				 for (var i = 0; i < question_response; i++) {
-					question["point_every_blank"].push(1);
-				 }
-			   }
-			   this.wrong_questions.push(question);
-		    })
+		  response.data[i]["point_every_blank"] = [];
+		  if (response.data[i].question_blank_num) {
+			for (var j = 0; j < response.data[i].question_blank_num; j++) {
+			  response.data[i].point_every_blank.push(1);
+			}
+		  }
 		}
+		this.wrong_questions = response.data;
 	  })
   },
   methods: {
