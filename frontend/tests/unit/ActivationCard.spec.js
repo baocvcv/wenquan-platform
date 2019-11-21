@@ -26,25 +26,23 @@ describe("ActivationCard.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(ActivationCard, {
       localVue,
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     wrapper.vm.reset();
     wrapper.vm.code = "123";
     wrapper.vm.activate();
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
 
   it("travel", done => {
@@ -55,24 +53,22 @@ describe("ActivationCard.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(ActivationCard, {
       localVue,
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     wrapper.vm.code = "234";
     wrapper.vm.activate();
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
 
   it("travel", done => {
@@ -83,24 +79,21 @@ describe("ActivationCard.vue", () => {
         }
       },
       mutations: {
-        updateUser(state, payload) {
-        },
-        updateUserWithKey(state, payload) {
-        }
-      },
-    })
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(ActivationCard, {
       localVue,
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     wrapper.vm.code = "345";
     wrapper.vm.activate();
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
-
 });

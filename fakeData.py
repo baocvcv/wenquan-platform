@@ -4,8 +4,9 @@ import WenQuan_Platform.settings as app_settings
 from django.conf import settings
 from django.utils import timezone
 
-settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
-django.setup()
+if __name__ == '__main__':
+    settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
+    django.setup()
 
 from backend.models import UserPermissions
 from backend.models import User
@@ -40,6 +41,10 @@ def createUser(
         is_banned=is_banned,
         question_banks=[],
     )
+    if user_group == 'Admin':
+        user.is_staff = True
+    if user_group == 'SuperAdmin':
+        user.is_superuser = True
     return user
 
 
@@ -164,7 +169,7 @@ def createQuestion(question_data, kind, bank):
             **question_data[0],
             history_version=q_group,
         )
-    question.save()
+        question.save()
     return question
 
 
@@ -218,8 +223,12 @@ def createPaper(multi, fill, brief):
     section2.save()
 
 
-test_bank = createBank(name="test_bank")
-multi = createQuestion(multi_example, TYPEDIC['multiple'], test_bank)
-fill = createQuestion(fill_blank_example, TYPEDIC['fill_blank'], test_bank)
-brief = createQuestion(brief_q_example, TYPEDIC['brief_ans'], test_bank)
-createPaper(multi, fill, brief)
+def create_related_q():
+    test_bank = createBank(name="test_bank")
+    multi = createQuestion(multi_example, TYPEDIC['multiple'], test_bank)
+    fill = createQuestion(fill_blank_example, TYPEDIC['fill_blank'], test_bank)
+    brief = createQuestion(brief_q_example, TYPEDIC['brief_ans'], test_bank)
+    createPaper(multi, fill, brief)
+
+
+create_related_q()

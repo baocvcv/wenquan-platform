@@ -2,6 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionList from "@/components/QuestionList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import Vuex from "vuex";
 import VueProgressBar from "vue-progressbar";
 import Router from "vue-router";
 import RouterRule from "@/router";
@@ -11,12 +12,24 @@ const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
 Vue.use(VueProgressBar);
+Vue.use(Vuex);
 
 describe("QuestionList.vue", () => {
-  let vuetify, router;
+  let vuetify, router, store;
   beforeEach(() => {
     vuetify = new Vuetify();
     router = new Router({ RouterRule });
+    store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("Fails to fetch data from question bank", async done => {
@@ -24,6 +37,7 @@ describe("QuestionList.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false,
       propsData: {
         id: 1,
@@ -145,6 +159,7 @@ describe("QuestionList.vue", () => {
     const wrapper = mount(QuestionList, {
       localVue,
       vuetify,
+      store,
       router,
       sync: false,
       propsData: {

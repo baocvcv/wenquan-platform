@@ -180,7 +180,7 @@
                       sm="4"
                       lg="3"
                     >
-                      <span>Points Assignment(optional)</span>
+                      <span>Points Assignment</span>
                     </v-col>
                     <v-col
                       v-for="(point, key) in question.point_every_blank"
@@ -414,9 +414,13 @@ export default {
   mounted: function() {
     let that = this;
     if (this.id != -1) {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/papers/" + this.id + "/")
+        .get("/api/papers/" + this.id + "/", { headers: headers })
         .then(response => {
+          response.data.time_limit = response.data.time_limit / 60;
           that.edited_paper = response.data;
           console.log(that.edited_paper);
           //to be continue
@@ -497,23 +501,28 @@ export default {
     },
     get_selected_questions(questions) {
       let that = this;
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       for (var i = 0; i < questions.length; i++) {
-        axios.get("/api/questions/" + questions[i] + "/").then(response => {
-          var tmp_point_every_blank = [];
-          var question = response.data;
-          if (question.question_type == "fill_blank") {
-            for (var i = 0; i < question.question_blank_num; i++) {
-              tmp_point_every_blank.push("");
+        axios
+          .get("/api/questions/" + questions[i] + "/", { headers: headers })
+          .then(response => {
+            var tmp_point_every_blank = [];
+            var question = response.data;
+            if (question.question_type == "fill_blank") {
+              for (var i = 0; i < question.question_blank_num; i++) {
+                tmp_point_every_blank.push("");
+              }
             }
-          }
-          that.cur_section.questions.push({
-            question_point: "",
-            point_every_blank: tmp_point_every_blank,
-            content: response.data
+            that.cur_section.questions.push({
+              question_point: "",
+              point_every_blank: tmp_point_every_blank,
+              content: response.data
+            });
+            //after at least one question has been loaded, close the dialog
+            this.adding_question = false;
           });
-          //after at least one question has been loaded, close the dialog
-          this.adding_question = false;
-        });
       }
     },
     edit_button_clicked() {
@@ -534,10 +543,14 @@ export default {
           };
         }
       }
+      result.time_limit = parseInt(result.time_limit) * 60;
       if (!this.paper || this.paper.id == -1) {
         //must be creating a test paper
+        const headers = {
+          Authorization: "Token " + this.$store.state.user.token
+        };
         axios
-          .post("/api/papers/", result)
+          .post("/api/papers/", result, { headers: headers })
           .then(response => {
             alert("OK");
             this.$emit("create-response", true);
@@ -547,8 +560,13 @@ export default {
             this.$emit("create-response", false);
           });
       } else {
+        const headers = {
+          Authorization: "Token " + this.$store.state.user.token
+        };
         axios
-          .put("/api/papers/" + this.paper.id + "/", result)
+          .put("/api/papers/" + this.paper.id + "/", result, {
+            headers: headers
+          })
           .then(response => {
             alert("OK");
           })

@@ -21,10 +21,7 @@
               >{{ change_paper_status_btn_text }}</v-btn
             >
           </template>
-          <span
-            >Change status of this test paper to
-            {{ change_paper_status_btn_text }}</span
-          >
+          <span>Change status of this test paper to {{ opposite_status }}</span>
         </v-tooltip>
         <v-spacer></v-spacer>
         <v-tooltip bottom>
@@ -119,12 +116,18 @@ export default {
   computed: {
     change_paper_status_btn_text: function() {
       return this.test_paper["status"] == "drafted" ? "publish" : "drafted";
+    },
+    opposite_status() {
+      return this.test_paper["status"] == "drafted" ? "published" : "drafted";
     }
   },
   methods: {
     delete_confirmed() {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .delete("/api/papers/" + this.test_paper.id + "/")
+        .delete("/api/papers/" + this.test_paper.id + "/", { headers: headers })
         .then(response => {
           console.log(response);
           this.$emit("delete");
@@ -134,6 +137,33 @@ export default {
         })
         .then(() => {
           this.delete_test_paper = false;
+        });
+    },
+    change_paper_status() {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      axios
+        .put(
+          "/api/papers/" + this.test_paper.id + "/",
+          {
+            change_status: this.opposite_status
+          },
+          { headers: headers }
+        )
+        .then(() => {
+          this.$notify({
+            text: "Change test paper state to " + this.opposite_status,
+            type: "success"
+          });
+          this.test_paper["status"] = this.opposite_status;
+        })
+        .catch(error => {
+          this.$notify({
+            title: "error",
+            text: "Oops..." + error,
+            type: "error"
+          });
         });
     }
   }

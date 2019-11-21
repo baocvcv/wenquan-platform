@@ -26,7 +26,11 @@
         ref="content"
         v-bind:style="{ 'max-height': max_height + 'px' }"
       >
-        <rich-text-editor readonly label="Question" v-model="content"></rich-text-editor>
+        <rich-text-editor
+          readonly
+          label="Question"
+          v-model="content"
+        ></rich-text-editor>
         <v-textarea
           outlined
           readonly
@@ -95,7 +99,7 @@ export default {
     hide_content: false,
     content_too_long: false,
     width: 0,
-    max_height: 250,
+    max_height: 400,
     max_height_cache: 0,
     content: "",
     viewing_question: false,
@@ -122,10 +126,13 @@ export default {
       }
     }
     let index;
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
     for (index in this.question.parents_node) {
       let node = this.question.parents_node[index];
       axios
-        .get("/api/knowledge_nodes/" + node + "/")
+        .get("/api/knowledge_nodes/" + node + "/", { headers: headers })
         .then(response => {
           if (node != this.question.root_id)
             this.nodes.push(response.data.name);

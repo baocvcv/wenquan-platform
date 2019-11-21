@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from psycopg2 import Error
 
 from backend.models import AuthCode
-# from backend.serializers import AuthCodeSerializer
 from backend.models import QuestionBank
 from backend.scripts.generate_token import generate_token
 
@@ -16,6 +15,8 @@ class AuthCodeView(APIView):
     @staticmethod
     def post(request):
         """ generate auth codes """
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         q_bank_id = request.data['question_bank_id']
         q_bank = QuestionBank.objects.get(pk=q_bank_id)
         auth_codes = q_bank.authcode_set.all()

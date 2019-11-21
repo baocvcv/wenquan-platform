@@ -152,7 +152,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_MAX_DEFERRED = 5
 
 from datetime import timedelta
-# from rest_framework.settings import api_settings
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,

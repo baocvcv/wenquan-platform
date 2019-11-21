@@ -17,11 +17,17 @@
         @blur="blur"
         @focus="focus"
         :options="editorOption"
-        :class="readonly? 'quill-editor-disabled' : ''"
+        :class="readonly ? 'quill-editor-disabled' : ''"
       >
       </quill-editor>
-      <v-btn id="virtual-upload-button" @click="$refs.uploader.upload()" v-show="false"></v-btn>
-      <span v-show="is_empty && required" class="caption error--text pl-2 pr-2">{{get_label}} is required.</span>
+      <v-btn
+        id="virtual-upload-button"
+        @click="$refs.uploader.upload()"
+        v-show="false"
+      ></v-btn>
+      <span v-show="is_empty && required" class="caption error--text pl-2 pr-2"
+        >{{ get_label }} is required.</span
+      >
     </v-card>
   </div>
 </template>
@@ -85,7 +91,7 @@ export default {
             handlers: {
               image: function(value) {
                 if (value) {
-                  document.querySelector('#virtual-upload-button').click()
+                  document.querySelector("#virtual-upload-button").click();
                 } else {
                   this.quill.format("image", false);
                 }
@@ -106,11 +112,9 @@ export default {
   computed: {
     get_label() {
       let str = this.label;
-      if (str && str.endsWith('*'))
-        return str.substr(0, str.length - 1);
+      if (str && str.endsWith("*")) return str.substr(0, str.length - 1);
       return str;
     }
-
   },
   methods: {
     onEditorChange({ editor, html, text }) {
@@ -120,20 +124,20 @@ export default {
       console.log("Start uploading!");
       this.$notify({
         title: "Start uploading the picutre..."
-      })
+      });
     },
     finish_upload(url) {
       let quill = this.$refs.TextEditor.quill;
       // 获取光标所在位置
       let length = quill.getSelection().index;
       // 插入图片  res.info为服务器返回的图片地址
-      quill.insertEmbed(length, 'image', url);
+      quill.insertEmbed(length, "image", url);
       // 调整光标到最后
       quill.setSelection(length + 1);
       this.$notify({
         title: "Finish uploading the picture!",
         type: "success"
-      })
+      });
     },
     blur() {
       if (this.content.length === 0) {
@@ -144,7 +148,7 @@ export default {
       this.is_empty = false;
     },
     reset() {
-      this.$refs.TextEditor.deleteText();
+      this.$emit("change", "");
     }
   }
 };

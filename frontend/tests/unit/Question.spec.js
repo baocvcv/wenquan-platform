@@ -64,6 +64,7 @@ describe("UserTable.vue", () => {
         edit_button.trigger("click");
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.edit_mode).toBe(true);
+        wrapper.vm.cancel();
         done();
       }, 1000);
     }, 1000);

@@ -97,9 +97,15 @@ export default {
   methods: {
     update_data() {
       this.process = "fetching data ...";
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/papers/")
+        .get("/api/papers/", { headers: headers })
         .then(response => {
+          for (var i = 0; i < response.data.length; i++) {
+            response.data[i].time_limit = response.data[i].time_limit / 60;
+          }
           this.test_papers = response.data;
           this.process = "total count: " + this.test_papers.length;
         })

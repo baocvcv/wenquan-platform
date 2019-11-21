@@ -2,12 +2,14 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import CreateQuestionBank from "@/components/CreateQuestionBank";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import Vuex from "vuex";
 import Router from "vue-router";
 import RouterRule from "@/router";
 import "./mock/CreateQuestionBankMock.js";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Vuex);
 
 describe("CreateQuestionBank.vue", () => {
   let vuetify, router;
@@ -17,10 +19,22 @@ describe("CreateQuestionBank.vue", () => {
   });
   it("create public question bank successfully", async done => {
     window.alert = jest.fn();
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
       router,
+      store,
       sync: false
     });
     wrapper.setData({
@@ -43,10 +57,22 @@ describe("CreateQuestionBank.vue", () => {
   });
   it("create private question bank successfully", async done => {
     window.alert = jest.fn();
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
       router,
+      store,
       sync: false
     });
     wrapper.setData({
@@ -75,9 +101,21 @@ describe("CreateQuestionBank.vue", () => {
   });
   it("Reset button", async () => {
     window.alert = jest.fn();
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
+      store,
       sync: false
     });
     wrapper.setData({
@@ -97,10 +135,22 @@ describe("CreateQuestionBank.vue", () => {
   });
   it("Failed", async done => {
     window.alert = jest.fn();
+    const store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
     const wrapper = mount(CreateQuestionBank, {
       vuetify,
       localVue,
       router,
+      store,
       sync: false
     });
     wrapper.setData({
