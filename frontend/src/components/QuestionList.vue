@@ -352,6 +352,7 @@ export default {
           if (this.tree_selection.length == 0) {
             this.shown_questions.push(response.data);
             this.create_question_dialog = false;
+            this.$emit("create-question");
             return;
           }
           let node_index;
@@ -366,6 +367,7 @@ export default {
             }
           }
           this.create_question_dialog = false;
+          this.$emit("create-question");
         })
         .catch(error => {});
     },
