@@ -1,10 +1,7 @@
 """ PaperRecord View """
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# from rest_framework import generics
 from rest_framework import status
-# from django.utils import timezone
-# from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 
 from backend.models import QuestionRecord
@@ -60,28 +57,29 @@ class PaperRecordDetail(APIView):
     def get(request, record_id):
         "Get the detail of a paper record"
         paper_record = PaperRecord.objects.get(id=record_id)
+        if request.user.user_group == 'Student' and paper_record.user != request.user:
+            return Response(status.HTTP_403_FORBIDDEN)
         paper_record_data = PaperRecordSerializer(paper_record).data
         # compile questions
         question_data = {}
-        # paper = paper_record.paper
         for question in paper_record.questionrecord_set.all():
             q_data = QuestionRecordSerializer(question).data
             question_data[question.question_id] = q_data
         paper_record_data['questions'] = question_data
         return Response(paper_record_data, status.HTTP_200_OK)
 
+
     @staticmethod
     def post(request, record_id):
         " Update paper record "
         paper_record = PaperRecord.objects.get(id=record_id)
-        # error
+        if request.user.user_group == 'Student' and paper_record.user != request.user:
+            return Response(status.HTTP_403_FORBIDDEN)
         if not paper_record.can_update():
             return Response(
                 {"error": "Paper no longer active."},
                 status=status.HTTP_400_BAD_REQUEST,
                 )
-        # paper = Paper.objects.get(id=request.data['paper_id'])
-        # sections = paper.section_set.all()
         if 'sections' in request.data:
             section_datas = request.data['sections']
         else:
@@ -115,7 +113,12 @@ class PaperRecordDetail(APIView):
                 question_record.set_ans(q_data['ans'])
                 question_record.save()
 
-        # update status of paper record
+        PaperRecordDetail.update_status(request, paper_record)
+        return Response(status=status.HTTP_200_OK)
+
+    @staticmethod
+    def update_status(request, paper_record):
+        "update status of paper record"
         if 'action' in request.data:
             cmd = request.data['action']
             if cmd == 'pause':
@@ -127,11 +130,11 @@ class PaperRecordDetail(APIView):
                 paper_record.time_left = 0
         paper_record.save()
 
-        return Response(status=status.HTTP_200_OK)
-
     @staticmethod
     def put(request, record_id):
         "Modify a question record"
+        if request.user.user_group == 'Student':
+            return Response(status.HTTP_403_FORBIDDEN)
         paper_record = PaperRecord.objects.get(id=record_id)
         if 'action' in request.data:
             paper_record.need_judging = False

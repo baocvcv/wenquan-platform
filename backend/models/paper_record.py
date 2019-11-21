@@ -1,6 +1,5 @@
 """ Paper history records """
 from django.db import models
-# from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
 
 from .paper import Paper
@@ -41,11 +40,3 @@ class PaperRecord(models.Model):
             for score in q_record.score:
                 self.user_total_points += score
         return self.user_total_points
-
-    # def compile_sections(self):
-    #     "Compile sections into a json"
-    #     question_records = self.question_record_set.all()
-    #     sections = self.paper.section_set.all()
-    #     section_points = []
-    #     paper_points =
-    #     for section

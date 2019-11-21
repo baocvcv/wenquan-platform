@@ -1,7 +1,6 @@
 """ Email verification model """
 from django.db import models
 from django.conf import settings
-# from mailer import send_mail
 from django.core.mail import send_mail
 
 class EmailVerificationRecord(models.Model):
@@ -49,7 +48,6 @@ class EmailVerificationRecord(models.Model):
                 settings.DEFAULT_FROM_EMAIL,
                 [self.email])
             print(send_status)
-            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
             url = domain + "/#/forget_password/{0}".format(self.token)
@@ -61,7 +59,6 @@ class EmailVerificationRecord(models.Model):
                 email_body,
                 settings.DEFAULT_FROM_EMAIL,
                 [self.email])
-            # send_status = send_mail(email_title, email_body, "a@b.com", [self.email])
 
     def is_time_valid(self, time):
         """ check if time is valid """

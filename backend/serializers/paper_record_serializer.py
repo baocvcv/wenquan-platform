@@ -1,7 +1,6 @@
 """ Serializers for Paper Record """
 from rest_framework import serializers
 
-# from backend.models import QuestionRecord
 from backend.models import PaperRecord
 from backend.models import Paper
 
