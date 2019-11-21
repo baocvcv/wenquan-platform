@@ -109,6 +109,7 @@ class PaperRecordDetail(APIView):
                         score=scores,
                         paper_record=paper_record,
                         correct_or_not=[],
+                        user=request.user,
                     )
                 question_record.set_ans(q_data['ans'])
                 question_record.save()
