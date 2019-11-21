@@ -10,7 +10,7 @@
       :duration="5000"
       :width="500"
       animation-name="v-fade-left"
-      position="top left"
+      position="top right"
     >
       <template slot="body" slot-scope="props">
         <div
