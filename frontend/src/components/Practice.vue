@@ -165,7 +165,6 @@ export default {
               "/api/questions/" + all_question[rand] + "/",
               { headers: headers }
             );
-            question["content"] = tmp_data.data;
             this.practice_paper.sections[0].questions.push({
               id: all_question[rand],
               content: tmp_data.data,
