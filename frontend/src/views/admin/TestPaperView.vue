@@ -46,6 +46,7 @@ export default {
             question["content"] = tmp_data.data;
           }
         }
+		result.time_limit = result.time_limit/60;
         this.paper = result;
         this.loading = false;
       })
