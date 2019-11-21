@@ -60,8 +60,6 @@ class MultpChoiceQ(ChoiceQ):
         ans = set(ans)
         if section_id is not None:
             section = Section.objects.get(id=section_id)
-            if not section:
-                return "Not Found"
             q_on_paper = section.questionversion_set.get(question=self, section=section)
             point = 0
         if ans == [""]:
