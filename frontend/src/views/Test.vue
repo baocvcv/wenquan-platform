@@ -108,11 +108,9 @@ export default {
         this.time_left = record.data.time_left;
         var timer = setInterval(() => {
           if (this.time_left == 0) {
-              if(this.$refs && this.$refs.solve)
-                this.$refs.solve.force_submit();
-              clearInterval(timer);
-          }
-          else this.time_left--;
+            if (this.$refs && this.$refs.solve) this.$refs.solve.force_submit();
+            clearInterval(timer);
+          } else this.time_left--;
         }, 1000);
 
         this.loading = false;
