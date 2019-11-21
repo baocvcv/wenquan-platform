@@ -151,6 +151,7 @@
       v-if="question_bank.id"
       :editable="editable"
       :id="question_bank.id"
+      @create-question="refresh_count"
     ></question-list>
   </div>
 </template>
@@ -242,6 +243,11 @@ export default {
         JSON.stringify(this.question_bank_image)
       );
     },
+    refresh_count() {
+      console.log("Yeah!");
+      this.question_bank.question_count++;
+      this.edited_question_bank.question_count++;
+    },
     save() {
       this.edited_question_bank.picture = this.edited_question_bank_image[0];
       const headers = {
@@ -287,7 +293,7 @@ export default {
   },
   created() {
     let id = this.$route.params.id;
-    if (this.$store.state.user.question_banks.indexOf(id) === -1) {
+    if (this.$store.state.user.question_banks.indexOf(id) === -1 && this.$store.state.user.user_group === "Student") {
       this.$notify({
         type: "error",
         title: "You have no access to this question bank."

@@ -7,10 +7,9 @@
       </v-container>
     </v-content>
     <notifications
-      :duration="5000"
+      :duration="3000"
       :width="500"
-      animation-name="v-fade-left"
-      position="top right"
+      position="bottom right"
     >
       <template slot="body" slot-scope="props">
         <div
@@ -99,16 +98,5 @@ export default {
 .vue-notification.succeed {
   background: #68CD86;
   border-left-color: #42A85F;
-}
-
-.v-fade-left-enter-active,
-.v-fade-left-leave-active,
-.v-fade-left-move {
-  transition: all 1s;
-}
-.v-fade-left-enter,
-.v-fade-left-leave-to {
-  opacity: 0;
-  transform: translateX(-500px) scale(0.2);
 }
 </style>
