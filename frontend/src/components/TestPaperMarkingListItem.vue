@@ -84,11 +84,24 @@ export default {
   },
   data: function() {
     return {
-      paper_name: "test-paper-list-item",
-      paper_records: []
+      paper_name: "",
+      paper_records: [],
+      latest: true
     };
   },
   created() {
+    axios
+      .get("/api/papers/" + this.id + "/", {
+        headers: {
+          Authorization: "Token " + this.$store.state.user.token
+        }
+      })
+      .then(response => {
+        this.latest = response.data.is_latest;
+      })
+      .catch(error => {
+        console.log(error);
+      });
     axios
       .get("/api/paper_records?paper=" + this.id, {
         headers: {
@@ -105,8 +118,11 @@ export default {
             else this.paper_records.push(all_records[i]);
           }
         }
-        if (all_records.length != 0)
+        if (all_records.length != 0) {
           this.paper_name = all_records[0].paper_name;
+          if (!this.latest && !!this.paper_name)
+            this.paper_name += "(Old Version)";
+        }
       })
       .catch(error => {
         console.log(error);
