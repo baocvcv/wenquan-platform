@@ -24,8 +24,8 @@
             >Unmarked</span
           ><span v-else style="color: green; font-size: 80%;">Marked</span> |
           <span style="font-size: 80%"
-            >Score: {{ record.user_total_point }}/{{
-              record.paper_total_point
+            >Score: {{ record.user_total_points }}/{{
+              record.paper_total_points
             }}</span
           ></v-list-item-title
         >
@@ -116,7 +116,11 @@ export default {
       let id = this.paper_records[index].id;
       let success = true;
       await axios
-        .put("/api/paper_records/" + id, { action: "finish" })
+        .put("/api/paper_records/" + id, { action: "finish" }, {
+			headers: {
+			  Authorization: "Token " + this.$store.state.user.token
+			}
+		})
         .then(() => {
           if (single) {
             this.$notify({
