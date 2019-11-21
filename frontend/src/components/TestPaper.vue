@@ -16,7 +16,7 @@
       </v-card-title>
       <v-card-text>
         <p v-show="!create">
-          Last Updated time: {{ edited_paper.change_time }}
+          Last Updated time: {{ new Date(edited_paper.change_time) }}
         </p>
         <v-form ref="input" v-model="valid">
           <v-text-field

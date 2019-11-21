@@ -118,10 +118,10 @@ export default {
       type: Boolean,
       default: false
     },
-	practice: {
-	  type: Boolean,
-	  default: false
-	}
+    practice: {
+      type: Boolean,
+      default: false
+    }
   },
   data: function() {
     return {
@@ -136,8 +136,6 @@ export default {
     "question-solve": QuestionSolve
   },
   created() {
-    console.log("question-correct");
-    console.log(this.question);
     var record_id = this.question.question_record_id;
     if (record_id != -1) {
       axios
@@ -177,9 +175,6 @@ export default {
       ];
     },
     check_ans(index, question_data) {
-      console.log("check");
-      console.log(index);
-      console.log(question_data);
       this.correct_or_not[index] = !this.correct_or_not[index];
       let type = question_data.question_type;
       if (type != "fill_blank") {

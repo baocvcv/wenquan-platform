@@ -105,9 +105,11 @@ export default {
         .get("/api/papers/", { headers: headers })
         .then(response => {
           for (var i = 0; i < response.data.length; i++) {
+            if (this.readonly && response.data[i].status == "drafted") continue;
             response.data[i].time_limit = response.data[i].time_limit / 60;
+            this.test_papers.push(response.data[i]);
           }
-          this.test_papers = response.data;
+          //this.test_papers = response.data;
           this.process = "total count: " + this.test_papers.length;
         })
         .catch(error => {

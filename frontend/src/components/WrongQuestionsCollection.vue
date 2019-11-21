@@ -1,11 +1,13 @@
 <template>
   <div>
+    <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
     <v-list>
       <question-correct
         v-for="(question, key) in wrong_questions"
         :key="key"
         :question="question_info(question)"
         readonly
+        practice
       />
     </v-list>
   </div>
@@ -14,17 +16,21 @@
 <script>
 import QuestionCorrect from "@/components/QuestionCorrect.vue";
 import axios from "axios";
+import VueElementLoading from "vue-element-loading";
 export default {
   name: "wrong-question-collection",
   components: {
-    "question-correct": QuestionCorrect
+    "question-correct": QuestionCorrect,
+    "vue-element-loading": VueElementLoading
   },
   data: function() {
     return {
-      wrong_questions: []
+      wrong_questions: [],
+      loading: false
     };
   },
   created() {
+    this.loading = true;
     axios
       .get("/api/question_records/", {
         headers: {
@@ -41,6 +47,12 @@ export default {
           }
         }
         this.wrong_questions = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        this.loading = false;
       });
   },
   methods: {
