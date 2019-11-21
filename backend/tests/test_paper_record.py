@@ -1,10 +1,10 @@
 """test module for users_views"""
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APITestCase
+# from django.urls import reverse
+# from rest_framework import status
+# from rest_framework.test import APITestCase
 
-from backend.tests.utils import reset_database_permissions
-from backend.models import User
+# from backend.tests.utils import reset_database_permissions
+# from backend.models import User
 # import reset_permissions
 # from fakeData import createUser
 
