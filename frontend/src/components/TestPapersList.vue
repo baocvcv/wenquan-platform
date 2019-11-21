@@ -12,6 +12,7 @@
           clearable
         ></v-text-field>
         <v-btn
+          v-show="!readonly"
           color="primary"
           elevation="0"
           class="ml-2"
