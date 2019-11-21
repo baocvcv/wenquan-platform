@@ -1,4 +1,6 @@
 <template>
+  <div class="test-paper-marking-list">
+  <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
   <v-card>
     <v-toolbar flat>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -27,11 +29,13 @@
       </v-list>
     </v-card-text>
   </v-card>
+  </div>
 </template>
 
 <script>
 import TestPaperMarkingListItem from "@/components/TestPaperMarkingListItem.vue";
 import axios from "axios";
+import VueElementLoading from "vue-element-loading";
 export default {
   name: "test-paper-marking-list",
   props: {
@@ -41,15 +45,18 @@ export default {
     }
   },
   components: {
-    "test-paper-marking-list-item": TestPaperMarkingListItem
+    "test-paper-marking-list-item": TestPaperMarkingListItem,
+	"vue-element-loading": VueElementLoading
   },
   data: function() {
     return {
       process: "loading",
-      papers: []
+      papers: [],
+	  loading: false
     };
   },
   created() {
+	this.loading = true;
     axios
       .get("/api/papers/", {
         headers: {
@@ -62,7 +69,10 @@ export default {
       })
       .catch(error => {
         this.process = "Oops!" + error;
-      });
+      })
+	  .then(() => {
+	    this.loading = false;
+	  });
   }
 };
 </script>
