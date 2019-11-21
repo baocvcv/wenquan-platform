@@ -60,6 +60,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    record: {
+      type: Object,
+      default: null
     }
   },
   data: function() {
@@ -136,6 +140,8 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    } else if (this.record) {
+      this.paper_record = this.record;
     }
   },
   components: {

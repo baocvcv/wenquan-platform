@@ -35,8 +35,19 @@
           ></test-paper-record-list>
         </v-tab-item>
       </v-tabs>
-      <paper-solve v-if="practicing" :initData="paper" />
+      <paper-solve
+        v-if="practicing"
+        :initData="paper"
+        @submit="finish_practicing"
+      />
+      <paper-marking
+        v-if="view_practice_record"
+        :record="practice_record"
+        readonly
+        :paper_data="paper"
+      />
     </v-card-text>
+    <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
   </v-card>
 </template>
 
@@ -45,25 +56,64 @@ import Practice from "@/components/Practice.vue";
 import TestPapersList from "@/components/TestPapersList.vue";
 import PaperSolve from "@/components/PaperSolve.vue";
 import TestPaperRecordList from "@/components/TestPaperRecordList.vue";
+import VueElementLoading from "vue-element-loading";
+import PaperMarking from "@/components/PaperMarking.vue";
+import axios from "axios";
 
 export default {
   name: "learn",
   data: function() {
     return {
       practicing: false,
-      paper: undefined
+      paper: undefined,
+      loading: false,
+      practice_record: null,
+      view_practice_record: false
     };
   },
   components: {
     practice: Practice,
     "test-papers-list": TestPapersList,
     "paper-solve": PaperSolve,
-    "test-paper-record-list": TestPaperRecordList
+    "test-paper-record-list": TestPaperRecordList,
+    "vue-element-loading": VueElementLoading,
+    "paper-marking": PaperMarking
   },
   methods: {
     start_practice(paper) {
       this.paper = paper;
       this.practicing = true;
+    },
+    async finish_practicing(result) {
+      this.loading = true;
+      const header = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      let record = {
+        questions: {}
+      };
+      for (var sec_i = 0; sec_i < result.sections.length; sec_i++)
+        for (
+          var qes_i = 0;
+          qes_i < result.sections[sec_i].questions.length;
+          qes_i++
+        ) {
+          let parsed_ans = {
+            question_id: result.sections[sec_i].questions[qes_i].id,
+            ans: result.sections[sec_i].questions[qes_i].ans
+          };
+          let response = await axios.post("/api/question_records", parsed_ans, {
+            headers: header
+          });
+          let parsed_record = response.data;
+          parsed_record.ans = result.sections[sec_i].questions[qes_i].ans;
+          record.questions[
+            parsed_record.question_id.toString()
+          ] = parsed_record;
+        }
+      this.parsed_record = record;
+      this.view_practice_record = true;
+      this.loading = false;
     }
   },
   beforeRouteLeave(to, from, next) {
