@@ -7,14 +7,44 @@ from rest_framework.test import APITestCase
 
 from backend.models.questions import Question
 
-from backend.models.question_bank import QuestionBank
 from backend.models.knowledge_node import KnowledgeNode
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
+
+from backend.models import UserPermissions
+from backend.models import User
+from backend.models import Profile
+from backend.tests.utils import create_permission
+
+
+def create_user(
+        username,
+        password="11111111",
+        email="a@b.com",
+        user_group=User.STUDENT,
+        is_banned=False,
+):
+    """ create user"""
+    permission = UserPermissions.objects.get(group_name=user_group)
+    profile = Profile.objects.create(school_name='THU', )
+    user = User.objects.create_user(
+        username=username,
+        password=password,
+        email=email,
+        user_group=user_group,
+        user_permissions=permission,
+        profile=profile,
+        is_banned=is_banned,
+        question_banks=[],
+    )
+    if user_group == 'Admin':
+        user.is_staff = True
+    if user_group == 'SuperAdmin':
+        user.is_superuser = True
+    return user
 
 
 class QuestionTest(APITestCase):
     """ test for question views """
-    bank = QuestionBank()
     bank_data = {
         "name": "bank1",
         "picture": "www.a.com",
@@ -105,6 +135,13 @@ class QuestionTest(APITestCase):
         else:
             print(serializer.errors)
 
+        create_permission().save()
+        create_permission("Admin").save()
+        create_permission("SuperAdmin").save()
+        admin = create_user(username='xq', user_group=User.SUPER_ADMIN)
+        admin.save()
+        cls.user = admin
+
     def get_response(self, new_q_id):
         """GET method testing"""
         url = reverse("questions_detail", args=[new_q_id])
@@ -136,7 +173,8 @@ class QuestionTest(APITestCase):
         url = reverse("questions_detail", args=[new_q.id])
         data[0]["parents_node"] = [self.bank.root_id]
         data[0]["question_name"] = "modify"
-        response = self.client.post(url, data, format='json')
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.data['question_name'], "modify")
 
     def test_multiple(self):
         """ test creating an single choice question"""
@@ -198,6 +236,7 @@ class QuestionTest(APITestCase):
 
     def test_question_bank(self):
         """Test related to QuestionBank"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         url = reverse("banks_detail", args=[self.bank.id])
         self.client.get(url)
         url = reverse("banks_list")
@@ -210,11 +249,58 @@ class QuestionTest(APITestCase):
         }
         self.client.post(bank_post)
 
-    def paper_test(self):
+    def test_nodes(self):
+        """Test related to KnowledgeNode"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
+
+        self.create_question(self.multi_example)
+        self.create_question(self.fill_blank_example)
+        self.create_question(self.t_or_f_example)
+
+        url = reverse("questions_list")
+        self.client.get(url)
+
+        url = reverse("nodes_list", args=[self.bank.root_id])
+        self.client.get(url)
+        node_data = {
+            "delete": [],
+            "modify": {
+                "id": self.bank.root_id,
+                "name": "math",
+                "subnodes": [
+                    {
+                        "id": -1,
+                        "name": "algebra",
+                        "subnodes": [
+                            {
+                                "id": -1,
+                                "name": "circle",
+                                "subnodes": [],
+                            },
+                        ]
+                    },
+                ]
+            }
+        }
+        response = self.client.put(url, node_data, format='json')
+        node_id = response.data["subnodes"][0]['id']
+        node_data['delete'] = [node_id]
+        self.client.put(url, node_data, format='json')
+
+        url = reverse("nodes_detail", args=[self.bank.root_id])
+        self.client.get(url)
+
+        url = reverse("nodes_question")
+        self.client.post(url, {"nodes_id": [self.bank.root_id]}, format='json')
+
+    def test_paper(self):
         "Test related to Paper"
-        mult = self.create_question(self.multi_example)
-        fill = self.create_question(self.fill_blank_example)
-        torf = self.create_question(self.t_or_f_example)
+
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
+        mult = self.create_question(self.multi_example).data
+        fill = self.create_question(self.fill_blank_example).data
+        torf = self.create_question(self.t_or_f_example).data
+
         paper_data = {
             "title": "test paper",
             "total_point": 100,
@@ -238,6 +324,7 @@ class QuestionTest(APITestCase):
             }, {
                 "title": "unnamed sections",
                 "total_point": 50,
+                "section_num": 2,
                 "questions": [
                     {
                         "id": torf['id'],
@@ -251,15 +338,16 @@ class QuestionTest(APITestCase):
         url = reverse("papers_list")
         response = self.client.post(url, paper_data, format='json')
         self.client.get(url)
+        self.assertEqual(response.data['title'], paper_data['title'])
 
-        paper_id = response['id']
-        url = reverse("paper_detail", args=[paper_id])
+        paper_id = response.data['id']
+        url = reverse("papers_detail", args=[paper_id])
         self.client.get(url)
 
         paper_data['status'] = "drafted"
         self.client.put(url, paper_data, format='json')
 
-        change_state = {"change_state": "error"}
+        change_state = {"change_status": "error"}
         self.client.put(url, change_state, format='json')
-        change_state = {"change_state": "drafted"}
+        change_state = {"change_status": "drafted"}
         self.client.put(url, change_state, format='json')

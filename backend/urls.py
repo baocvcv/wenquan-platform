@@ -33,7 +33,7 @@ urlpatterns = [
     path(
         r'api/knowledge_nodes/<int:root_id>/',
         views.KnowledgeNodeDetail.as_view(),
-        name='node_detail',
+        name='nodes_detail',
     ),
     path(
         r'api/nodes_question/',
