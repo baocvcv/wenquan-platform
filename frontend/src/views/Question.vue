@@ -25,7 +25,9 @@
         </v-row>
 
         <v-row v-show="last_changing_time">
-          <p>Last Changed: {{ Date(last_changing_time) }}</p>
+          <v-spacer></v-spacer>
+          <p>Last Changed: {{ new Date(last_changing_time) }}</p>
+          <v-spacer></v-spacer>
         </v-row>
 
         <!--tree-view and the words shown in readonly mode-->
