@@ -48,6 +48,10 @@ export default {
     id: {
       type: Number,
       default: -1
+    },
+    view: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -91,25 +95,27 @@ export default {
         this.paper_data = result;
 
         //start a new record
-        let record = await axios.post(
-          "/api/paper_records/",
-          {
-            paper_id: id,
-            is_timed: true
-          },
-          {
-            headers: {
-              Authorization: "Token " + this.$store.state.user.token
+        if (!this.view) {
+          let record = await axios.post(
+            "/api/paper_records/",
+            {
+              paper_id: id,
+              is_timed: true
+            },
+            {
+              headers: {
+                Authorization: "Token " + this.$store.state.user.token
+              }
             }
-          }
-        );
+          );
 
-        this.record_id = record.data.id;
-        this.time_left = record.data.time_left;
-        setInterval(() => {
-          if (this.time_left == 0) this.$refs.solve.force_submit();
-          else this.time_left--;
-        }, 1000);
+          this.record_id = record.data.id;
+          this.time_left = record.data.time_left;
+          setInterval(() => {
+            if (this.time_left == 0) this.$refs.solve.force_submit();
+            else this.time_left--;
+          }, 1000);
+        }
 
         this.loading = false;
       })
