@@ -30,12 +30,21 @@ class UserListViewTest(APITestCase):
         """ test creating an user account"""
         url = reverse('user-list')
         data = copy(self.user_data)
-
         response = self.client.post(url, data, format='json')
+        user = User.objects.get(username='Kobe')
+        user.user_group = 'Admin'
+        user.save()
         user = User.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(user.username, 'Kobe')
+        self.client.force_authenticate(user=user) #pylint: disable=no-member
+        data['username'] = 'Byant'
+        response = self.client.post(url, data, format='json')
+        url = reverse('verification')
+        self.client.get(url, {'username':'Byant'})
+        url = reverse('password')
+        self.client.put(url, {'password':'asdf'})
 
     def test_create_student_with_profile(self):
         """ test creating an user account"""
@@ -44,6 +53,7 @@ class UserListViewTest(APITestCase):
         data['profile'] = self.profile_data
 
         response = self.client.post(url, data, format='json')
+
         user = User.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
@@ -129,5 +139,4 @@ class UserDetailTest(APITestCase):
         self.assertEqual(response.data['username'], 'Bryant')
         self.assertEqual(response.data['email'], 'c@d.com')
         self.assertEqual(response.data['is_banned'], True)
-        self.assertEqual(response.data['user_group'], 'Admin')
         self.assertEqual(response.data['profile']['school_name'], 'PKU')
