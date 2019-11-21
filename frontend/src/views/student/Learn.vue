@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-tabs v-if="!practicing && !view_practice_record">
+      <v-tabs v-if="!practicing && !view_practice_record" show-arrows>
         <v-tab>
           <v-icon left>mdi-finance</v-icon>
           Practice
@@ -14,10 +14,10 @@
           <v-icon left>mdi-pen</v-icon>
           Records
         </v-tab>
-		<v-tab>
-		  <v-icon left>mdi-notebook-outline</v-icon>
-		  Mistakes
-		</v-tab>
+        <v-tab>
+          <v-icon left>mdi-notebook-outline</v-icon>
+          Mistakes
+        </v-tab>
         <v-tab-item>
           <practice v-on:practicing="start_practice" />
         </v-tab-item>
@@ -38,9 +38,9 @@
             "
           ></test-paper-record-list>
         </v-tab-item>
-		<v-tab-item>
-		  <wrong-questions-collection />
-		</v-tab-item>
+        <v-tab-item>
+          <wrong-questions-collection />
+        </v-tab-item>
       </v-tabs>
       <paper-solve
         v-if="practicing && !view_practice_record"
@@ -86,7 +86,7 @@ export default {
     "test-paper-record-list": TestPaperRecordList,
     "vue-element-loading": VueElementLoading,
     "paper-marking": PaperMarking,
-	"wrong-questions-collection": WrongQuestionsCollection
+    "wrong-questions-collection": WrongQuestionsCollection
   },
   methods: {
     start_practice(paper) {
@@ -112,7 +112,7 @@ export default {
             ans: result.sections[sec_i].questions[qes_i].ans
           };
           let response = await axios.post("/api/question_records/", parsed_ans, {
-            headers: header
+              headers: header
           });
           let parsed_record = response.data;
           parsed_record.ans = result.sections[sec_i].questions[qes_i].ans;
