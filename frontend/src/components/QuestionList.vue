@@ -376,6 +376,7 @@ export default {
     },
     done_select() {
       this.$emit("done-select", this.selected_questions);
+      this.selected_questions = [];
       //this.is_selecting = false;
     }
   }

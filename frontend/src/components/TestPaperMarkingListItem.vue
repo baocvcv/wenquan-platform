@@ -1,5 +1,5 @@
 <template>
-  <v-list-group v-if="!!paper_name">
+  <v-list-group v-show="!!paper_name">
     <template v-slot:activator>
       <v-list-item-title
         >{{ paper_name }} | Total records:
