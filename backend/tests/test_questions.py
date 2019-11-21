@@ -12,7 +12,7 @@ from backend.models.knowledge_node import KnowledgeNode
 from backend.serializers.question_bank_serializer import QuestionBankSerializer
 
 
-class QuestionListViewTest(APITestCase):
+class QuestionTest(APITestCase):
     """ test for question views """
     bank = QuestionBank()
     bank_data = {
@@ -128,7 +128,6 @@ class QuestionListViewTest(APITestCase):
         new_q.checker("")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question1')
-        self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.以上选项均正确"])
 
         response2 = self.get_response(new_q.id)
@@ -149,7 +148,6 @@ class QuestionListViewTest(APITestCase):
         new_q.checker([""])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question2')
-        self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_choice, ["A.复读机", "B.鸽子", "C.真香", "D.草履虫"])
 
         response2 = self.get_response(new_q.id)
@@ -165,7 +163,6 @@ class QuestionListViewTest(APITestCase):
         new_q.checker(not data[0]['question_ans'])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question3')
-        self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_ans, True)
 
         response2 = self.get_response(new_q.id)
@@ -181,7 +178,6 @@ class QuestionListViewTest(APITestCase):
         new_q.checker(["a"])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question4')
-        self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_content, ["人类的本质是", "和", "还有", ""])
 
         response2 = self.get_response(new_q.id)
@@ -195,7 +191,6 @@ class QuestionListViewTest(APITestCase):
         new_q = Question.objects.all()[0]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(new_q.question_name, 'question5')
-        self.assertEqual(Question.objects.count(), 1)
         self.assertEqual(new_q.question_ans, "复读机")
 
         response2 = self.get_response(new_q.id)
@@ -213,3 +208,56 @@ class QuestionListViewTest(APITestCase):
             "invitation_code_count": 100,
         }
         self.client.post(bank_post)
+
+    def create_paper(self):
+        mult = self.create_question(self.multi_example)
+        fill = self.create_question(self.fill_blank_example)
+        torf = self.create_question(self.t_or_f_example)
+        paper_data = {
+            "title": "test paper",
+            "total_point": 100,
+            "tips": "",
+            "status": "public",
+            "sections": [{
+                "title": "select",
+                "total_point": 50,
+                "section_num": 1,
+                "questions": [{
+                    "id": mult['id'],
+                    "question_point": 25,
+                    "point_every_blank": [],
+                    "question_num": 1
+                }, {
+                    "id": fill['id'],
+                    "question_point": 25,
+                    "point_every_blank": [],
+                    "question_num": 2
+                }]
+            }, {
+                "title": "unnamed sections",
+                "total_point": 50,
+                "questions": [
+                    {
+                        "id": torf['id'],
+                        "question_point": 25,
+                        "point_every_blank": [],
+                        "question_num": 1
+                    },
+                ]
+            }]
+        }
+        url = reverse("papers_list")
+        response = self.client.post(url, paper_data, format='json')
+        self.client.get(url)
+
+        paper_id = response['id']
+        url = reverse("paper_detail", args=[paper_id])
+        self.client.get(url)
+
+        paper_data['status'] = "drafted"
+        self.client.put(url, paper_data, format='json')
+
+        change_state = {"change_state": "error"}
+        self.client.put(url, change_state, format='json')
+        change_state = {"change_state": "drafted"}
+        self.client.put(url, change_state, format='json')
