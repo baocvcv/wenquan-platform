@@ -85,7 +85,7 @@ class KnowledgeNodeList(APIView):
 
     def put(self, request, root_id):
         """Edit tree of node"""
-        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+        if request.user.user_group == 'Student':
             return Response(status=status.HTTP_403_FORBIDDEN)
         put_data = JSONParser().parse(request)
         modify = put_data['modify']
@@ -130,7 +130,7 @@ class KnowledgeNodeDetail(APIView):
 
     def put(self, request, root_id):
         """Modify infomation"""
-        if request.user.user_group != 'Admin' or request.user.user_group != 'SuperAmdin':
+        if request.user.user_group == 'Student':
             return Response(status=status.HTTP_403_FORBIDDEN)
         put_datas = JSONParser().parse(request)
         response = []
