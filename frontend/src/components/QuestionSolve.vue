@@ -64,6 +64,9 @@
       </v-list-item>
       <slot name="correct" :question_data="question_data"></slot>
     </template>
+    <template v-slot:standard-answer="{ question_data }">
+      <slot name="standard-answer" :question_data="question_data"></slot>
+    </template>
     <template v-slot:score="{ question_data }">
       <slot name="score" :question_data="question_data"></slot>
     </template>

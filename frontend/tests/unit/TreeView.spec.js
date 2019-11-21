@@ -4,12 +4,14 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
+import Notification from "vue-notification";
 import { wrap } from "module";
 
 const localVue = createLocalVue();
 Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Notification);
 
 describe("TreeView.vue", () => {
   let vuetify, router, store;

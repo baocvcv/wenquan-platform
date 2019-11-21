@@ -132,7 +132,7 @@ export default {
       };
       axios
         .get("/api/question_banks/" + this.bank_id + "/", { headers: headers })
-        .then(response => {
+        .then(async response => {
           let all_question = response.data.questions;
 
           if (all_question.length < this.question_number) {
@@ -161,8 +161,13 @@ export default {
           for (var i = 0; i < this.question_number; i++) {
             let rand = Math.floor(Math.random() * all_question.length);
             selected_question_id.push(all_question[rand]);
+            let tmp_data = await axios.get(
+              "/api/questions/" + all_question[rand] + "/",
+              { headers: headers }
+            );
             this.practice_paper.sections[0].questions.push({
               id: all_question[rand],
+              content: tmp_data.data,
               question_point: 1,
               question_num: i + 1
             });

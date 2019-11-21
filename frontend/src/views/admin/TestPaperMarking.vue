@@ -1,5 +1,5 @@
 <template>
-  <test-view v-if="paper_id != -1" :id="paper_id">
+  <test-view v-if="paper_id != -1" :id="paper_id" view>
     <template v-slot:comment="{ paper_data }">
       <paper-marking
         :paper_record_id="$route.params.id"

@@ -54,6 +54,16 @@
         }}</span>
       </v-tooltip>
     </template>
+    <template v-slot:standard-answer="{ question_data }">
+      <v-list-item>
+        <v-text-field
+          label="Standard Answer"
+          v-model="question_data.question_ans"
+          readonly
+          outlined
+        ></v-text-field>
+      </v-list-item>
+    </template>
     <template v-slot:score="{ question_data }">
       <v-list-item>
         <v-form v-model="score_form">
@@ -142,10 +152,6 @@ export default {
             correct_bool.length != 0
               ? correct_bool
               : [response.data.is_correct];
-          console.log("question correct record got");
-          console.log(response);
-          console.log(this.answer);
-          console.log(this.correct_or_not);
         })
         .catch(error => {
           console.log("question correct");

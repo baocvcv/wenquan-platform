@@ -60,6 +60,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    record: {
+      type: Object,
+      default: null
     }
   },
   data: function() {
@@ -77,6 +81,10 @@ export default {
       console.log(question);
       //console.log(this.paper_record);
       var questionRecordId = this.paper_record.questions[question.id].id;
+      let default_point = [];
+      if (!question.point_every_blank)
+        for (var ii = 0; ii < question.content.question_blank_num; ii++)
+          default_point.push(1);
       var result = {
         paper_record_id: this.paper_record_id,
         question_record_id: questionRecordId,
@@ -85,6 +93,8 @@ export default {
         question_id: question.id,
         question_point: question.question_point,
         point_every_blank: question.point_every_blank
+          ? question.point_every_blank
+          : default_point
       };
       var blank_num = question.content.question_blank_num;
       if (
@@ -136,6 +146,8 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    } else if (this.record) {
+      this.paper_record = this.record;
     }
   },
   components: {

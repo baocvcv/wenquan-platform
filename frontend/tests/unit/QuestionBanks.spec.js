@@ -4,11 +4,13 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import Vuex from "vuex";
 import "./mock/QuestionBanksMock.js";
+import Notification from "vue-notification";
 import VueProgressBar from "vue-progressbar";
 const localVue = createLocalVue();
 Vue.use(Vuetify);
 Vue.use(Vuex);
 Vue.use(VueProgressBar, {});
+Vue.use(Notification);
 
 describe("QuestionBanks", () => {
   let vuetify;

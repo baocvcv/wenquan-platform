@@ -78,7 +78,7 @@
             <v-card-actions v-show="edit_mode">
               <div class="flex-grow-1"></div>
               <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save" :disabled="edited"
+              <v-btn color="blue darken-1" text @click="save" :disabled="!edited"
                 >Save</v-btn
               >
             </v-card-actions>
@@ -256,9 +256,16 @@ export default {
           this.question_bank_image = JSON.parse(
             JSON.stringify(this.edited_question_bank_image)
           );
+          this.$notify({
+            type: "success",
+            title: "Your change has been saved."
+          });
         })
         .catch(error => {
-          console.log(error);
+          this.$notify({
+            type: "error",
+            title: "Failed to save the change."
+          });
         });
     },
     edit_button_clicked() {
@@ -293,23 +300,35 @@ export default {
         this.loading = false;
       })
       .catch(error => {
-        console.log(error);
-      });
-    if (this.editable) {
-      const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
-      axios
-        .post("/api/auth_code/", { question_bank_id: id }, { headers: headers })
-        .then(response => {
-          this.codes = response.data.auth_code;
-          this.invitation_code_count = response.data.total_num;
-          this.available_code_count = response.data.valid_num;
-        })
-        .catch(error => {
-          console.log(error);
+        this.$notify({
+          type: "error",
+          title: "Failed to load the question bank."
         });
-    }
+      });
+    axios
+      .post("/api/auth_code/", { question_bank_id: id }, { headers: headers })
+      .then(response => {
+        this.codes = response.data.auth_code;
+        this.invitation_code_count = response.data.total_num;
+        this.available_code_count = response.data.valid_num;
+      })
+      .catch(error => {
+        if (error.response) {
+          let status = error.response.status;
+          if (status === 403) {
+            this.$notify({
+              type: "error",
+              title: "You have no access to this question bank."
+            });
+            this.$router.push("/");
+          }
+        } else {
+          this.$notify({
+            type: "error",
+            title: "Failed to load the auth code."
+          });
+        }
+      });
   }
 };
 </script>

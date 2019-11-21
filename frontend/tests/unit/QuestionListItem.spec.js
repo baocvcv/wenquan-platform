@@ -4,6 +4,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
+import Notification from "vue-notification";
 import RouterRule from "@/router";
 import QuestionFactory from "./utils/QuestionFactory.js";
 
@@ -11,6 +12,7 @@ const localVue = createLocalVue();
 Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Notification);
 
 const resizeWindow = (x, y) => {
   window.innerWidth = x;
