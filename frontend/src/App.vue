@@ -7,20 +7,18 @@
       </v-container>
     </v-content>
     <notifications
-                   :duration="5000"
-                   :width="500"
-                   animation-name="v-fade-left"
-                   position="top left"
-                   >
-
-       <template slot="body" slot-scope="props">
+      :duration="5000"
+      :width="500"
+      animation-name="v-fade-left"
+      position="top left"
+    >
+      <template slot="body" slot-scope="props">
         <div :class="get_class(props)" @click="props.close">
           <div class="custom-template-content">
             <div class="custom-template-title">
-              {{props.item.title}}
+              {{ props.item.title }}
             </div>
-            <div class="custom-template-text"
-                 v-html="props.item.text"></div>
+            <div class="custom-template-text" v-html="props.item.text"></div>
           </div>
         </div>
       </template>
@@ -43,7 +41,7 @@ export default {
     get_class(props) {
       let style = "custom-template";
       if (props.item.type) {
-        if (props.item.type === 'error') {
+        if (props.item.type === "error") {
           style += " fail";
         } else if (props.item.type === "success") {
           style += " succeed";
@@ -78,14 +76,15 @@ export default {
   margin-bottom: 0;
   align-items: center;
   justify-content: center;
-  &, & > div {
+  &,
+  & > div {
     box-sizing: border-box;
   }
   background: rgb(157, 206, 252);
   border: 2px solid rgb(75, 151, 226);
   .custom-template-icon {
     flex: 0 1 auto;
-    color: #15C371;
+    color: #15c371;
     font-size: 32px;
     padding: 0 10px;
   }
@@ -111,17 +110,17 @@ export default {
   }
 }
 .custom-template.warning {
-    background: #ffb648;
+  background: #ffb648;
   border: 2px solid #f48a06 !important;
 }
 
 .custom-template.fail {
-    background: rgb(231, 140, 134);
+  background: rgb(231, 140, 134);
   border: 2px solid rgb(192, 99, 92) !important;
 }
 
 .custom-template.succeed {
-    background: rgb(138, 202, 157);
+  background: rgb(138, 202, 157);
   border: 2px solid rgb(89, 175, 113) !important;
 }
 

@@ -14,10 +14,10 @@
           <v-icon left>mdi-pen</v-icon>
           Records
         </v-tab>
-		<v-tab>
-		  <v-icon left>mdi-notebook-outline</v-icon>
-		  Mistakes
-		</v-tab>
+        <v-tab>
+          <v-icon left>mdi-notebook-outline</v-icon>
+          Mistakes
+        </v-tab>
         <v-tab-item>
           <practice v-on:practicing="start_practice" />
         </v-tab-item>
@@ -38,9 +38,9 @@
             "
           ></test-paper-record-list>
         </v-tab-item>
-		<v-tab-item>
-		  <wrong-questions-collection />
-		</v-tab-item>
+        <v-tab-item>
+          <wrong-questions-collection />
+        </v-tab-item>
       </v-tabs>
       <paper-solve
         v-if="practicing && !view_practice_record"
@@ -86,7 +86,7 @@ export default {
     "test-paper-record-list": TestPaperRecordList,
     "vue-element-loading": VueElementLoading,
     "paper-marking": PaperMarking,
-	"wrong-questions-collection": WrongQuestionsCollection
+    "wrong-questions-collection": WrongQuestionsCollection
   },
   methods: {
     start_practice(paper) {
@@ -111,9 +111,13 @@ export default {
             question_id: result.sections[sec_i].questions[qes_i].id,
             ans: result.sections[sec_i].questions[qes_i].ans
           };
-          let response = await axios.post("/api/question_records/", parsed_ans, {
-            headers: header
-          });
+          let response = await axios.post(
+            "/api/question_records/",
+            parsed_ans,
+            {
+              headers: header
+            }
+          );
           let parsed_record = response.data;
           parsed_record.ans = result.sections[sec_i].questions[qes_i].ans;
           record.questions[

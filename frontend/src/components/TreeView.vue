@@ -152,7 +152,7 @@ export default {
           this.$notify({
             type: "error",
             title: "Failed to get knowledge nodes."
-          })
+          });
         });
     },
     updateData(data) {
@@ -199,14 +199,14 @@ export default {
             type: "success",
             title: "Success",
             text: "Your change is saved."
-          })
+          });
         })
         .catch(err => {
           this.$notify({
             type: "error",
             title: "Failed",
             text: "Failed to save your change on knowledge nodes."
-          })
+          });
         });
 
       this.edit = false;
