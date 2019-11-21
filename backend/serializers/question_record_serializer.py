@@ -2,6 +2,7 @@
 from rest_framework import serializers
 
 from backend.models import QuestionRecord
+from backend.models improt Question
 
 class QuestionRecordSerializer(serializers.ModelSerializer):
     "Serializer for QuestionRecord"
@@ -14,6 +15,14 @@ class QuestionRecordSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", read_only=True)
     correct_or_not = serializers.ListField(read_only=True)
     comment = serializers.CharField(read_only=True)
+
+    def to_representation(self, instance):
+        """Add points"""
+        ret = super().to_representation(instance)
+        q = Question.objects.get(pk=ret['question_id'])
+        if q.question_type == 4:
+            ret['question_blank_num'] = q.question_blank_num
+        return ret
 
     class Meta:
         "Meta"
