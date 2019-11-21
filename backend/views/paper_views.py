@@ -141,8 +141,8 @@ class PaperDetail(APIView):
         put_data = JSONParser().parse(request)
         if "change_status" in put_data:
             new_status = put_data["change_status"]
-            if not new_status == "public" and not new_status == "drafted":
-                return Response("Error: status should be \"public\" or \"drafted\"")
+            if not new_status == "published" and not new_status == "drafted":
+                return Response("Error: status should be \"published\" or \"drafted\"")
             paper.status = new_status
             paper.change_time = timezone.now()
             paper.save()
