@@ -13,12 +13,20 @@
       position="top left"
     >
       <template slot="body" slot-scope="props">
-        <div :class="get_class(props)" @click="props.close">
-          <div class="custom-template-content">
-            <div class="custom-template-title">
-              {{ props.item.title }}
-            </div>
-            <div class="custom-template-text" v-html="props.item.text"></div>
+        <div
+          :class="get_class(props)"
+          @click="props.close"
+        >
+          <div
+            v-if="props.item.title"
+            class="notification-title"
+            v-html="props.item.title"
+          >
+          </div>
+          <div
+            class="notification-content"
+            v-html="props.item.text"
+          >
           </div>
         </div>
       </template>
@@ -39,7 +47,7 @@ export default {
   }),
   methods: {
     get_class(props) {
-      let style = "custom-template";
+      let style = "vue-notification-template vue-notification";
       if (props.item.type) {
         if (props.item.type === "error") {
           style += " fail";
@@ -65,63 +73,32 @@ export default {
 /*
   EXAMPLES
 */
-.custom-template {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+.vue-notification {
+  display: block;
+  box-sizing: border-box;  
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
+  padding: 10px;
+  margin: 0 5px 5px;
+
   color: white;
-  margin: 5px;
-  margin-bottom: 0;
-  align-items: center;
-  justify-content: center;
-  &,
-  & > div {
-    box-sizing: border-box;
-  }
-  background: rgb(157, 206, 252);
-  border: 2px solid rgb(75, 151, 226);
-  .custom-template-icon {
-    flex: 0 1 auto;
-    color: #15c371;
-    font-size: 32px;
-    padding: 0 10px;
-  }
-  .custom-template-close {
-    flex: 0 1 auto;
-    padding: 0 20px;
-    font-size: 16px;
-    opacity: 0.2;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-  .custom-template-content {
-    padding: 10px;
-    flex: 1 0 auto;
-    .custom-template-title {
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      font-size: 10px;
-      font-weight: 600;
-    }
-  }
+  background: #44A4FC;
+  border-left: 5px solid #187FE7;
 }
-.custom-template.warning {
+
+.vue-notification.warning {
   background: #ffb648;
-  border: 2px solid #f48a06 !important;
+  border-left-color: #f48a06;
 }
 
-.custom-template.fail {
-  background: rgb(231, 140, 134);
-  border: 2px solid rgb(192, 99, 92) !important;
+.vue-notification.fail {
+  background: #E54D42;
+  border-left-color: #B82E24;
 }
 
-.custom-template.succeed {
-  background: rgb(138, 202, 157);
-  border: 2px solid rgb(89, 175, 113) !important;
+.vue-notification.succeed {
+  background: #68CD86;
+  border-left-color: #42A85F;
 }
 
 .v-fade-left-enter-active,

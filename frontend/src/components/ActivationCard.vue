@@ -50,12 +50,11 @@ export default {
         headers: headers
       })
         .then(response => {
-          let msg =
-            "The bank has been activated. You can now find it in 'MYBANK'.";
-          this.$emit("activated", {
-            status: true,
-            msg: msg
-          });
+          this.$notify({
+            type: "success",
+            title: "Success",
+            text: "The bank is added to your account. You can now find it in 'MYBANK'. If you can not find it, please refresh the webpage."
+          })
           axios
             .get("/api/accounts/users/" + this.$store.state.user.id + "/", {
               headers: headers
@@ -65,17 +64,22 @@ export default {
                 key: "question_banks",
                 value: response.data.question_banks
               });
+              this.$emit("activated", true);
             });
         })
         .catch(error => {
           if (error.response && error.response.status === 400) {
-            let msg = "The code has expired or been used or is invalid.";
-            this.$emit("activated", {
-              status: false,
-              msg: msg
-            });
+            this.$notify({
+              type: "error",
+              title: "Failed to activate",
+              text: "The code may have been expired; The code may be invalid"
+            })
+            this.$emit("activated", false);
           } else {
-            console.log(error);
+            this.$notify({
+              type: "error",
+              title: "Failed to activate the bank"
+            })
           }
         });
     },

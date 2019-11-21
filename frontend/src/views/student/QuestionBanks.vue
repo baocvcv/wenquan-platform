@@ -29,7 +29,7 @@
               :flat="true"
               :mybank="true"
               :admin="false"
-              :bankIDs="$store.state.user.question_banks"
+              :bankIDs="question_banks"
               :title="'MyBank'"
               ref="my-bank"
             ></question-banks-list>
@@ -50,8 +50,16 @@ export default {
   },
   methods: {
     forceUpdate() {
-      this.$refs["my-bank"].$forceUpdate();
+      this.question_banks = this.$store.state.user.question_banks;
     }
+  },
+  data: function() {
+    return {
+      question_banks: null
+    }
+  },
+  created() {
+    this.question_banks = this.$store.state.user.question_banks;
   }
 };
 </script>

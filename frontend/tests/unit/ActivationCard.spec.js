@@ -4,11 +4,13 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
+import Notification from "vue-notification";
 import RouterRule from "@/router";
 import "./mock/ActivationCard.js";
 
 const localVue = createLocalVue();
 Vue.use(Vuetify);
+Vue.use(Notification);
 Vue.use(Router);
 
 describe("ActivationCard.vue", () => {
