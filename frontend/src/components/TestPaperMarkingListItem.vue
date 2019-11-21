@@ -118,7 +118,10 @@ export default {
             else this.paper_records.push(all_records[i]);
           }
         }
-        if (all_records.length != 0) {
+        if (
+          (this.readonly && this.paper_records.length != 0) ||
+          (!this.readonly && all_records.length != 0)
+        ) {
           this.paper_name = all_records[0].paper_name;
           if (!this.latest && !!this.paper_name)
             this.paper_name += "(Old Version)";
@@ -176,6 +179,9 @@ export default {
         title: "Succeeded!",
         type: "success"
       });
+    },
+    show() {
+      return !!this.paper_name;
     }
   }
 };
