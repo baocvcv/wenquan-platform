@@ -4,8 +4,9 @@ import WenQuan_Platform.settings as app_settings
 from django.conf import settings
 from django.utils import timezone
 
-settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
-django.setup()
+if __name__ == '__main__':
+    settings.configure(INSTALLED_APPS=app_settings.INSTALLED_APPS, DATABASES=app_settings.DATABASES)
+    django.setup()
 
 from backend.models import UserPermissions
 from backend.models import User
