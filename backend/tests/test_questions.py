@@ -239,9 +239,12 @@ class QuestionTest(APITestCase):
         self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
 
         url = reverse("banks_detail", args=[self.bank.id])
-        self.client.get(url)
+        response = self.client.get(url)
+        self.assertEqual(response.data['id'], self.bank.id)
+        self.client.put(url, response.data, format='json')
 
         url = reverse("banks_list")
+        self.client.get(url)
         bank_post = {
             "name": "bank1",
             "picture": "www.a.com",
