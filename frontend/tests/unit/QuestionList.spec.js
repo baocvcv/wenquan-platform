@@ -2,7 +2,7 @@ import { mount, createLocalVue } from "@vue/test-utils";
 import QuestionList from "@/components/QuestionList.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import Vuex from "Vuex";
+import Vuex from "vuex";
 import VueProgressBar from "vue-progressbar";
 import Router from "vue-router";
 import RouterRule from "@/router";

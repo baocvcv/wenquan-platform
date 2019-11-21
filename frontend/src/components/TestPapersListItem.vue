@@ -21,10 +21,7 @@
               >{{ change_paper_status_btn_text }}</v-btn
             >
           </template>
-          <span
-            >Change status of this test paper to
-            {{ change_paper_status_btn_text }}</span
-          >
+          <span>Change status of this test paper to {{ opposite_status }}</span>
         </v-tooltip>
         <v-spacer></v-spacer>
         <v-tooltip bottom>
@@ -155,11 +152,11 @@ export default {
           { headers: headers }
         )
         .then(() => {
-          this.test_paper["status"] = this.opposite_status;
           this.$notify({
             text: "Change test paper state to " + this.opposite_status,
             type: "success"
           });
+          this.test_paper["status"] = this.opposite_status;
         })
         .catch(error => {
           this.$notify({
