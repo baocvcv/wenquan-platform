@@ -197,6 +197,7 @@ class QuestionTest(APITestCase):
         self.assertEqual(response.data, response2.data)
 
     def test_question_bank(self):
+        """Test related to QuestionBank"""
         url = reverse("banks_detail", args=[self.bank.id])
         self.client.get(url)
         url = reverse("banks_list")
@@ -209,7 +210,8 @@ class QuestionTest(APITestCase):
         }
         self.client.post(bank_post)
 
-    def create_paper(self):
+    def paper_test(self):
+        "Test related to Paper"
         mult = self.create_question(self.multi_example)
         fill = self.create_question(self.fill_blank_example)
         torf = self.create_question(self.t_or_f_example)
