@@ -2,6 +2,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 
 from backend.scripts.email_verification import create_email_verification_record
 from backend.scripts.email_verification import use_token
@@ -11,6 +12,8 @@ from backend.models import User
 
 class ChangePasswordView(APIView):
     """ Handle password change """
+    permission_classes = [permissions.AllowAny]
+
     @staticmethod
     def post(request):
         """ send verification email """
@@ -20,7 +23,7 @@ class ChangePasswordView(APIView):
 
     @staticmethod
     def put(request):
-        """ change pasword """
+        """ change password """
         data = request.data
         if 'token' in data:
             token = data['token']

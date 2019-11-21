@@ -31,15 +31,14 @@ describe("Test.vue", () => {
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
-    await setTimeout(() => {},500);
+    await setTimeout(() => {}, 500);
     wrapper.vm.submit({});
-    await setTimeout(() => {},500);
+    await setTimeout(() => {}, 500);
     wrapper.vm.submit({});
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
-
 });

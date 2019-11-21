@@ -17,7 +17,9 @@
                 <v-list-item-subtitle
                   v-if="!readonly"
                   :style="
-                    !!edited_question.question_ans ? 'color: green;' : 'color: red;'
+                    !!edited_question.question_ans
+                      ? 'color: green;'
+                      : 'color: red;'
                   "
                 >
                   {{
@@ -55,7 +57,9 @@
                       v-on="on"
                       ><v-icon
                         :color="
-                          edited_question.question_ans == choice ? 'green' : 'red'
+                          edited_question.question_ans == choice
+                            ? 'green'
+                            : 'red'
                         "
                         dark
                         >{{
@@ -143,7 +147,11 @@
           color="primary"
           outlined
           @click="submit()"
-          :disabled="!valid || !edited_question.question_ans || this.edited_question.question_content.length == 0"
+          :disabled="
+            !valid ||
+              !edited_question.question_ans ||
+              this.edited_question.question_content.length == 0
+          "
           v-if="!readonly"
         >
           {{ creation ? "Create" : "Save" }}
@@ -196,8 +204,7 @@ export default {
   created() {
     this.question = JSON.stringify(this.parse());
     let i;
-    for (i = 0; i < 4; i++)
-    {
+    for (i = 0; i < 4; i++) {
       this.choice_num_up();
     }
   },

@@ -51,10 +51,15 @@ export default {
         num: Number(this.number),
         length: Number(this.length)
       };
-      axios.post("/api/auth_code/", post).then(response => {
-        this.$refs["form"].reset();
-        this.$emit("add-auth-code", response.data);
-      });
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      axios
+        .post("/api/auth_code/", post, { headers: headers })
+        .then(response => {
+          this.$refs["form"].reset();
+          this.$emit("add-auth-code", response.data);
+        });
     }
   }
 };

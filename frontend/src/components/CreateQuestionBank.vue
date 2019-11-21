@@ -97,15 +97,22 @@ export default {
   methods: {
     create() {
       let that = this;
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .post("/api/question_banks/", {
-          id: -1,
-          name: this.name,
-          picture: this.image.length == 0 ? "" : this.image[0],
-          brief: this.brief,
-          authority: this.authority,
-          invitation_code_count: this.invitation_code_count
-        })
+        .post(
+          "/api/question_banks/",
+          {
+            id: -1,
+            name: this.name,
+            picture: this.image.length == 0 ? "" : this.image[0],
+            brief: this.brief,
+            authority: this.authority,
+            invitation_code_count: this.invitation_code_count
+          },
+          { headers: headers }
+        )
         .then(response => {
           alert("Success!");
           that.$router.push("questionbanks/" + response.data.id);

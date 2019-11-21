@@ -25,8 +25,7 @@ nock(/.*/)
   });
 nock(/.*/)
   .get(/\/api\/questions\/.*/, () => true)
-  .reply(200, {
-  });
+  .reply(200, {});
 nock(/.*/)
   .post("/api/paper_records/", () => true)
   .reply(200, {
@@ -55,4 +54,3 @@ nock(/.*/)
       }
     ]
   });
-

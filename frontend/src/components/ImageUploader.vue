@@ -145,8 +145,11 @@ export default {
         if (/^data:image.*?base64/.test(this.result)) {
           let formData = new FormData();
           formData.append("imagefile", file);
+          const headers = {
+            Authorization: "Token " + this.$store.state.user.token
+          };
           var url = await axios
-            .post("/api/upload/image/", formData)
+            .post("/api/upload/image/", formData, { headers: headers })
             .catch(error => {
               alert(error);
               that.loading = false;

@@ -3,8 +3,7 @@
     <v-list>
       <slot name="content" :question_data="question_data">
         <v-container class="pt-0 pb-0">
-          <rich-text-editor readonly v-model="content">
-          </rich-text-editor>
+          <rich-text-editor readonly v-model="content"> </rich-text-editor>
         </v-container>
       </slot>
       <slot name="answer" :question_data="question_data"></slot>
@@ -40,9 +39,12 @@ export default {
     };
   },
   created() {
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
     if (this.id)
       axios
-        .get("/api/questions/" + this.id + "/")
+        .get("/api/questions/" + this.id + "/", { headers: headers })
         .then(response => {
           this.question_data = response.data;
           this.parse();

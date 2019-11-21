@@ -25,7 +25,8 @@ describe("QuestionFillInBlank.vue", () => {
       vuetify,
       sync: false
     });
-    wrapper.vm.edited_data.content = "a_______b________c_______________    _______alsjv";
+    wrapper.vm.edited_data.content =
+      "a_______b________c_______________    _______alsjv";
     expect(wrapper.vm.blankNum).toBe(4);
   });
   it("Too long answers split rightly", () => {
