@@ -2,7 +2,7 @@
   <v-list-group v-show="!!paper_name">
     <template v-slot:activator>
       <v-list-item-title
-        >{{ paper_name }} | Total records:
+        >{{ paper_name }}<span v-show="!latest" style="color: warning">(Old Version)</span> | Total records:
         {{ paper_records.length }}</v-list-item-title
       >
       <v-list-item-action>
@@ -123,8 +123,6 @@ export default {
           (!this.readonly && all_records.length != 0)
         ) {
           this.paper_name = all_records[0].paper_name;
-          if (!this.latest && !!this.paper_name)
-            this.paper_name += "(Old Version)";
         }
       })
       .catch(error => {

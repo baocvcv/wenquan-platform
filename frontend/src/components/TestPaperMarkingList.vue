@@ -18,9 +18,9 @@
           class="caption grey--text text-right mt-0 mb-0 pr-1"
           transition="fade-transition"
         >
-          {{ process }}
+          {{ process == "Done" ? "Total count: " + count : process }}
         </p>
-        <v-list>
+        <v-list ref="items">
           <test-paper-marking-list-item
             v-for="(paper, key) in papers"
             :key="key"
@@ -53,8 +53,17 @@ export default {
       process: "loading",
       papers: [],
       loading: false,
-      latest: true
+      latest: true,
     };
+  },
+  computed: {
+	count() {
+	  let cnt = 0;
+	  for (var i = 0; i < this.$refs.items.length; i++) {
+		if (this.$refs.items[i].show()) cnt++;
+	  }
+	  return cnt;
+	}
   },
   created() {
     this.loading = true;
@@ -66,7 +75,7 @@ export default {
       })
       .then(response => {
         this.papers = response.data;
-        this.process = "Total count: " + this.papers.length;
+        this.process = "Done";
       })
       .catch(error => {
         this.process = "Oops!" + error;
@@ -74,7 +83,7 @@ export default {
       .then(() => {
         this.loading = false;
       });
-  }
+  },
 };
 </script>
 
