@@ -42,7 +42,7 @@ class UserList(APIView):
             user = serializer.save()
             if user:
                 if not request.user.is_anonymous:
-                    if request.user.is_staff or request.user.is_superuser:
+                    if request.user.user_group != 'Student':
                         user.is_active = True
                         user.save()
                         json = UserSerializer(user).data
