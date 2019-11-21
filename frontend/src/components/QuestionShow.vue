@@ -7,7 +7,7 @@
         </v-container>
       </slot>
       <slot name="answer" :question_data="question_data"></slot>
-	  <slot name="standard-answer" :question_data="question_data"></slot>
+      <slot name="standard-answer" :question_data="question_data"></slot>
       <slot name="score" :question_data="question_data"></slot>
       <slot name="comment" :question_data="question_data"></slot>
       <slot name="others" :question_data="question_data"></slot>
