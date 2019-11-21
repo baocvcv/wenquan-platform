@@ -49,20 +49,6 @@
         </v-flex>
       </v-layout>
     </v-card>
-
-    <v-dialog v-model="show_dialog" max-width="300" data-app>
-      <v-card>
-        <v-toolbar color="indigo" dark>
-          <v-toolbar-title>{{ sign_in_result }}</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text align="left">{{ sign_in_response }}</v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn @click="show_dialog = false" text>Close</v-btn>
-          <div class="flex-grow-1"></div>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -76,10 +62,7 @@ export default {
     return {
       username: "",
       password: "",
-      show_password: false,
-      show_dialog: false,
-      sign_in_result: "",
-      sign_in_response: ""
+      show_password: false
     };
   },
   methods: {
@@ -98,10 +81,11 @@ export default {
             //Sign in successfully
 
             if (response.data.is_banned) {
-              this.sign_in_result = "Error";
-              this.sign_in_response =
-                "You are banned! Please contact your administrator.";
-              this.show_dialog = true;
+              this.$notify({
+                type: "error",
+                title: "Failed to sign in",
+                text: "You are banned! Please contact with the admin."
+              });
               return;
             }
 
@@ -114,23 +98,36 @@ export default {
 
             this.sign_in_result = "Success";
 
+            this.$notify({
+              type: "success",
+              title: "Succesffully sign in!"
+            });
+
             this.$router.push("/").catch(err => console.log(err));
           })
           .catch(error => {
             if (error.response) {
               const status = error.response.status;
               if (status === 400) {
-                this.sign_in_response =
-                  "Username or password incorrect. Please try again.";
+                this.$notify({
+                  type: "error",
+                  title: "Failed to sigin in",
+                  text: "Username or password incorrect. Please try again."
+                });
               } else if (status === 401) {
-                this.sign_in_response =
-                  "User has not been activated. Please check the email you use when signing in and click the link to activate your account.";
+                this.$notify({
+                  type: "error",
+                  title: "Failed to sign in",
+                  text:
+                    "User has not been activated. Please check the email you use when signing in and click the link to activate your account."
+                });
               }
             } else {
-              this.sign_in_response = "Network error";
+              this.$notify({
+                type: "error",
+                title: "Failed to sign in"
+              });
             }
-            this.sign_in_result = "Error";
-            this.show_dialog = true;
           })
           .then(() => {});
       }
