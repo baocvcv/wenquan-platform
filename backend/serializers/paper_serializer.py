@@ -50,7 +50,6 @@ class SectionSerializer(serializers.ModelSerializer):
             "title",
             "total_point",
             "section_num",
-            "point_every_blank",
         ]
 
     def create(self, validated_data):
