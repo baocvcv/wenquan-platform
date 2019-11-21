@@ -24,6 +24,10 @@
           </v-col>
         </v-row>
 
+        <v-row v-show="last_changing_time">
+          <p>Last Changed: {{ Date(last_changing_time) }}</p>
+        </v-row>
+
         <!--tree-view and the words shown in readonly mode-->
         <tree-view
           v-model="node_selection"
@@ -142,6 +146,7 @@ export default {
         .then(response_outer => {
           this.initData = response_outer.data;
           this.root_id = response_outer.data.root_id;
+          this.last_changing_time = response_outer.data.question_change_time;
           axios
             .get("/api/nodes_list/" + this.root_id + "/", { headers: headers })
             .then(response => {
@@ -220,6 +225,7 @@ export default {
               type: "success",
               title: "The new question is created."
             });
+            this.last_changing_time = response.data.question_change_time;
           })
           .catch(err => {
             this.$notify({
@@ -279,7 +285,8 @@ export default {
       edit_mode: false,
       initData: null,
       node_selection: [],
-      tree_data: null
+      tree_data: null,
+      last_changing_time: null
     };
   }
 };
