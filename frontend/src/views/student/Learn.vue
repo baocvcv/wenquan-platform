@@ -111,9 +111,13 @@ export default {
             question_id: result.sections[sec_i].questions[qes_i].id,
             ans: result.sections[sec_i].questions[qes_i].ans
           };
-          let response = await axios.post("/api/question_records/", parsed_ans, {
+          let response = await axios.post(
+            "/api/question_records/",
+            parsed_ans,
+            {
               headers: header
-          });
+            }
+          );
           let parsed_record = response.data;
           parsed_record.ans = result.sections[sec_i].questions[qes_i].ans;
           record.questions[

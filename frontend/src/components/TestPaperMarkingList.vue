@@ -1,34 +1,34 @@
 <template>
   <div class="test-paper-marking-list">
-  <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
-  <v-card>
-    <v-toolbar flat>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-text-field
-        flat
-        hide-details
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        clearable
-      ></v-text-field>
-    </v-toolbar>
-    <v-card-text class="pt-0">
-      <p
-        class="caption grey--text text-right mt-0 mb-0 pr-1"
-        transition="fade-transition"
-      >
-        {{ process }}
-      </p>
-      <v-list>
-        <test-paper-marking-list-item
-          v-for="(paper, key) in papers"
-          :key="key"
-          :id="paper.id"
-        />
-      </v-list>
-    </v-card-text>
-  </v-card>
+    <vue-element-loading :active="loading" is-full-screen></vue-element-loading>
+    <v-card>
+      <v-toolbar flat>
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-text-field
+          flat
+          hide-details
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          clearable
+        ></v-text-field>
+      </v-toolbar>
+      <v-card-text class="pt-0">
+        <p
+          class="caption grey--text text-right mt-0 mb-0 pr-1"
+          transition="fade-transition"
+        >
+          {{ process }}
+        </p>
+        <v-list>
+          <test-paper-marking-list-item
+            v-for="(paper, key) in papers"
+            :key="key"
+            :id="paper.id"
+          />
+        </v-list>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -46,17 +46,17 @@ export default {
   },
   components: {
     "test-paper-marking-list-item": TestPaperMarkingListItem,
-	"vue-element-loading": VueElementLoading
+    "vue-element-loading": VueElementLoading
   },
   data: function() {
     return {
       process: "loading",
       papers: [],
-	  loading: false
+      loading: false
     };
   },
   created() {
-	this.loading = true;
+    this.loading = true;
     axios
       .get("/api/papers/", {
         headers: {
@@ -70,9 +70,9 @@ export default {
       .catch(error => {
         this.process = "Oops!" + error;
       })
-	  .then(() => {
-	    this.loading = false;
-	  });
+      .then(() => {
+        this.loading = false;
+      });
   }
 };
 </script>

@@ -117,11 +117,15 @@ export default {
       let id = this.paper_records[index].id;
       let success = true;
       await axios
-        .put("/api/paper_records/" + id, { action: "finish" }, {
+        .put(
+          "/api/paper_records/" + id,
+          { action: "finish" },
+          {
             headers: {
               Authorization: "Token " + this.$store.state.user.token
             }
-        })
+          }
+        )
         .then(() => {
           if (single) {
             this.$notify({
