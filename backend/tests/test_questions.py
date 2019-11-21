@@ -237,8 +237,10 @@ class QuestionTest(APITestCase):
     def test_question_bank(self):
         """Test related to QuestionBank"""
         self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
+
         url = reverse("banks_detail", args=[self.bank.id])
         self.client.get(url)
+
         url = reverse("banks_list")
         bank_post = {
             "name": "bank1",
@@ -247,7 +249,8 @@ class QuestionTest(APITestCase):
             "authority": "public",
             "invitation_code_count": 100,
         }
-        self.client.post(bank_post)
+        response = self.client.post(url, bank_post, format='json')
+        self.assertEqual(response.data["name"], "bank1")
 
     def test_nodes(self):
         """Test related to KnowledgeNode"""
@@ -297,29 +300,39 @@ class QuestionTest(APITestCase):
         "Test related to Paper"
 
         self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
+        sing = self.create_question(self.single_example).data
         mult = self.create_question(self.multi_example).data
         fill = self.create_question(self.fill_blank_example).data
         torf = self.create_question(self.t_or_f_example).data
 
         paper_data = {
-            "title": "test paper",
-            "total_point": 100,
-            "tips": "",
-            "status": "public",
+            "title":
+            "test paper",
+            "total_point":
+            100,
+            "tips":
+            "",
+            "status":
+            "public",
             "sections": [{
                 "title": "select",
                 "total_point": 50,
                 "section_num": 1,
                 "questions": [{
-                    "id": mult['id'],
-                    "question_point": 25,
+                    "id": sing['id'],
+                    "question_point": 10,
                     "point_every_blank": [],
                     "question_num": 1
                 }, {
-                    "id": fill['id'],
-                    "question_point": 25,
+                    "id": mult['id'],
+                    "question_point": 15,
                     "point_every_blank": [],
                     "question_num": 2
+                }, {
+                    "id": fill['id'],
+                    "question_point": 25,
+                    "point_every_blank": [1],
+                    "question_num": 3
                 }]
             }, {
                 "title": "unnamed sections",
@@ -340,6 +353,18 @@ class QuestionTest(APITestCase):
         self.client.get(url)
         self.assertEqual(response.data['title'], paper_data['title'])
 
+        instance = Question.objects.get(id=sing['id'])
+        instance.checker(sing['question_ans'], 1)
+
+        instance = Question.objects.get(id=mult['id'])
+        instance.checker(mult['question_ans'], 1)
+
+        instance = Question.objects.get(id=fill['id'])
+        instance.checker(fill['question_ans'], 1)
+
+        instance = Question.objects.get(id=torf['id'])
+        instance.checker(torf['question_ans'], 2)
+
         paper_id = response.data['id']
         url = reverse("papers_detail", args=[paper_id])
         self.client.get(url)
@@ -349,5 +374,6 @@ class QuestionTest(APITestCase):
 
         change_state = {"change_status": "error"}
         self.client.put(url, change_state, format='json')
+
         change_state = {"change_status": "drafted"}
         self.client.put(url, change_state, format='json')
