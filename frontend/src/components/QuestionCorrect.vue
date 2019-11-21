@@ -54,6 +54,11 @@
         }}</span>
       </v-tooltip>
     </template>
+	<template v-slot:standard-answer="{ question_data }">
+	  <v-list-item>
+	    <v-text-field label="Standard Answer" v-model="question_data.question_ans" readonly outlined></v-text-field>
+	  </v-list-item>
+	</template>
     <template v-slot:score="{ question_data }">
       <v-list-item>
         <v-form v-model="score_form">
