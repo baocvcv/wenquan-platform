@@ -76,8 +76,6 @@ class PaperList(APIView):
         papers = Paper.objects.all()
         response = []
         for i in papers:
-            if not i.is_latest:
-                continue
             paper_data = self.create_response_from_paper(i)
             response.append(paper_data)
         return Response(response)
