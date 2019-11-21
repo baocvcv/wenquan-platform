@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-cols cols="12">
-        <img src="/media/pictures/xqab.com2019-11-21125550.2132690000.jpg">
+        <img src="/media/pictures/xqab.com2019-11-21125550.2132690000.jpg" width="100%">
       </v-cols>
     </v-row>
   </div>
