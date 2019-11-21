@@ -89,7 +89,7 @@
           </v-expand-transition>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4" md="4" v-if="editable">
+      <v-col cols="12" sm="4" md="4" v-if="editable && this.question_bank.authority != 'public'">
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title>
             Activation Code
@@ -172,7 +172,8 @@ export default {
   },
   data: () => ({
     question_bank: {
-      id: null
+      id: null,
+      authority: "public"
     },
     edited_question_bank: {},
     edit_mode: false,
@@ -286,6 +287,13 @@ export default {
   },
   created() {
     let id = this.$route.params.id;
+    if (this.$store.state.user.question_banks.indexOf(id) === -1) {
+      this.$notify({
+        type: "error",
+        title: "You have no access to this question bank."
+      });
+      this.$router.push("/");
+    }
     this.loading = true;
     this.editable = this.$route.fullPath.search("/admin/") == -1 ? false : true;
     const headers = {
@@ -310,30 +318,32 @@ export default {
           title: "Failed to load the question bank."
         });
       });
-    axios
-      .post("/api/auth_code/", { question_bank_id: id }, { headers: headers })
-      .then(response => {
-        this.codes = response.data.auth_code;
-        this.invitation_code_count = response.data.total_num;
-        this.available_code_count = response.data.valid_num;
-      })
-      .catch(error => {
-        if (error.response) {
-          let status = error.response.status;
-          if (status === 403) {
+    if (this.editable) {
+      axios
+        .post("/api/auth_code/", { question_bank_id: id }, { headers: headers })
+        .then(response => {
+          this.codes = response.data.auth_code;
+          this.invitation_code_count = response.data.total_num;
+          this.available_code_count = response.data.valid_num;
+        })
+        .catch(error => {
+          if (error.response) {
+            let status = error.response.status;
+            if (status === 403) {
+              this.$notify({
+                type: "error",
+                title: "You have no access to this question bank."
+              });
+              this.$router.push("/");
+            }
+          } else {
             this.$notify({
               type: "error",
-              title: "You have no access to this question bank."
+              title: "Failed to load the auth code."
             });
-            this.$router.push("/");
           }
-        } else {
-          this.$notify({
-            type: "error",
-            title: "Failed to load the auth code."
-          });
-        }
-      });
+        });
+    }
   }
 };
 </script>

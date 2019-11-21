@@ -40,7 +40,8 @@ describe("QuestionBank.vue", () => {
     const store = new Vuex.Store({
       state: {
         user: {
-          id: 123
+          id: 123,
+          question_banks: [500]
         }
       },
       mutations: {
@@ -68,7 +69,8 @@ describe("QuestionBank.vue", () => {
     const store = new Vuex.Store({
       state: {
         user: {
-          id: 123
+          id: 123,
+          question_banks: [200]
         }
       },
       mutations: {
@@ -140,7 +142,8 @@ describe("QuestionBank.vue", () => {
     const store = new Vuex.Store({
       state: {
         user: {
-          id: 123
+          id: 123,
+          question_banks: [200]
         }
       },
       mutations: {
@@ -194,7 +197,8 @@ describe("QuestionBank.vue", () => {
     const store = new Vuex.Store({
       state: {
         user: {
-          id: 123
+          id: 123,
+          question_banks: [200]
         }
       },
       mutations: {
