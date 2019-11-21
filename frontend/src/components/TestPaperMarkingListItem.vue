@@ -99,6 +99,7 @@ export default {
         let all_records = response.data;
         for (var i = 0; i < all_records.length; i++) {
           if (!all_records[i].is_active) {
+            if (this.readonly && all_records[i].need_judging) continue;
             if (all_records[i].need_judging)
               this.paper_records.unshift(all_records[i]);
             else this.paper_records.push(all_records[i]);
@@ -116,11 +117,15 @@ export default {
       let id = this.paper_records[index].id;
       let success = true;
       await axios
-        .put("/api/paper_records/" + id, { action: "finish" }, {
-			headers: {
-			  Authorization: "Token " + this.$store.state.user.token
-			}
-		})
+        .put(
+          "/api/paper_records/" + id,
+          { action: "finish" },
+          {
+            headers: {
+              Authorization: "Token " + this.$store.state.user.token
+            }
+          }
+        )
         .then(() => {
           if (single) {
             this.$notify({

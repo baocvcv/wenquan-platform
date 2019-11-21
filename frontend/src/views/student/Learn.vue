@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-tabs v-if="!practicing && !view_practice_record">
+      <v-tabs v-if="!practicing && !view_practice_record" show-arrows>
         <v-tab>
           <v-icon left>mdi-finance</v-icon>
           Practice
