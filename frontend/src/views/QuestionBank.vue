@@ -260,6 +260,7 @@ export default {
             type: "success",
             title: "Your change has been saved."
           });
+          this.edited_question_bank = response.data;
         })
         .catch(error => {
           this.$notify({
