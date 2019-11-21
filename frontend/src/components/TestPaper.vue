@@ -15,6 +15,9 @@
         >
       </v-card-title>
       <v-card-text>
+        <p v-show="!create">
+          Last Updated time: {{ edited_paper.change_time }}
+        </p>
         <v-form ref="input" v-model="valid">
           <v-text-field
             v-model="edited_paper.title"
@@ -255,7 +258,7 @@
             >Reset</v-btn
           >
           <v-btn
-            v-if="!readonly"
+            v-if="!readonly && !create"
             :disabled="!paper"
             class="mr-4"
             @click="cancel"
@@ -395,7 +398,9 @@ export default {
                 "Sum-up of points of sections: " +
                 sum +
                 " | Points assigned to this test paper: " +
-                this.edited_paper.total_point
+                (this.edited_paper.total_point
+                  ? this.edited_paper.total_point
+                  : 0)
             };
       return tip;
     },
@@ -422,7 +427,6 @@ export default {
         .then(response => {
           response.data.time_limit = response.data.time_limit / 60;
           that.edited_paper = response.data;
-          console.log(that.edited_paper);
           //to be continue
         })
         .catch(error => {
@@ -448,7 +452,8 @@ export default {
       let section = this.edited_paper.sections[index];
       let sum = 0;
       for (var i = 0; !!section && i < section.questions.length; i++) {
-        sum += parseInt(section.questions[i].question_point);
+        if (section.questions[i].question_point)
+          sum += parseInt(section.questions[i].question_point);
       }
       var tip =
         sum == section.total_point && !!section.total_point
@@ -459,7 +464,7 @@ export default {
                 "Sum-up of points of questions: " +
                 sum +
                 " |Points assigned to this section: " +
-                section.total_point
+                (section.total_point ? section.total_point : 0)
             };
       return tip;
     },
@@ -470,7 +475,8 @@ export default {
       ];
       let sum = 0;
       for (var i = 0; i < question.point_every_blank.length; i++) {
-        sum += parseInt(question.point_every_blank[i]);
+        if (question.point_every_blank[i])
+          sum += parseInt(question.point_every_blank[i]);
       }
       var tip =
         sum == parseInt(question.question_point) || sum == 0
@@ -481,7 +487,7 @@ export default {
                 "Sum-up of points of blanks: " +
                 sum +
                 " |Points assigned to this question: " +
-                question.question_point
+                (question.question_point ? question.question_point : 0)
             };
       return tip;
     },
@@ -539,7 +545,8 @@ export default {
           section.questions[j] = {
             id: question.content.id,
             question_point: question.question_point,
-            question_num: j + 1
+            question_num: j + 1,
+            point_every_blank: question.point_every_blank
           };
         }
       }
@@ -552,7 +559,10 @@ export default {
         axios
           .post("/api/papers/", result, { headers: headers })
           .then(response => {
-            alert("OK");
+            this.$notify({
+              title: "Successfully Created!",
+              type: "success"
+            });
             this.$emit("create-response", true);
           })
           .catch(error => {

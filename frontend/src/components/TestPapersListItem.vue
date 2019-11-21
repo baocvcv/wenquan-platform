@@ -7,6 +7,8 @@
         <p>Total Points: {{ test_paper.total_point }} points</p>
         <p>Time Limit: {{ test_paper.time_limit }} min</p>
         <p>Status: {{ test_paper.status }}</p>
+        <p>Create Time: {{ test_paper.create_time }}</p>
+        <p>Last Change Time: {{ test_paper.change_time }}</p>
       </v-card-text>
 
       <v-card-actions>
