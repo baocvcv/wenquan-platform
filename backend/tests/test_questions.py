@@ -409,7 +409,15 @@ class QuestionTest(APITestCase):
         }
         response = self.client.post(url, data, format='json')
 
-        data = {'paper_id': 1, 'section_id': 1, 'question_id': mult['id'], 'correct_or_not': [False], 'score': [4], 'comment': 'No comment', 'action': 'finish'}
+        data = {
+            'paper_id': 1,
+            'section_id': 1,
+            'question_id': mult['id'],
+            'correct_or_not': [False],
+            'score': [4],
+            'comment': 'No comment',
+            'action': 'finish',
+        }
         self.client.put(url, data, format='json')
         response = self.client.post(url, {'action': 'finish'}, format='json')
 
