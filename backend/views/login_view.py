@@ -27,13 +27,13 @@ class LoginView(KnoxLoginView):
         if not user.is_active:
             return Response(
                 {'non_field_errors': ['Account not activated']},
-                status.HTTP_401_UNAUTHORIZED
+                status.HTTP_403_FORBIDDEN
             )
 
         if user.is_banned:
             return Response(
                 {'non_field_errors': ['Account is banned']},
-                status.HTTP_403_FORBIDDEN
+                status.HTTP_401_UNAUTHORIZED
             )
 
         login(request, user)
