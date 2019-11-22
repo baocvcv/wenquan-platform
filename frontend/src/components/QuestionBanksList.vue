@@ -340,39 +340,39 @@ export default {
     bankIDs() {
       let that = this;
       that.process = "Fetching data from server...";
-    let load_question_banks = async question_banks => {
-      let all_count = question_banks.length;
-      let count = 0;
-      let lock = false;
-      that.$Progress.set(0);
-      if (all_count === 0) {
-        that.$Progress.finish();
-        that.process = "Total Count: " + all_count;
-      }
-      const headers = {
-        Authorization: "Token " + this.$store.state.user.token
+      let load_question_banks = async question_banks => {
+        let all_count = question_banks.length;
+        let count = 0;
+        let lock = false;
+        that.$Progress.set(0);
+        if (all_count === 0) {
+          that.$Progress.finish();
+          that.process = "Total Count: " + all_count;
+        }
+        const headers = {
+          Authorization: "Token " + this.$store.state.user.token
+        };
+        for (var i = 0; i < question_banks.length; i++) {
+          axios
+            .get("/api/question_banks/" + question_banks[i] + "/", {
+              headers: headers
+            })
+            .then(sub_response => {
+              that.question_banks.push(that.parse(sub_response.data));
+              while (lock);
+              lock = true;
+              count++;
+              lock = false;
+              that.process =
+                "Loading question banks: " + count + " / " + all_count;
+              that.$Progress.increase((1 / all_count) * 100);
+              if (count == all_count) {
+                that.process = "Total Count: " + all_count;
+                that.$Progress.finish();
+              }
+            });
+        }
       };
-      for (var i = 0; i < question_banks.length; i++) {
-        axios
-          .get("/api/question_banks/" + question_banks[i] + "/", {
-            headers: headers
-          })
-          .then(sub_response => {
-            that.question_banks.push(that.parse(sub_response.data));
-            while (lock);
-            lock = true;
-            count++;
-            lock = false;
-            that.process =
-              "Loading question banks: " + count + " / " + all_count;
-            that.$Progress.increase((1 / all_count) * 100);
-            if (count == all_count) {
-              that.process = "Total Count: " + all_count;
-              that.$Progress.finish();
-            }
-          });
-      }
-    };
       load_question_banks(this.bankIDs);
     }
   },

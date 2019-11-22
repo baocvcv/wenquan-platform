@@ -147,7 +147,11 @@ export default {
         .then(response => {
           this.answer = response.data.ans;
           var score = response.data.score;
-          this.score = score instanceof Array ? score[0] : score;
+          var score_all = 0;
+          for (var i = 0; i < score.length; i++) {
+            score_all += score[i];
+          }
+          this.score = score_all;
           this.comment = response.data.comment;
           var correct_bool = response.data.correct_or_not;
           this.correct_or_not =
@@ -202,6 +206,15 @@ export default {
         score: parseInt(this.score),
         correct_or_not: this.correct_or_not
       };
+      let point_detail = this.question.point_every_blank;
+      if (point_detail.length > 1) {
+        marking_result.score = [];
+        for (var i = 0; i < point_detail.length; i++) {
+          marking_result.score[i] = this.correct_or_not[i]
+            ? point_detail[i]
+            : 0;
+        }
+      }
       var if_success = false;
       const headers = {
         Authorization: "Token " + this.$store.state.user.token
