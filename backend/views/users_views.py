@@ -41,12 +41,11 @@ class UserList(APIView):
         if serializer.is_valid():
             user = serializer.save()
             if user:
-                if not request.user.is_anonymous:
-                    if request.user.user_group != 'Student':
-                        user.is_active = True
-                        user.save()
-                        json = UserSerializer(user).data
-                        return Response(json, status=status.HTTP_201_CREATED)
+                if request.user.is_authenticated and request.user.user_group != 'Student':
+                    user.is_active = True
+                    user.save()
+                    json = UserSerializer(user).data
+                    return Response(json, status=status.HTTP_201_CREATED)
                 # send the email verificaton record
                 create_email_verification_record(user)
                 json = serializer.data

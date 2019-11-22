@@ -30,8 +30,10 @@ class QuestionRecordList(APIView):
         data = request.data
         # judge
         question = Question.objects.get(id=data['question_id'])
-        if request.user.user_group == 'Student':
-            if question.history_version.belong_bank.id not in request.user.question_banks:
+        is_student = request.user.user_group == 'Student'
+        if is_student:
+            q_banks = request.user.question_banks
+            if question.history_version.belong_bank.id not in q_banks:
                 return Response(status=status.HTTP_403_FORBIDDEN)
         if question.question_type != 5:
             is_correct, _ = question.checker(data['ans'])
