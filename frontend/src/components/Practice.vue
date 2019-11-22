@@ -20,6 +20,8 @@
             readonly
             title="Question Banks"
             :admin="false"
+            :flat="true"
+            :bankIDs="$store.state.user.question_banks"
             v-on:done-select="done_select_bank"
           />
         </v-stepper-content>
