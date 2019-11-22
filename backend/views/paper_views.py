@@ -148,5 +148,7 @@ class PaperDetail(APIView):
         paper.is_latest = False
         paper.save()
         new_paper = PaperList.create_paper_from_data(put_data)
+        new_paper.create_time = paper.create_time
+        new_paper.save()
         response = PaperList.create_response_from_paper(new_paper)
         return Response(response)

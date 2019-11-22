@@ -225,6 +225,10 @@ class QuestionDetail(APIView):
 
             q_group.save()
 
+            bank = q_group.belong_bank
+            bank.lastUpdate = new_q.question_change_time
+            bank.save()
+
             response = question.data
             response['id'] = new_q.id
             response['question_type'] = INT2TYPE[(str)(response['question_type'])]
