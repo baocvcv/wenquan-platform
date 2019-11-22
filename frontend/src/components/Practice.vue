@@ -147,7 +147,7 @@ export default {
             this.warning = "Let's go! practice !";
           }
 
-          let selected_question_id = [];
+          //let selected_question_id = [];
           this.practice_paper = {
             title: "Self-practice",
             total_point: this.question_num,
@@ -162,7 +162,7 @@ export default {
           };
           for (var i = 0; i < this.question_number; i++) {
             let rand = Math.floor(Math.random() * all_question.length);
-            selected_question_id.push(all_question[rand]);
+            //selected_question_id.push(all_question[rand]);
             let tmp_data = await axios.get(
               "/api/questions/" + all_question[rand] + "/",
               { headers: headers }
