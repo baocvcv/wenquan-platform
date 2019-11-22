@@ -17,18 +17,18 @@ describe("QuestionSingleChoice.vue", () => {
       vuetify,
       sync: false
     });
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(4);
     wrapper.vm.choice_num_up();
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(1);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(5);
     wrapper.vm.delete_choice(0);
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(4);
     wrapper.vm.choice_num_up();
     wrapper.vm.choice_num_up();
     wrapper.vm.choice_num_up();
     wrapper.vm.edited_question.question_ans =
       wrapper.vm.edited_question.question_choice[0];
     wrapper.vm.delete_choice(0);
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(2);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(6);
   });
   it("Choice check assert", () => {
     const wrapper = mount(SingleChoice, {
@@ -36,11 +36,11 @@ describe("QuestionSingleChoice.vue", () => {
       vuetify,
       sync: false
     });
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(4);
     wrapper.vm.choice_num_up();
     wrapper.vm.check_ans(wrapper.vm.edited_question.question_choice[0]);
     wrapper.vm.check_ans(wrapper.vm.edited_question.question_choice[0]);
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(1);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(5);
   });
   it("Submit event listener", () => {
     const wrapper = mount(SingleChoice, {
@@ -87,7 +87,7 @@ describe("QuestionSingleChoice.vue", () => {
     wrapper.vm.choice_num_up();
     wrapper.vm.submitted();
     wrapper.vm.reset();
-    expect(wrapper.vm.edited_question.question_choice.length).toBe(0);
+    expect(wrapper.vm.edited_question.question_choice.length).toBe(4);
   });
   it("Update question assignment", () => {
     const wrapper = mount(SingleChoice, {

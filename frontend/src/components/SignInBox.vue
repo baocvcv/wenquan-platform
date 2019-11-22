@@ -49,25 +49,10 @@
         </v-flex>
       </v-layout>
     </v-card>
-
-    <v-dialog v-model="show_dialog" max-width="300" data-app>
-      <v-card>
-        <v-toolbar color="indigo" dark>
-          <v-toolbar-title>{{ sign_in_result }}</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text align="left">{{ sign_in_response }}</v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn @click="show_dialog = false" text>Close</v-btn>
-          <div class="flex-grow-1"></div>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
 <script>
-import md5 from "js-md5";
 import axios from "axios";
 
 export default {
@@ -76,10 +61,7 @@ export default {
     return {
       username: "",
       password: "",
-      show_password: false,
-      show_dialog: false,
-      sign_in_result: "",
-      sign_in_response: ""
+      show_password: false
     };
   },
   methods: {
@@ -98,29 +80,60 @@ export default {
             //Sign in successfully
 
             if (response.data.is_banned) {
-              this.sign_in_result = "Error";
-              this.sign_in_response =
-                "You are banned! Please contact your administrator.";
-              this.show_dialog = true;
+              this.$notify({
+                type: "error",
+                title: "Failed to sign in",
+                text: "You are banned! Please contact with the admin."
+              });
               return;
             }
 
-            user.user_permissions = response.data.user_permissions;
-            user.user_group = response.data.user_group;
+            user = response.data.user;
             user.token = response.data.token;
 
-            this.$store.commit("login", {
+            this.$store.commit("updateUser", {
               user: user
             });
 
             this.sign_in_result = "Success";
 
+            this.$notify({
+              type: "success",
+              title: "Successfully sign in!"
+            });
+
             this.$router.push("/").catch(err => console.log(err));
           })
-          .catch(response => {
-            this.sign_in_result = "Error";
-            this.sign_in_response = response;
-            this.show_dialog = true;
+          .catch(error => {
+            if (error.response) {
+              const status = error.response.status;
+              if (status === 400) {
+                this.$notify({
+                  type: "error",
+                  title: "Failed to sign in",
+                  text: "Username or password incorrect. Please try again."
+                });
+              }
+              else if (status === 401) {
+                this.$notify({
+                  type: "error",
+                  title: "Failed to sign in",
+                  text: "Your account is banned. Please contact with the admins."
+                })
+              } else if (status === 403) {
+                this.$notify({
+                  type: "error",
+                  title: "Failed to sign in",
+                  text:
+                    "User has not been activated. Please check the email you use when signing in and click the link to activate your account."
+                });
+              }
+            } else {
+              this.$notify({
+                type: "error",
+                title: "Failed to sign in"
+              });
+            }
           })
           .then(() => {});
       }

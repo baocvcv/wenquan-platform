@@ -25,7 +25,8 @@ describe("QuestionFillInBlank.vue", () => {
       vuetify,
       sync: false
     });
-    wrapper.vm.edited_data.content = "a__b_c_______________    _alsjv";
+    wrapper.vm.edited_data.content =
+      "a_______b________c_______________    _______alsjv";
     expect(wrapper.vm.blankNum).toBe(4);
   });
   it("Too long answers split rightly", () => {
@@ -34,9 +35,9 @@ describe("QuestionFillInBlank.vue", () => {
       vuetify,
       sync: false
     });
-    wrapper.vm.edited_data.content = "a_b_c_d_e_f";
+    wrapper.vm.edited_data.content = "a______b______c______d______e______f";
     wrapper.vm.edited_data.answers = ["1", "2", "3", "4", "5"];
-    wrapper.vm.edited_data.content = "a_b";
+    wrapper.vm.edited_data.content = "a______b";
     expect(wrapper.vm.parse().question_blank_num).toBe(1);
     expect(wrapper.vm.parse().question_ans).toEqual(["1"]);
   });

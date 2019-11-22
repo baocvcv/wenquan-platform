@@ -21,7 +21,7 @@ const router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./components/QuestionList.vue")
+        import(/* webpackChunkName: "about" */ "./components/PaperSolve.vue")
     },
     {
       path: "/account",
@@ -29,9 +29,19 @@ const router = new Router({
       component: () => import("./views/Account.vue")
     },
     {
+      path: "/learn",
+      name: "learn",
+      component: () => import("./views/student/Learn.vue")
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("./views/admin/Admin.vue")
+    },
+    {
       path: "/admin/usermanagement",
-      name: "user-management",
-      component: () => import("./views/UserManagement.vue")
+      name: "admin-user-management",
+      component: () => import("./views/admin/UserManagement.vue")
     },
     {
       path: "/signup",
@@ -45,17 +55,27 @@ const router = new Router({
     },
     {
       path: "/admin/testpapers",
-      name: "test-papers",
-      component: () => import("./views/TestPapers.vue")
+      name: "admin-test-papers",
+      component: () => import("./views/admin/TestPapers.vue")
+    },
+    {
+      path: "/admin/testpapers/:id",
+      name: "admin-test-paper",
+      component: () => import("./views/admin/TestPaperView.vue")
+    },
+    {
+      path: "/admin/testmarks/:id",
+      name: "test-paper-marking",
+      component: () => import("./views/admin/TestPaperMarking.vue")
     },
     {
       path: "/admin/questionbanks",
-      name: "question-banks",
-      component: () => import("./views/QuestionBanks.vue")
+      name: "admin-question-banks",
+      component: () => import("./views/admin/QuestionBanks.vue")
     },
     {
       path: "/admin/questionbanks/:id",
-      name: "question-bank",
+      name: "admin-question-bank",
       component: () => import("./views/QuestionBank.vue")
     },
     {
@@ -72,6 +92,31 @@ const router = new Router({
       path: "/edit_question/:id",
       name: "question-edit",
       component: () => import("./views/Question.vue")
+    },
+    {
+      path: "/questionbanks/",
+      name: "question-banks",
+      component: () => import("./views/student/QuestionBanks.vue")
+    },
+    {
+      path: "/test/:id",
+      name: "test",
+      component: () => import("./views/Test.vue")
+    },
+    {
+      path: "/paper_record/:id",
+      name: "paper-record",
+      component: () => import("./views/student/TestPaperMarkingView.vue")
+    },
+    {
+      path: "/activate/:token",
+      name: "activate",
+      component: () => import("./views/Activate.vue")
+    },
+    {
+      path: "/questionbanks/:id",
+      name: "question-bank",
+      component: () => import("./views/QuestionBank.vue")
     },
     {
       path: "*",
@@ -92,7 +137,8 @@ router.beforeEach((to, from, next) => {
         to.path != "/" &&
         to.path != "/about" &&
         to.path != "/signin" &&
-        to.path != "/signup"
+        to.path != "/signup" &&
+        to.name != "activate"
       ) {
         next("/signin");
       } else {

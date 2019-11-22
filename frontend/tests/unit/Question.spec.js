@@ -3,6 +3,7 @@ import Question from "@/views/Question.vue";
 import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
+import Notification from "vue-notification";
 import Router from "vue-router";
 import UserFactory from "./utils/UserFactory.js";
 import QuestionFactory from "./utils/QuestionFactory.js";
@@ -11,6 +12,7 @@ const localVue = createLocalVue();
 Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Notification);
 
 const user_factory = new UserFactory();
 const question_factory = new QuestionFactory();
@@ -64,6 +66,7 @@ describe("UserTable.vue", () => {
         edit_button.trigger("click");
         await wrapper.vm.$nextTick();
         expect(wrapper.vm.edit_mode).toBe(true);
+        wrapper.vm.cancel();
         done();
       }, 1000);
     }, 1000);

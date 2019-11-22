@@ -105,28 +105,25 @@ export default {
       type: Array,
       default: () => []
     },
-    bankID: {
-      tyre: Number,
+    rootID: {
+      type: Number,
       default: -1
     }
   },
   mounted() {
     this.drag_drop.draggable = false;
-    if (this.bankID != -1) {
-      axios
-        .get("/api/nodes_list/" + this.bankID + "/")
-        .then(response => {
-          this.treeData = [response.data];
-        })
-        .catch(error => {
-          this.treeData = [
-            {
-              id: 0,
-              name: error.toString(),
-              subnodes: []
-            }
-          ];
-        });
+    if (this.rootID != -1) this.updateDataFromID(this.rootID);
+  },
+  watch: {
+    rootID() {
+      if (this.rootID != -1) this.updateDataFromID(this.rootID);
+      else
+        this.treeData = [
+          {
+            id: 0,
+            name: "Loading..."
+          }
+        ];
     }
   },
   computed: {
@@ -136,6 +133,28 @@ export default {
     }
   },
   methods: {
+    updateDataFromID(id) {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
+      axios
+        .get("/api/nodes_list/" + id + "/", { headers: headers })
+        .then(response => {
+          this.treeData = [response.data];
+        })
+        .catch(error => {
+          this.treeData = [
+            {
+              id: 0,
+              name: error.toString()
+            }
+          ];
+          this.$notify({
+            type: "error",
+            title: "Failed to get knowledge nodes."
+          });
+        });
+    },
     updateData(data) {
       //load data
       this.treeData = data;
@@ -162,15 +181,33 @@ export default {
       //submit modification
 
       //submit changes
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .put("/api/nodes_list/" + this.bankID + "/", {
-          delete: this.deletedID,
-          modify: this.treeData[0]
-        })
+        .put(
+          "/api/nodes_list/" + this.rootID + "/",
+          {
+            delete: this.deletedID,
+            modify: this.treeData[0]
+          },
+          { headers: headers }
+        )
         .then(response => {
           this.treeData = [response.data];
+          this.$notify({
+            type: "success",
+            title: "Success",
+            text: "Your change is saved."
+          });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.$notify({
+            type: "error",
+            title: "Failed",
+            text: "Failed to save your change on knowledge nodes."
+          });
+        });
 
       this.edit = false;
       this.clearSelection();
@@ -288,7 +325,7 @@ export default {
 /* Elements */
 
 .TreeViewDemo {
-  box-shadow: 0px 0px 10px #dadada;
+  box-shadow: 0px 0px 0px #dadada;
   white-space: nowrap;
 }
 

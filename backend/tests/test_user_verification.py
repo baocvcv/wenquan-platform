@@ -1,5 +1,4 @@
 """test module for users_views"""
-# from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -23,7 +22,7 @@ class TestVerificationView(APITestCase):
         url2 = reverse('account-auth')
         response1 = self.client.post(url2, USER_DATA, format='json')
         # not activated
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response1.status_code, status.HTTP_403_FORBIDDEN)
         # activate
         url3 = reverse('verification')
         verification_token = EmailVerificationRecord.objects.get().token

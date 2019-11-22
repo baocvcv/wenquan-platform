@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from django.http import Http404
+from django.utils import timezone
 
 from backend.models.paper import Paper
 from backend.models.paper import Section
@@ -18,15 +19,21 @@ class PaperList(APIView):
         """Create Section objects from json"""
         section_objects = []
         for i in data:
+            if "id" in i:
+                i.pop("id")
             question_list = i.pop("questions", [])
             new_section = Section.objects.create(**i)
             for j in question_list:
                 target = QuestionDetail.get_object(j['id'])
+                point_every_blank = []
+                if "point_every_blank" in j:
+                    point_every_blank = j['point_every_blank']
                 new_section.questions.add(
                     target,
                     through_defaults={
                         "question_point": j['question_point'],
                         "question_num": j["question_num"],
+                        "point_every_blank": point_every_blank
                     },
                 )
                 section_objects.append(new_section)
@@ -41,6 +48,8 @@ class PaperList(APIView):
             return Response({"errors": "sections is required"}, status=400)
         sections = data.pop("sections")
         section_objects = cls.create_sections_from_data(sections)
+        data['create_time'] = timezone.now()
+        data['change_time'] = data['create_time']
         new_paper = Paper.objects.create(**data)
         new_paper.save()
         for i in section_objects:
@@ -67,8 +76,6 @@ class PaperList(APIView):
         papers = Paper.objects.all()
         response = []
         for i in papers:
-            if not i.is_latest:
-                continue
             paper_data = self.create_response_from_paper(i)
             response.append(paper_data)
         return Response(response)
@@ -88,7 +95,7 @@ class SectionDetail(APIView):
         """Get Section objects whose id=section_id"""
         try:
             return Section.objects.get(id=section_id)
-        except Paper.DoesNotExist:
+        except Section.DoesNotExist:
             raise Http404
 
     def get(self, request, section_id):
@@ -103,6 +110,7 @@ class SectionDetail(APIView):
             question_data['id'] = i.id
             question_data['question_point'] = q_on_paper.question_point
             question_data['question_num'] = q_on_paper.question_num
+            question_data['point_every_blank'] = q_on_paper.point_every_blank
             questions.append(question_data)
         questions.sort(key=lambda x: x['question_num'])
         response['questions'] = questions
@@ -128,9 +136,19 @@ class PaperDetail(APIView):
     def put(self, request, paper_id):
         """Modify Paper whose id=paper_id"""
         paper = self.get_object(paper_id)
+        put_data = JSONParser().parse(request)
+        if "change_status" in put_data:
+            new_status = put_data["change_status"]
+            if not new_status == "published" and not new_status == "drafted":
+                return Response("Error: status should be \"published\" or \"drafted\"")
+            paper.status = new_status
+            paper.change_time = timezone.now()
+            paper.save()
+            return Response(PaperList.create_response_from_paper(paper))
         paper.is_latest = False
         paper.save()
-        put_data = JSONParser().parse(request)
         new_paper = PaperList.create_paper_from_data(put_data)
+        new_paper.create_time = paper.create_time
+        new_paper.save()
         response = PaperList.create_response_from_paper(new_paper)
         return Response(response)

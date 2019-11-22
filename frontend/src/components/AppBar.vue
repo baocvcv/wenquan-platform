@@ -136,6 +136,18 @@ export default {
         ],
         student: [
           {
+            name: "Question Banks",
+            text: "Question Banks",
+            link: "/questionbanks",
+            icon: "mdi-bank"
+          },
+          {
+            name: "Learn",
+            text: "Learn",
+            link: "/learn",
+            icon: "mdi-book-open-variant"
+          },
+          {
             name: "Account",
             text: "Account",
             link: "/account",
@@ -176,7 +188,7 @@ export default {
       var _user = this.$store.state.user;
       if (!_user && sessionStorage.getItem("user")) {
         _user = JSON.parse(sessionStorage.getItem("user"));
-        this.$store.commit("login", {
+        this.$store.commit("updateUser", {
           user: _user
         });
       }

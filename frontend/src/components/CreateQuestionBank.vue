@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card id="create-form">
-      <v-toolbar color="primary" dark>
+      <v-toolbar color="primary" dark elevation="0" dense>
         <v-toolbar-title>Create a Question Bank</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -51,16 +51,15 @@
             outlined
             required
           ></v-textarea>
-
-          <v-btn
-            color="success"
-            :disabled="!valid"
-            class="mr-4"
-            @click="create()"
-            >Create</v-btn
-          >
-
-          <v-btn color="error" class="mr-4" @click="reset()">Reset</v-btn>
+          <v-layout class="mt-2">
+            <v-spacer></v-spacer>
+            <v-btn class="mr-4 cancel-button" text @click="reset()"
+              >Reset</v-btn
+            >
+            <v-btn color="primary" :disabled="!valid" outlined @click="create()"
+              >Create</v-btn
+            >
+          </v-layout>
         </v-form>
       </v-card-text>
     </v-card>
@@ -98,17 +97,31 @@ export default {
   methods: {
     create() {
       let that = this;
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .post("/api/question_banks/", {
-          id: -1,
-          name: this.name,
-          picture: this.image.length == 0 ? "" : this.image[0],
-          brief: this.brief,
-          authority: this.authority,
-          invitation_code_count: this.invitation_code_count
-        })
+        .post(
+          "/api/question_banks/",
+          {
+            id: -1,
+            name: this.name,
+            picture: this.image.length == 0 ? "" : this.image[0],
+            brief: this.brief,
+            authority: this.authority,
+            invitation_code_count: this.invitation_code_count
+          },
+          { headers: headers }
+        )
         .then(response => {
-          alert("Success!");
+          this.$notify({
+            type: "suceess",
+            title: "Success!",
+            text:
+              "Question Bank " +
+              response.data.name +
+              " is created. You can now create new questions in it."
+          });
           that.$router.push("questionbanks/" + response.data.id);
         })
         .catch(error => {

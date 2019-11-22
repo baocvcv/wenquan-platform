@@ -1,0 +1,15 @@
+.cancel-button {
+    color: grey !important;
+}
+
+.cancel-button:hover {
+    color: black !important;
+}
+
+.reset-button {
+    color: grey !important;
+}
+
+.reset-button:hover {
+    color: #b71c1c !important;
+}

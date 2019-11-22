@@ -48,8 +48,9 @@
                     v-model="accept_terms"
                     class="shrink mr-0 mt-0 pt-0"
                     small
+                    color="primary"
                   ></v-checkbox>
-                  <span class="caption grey--text"
+                  <span :class="{ caption: true, 'grey--text': accept_terms }"
                     >I accept and agree to Terms of Service and Privacy
                     Statement</span
                   >
@@ -60,12 +61,13 @@
                   <v-btn
                     :disabled="!valid || !accept_terms"
                     outlined
+                    color="primary"
                     class="mr-4"
                     @click="click"
                     >Submit
                   </v-btn>
 
-                  <v-btn text class="mr-4 reset-button" @click="reset_input"
+                  <v-btn text class="mr-4 cancel-button" @click="reset_input"
                     >Reset</v-btn
                   >
                   <v-spacer></v-spacer>
@@ -84,19 +86,6 @@
         <v-flex v-show="$vuetify.breakpoint.mdAndUp"> </v-flex>
       </v-layout>
     </v-card>
-    <v-dialog v-model="show_dialog" max-width="300">
-      <v-card>
-        <v-toolbar color="indigo" dark>
-          <v-toolbar-title>{{ sign_up_result }}</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text align="left">{{ sign_up_response }}</v-card-text>
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-btn @click="redirect">Close</v-btn>
-          <div class="flex-grow-1"></div>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -130,11 +119,7 @@ export default {
         v => !!v || "Email is required.",
         v => /.+@.+/.test(v) || "Email must be valid."
       ],
-      accept_terms: false,
-      //below are parameters of response dialog after sign up info has been submitted
-      show_dialog: false,
-      sign_up_result: "",
-      sign_up_response: ""
+      accept_terms: false
     };
   },
   methods: {
@@ -149,26 +134,24 @@ export default {
         })
         .then(function(response) {
           //handle success
-          that.sign_up_result = "Success";
-          that.sign_up_response =
-            response.data.username + " successfully signed up! Please sign in";
+          that.$notify({
+            type: "success",
+            title: "Successfully sign up",
+            text:
+              "An email has been sent to your mailbox. Please click the link to activate your account."
+          });
+          that.$router.push("/");
         })
         .catch(function(error) {
           //handle error
-          that.sign_up_result = "Error";
-          that.sign_up_response = "Sign up failed! " + error;
-        })
-        .then(function() {
-          that.show_dialog = true;
+          that.$notify({
+            type: "error",
+            title: "Failed to sign up"
+          });
         });
     },
     reset_input() {
       this.$refs.input.reset();
-    },
-    redirect: function() {
-      //redirect if signup succeed
-      this.show_dialog = false;
-      if (this.sign_up_result == "Success") this.$router.replace("/signin");
     }
   }
 };
@@ -178,12 +161,6 @@ export default {
 <style scoped>
 #sign-up-box {
   margin: auto;
-}
-.reset-button {
-  color: grey;
-}
-.reset-button:hover {
-  color: black;
 }
 a {
   color: grey;

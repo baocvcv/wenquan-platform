@@ -1,17 +1,14 @@
 """Url config for django rest framework"""
-# from django.urls import include
 from django.urls import path
-# from rest_framework import routers
-from rest_framework.authtoken import views as auth_views
+from knox import views as knox_views
 from backend import views
-
-# router = routers.DefaultRouter()
 
 urlpatterns = [
     # path('', include(router.urls)),
     # auth
-    path(r'api/jwt-auth/', views.auth_views.CustomAuthToken.as_view(), name='account-auth'),
-    path(r'jwt-auth2/', auth_views.obtain_auth_token),
+    path(r'api/jwt-auth/', views.LoginView.as_view(), name='account-auth'),
+    path(r'api/logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
+    path(r'api/logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     # users
     path(r'api/accounts/users/', views.UserList.as_view(), name='user-list'),
     path(r'api/accounts/users/<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
@@ -36,7 +33,7 @@ urlpatterns = [
     path(
         r'api/knowledge_nodes/<int:root_id>/',
         views.KnowledgeNodeDetail.as_view(),
-        name='node_detail',
+        name='nodes_detail',
     ),
     path(
         r'api/nodes_question/',
@@ -51,7 +48,7 @@ urlpatterns = [
     path(
         r'api/question_banks/<int:bank_id>/',
         views.QuestionBankDetail.as_view(),
-        name='banks_list',
+        name='banks_detail',
     ),
     path(
         r'api/papers/',
@@ -61,11 +58,64 @@ urlpatterns = [
     path(
         r'api/papers/<int:paper_id>/',
         views.PaperDetail.as_view(),
-        name='paper_detail',
+        name='papers_detail',
     ),
     path(
         r'api/paper_sections/<int:section_id>/',
         views.SectionDetail.as_view(),
-        name='section_detail',
+        name='sections_detail',
     ),
+    # records
+    path(
+        r'api/question_records',
+        views.QuestionRecordList.as_view(),
+        name='question_record_list',
+    ),
+    path(
+        r'api/question_records/',
+        views.QuestionRecordList.as_view(),
+        name='question_record_list',
+    ),
+    path(
+        r'api/question_records/<int:pk>',
+        views.QuestionRecordDetail.as_view(),
+        name='question_record_detail',
+    ),
+    path(
+        r'api/question_records/<int:pk>/',
+        views.QuestionRecordDetail.as_view(),
+        name='question_record_detail',
+    ),
+    path(
+        r'api/paper_records/',
+        views.PaperRecordList.as_view(),
+        name="paper_record_list",
+    ),
+    path(
+        r'api/paper_records',
+        views.PaperRecordList.as_view(),
+        name="paper_record_list",
+    ),
+    path(
+        r'api/paper_records/<int:record_id>',
+        views.PaperRecordDetail.as_view(),
+        name="paper_record_detail",
+    ),
+    # auth-code
+    path(
+        r'api/auth_code/',
+        views.AuthCodeView.as_view(),
+        name="auth_code_create",
+    ),
+    path(
+        r'api/auth_code/<str:code>',
+        views.AuthCodeDetailView.as_view(),
+        name="auth_code_activate",
+    ),
+    # file-upload
+    path(
+        r'api/upload/image/',
+        views.ImageUploadView.as_view(),
+        name="upload_image",
+    )
 ]

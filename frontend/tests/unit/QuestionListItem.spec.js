@@ -4,6 +4,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
+import Notification from "vue-notification";
 import RouterRule from "@/router";
 import QuestionFactory from "./utils/QuestionFactory.js";
 
@@ -11,6 +12,7 @@ const localVue = createLocalVue();
 Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Notification);
 
 const resizeWindow = (x, y) => {
   window.innerWidth = x;
@@ -21,11 +23,22 @@ const resizeWindow = (x, y) => {
 const question_factory = new QuestionFactory();
 
 describe("QuestionListItem.vue", () => {
-  let vuetify, router;
+  let vuetify, router, store;
 
   beforeEach(() => {
     vuetify = new Vuetify();
     router = new Router({ RouterRule });
+    store = new Vuex.Store({
+      state: {
+        user: {
+          id: 123
+        }
+      },
+      mutations: {
+        updateUser(state, payload) {},
+        updateUserWithKey(state, payload) {}
+      }
+    });
   });
 
   it("read_more and collapse feature work properly", async () => {
@@ -33,6 +46,7 @@ describe("QuestionListItem.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false,
       propsData: {
         question: question_factory.create_single_choice(1)
@@ -51,6 +65,7 @@ describe("QuestionListItem.vue", () => {
       localVue,
       vuetify,
       router,
+      store,
       sync: false,
       propsData: {
         question: question_factory.create_brief_answer(1),

@@ -1,9 +1,10 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
-import UserManagement from "@/views/UserManagement.vue";
+import UserManagement from "@/views/admin/UserManagement.vue";
 import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Router from "vue-router";
+import Notification from "vue-notification";
 import RouterRule from "@/router";
 import UserFactory from "./utils/UserFactory.js";
 
@@ -11,6 +12,7 @@ const localVue = createLocalVue();
 Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
+Vue.use(Notification);
 
 const user_factory = new UserFactory();
 

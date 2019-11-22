@@ -28,7 +28,7 @@ export default {
   },
   data: function() {
     return {
-      timelag: 5
+      timelag: 3
     };
   }
 };

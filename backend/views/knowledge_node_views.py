@@ -1,5 +1,6 @@
 """ KnowledgeNode view """
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from django.http import Http404
@@ -74,12 +75,18 @@ class KnowledgeNodeList(APIView):
 
     def get(self, request, root_id):
         """Get a tree whose root's id = root_id"""
+        if request.user.user_group == 'Student':
+            bank_id = self.get_object(root_id).question_bank.id
+            if bank_id not in request.user.question_banks:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         response = self.go_through_tree(root_id)
         response['bank_id'] = self.get_object(root_id).question_bank.id
         return Response(response)
 
     def put(self, request, root_id):
         """Edit tree of node"""
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
         put_data = JSONParser().parse(request)
         modify = put_data['modify']
         delete = put_data['delete']
@@ -109,6 +116,10 @@ class KnowledgeNodeDetail(APIView):
 
     def get(self, request, root_id):
         """Get infomation except subnodes"""
+        if request.user.user_group == 'Student':
+            bank_id = KnowledgeNodeList.get_object(root_id).question_bank.id
+            if bank_id not in request.user.question_banks:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         try:
             node = KnowledgeNode.objects.get(id=root_id)
         except KnowledgeNode.DoesNotExist:
@@ -117,25 +128,35 @@ class KnowledgeNodeDetail(APIView):
         response = self.serializer(node)
         return Response(response)
 
-    def put(self, request, root_id):
-        """Modify infomation"""
-        put_datas = JSONParser().parse(request)
-        response = []
-        for put_data in put_datas:
-            node = KnowledgeNodeList.get_object(root_id)
-            node.name = put_data['name']
-            node.save()
-            response.append(self.serializer(node))
-        return Response(response)
-
 
 class NodeQuestionView(APIView):
     """View for question set in nodes"""
+    @classmethod
+    def go_through_tree(cls, root_id):
+        """KnowledgeNode tree level order traversal"""
+        root = KnowledgeNodeList.get_object(root_id)
+        nodes = []
+        child = list(root.subnodes.all())
+        for i in child:
+            nodes += cls.go_through_tree(i.id)
+        nodes.append(root_id)
+        return nodes
+
     def post(self, request):
         """Get question belong to some nodes"""
         response = set()
         post_data = JSONParser().parse(request)
-        for i in post_data['nodes_id']:
+        nodes = post_data['nodes_id']
+        temp = []
+        for i in nodes:
+            if request.user.user_group == 'Student':
+                bank_id = KnowledgeNodeList.get_object(i).question_bank.id
+                if bank_id not in request.user.question_banks:
+                    return Response(status=status.HTTP_403_FORBIDDEN)
+            temp += self.go_through_tree(i)
+
+        nodes += temp
+        for i in nodes:
             node = KnowledgeNodeList.get_object(i)
             questions = []
             for j in node.questiongroup_set.all():

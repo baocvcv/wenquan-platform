@@ -18,9 +18,13 @@ class PaperSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "total_point",
             "tips",
             "status",
             "time_limit",
+            "change_time",
+            "create_time",
+            "is_latest",
         ]
 
     def create(self, validated_data):

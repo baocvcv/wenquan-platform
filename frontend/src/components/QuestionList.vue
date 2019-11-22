@@ -112,11 +112,16 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title>Create A Question</v-card-title>
+            <v-card-title>
+              Create A Question
+              <v-btn right absolute icon @click="create_question_dialog = false"
+                ><v-icon>mdi-close</v-icon></v-btn
+              >
+            </v-card-title>
             <v-card-text>
               <question
                 :initData="null"
-                :bankID="[id]"
+                :root_id="root_id"
                 creation
                 @submit="create"
                 @cancel="create_question_dialog = false"
@@ -126,10 +131,11 @@
         </v-dialog>
       </v-app-bar>
       <v-card-text>
+        <vue-progress-bar style="position: relative;"></vue-progress-bar>
         <v-row>
-          <v-col v-show="drawer" cols="12" md="4" sm="6">
+          <v-col v-show="drawer" cols="12" md="4" sm="6" id="drawer-col">
             <tree-view
-              :bankID="id"
+              :rootID="root_id"
               v-model="tree_selection"
               editable
             ></tree-view>
@@ -138,9 +144,15 @@
             :cols="drawer && !$vuetify.breakpoint.xsOnly ? 6 : 12"
             :md="drawer ? 8 : 12"
           >
+            <p
+              class="caption grey--text text-right mt-0 mb-0 pr-1"
+              transition="fade-transition"
+            >
+              {{ process }}
+            </p>
             <v-row dense>
               <v-col
-                v-for="question in question_list"
+                v-for="question in shown_questions"
                 :key="question.id"
                 cols="12"
               >
@@ -189,10 +201,6 @@ export default {
       type: Boolean,
       default: false
     },
-    questions: {
-      type: Array,
-      default: () => []
-    },
     dialog: {
       type: Boolean,
       default: false
@@ -210,7 +218,7 @@ export default {
       level_min_filter: 0,
       level_max_filter: 5,
       drawer: null,
-      question_list: [],
+      question_list: {},
       tree_selection: [],
       sort_menu: ["Popularity", "Level"],
       keyword: "",
@@ -222,39 +230,107 @@ export default {
         "Brief Answer"
       ],
       selected_questions: [],
-      is_selecting: false
+      is_selecting: false,
+      process: "",
+      shown_questions: [],
+      question_indices: [],
+      root_id: -1
     };
   },
-  mounted() {
-    if (this.select) this.is_selecting = true;
-    let load_questions = () => {
-      let question_id_index;
-      for (question_id_index in questions) {
-        axios
-          .get("/api/questions/" + questions[question_id_index] + "/")
-          .then(response => {
-            this.question_list.push(response.data);
-          })
-          .catch(error => {
-            console.log(error);
-          });
+  watch: {
+    tree_selection() {
+      this.process = "Fetching data from server...";
+      let selected_node_id = [];
+      let i;
+      for (i in this.tree_selection) {
+        selected_node_id.push(this.tree_selection[i].id);
       }
-    };
-    let questions;
-    if (this.questions.length == 0) {
+      if (selected_node_id.length === 0) {
+        this.shown_questions = [];
+        let index;
+        for (index in this.question_list) {
+          this.shown_questions.push(this.question_list[index]);
+        }
+        this.process = "Total Count: " + this.shown_questions.length;
+        return;
+      }
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/question_banks/" + this.id + "/")
+        .post(
+          "/api/nodes_question/",
+          { nodes_id: selected_node_id },
+          { headers: headers }
+        )
         .then(response => {
-          questions = response.data.questions;
-          load_questions();
-        })
-        .catch(error => {
-          console.log(error);
+          this.question_indices = response.data;
         });
-    } else {
-      questions = this.questions;
-      load_questions();
+    },
+    question_indices() {
+      this.shown_questions = [];
+      let count = 0;
+      let all_count = this.question_indices.length;
+      let lock = false;
+      let i;
+      this.$Progress.start();
+      //console.log(this.process);
+      let process_on = () => {
+        while (lock);
+        lock = true;
+        count++;
+        this.$Progress.increase((1 / (all_count + 0.0001)) * 100);
+        this.process = "Loading questions: " + count + " / " + all_count;
+        if (count == all_count) {
+          this.process = "Total Count: " + all_count;
+          this.$Progress.finish();
+        }
+        lock = false;
+      };
+      if (this.question_indices.length === 0) {
+        this.$Progress.finish();
+        this.process = "Total Count: " + 0;
+      }
+      for (i in this.question_indices) {
+        let index = this.question_indices[i];
+        if (this.question_list.hasOwnProperty(index)) {
+          this.shown_questions.push(this.question_list[index]);
+          process_on();
+        } else {
+          const headers = {
+            Authorization: "Token " + this.$store.state.user.token
+          };
+          axios
+            .get("/api/questions/" + index + "/", { headers: headers })
+            .then(response => {
+              this.shown_questions.push(response.data);
+              this.question_list[index] = response.data;
+              process_on();
+            });
+        }
+      }
     }
+  },
+  created() {
+    if (this.select) this.is_selecting = true;
+    this.process = "Fetching data from server...";
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
+    axios
+      .get("/api/question_banks/" + this.id + "/", { headers: headers })
+      .then(response => {
+        this.question_indices = JSON.parse(
+          JSON.stringify(response.data.questions)
+        );
+        this.root_id = response.data.root_id;
+      })
+      .catch(error => {
+        this.$notify({
+          type: "error",
+          title: "Failed to load the question list."
+        });
+      });
   },
   methods: {
     reset_filter() {
@@ -263,25 +339,54 @@ export default {
       this.level_max_filter = 5;
     },
     create(question_id) {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      };
       axios
-        .get("/api/questions/" + question_id + "/")
+        .get("/api/questions/" + question_id + "/", { headers: headers })
         .then(response => {
-          this.question_list.push(response.data);
+          this.question_list[question_id] = response.data;
+          //console.log(this.question_list[question_id]);
+          //console.log(response.data.parents_node);
+          //console.log(this.tree_selection);
+          if (this.tree_selection.length == 0) {
+            this.shown_questions.push(response.data);
+            this.create_question_dialog = false;
+            this.$emit("create-question");
+            return;
+          }
+          let node_index;
+          for (node_index in response.data.parents_node) {
+            let selected_index;
+            for (selected_index in this.tree_selection) {
+              if (
+                this.tree_selection[selected_index] ===
+                response.data.parents_node[node_index]
+              )
+                this.shown_questions.push(response.data);
+            }
+          }
           this.create_question_dialog = false;
+          this.$emit("create-question");
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => {});
     },
     cancel_select() {
       this.selected_questions = [];
       this.$emit("cancel-select");
-      this.is_selecting = false;
+      //this.is_selecting = false;
     },
     done_select() {
       this.$emit("done-select", this.selected_questions);
-      this.is_selecting = false;
+      this.selected_questions = [];
+      //this.is_selecting = false;
     }
   }
 };
 </script>
+
+<style scoped>
+#drawer-col {
+  border-right: 1px solid rgb(226, 226, 226);
+}
+</style>

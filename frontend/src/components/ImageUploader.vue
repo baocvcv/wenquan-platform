@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader" :style="img_style">
-    <v-card outlined>
+    <v-card outlined v-show="!tool">
       <v-card-text v-if="!!label">
         {{ label }}
       </v-card-text>
@@ -16,7 +16,7 @@
             align="center"
           >
             <v-img
-              v-if="!!image"
+              v-if="/^\/media\/pictures\/.*?/.test(image)"
               :aspect-ratio="aspectRatio"
               :src="image"
               contain
@@ -25,12 +25,20 @@
               <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
           </v-col>
-          <v-col v-if="check_create()" align="center">
+          <v-col v-if="check_create() && !loading" align="center">
             <v-btn icon large @click="upload()">
               <v-icon color="green">mdi-plus</v-icon>
             </v-btn>
             <br />
             <v-label>{{ placeholder }}</v-label>
+          </v-col>
+          <v-col v-if="loading" align="center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+            <br />
+            <v-label>Uploading ... </v-label>
           </v-col>
         </v-row>
       </v-container>
@@ -42,10 +50,33 @@
         style="display: none"
       />
     </v-card>
+
+    <v-dialog v-model="not_an_image" max-width="250px">
+      <v-card>
+        <v-toolbar>
+          <v-toolbar-title>Error</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text align="center">
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-icon x-large color="error">mdi-information</v-icon>
+            </v-col>
+            <v-col cols="12">
+              <span>Not an image!</span>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="not_an_image = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "image-uploader",
   model: {
@@ -81,12 +112,17 @@ export default {
       type: Array,
       default: () => []
     },
+    tool: {
+      type: Boolean,
+      default: false
+    },
     width: String,
     height: String
   },
   data: function() {
     return {
-      //img: [],
+      loading: false,
+      not_an_image: false,
       img_style: {
         width: this.width,
         height: this.height
@@ -95,6 +131,8 @@ export default {
   },
   methods: {
     preview_image(src) {
+      this.$emit("upload-start");
+      this.loading = true;
       var file = src.target.files[0];
       let that = this;
       let reader = new FileReader();
@@ -102,10 +140,27 @@ export default {
       if (file) {
         reader.readAsDataURL(file);
       }
-
-      reader.onload = function() {
-        that.img.push(this.result);
-        that.$emit("change", that.img);
+      reader.onload = async function() {
+        if (/^data:image.*?base64/.test(this.result)) {
+          let formData = new FormData();
+          formData.append("imagefile", file);
+          const headers = {
+            Authorization: "Token " + that.$store.state.user.token
+          };
+          var url = await axios
+            .post("/api/upload/image/", formData, { headers: headers })
+            .catch(error => {
+              alert(error);
+              that.loading = false;
+            });
+          url = url.data.url;
+          that.img.push(url);
+          that.$emit("change", that.img);
+          that.$emit("upload-finish", url);
+        } else {
+          that.not_an_image = true;
+        }
+        that.loading = false;
       };
     },
     delete_image(index) {

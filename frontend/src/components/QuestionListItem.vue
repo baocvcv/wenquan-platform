@@ -26,15 +26,11 @@
         ref="content"
         v-bind:style="{ 'max-height': max_height + 'px' }"
       >
-        <v-textarea
-          outlined
+        <rich-text-editor
           readonly
           label="Question"
           v-model="content"
-          auto-grow
-          rows="1"
-        >
-        </v-textarea>
+        ></rich-text-editor>
         <v-textarea
           outlined
           readonly
@@ -79,7 +75,7 @@
           </v-tooltip>
           <v-toolbar-title>Viewing Question</v-toolbar-title>
         </v-toolbar>
-        <question-view :questionID="question.id" />
+        <question-view :questionID="question.id" editable="true" />
       </v-card>
     </v-dialog>
   </div>
@@ -88,6 +84,8 @@
 <script>
 import axios from "axios";
 import Question from "@/views/Question.vue";
+import RichTextEditor from "@/components/RichTextEditor.vue";
+
 export default {
   name: "question-list-item",
   props: {
@@ -101,13 +99,15 @@ export default {
     hide_content: false,
     content_too_long: false,
     width: 0,
-    max_height: 120,
+    max_height: 400,
     max_height_cache: 0,
     content: "",
-    viewing_question: false
+    viewing_question: false,
+    nodes: []
   }),
   components: {
-    "question-view": Question
+    "question-view": Question,
+    "rich-text-editor": RichTextEditor
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
@@ -124,6 +124,39 @@ export default {
           ". " +
           this.question.question_choice[index];
       }
+    }
+    let index;
+    const headers = {
+      Authorization: "Token " + this.$store.state.user.token
+    };
+    for (index in this.question.parents_node) {
+      let node = this.question.parents_node[index];
+      axios
+        .get("/api/knowledge_nodes/" + node + "/", { headers: headers })
+        .then(response => {
+          if (node != this.question.root_id)
+            this.nodes.push(response.data.name);
+          if (
+            this.nodes.length == 0 &&
+            index == this.question.parents_node.length - 1
+          )
+            this.nodes.push("Uncategorized");
+        })
+        .catch(error => {
+          this.$notify({
+            type: "error",
+            title:
+              "Failed to get the knowledge node for question No." +
+              this.question.id
+          });
+        })
+        .then(() => {
+          if (
+            this.nodes.length === 0 &&
+            node === this.question.parents_node.length - 1
+          )
+            this.nodes.push("Uncategorized");
+        });
     }
   },
   watch: {
@@ -148,26 +181,6 @@ export default {
                 this.content += "\n" + this.question.question_choice;
         }
         */
-  },
-  computed: {
-    nodes() {
-      let nodes = [];
-      let node;
-      for (node in this.question.parents_node) {
-        /*
-                axios
-                    .get("/api/nodes_list/" + node + "/")
-                    .then((response) => {
-                        nodes.push(response.data.name);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-                    */
-        nodes.push(node);
-      }
-      return nodes;
-    }
   },
   methods: {
     handleResize() {
