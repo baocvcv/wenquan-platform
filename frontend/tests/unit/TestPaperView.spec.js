@@ -44,6 +44,6 @@ describe("TestPaperView.vue", () => {
     });
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
 });

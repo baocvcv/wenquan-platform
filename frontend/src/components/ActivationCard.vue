@@ -53,8 +53,9 @@ export default {
           this.$notify({
             type: "success",
             title: "Success",
-            text: "The bank is added to your account. You can now find it in 'MYBANK'. If you can not find it, please refresh the webpage."
-          })
+            text:
+              "The bank is added to your account. You can now find it in 'MYBANK'. If you can not find it, please refresh the webpage."
+          });
           axios
             .get("/api/accounts/users/" + this.$store.state.user.id + "/", {
               headers: headers
@@ -73,13 +74,13 @@ export default {
               type: "error",
               title: "Failed to activate",
               text: "The code may have been expired; The code may be invalid"
-            })
+            });
             this.$emit("activated", false);
           } else {
             this.$notify({
               type: "error",
               title: "Failed to activate the bank"
-            })
+            });
           }
         });
     },

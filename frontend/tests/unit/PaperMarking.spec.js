@@ -35,28 +35,30 @@ describe("PaperMarking.vue", () => {
       propsData: {
         record: {
           questions: {
-            "1": {
-
-            }
+            "1": {}
           }
         }
       }
     });
-    wrapper.vm.question_info({},{
-      id: "1",
-      content: {
-
+    wrapper.vm.question_info(
+      {},
+      {
+        id: "1",
+        content: {}
       }
-    });
-    wrapper.vm.question_info({},{
-      id: "1",
-      point_every_blank: [1],
-      content: {
-        question_blank_num: 2
+    );
+    wrapper.vm.question_info(
+      {},
+      {
+        id: "1",
+        point_every_blank: [1],
+        content: {
+          question_blank_num: 2
+        }
       }
-    });
-    wrapper.vm.question_ref(0,0);
-    wrapper.vm.question_ref(0,0);
+    );
+    wrapper.vm.question_ref(0, 0);
+    wrapper.vm.question_ref(0, 0);
     setTimeout(() => {
       done();
     }, 500);
@@ -74,7 +76,7 @@ describe("PaperMarking.vue", () => {
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     setTimeout(() => {
       done();

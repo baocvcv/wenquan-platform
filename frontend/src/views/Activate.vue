@@ -33,10 +33,7 @@ export default {
   },
   created() {
     axios
-      .post(
-        "/api/verification/",
-        { token: this.$route.params.token },
-      )
+      .post("/api/verification/", { token: this.$route.params.token })
       .then(response => {
         this.activated = true;
         setTimeout(() => {

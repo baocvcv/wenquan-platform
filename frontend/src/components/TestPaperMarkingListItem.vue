@@ -31,7 +31,7 @@
           ></v-list-item-title
         >
         <v-list-item-subtitle
-          v-text="record.record_time"
+          v-text="new Date(record.record_time)"
         ></v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>

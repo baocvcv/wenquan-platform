@@ -6,27 +6,15 @@
         <router-view />
       </v-container>
     </v-content>
-    <notifications
-      :duration="3000"
-      :width="500"
-      position="bottom right"
-    >
+    <notifications :duration="3000" :width="500" position="bottom right">
       <template slot="body" slot-scope="props">
-        <div
-          :class="get_class(props)"
-          @click="props.close"
-        >
+        <div :class="get_class(props)" @click="props.close">
           <div
             v-if="props.item.title"
             class="notification-title"
             v-html="props.item.title"
-          >
-          </div>
-          <div
-            class="notification-content"
-            v-html="props.item.text"
-          >
-          </div>
+          ></div>
+          <div class="notification-content" v-html="props.item.text"></div>
         </div>
       </template>
     </notifications>
@@ -74,15 +62,15 @@ export default {
 */
 .vue-notification {
   display: block;
-  box-sizing: border-box;  
+  box-sizing: border-box;
   text-align: left;
   font-size: 12px;
   padding: 10px;
   margin: 0 5px 5px;
 
   color: white;
-  background: #44A4FC;
-  border-left: 5px solid #187FE7;
+  background: #44a4fc;
+  border-left: 5px solid #187fe7;
 }
 
 .vue-notification.warning {
@@ -91,12 +79,12 @@ export default {
 }
 
 .vue-notification.fail {
-  background: #E54D42;
-  border-left-color: #B82E24;
+  background: #e54d42;
+  border-left-color: #b82e24;
 }
 
 .vue-notification.succeed {
-  background: #68CD86;
-  border-left-color: #42A85F;
+  background: #68cd86;
+  border-left-color: #42a85f;
 }
 </style>

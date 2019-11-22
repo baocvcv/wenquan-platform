@@ -122,7 +122,11 @@
                       <span class="font-weight-bold">{{ attr }}:</span>
                     </v-col>
                     <v-col class="mt-0 mb-0 pt-0 pd-0">
-                      <span>{{ cur_qst_bank.details[attr] }}</span>
+                      <span>{{
+                        attr.search("Time") == -1
+                          ? cur_qst_bank.details[attr]
+                          : new Date(cur_qst_bank.details[attr])
+                      }}</span>
                     </v-col>
                   </v-row>
                 </p>
