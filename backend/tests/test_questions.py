@@ -144,12 +144,14 @@ class QuestionTest(APITestCase):
 
     def get_response(self, new_q_id):
         """GET method testing"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         url = reverse("questions_detail", args=[new_q_id])
         response = self.client.get(url)
         return response
 
     def create_question(self, data):
         """Create Question from data by POST method"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         url = reverse('questions_list')
         data[0]["parents_node"] = [self.bank.root_id]
         response = self.client.post(url, data, format='json')
@@ -157,6 +159,7 @@ class QuestionTest(APITestCase):
 
     def test_single(self):
         """ test creating an single choice question"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         data = copy(self.single_example)
         response = self.create_question(data)
 
@@ -178,6 +181,7 @@ class QuestionTest(APITestCase):
 
     def test_multiple(self):
         """ test creating an single choice question"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         data = copy(self.multi_example)
         response = self.create_question(data)
 
@@ -193,6 +197,7 @@ class QuestionTest(APITestCase):
 
     def test_true_or_false(self):
         """ test creating an single choice question"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         data = copy(self.t_or_f_example)
         response = self.create_question(data)
 
@@ -208,6 +213,7 @@ class QuestionTest(APITestCase):
 
     def test_fill_blank(self):
         """ test creating an single choice question"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         data = copy(self.fill_blank_example)
         response = self.create_question(data)
 
@@ -223,6 +229,7 @@ class QuestionTest(APITestCase):
 
     def test_brief_ans(self):
         """ test creating an single choice question"""
+        self.client.force_authenticate(user=self.user)  # pylint:disable=no-member
         data = copy(self.brief_q_example)
         response = self.create_question(data)
 
@@ -309,11 +316,16 @@ class QuestionTest(APITestCase):
         torf = self.create_question(self.t_or_f_example).data
 
         paper_data = {
-            "title": "test paper",
-            "total_point": 100,
-            "tips": "",
-            "status": "public",
-            "time_limit": 100,
+            "title":
+            "test paper",
+            "total_point":
+            100,
+            "tips":
+            "",
+            "status":
+            "public",
+            "time_limit":
+            100,
             "sections": [{
                 "title": "select",
                 "total_point": 50,
@@ -387,17 +399,13 @@ class QuestionTest(APITestCase):
         url = reverse("paper_record_detail", args=[response.data['id']])
         response = self.client.get(url, format='json')
         data = {
-            'sections':[
-                {
-                    'id': 1,
-                    'questions': [
-                        {
-                            'id': mult['id'],
-                            'ans': ['A', 'B']
-                        }
-                    ]
-                }
-            ],
+            'sections': [{
+                'id': 1,
+                'questions': [{
+                    'id': mult['id'],
+                    'ans': ['A', 'B']
+                }]
+            }],
         }
         response = self.client.post(url, data, format='json')
 
@@ -408,18 +416,14 @@ class QuestionTest(APITestCase):
             'correct_or_not': [False],
             'score': [4],
             'comment': 'No comment',
-            'action': 'finish'
+            'action': 'finish',
         }
         self.client.put(url, data, format='json')
         response = self.client.post(url, {'action': 'finish'}, format='json')
 
         # auth code
         url = reverse('auth_code_create')
-        self.client.post(
-            url,
-            {'question_bank_id': self.bank.id, 'num': 10},
-            format='json'
-        )
+        self.client.post(url, {'question_bank_id': self.bank.id, 'num': 10}, format='json')
         from backend.models import AuthCode
         code = AuthCode.objects.all()[0].key
         url = url + code
@@ -428,9 +432,5 @@ class QuestionTest(APITestCase):
         # qr
         url = reverse('question_record_list')
         self.client.get(url)
-        response = self.client.post(
-            url,
-            {'question_id': mult['id'], 'ans': ["A"]},
-            format='json'
-        )
+        response = self.client.post(url, {'question_id': mult['id'], 'ans': ["A"]}, format='json')
         self.assertEqual(response.status_code, 201)
