@@ -33,8 +33,9 @@ nock(/.*?/)
 
 nock(/.*?/)
   .put("/api/question_banks/200/", body => {
-    return body.name != "Fail";
+    return body.name === "edited";
   })
   .reply(200, {
-    result: "Success"
+    result: "Success",
+    name: "edited"
   });

@@ -5,6 +5,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Vuetify from "vuetify";
 import Notification from "vue-notification";
+import Progress from "vue-progressbar";
 import Router from "vue-router";
 import "./mock/QuestionBankMock.js";
 
@@ -13,6 +14,7 @@ Vue.use(Vuex);
 Vue.use(Vuetify);
 Vue.use(Router);
 Vue.use(Notification);
+Vue.use(Progress);
 
 describe("QuestionBank.vue", () => {
   let vuetify, router;
