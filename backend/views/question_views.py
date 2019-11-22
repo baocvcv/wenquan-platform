@@ -155,9 +155,38 @@ class QuestionDetail(APIView):
         except Question.DoesNotExist:
             raise Http404
 
+    @staticmethod
+    def check_permission(user, question):
+        "check if user has access to question"
+        if user.user_group == 'Student':
+            from backend.models import PaperRecord
+            paper_records = PaperRecord.objects.filter(user=user, is_active=True)
+            flag = False
+            for record in paper_records:
+                paper = record.paper
+                for section in paper.section_set.all():
+                    for q_tmp in section.questions.all():
+                        if q_tmp.id == question.id:
+                            flag = True
+                            break
+                    if flag:
+                        break
+                if flag:
+                    break
+            if not flag:
+                bank_id = question.history_version.belong_bank.id
+                if bank_id in user.question_banks:
+                    flag = True
+            return flag
+        return True
+
     def get(self, request, q_id):
         """Get information of the Question whose id=q_id"""
         question = self.get_object(q_id)
+        user = request.user
+        if not QuestionDetail.check_permission(user, question):
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = QuestionList.create_serializer_from_question(question)
         response = serializer.data
         response['question_type'] = INT2TYPE[(str)(response['question_type'])]
