@@ -31,34 +31,41 @@ class EmailVerificationRecord(models.Model):
     def send_email(self):
         """ send email to user """
         email_title = ""
-        email_body = ""
+        email_body = "Dear " + self.user.username + ":"
         # local test
         # domain = "https://127.0.0.1:8000"
         domain = "https://never404-never404.app.secoder.net"
         if self.send_type == "register": # if register
             email_title = "[Wen Quan Platform] Activate your account"
             url = domain + "/#/activate/{0}".format(self.token)
-            email_body = "Please click this link to activate your account: " + url
-            # send email
-            print(self.email)
-            # self.user.email_user(email_title, email_body)
-            send_status = send_mail(
+            email_body_plain = email_body + "\nPlease click this link to activate your account: "
+            email_body_plain += url
+            email_body_html = email_body + """<div><br></div>Welcome to <b>WenQuan Platform</b>!<br>
+Please click <a href="%s" target="_blank">this link</a> to activate your account.
+</div><div><br></div><div>Best regards,</div><div>WenQuan Platform</div>""" % url
+            send_mail(
                 email_title,
-                email_body,
+                email_body_plain,
                 settings.DEFAULT_FROM_EMAIL,
-                [self.email])
-            print(send_status)
+                [self.email],
+                html_message=email_body_html
+                )
         elif self.send_type == "forget":
             email_title = "[Wen Quan Platform] Change your password"
             url = domain + "/#/forget_password/{0}".format(self.token)
-            email_body = "Please click this link to change your password: " + url
+            email_body_plain = "\nPlease click this link to change your password: " + url
+            email_body_html = email_body + """<div><br></div>
+Please click <a href="%s" target="_blank">this link</a> to change your password.
+</div><div><br></div><div>Best regards,</div><div>WenQuan Platform</div>""" % url
             # send email
             # self.user.email_user(email_title, email_body)
             send_mail(
                 email_title,
                 email_body,
                 settings.DEFAULT_FROM_EMAIL,
-                [self.email])
+                [self.email],
+                html_message=email_body_html
+                )
 
     def is_time_valid(self, time):
         """ check if time is valid """

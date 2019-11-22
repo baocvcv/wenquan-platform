@@ -131,7 +131,6 @@ class UserDetailTest(APITestCase):
                 'school_name': 'PKU',
             }
         }
-        # response = self.client.put(url2, data, format='json')
         user = User.objects.get(username='Kobe')
         self.client.force_authenticate(user=user) # pylint: disable=no-member
         response = self.client.put(url2, data, format='json')

@@ -309,14 +309,11 @@ class QuestionTest(APITestCase):
         torf = self.create_question(self.t_or_f_example).data
 
         paper_data = {
-            "title":
-            "test paper",
-            "total_point":
-            100,
-            "tips":
-            "",
-            "status":
-            "public",
+            "title": "test paper",
+            "total_point": 100,
+            "tips": "",
+            "status": "public",
+            "time_limit": 100,
             "sections": [{
                 "title": "select",
                 "total_point": 50,
@@ -380,3 +377,60 @@ class QuestionTest(APITestCase):
 
         change_state = {"change_status": "drafted"}
         self.client.put(url, change_state, format='json')
+
+        url = reverse("paper_record_list")
+        self.client.get(url, format='json')
+
+        data = {'paper_id': 1, 'is_timed': True}
+        response = self.client.post(url, data, format='json')
+
+        url = reverse("paper_record_detail", args=[response.data['id']])
+        response = self.client.get(url, format='json')
+        data = {
+            'sections':[
+                {
+                    'id': 1,
+                    'questions': [
+                        {
+                            'id': mult['id'],
+                            'ans': ['A', 'B']
+                        }
+                    ]
+                }
+            ],
+        }
+        response = self.client.post(url, data, format='json')
+
+        data = {
+            'paper_id': 1,
+            'section_id': 1,
+            'question_id': mult['id'],
+            'correct_or_not': [False],
+            'score': [4],
+            'comment': 'No comment',
+            'action': 'finish'
+        }
+        self.client.put(url, data, format='json')
+        response = self.client.post(url, {'action': 'finish'}, format='json')
+
+        # auth code
+        url = reverse('auth_code_create')
+        self.client.post(
+            url,
+            {'question_bank_id': self.bank.id, 'num': 10},
+            format='json'
+        )
+        from backend.models import AuthCode
+        code = AuthCode.objects.all()[0].key
+        url = url + code
+        self.client.get(url)
+
+        # qr
+        url = reverse('question_record_list')
+        self.client.get(url)
+        response = self.client.post(
+            url,
+            {'question_id': mult['id'], 'ans': ["A"]},
+            format='json'
+        )
+        self.assertEqual(response.status_code, 201)
