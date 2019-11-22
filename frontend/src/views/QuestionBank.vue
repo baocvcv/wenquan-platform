@@ -89,7 +89,12 @@
           </v-expand-transition>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="4" md="4" v-if="editable && this.question_bank.authority != 'public'">
+      <v-col
+        cols="12"
+        sm="4"
+        md="4"
+        v-if="editable && this.question_bank.authority != 'public'"
+      >
         <v-card v-show="!loading" style="height: 100%">
           <v-card-title>
             Activation Code
@@ -293,7 +298,10 @@ export default {
   },
   created() {
     let id = this.$route.params.id;
-    if (this.$store.state.user.question_banks.indexOf(id) === -1 && this.$store.state.user.user_group === "Student") {
+    if (
+      this.$store.state.user.question_banks.indexOf(id) === -1 &&
+      this.$store.state.user.user_group === "Student"
+    ) {
       this.$notify({
         type: "error",
         title: "You have no access to this question bank."

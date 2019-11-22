@@ -56,7 +56,7 @@ export default {
   data: function() {
     return {
       question_banks: null
-    }
+    };
   },
   created() {
     this.question_banks = this.$store.state.user.question_banks;

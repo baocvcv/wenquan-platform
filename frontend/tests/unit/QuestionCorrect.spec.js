@@ -33,11 +33,11 @@ describe("QuestionCorrect.vue", () => {
       vuetify,
       router,
       store,
-      sync: false,
+      sync: false
     });
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
   it("travel through all funcs", done => {
     const wrapper = mount(QuestionCorrect, {
@@ -60,13 +60,13 @@ describe("QuestionCorrect.vue", () => {
     });
     wrapper.vm.save();
     wrapper.vm.save();
-    wrapper.vm.check_ans(0,{});
-    wrapper.vm.check_ans(0,{
+    wrapper.vm.check_ans(0, {});
+    wrapper.vm.check_ans(0, {
       question_type: "fill_blank"
     });
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
   it("travel through all funcs", done => {
     const wrapper = mount(QuestionCorrect, {
@@ -89,6 +89,6 @@ describe("QuestionCorrect.vue", () => {
     });
     setTimeout(() => {
       done();
-    },500);
+    }, 500);
   });
 });
