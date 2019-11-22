@@ -256,7 +256,6 @@ export default {
       let result = {
         sections: []
       };
-      let all_answered = true;
       for (var i = 0; i < this.paper.sections.length; i++) {
         result.sections[i] = {
           id: this.paper.sections[i].id,
@@ -266,7 +265,6 @@ export default {
           let current_answer = this.parse_answer(
             this.answers[this.current_total_index(i, j)]
           );
-          if (!current_answer) all_answered = false;
           result.sections[i].questions.push({
             id: this.paper.sections[i].questions[j].id,
             ans: current_answer ? current_answer : ""
