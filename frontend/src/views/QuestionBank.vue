@@ -313,7 +313,7 @@ export default {
   created() {
     let id = this.$route.params.id;
     if (
-      this.$store.state.user.question_banks.indexOf(id) === -1 &&
+      this.$store.state.user.question_banks.indexOf(Number(id)) == -1 &&
       this.$store.state.user.user_group === "Student"
     ) {
       this.$notify({

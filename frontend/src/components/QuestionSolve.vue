@@ -37,8 +37,8 @@
       </v-list-item>
       <v-list-item v-if="question_data.question_type == 'TorF'">
         <v-radio-group v-model="answer">
-          <v-radio :value="true" label="T"></v-radio>
-          <v-radio :value="false" label="F"></v-radio>
+          <v-radio :value="true" label="T" :readonly="readonly"></v-radio>
+          <v-radio :value="false" label="F" :readonly="readonly"></v-radio>
         </v-radio-group>
       </v-list-item>
       <v-list-item v-if="question_data.question_type == 'multiple'">
