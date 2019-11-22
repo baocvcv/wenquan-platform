@@ -47,3 +47,16 @@ nock(/.*?/)
     invitation_code_count: 0,
     activated_code_count: 0
   });
+
+  nock(/.*?/)
+    .put("/api/accounts/users/200/")
+    .reply(200, {
+      id: 200,
+      question_banks: [1]
+    })
+
+  nock(/.*?/)
+    .put("/api/accounts/users/500/")
+    .reply(500, {
+      results: "Failed"
+    })
