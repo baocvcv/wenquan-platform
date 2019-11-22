@@ -162,7 +162,18 @@ export default {
               };
               this.tree_data[0].subnodes.forEach(travelSubnode);
             })
-            .catch(error => {});
+            .catch(error => {
+              if (error.response) {
+                let status = error.response.status;
+                if (status === "403") {
+                  this.$notify({
+                    type: "error",
+                    title: "You have no access to this question."
+                  });
+                  this.$router.push("/");
+                }
+              }
+            });
         })
         .catch(error => {
           if (error.response) {
