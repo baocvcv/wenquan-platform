@@ -2,6 +2,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 from django.utils import timezone
 from django.http import Http404
 
@@ -63,6 +64,9 @@ class QuestionList(APIView):
 
     def get(self, request):
         """get all questions, only get the latest version"""
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         question_groups = QuestionGroup.objects.all()
         response = []
 
@@ -87,6 +91,8 @@ class QuestionList(APIView):
 
     def post(self, request):
         """Create a question"""
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         post_data = JSONParser().parse(request)[0]
         if "id" in post_data:
@@ -165,6 +171,9 @@ class QuestionDetail(APIView):
 
     def put(self, request, q_id):
         """Update information of the Question whose id=q_id"""
+        if request.user.user_group == 'Student':
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         post_data = JSONParser().parse(request)[0]
         if "id" in post_data:
             post_data.pop("id")
