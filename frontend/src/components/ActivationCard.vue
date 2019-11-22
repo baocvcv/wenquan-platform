@@ -49,7 +49,7 @@ export default {
         url: "/api/auth_code/" + String(this.code),
         headers: headers
       })
-        .then(response => {
+        .then(response_outer => {
           this.$notify({
             type: "success",
             title: "Success",

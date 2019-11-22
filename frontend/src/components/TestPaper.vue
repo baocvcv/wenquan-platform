@@ -517,7 +517,7 @@ export default {
             var tmp_point_every_blank = [];
             var question = response.data;
             if (question.question_type == "fill_blank") {
-              for (var i = 0; i < question.question_blank_num; i++) {
+              for (var j = 0; j < question.question_blank_num; j++) {
                 tmp_point_every_blank.push("");
               }
             }
