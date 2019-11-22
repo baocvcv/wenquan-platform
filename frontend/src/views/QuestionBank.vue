@@ -25,21 +25,19 @@
                   v-model="edited_question_bank.name"
                 ></v-text-field>
                 <v-row>
-                  <v-col>
+                  <v-col cols="12" md="9">
                     <v-text-field
                       label="Created Time"
                       :readonly="true"
                       outlined
-                      v-model="edited_question_bank.createTime"
+                      v-model="created_time"
                     >
                     </v-text-field>
-                  </v-col>
-                  <v-col>
                     <v-text-field
                       label="Last Update"
                       :readonly="true"
                       outlined
-                      v-model="edited_question_bank.lastUpdate"
+                      v-model="last_update"
                     >
                     </v-text-field>
                   </v-col>
@@ -156,7 +154,7 @@
       v-if="question_bank.id"
       :editable="editable"
       :id="question_bank.id"
-      @create-question="refresh_count"
+      @create-question="create_question"
     ></question-list>
   </div>
 </template>
@@ -190,7 +188,9 @@ export default {
     codes: [],
     invitation_code_count: null,
     available_code_count: null,
-    editable: null
+    editable: null,
+    created_time: null,
+    last_update: null
   }),
   computed: {
     td_codes() {
@@ -248,10 +248,23 @@ export default {
         JSON.stringify(this.question_bank_image)
       );
     },
-    refresh_count() {
-      console.log("Yeah!");
-      this.question_bank.question_count++;
-      this.edited_question_bank.question_count++;
+    create_question() {
+      const headers = {
+        Authorization: "Token " + this.$store.state.user.token
+      }
+      axios
+        .get("/api/question_banks/" + this.question_bank.id + "/", {headers: headers})
+        .then(response => {
+          this.question_bank = response.data;
+          this.edited_question_bank = JSON.parse(
+            JSON.stringify(this.question_bank)
+          );
+          this.question_bank_image.push(this.question_bank.picture);
+          this.edited_question_bank_image = JSON.parse(
+            JSON.stringify(this.question_bank_image)
+          );
+          this.last_update = new Date(response.data.lastUpdate);
+        })
     },
     save() {
       this.edited_question_bank.picture = this.edited_question_bank_image[0];
@@ -266,6 +279,8 @@ export default {
         )
         .then(response => {
           this.edit_mode = false;
+          this.edited_question_bank = response.data;
+          this.last_update = new Date(response.data.lastUpdate);
           this.question_bank = JSON.parse(
             JSON.stringify(this.edited_question_bank)
           );
@@ -276,7 +291,6 @@ export default {
             type: "success",
             title: "Your change has been saved."
           });
-          this.edited_question_bank = response.data;
         })
         .catch(error => {
           this.$notify({
@@ -317,6 +331,8 @@ export default {
       .get("/api/question_banks/" + id + "/", { headers: headers })
       .then(response => {
         this.question_bank = response.data;
+        this.last_update = new Date(response.data.lastUpdate);
+        this.created_time = new Date(response.data.createTime);
         this.edited_question_bank = JSON.parse(
           JSON.stringify(this.question_bank)
         );
