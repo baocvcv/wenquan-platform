@@ -145,14 +145,14 @@ export default {
           }
         })
         .then(response => {
-		  var question_type = response.data.question_type;
-		  if (question_type == "multiple" || question_type == "fill_blank") {
-			this.answer = response.data.ans;
-		  } else if (question_type == "TorF") {
-			this.answer = (response.data.ans[0] == "true" ? true : false);
-		  } else {
-			this.answer = response.data.ans[0];
-		  }
+          var question_type = response.data.question_type;
+          if (question_type == "multiple" || question_type == "fill_blank") {
+            this.answer = response.data.ans;
+          } else if (question_type == "TorF") {
+            this.answer = response.data.ans[0] == "true" ? true : false;
+          } else {
+            this.answer = response.data.ans[0];
+          }
           var score = response.data.score;
           var score_all = 0;
           for (var i = 0; i < score.length; i++) {

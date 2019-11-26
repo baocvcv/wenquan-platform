@@ -38,16 +38,20 @@ describe("Test.vue", () => {
       sync: false
     });
 
-	const result = {
-	  sections: [{
-		questions: [{
-		  id: 0,
-		  ans: "A"
-		}]
-	  }]
-	}
+    const result = {
+      sections: [
+        {
+          questions: [
+            {
+              id: 0,
+              ans: "A"
+            }
+          ]
+        }
+      ]
+    };
     await setTimeout(() => {}, 500);
-	wrapper.vm.finish_practicing(result);
+    wrapper.vm.finish_practicing(result);
     await setTimeout(() => {}, 500);
     setTimeout(() => {
       done();

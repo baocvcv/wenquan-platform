@@ -36,20 +36,20 @@ describe("TestPaperMarkingListItem.vue", () => {
       router,
       store,
       sync: false,
-	  propsData: {
-		id: 0
-	  }
+      propsData: {
+        id: 0
+      }
     });
-	wrapper.vm.paper_records = [{id: 0}, {id: 1}];
-	wrapper.vm.show();
+    wrapper.vm.paper_records = [{ id: 0 }, { id: 1 }];
+    wrapper.vm.show();
     await setTimeout(() => {}, 500);
-	wrapper.vm.upload_marking(0);
+    wrapper.vm.upload_marking(0);
     await setTimeout(() => {}, 500);
-	wrapper.vm.upload_marking(0);
+    wrapper.vm.upload_marking(0);
     await setTimeout(() => {}, 500);
-	wrapper.vm.upload_all();
+    wrapper.vm.upload_all();
     await setTimeout(() => {}, 500);
-	wrapper.vm.upload_all();
+    wrapper.vm.upload_all();
     setTimeout(() => {
       done();
     }, 500);
