@@ -13,7 +13,7 @@ nock(/.*?/)
   .get("/api/question_banks/501/")
   .reply(200, {
     questions: [500]
-  })
+  });
 
 nock(/.*?/)
   .get("/api/questions/500/")

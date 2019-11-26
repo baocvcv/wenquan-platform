@@ -4,7 +4,7 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import Vuex from "vuex";
 import "./mock/QuestionBanksListMock.js";
-import ""
+import "";
 import Notification from "vue-notification";
 import Progress from "vue-progressbar";
 import Router from "vue-router";
@@ -146,7 +146,7 @@ describe("SignUp.vue", () => {
       done();
     }, 1000);
   });
-  
+
   it("add to mybank", async done => {
     const wrapper = mount(QuestionBanksList, {
       vuetify,
@@ -175,7 +175,9 @@ describe("SignUp.vue", () => {
     await wrapper.vm.$nextTick();
     wrapper.vm.add_to_my_bank(1);
     setTimeout(() => {
-      expect(wrapper.vm.$store.state.user.question_banks.length === 1).toBe(true);
+      expect(wrapper.vm.$store.state.user.question_banks.length === 1).toBe(
+        true
+      );
       wrapper.vm.$store.commit("updateUserWithKey", {
         key: "id",
         value: 500
@@ -183,7 +185,7 @@ describe("SignUp.vue", () => {
       wrapper.vm.add_to_my_bank(1);
       setTimeout(() => {
         done();
-      })
-    }, 500)
+      });
+    }, 500);
   });
 });

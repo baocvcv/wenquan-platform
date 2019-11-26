@@ -365,7 +365,7 @@ export default {
                 response.data.parents_node[node_index]
               )
                 this.shown_questions.push(response.data);
-                this.process = "Total Count: " + this.shown_questions.length;
+              this.process = "Total Count: " + this.shown_questions.length;
             }
           }
           this.create_question_dialog = false;
