@@ -82,11 +82,13 @@ describe("QuestionList.vue", () => {
     });
     setTimeout(() => {
       expect(wrapper.vm.question_list.length != 0).toBe(true);
-      expect(wrapper.exists(wrapper.vm.question_list.hasOwnProperty(1))).toBe(true);
+      expect(wrapper.exists(wrapper.vm.question_list.hasOwnProperty(1))).toBe(
+        true
+      );
       done();
     }, 500);
   });
-  
+
   it("Select works properly", async done => {
     const wrapper = mount(QuestionList, {
       localVue,

@@ -113,13 +113,13 @@ export default {
                   title: "Failed to sign in",
                   text: "Username or password incorrect. Please try again."
                 });
-              }
-              else if (status === 401) {
+              } else if (status === 401) {
                 this.$notify({
                   type: "error",
                   title: "Failed to sign in",
-                  text: "Your account is banned. Please contact with the admins."
-                })
+                  text:
+                    "Your account is banned. Please contact with the admins."
+                });
               } else if (status === 403) {
                 this.$notify({
                   type: "error",

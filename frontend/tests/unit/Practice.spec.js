@@ -36,24 +36,24 @@ describe("Practice.vue", () => {
       router,
       store,
       sync: false,
-	  attachToDocument: true
+      attachToDocument: true
     });
-	wrapper.vm.question_number = 2;
-	wrapper.element.setAttribute("data-app", true);
+    wrapper.vm.question_number = 2;
+    wrapper.element.setAttribute("data-app", true);
     await setTimeout(() => {}, 500);
     wrapper.vm.done_select_bank(1);
     await setTimeout(() => {}, 500);
     wrapper.vm.start_practice();
-	await setTimeout(() => {}, 500);
-	wrapper.vm.question_number = 2;
-	await setTimeout(() => {}, 500);
-	wrapper.vm.done_select_bank(0);
-	await setTimeout(() => {}, 500);
-	wrapper.vm.start_practice();
-	await setTimeout(() => {}, 500);
-	wrapper.vm.done_select_bank(2);
-	await setTimeout(() => {}, 500);
-	wrapper.vm.start_practice();
+    await setTimeout(() => {}, 500);
+    wrapper.vm.question_number = 2;
+    await setTimeout(() => {}, 500);
+    wrapper.vm.done_select_bank(0);
+    await setTimeout(() => {}, 500);
+    wrapper.vm.start_practice();
+    await setTimeout(() => {}, 500);
+    wrapper.vm.done_select_bank(2);
+    await setTimeout(() => {}, 500);
+    wrapper.vm.start_practice();
     setTimeout(() => {
       done();
     }, 500);

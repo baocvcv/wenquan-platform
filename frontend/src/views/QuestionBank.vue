@@ -251,9 +251,11 @@ export default {
     create_question() {
       const headers = {
         Authorization: "Token " + this.$store.state.user.token
-      }
+      };
       axios
-        .get("/api/question_banks/" + this.question_bank.id + "/", {headers: headers})
+        .get("/api/question_banks/" + this.question_bank.id + "/", {
+          headers: headers
+        })
         .then(response => {
           this.question_bank = response.data;
           this.edited_question_bank = JSON.parse(
@@ -264,7 +266,7 @@ export default {
             JSON.stringify(this.question_bank_image)
           );
           this.last_update = new Date(response.data.lastUpdate);
-        })
+        });
     },
     save() {
       this.edited_question_bank.picture = this.edited_question_bank_image[0];

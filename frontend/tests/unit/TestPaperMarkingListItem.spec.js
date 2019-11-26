@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from "@vue/test-utils";
-import Learn from "@/views/student/Learn.vue";
+import TestPaperMarkingListItem from "@/components/TestPaperMarkingListItem.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
 import Vuex from "vuex";
@@ -7,7 +7,7 @@ import Router from "vue-router";
 import RouterRule from "@/router";
 import VueProgressBar from "vue-progressbar";
 import Notifications from "vue-notification";
-import "./mock/LearnMock.js";
+import "./mock/TestPaperMarkingListItemMock.js";
 
 const localVue = createLocalVue();
 Vue.use(Vuetify);
@@ -15,7 +15,7 @@ Vue.use(Router);
 Vue.use(VueProgressBar);
 Vue.use(Notifications);
 
-describe("Test.vue", () => {
+describe("TestPaperMarkingListItem.vue", () => {
   let vuetify, router;
   beforeEach(() => {
     vuetify = new Vuetify();
@@ -30,29 +30,26 @@ describe("Test.vue", () => {
         }
       }
     });
-    const wrapper = mount(Learn, {
+    const wrapper = mount(TestPaperMarkingListItem, {
       localVue,
       vuetify,
       router,
       store,
-      sync: false
+      sync: false,
+      propsData: {
+        id: 0
+      }
     });
-
-    const result = {
-      sections: [
-        {
-          questions: [
-            {
-              id: 0,
-              ans: "A"
-            }
-          ]
-        }
-      ]
-    };
+    wrapper.vm.paper_records = [{ id: 0 }, { id: 1 }];
+    wrapper.vm.show();
     await setTimeout(() => {}, 500);
-    wrapper.vm.finish_practicing(result);
+    wrapper.vm.upload_marking(0);
     await setTimeout(() => {}, 500);
+    wrapper.vm.upload_marking(0);
+    await setTimeout(() => {}, 500);
+    wrapper.vm.upload_all();
+    await setTimeout(() => {}, 500);
+    wrapper.vm.upload_all();
     setTimeout(() => {
       done();
     }, 500);
