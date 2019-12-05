@@ -141,27 +141,34 @@ export default {
   },
   methods: {
     submit(result) {
-      result.paper_id = this.$route.params.id;
-      result.action = "finish";
-      this.loading = true;
-      const headers = {
-        Authorization: "Token " + this.$store.state.user.token
-      };
-      axios
-        .post("/api/paper_records/" + this.record_id, result, {
-          headers: headers
-        })
-        .then(response => {
-          this.loading = false;
-          this.$router.push("/learn");
-        })
-        .catch(err => {
-          console.log(err);
-          this.msg =
-            "Due to network error, submit failed. Please try again later.";
-          this.msg_dialog = true;
-          this.loading = false;
-        });
+      if (!navigator.onLine) {
+        this.msg =
+          "Due to network error, submit failed. Please try again later.";
+        this.msg_dialog = true;
+        this.loading = false;
+      } else {
+        result.paper_id = this.$route.params.id;
+        result.action = "finish";
+        this.loading = true;
+        const headers = {
+          Authorization: "Token " + this.$store.state.user.token
+        };
+        axios
+          .post("/api/paper_records/" + this.record_id, result, {
+            headers: headers
+          })
+          .then(response => {
+            this.loading = false;
+            this.$router.push("/learn");
+          })
+          .catch(err => {
+            console.log(err);
+            this.msg =
+              "Due to network error, submit failed. Please try again later.";
+            this.msg_dialog = true;
+            this.loading = false;
+          });
+      }
     }
   }
 };
