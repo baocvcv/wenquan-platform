@@ -65,35 +65,51 @@
           :key="nav_link.name"
           :to="nav_link.link"
         >
-          <v-btn v-if="nav_link.name === 'Sign up'" outlined>
-            {{ nav_link.text }}
-          </v-btn>
-          <v-btn
-            v-else
-            text
-            @click="nav_link.name == 'Log out' ? logout() : ''"
-          >
-            <v-icon>{{ nav_link.icon }}</v-icon>
-            <div v-if="$vuetify.breakpoint.mdAndUp">
-              {{ nav_link.text }}
-            </div>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn v-if="nav_link.name === 'Sign up'" outlined v-on="on">
+                {{ nav_link.text }}
+              </v-btn>
+              <v-btn
+                v-else
+                text
+                v-on="on"
+                @click="nav_link.name == 'Log out' ? logout() : ''"
+              >
+                <v-icon>{{ nav_link.icon }}</v-icon>
+                <div v-if="$vuetify.breakpoint.mdAndUp">
+                  {{ nav_link.text }}
+                </div>
+              </v-btn>
+            </template>
+            <span>{{ nav_link.text }}</span>
+          </v-tooltip>
         </router-link>
         <router-link to="/admin" v-if="render_admin_entry">
-          <v-btn text>
-            <v-icon>mdi-account-supervisor-circle</v-icon>
-            <div v-if="$vuetify.breakpoint.mdAndUp">
-              Admin
-            </div>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn text v-on="on">
+                <v-icon>mdi-account-supervisor-circle</v-icon>
+                <div v-if="$vuetify.breakpoint.mdAndUp">
+                  Admin
+                </div>
+              </v-btn>
+            </template>
+            <span>Admin</span>
+          </v-tooltip>
         </router-link>
         <router-link to="/" v-if="render_exit">
-          <v-btn text>
-            <v-icon>mdi-location-exit</v-icon>
-            <div v-if="$vuetify.breakpoint.mdAndUp">
-              Exit
-            </div>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn text v-on="on">
+                <v-icon>mdi-location-exit</v-icon>
+                <div v-if="$vuetify.breakpoint.mdAndUp">
+                  Exit
+                </div>
+              </v-btn>
+            </template>
+            <span>Exit</span>
+          </v-tooltip>
         </router-link>
       </div>
     </v-app-bar>
