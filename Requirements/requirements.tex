@@ -268,6 +268,94 @@
 	    		\subitem{tool：是否作为其他组件的工具并且不显示}
 	    		\subitem{width：组件宽度}
 	    		\subitem{height：组件高度}
+	    \paragraph{PaperMarking}
+	    	\subparagraph{描述}
+	    		用于试卷批阅和查看批阅结果的组件
+	    	\subparagraph{调用}
+	    		PaperSolve, QuestionCorrect
+	    	\subparagraph{属性}\ \par
+	    		\subitem{paper\_record\_id：查看批阅结果时的批阅记录ID}
+	    		\subitem{paper\_data：试卷数据}
+	    		\subitem{readonly：是否只读}
+	    		\subitem{record：初始化用的批阅记录}
+	    		\subitem{practice：当前试卷是否是自主练习}
+	    \paragraph{PaperSolve}
+	    	\subparagraph{描述}
+	    		用于答题的试卷组件
+	    	\subparagraph{调用}
+	    		QuestionSolve
+	    	\subparagraph{属性}\ \par
+	    		\subitem{initData：初始化用的试卷数据}
+	    		\subitem{readonly：试卷是否可以答题}
+	    \paragraph{Practice}
+	    	\subparagraph{描述}
+	    		用于生成自主练习和完成自主练习的组件
+	    	\subparagraph{调用}
+	    		QuestionBanksList
+	    \paragraph{QuestionBanksList}
+	    	\subparagraph{描述}
+	    		展示所有题库的列表的组件
+	    	\subparagraph{调用}
+	    		CreateQuestionBank, ActicationCard
+	    	\subparagraph{属性}\ \par
+	    		\subitem{select：是否可以选中题库}
+	    		\subitem{title：组件标题}
+	    		\subitem{flat：组件是否以flat模式渲染}
+	    		\subitem{explore：是否处在学生浏览全部题库的模式}
+	    		\subitem{mybank：是否是学生查看已拥有题库的模式}
+	    		\subitem{bankIDs：展示的题库的ID的数组}
+	    		\subitem{admin：是否是管理员模式}
+	    \paragraph{QuestionBriefAnswer}
+	    	\subparagraph{描述}
+	    		简答题的编辑或者创建或者查看详细的组件
+	    	\subparagraph{调用}
+	    		RichTextEditor
+	    	\subparagraph{属性}\ \par
+	    		\subitem{readonly：题目是否可编辑}
+	    		\subitem{creation：是否处在创建题目模式}
+	    \paragraph{QuestionCorrect}
+	    	\subparagraph{描述}
+	    		用于批阅单个题目的组件
+	    	\subparagraph{调用}
+	    		QuestionSolve
+	    	\subparagraph{属性}\ \par
+	    		\subitem{question：本题的题目数据}
+	    		\subitem{readonly：是否只读}
+	    		\subitem{practice：是否是自主练习的批阅/查看批阅}
+	    \paragraph{QuestionFillInBlank}
+	    	\subparagraph{描述}
+	    		填空题的编辑或者创建或者查看详细的组件
+	    	\subparagraph{调用}
+	    		RichTextEditor
+	    	\subparagraph{属性}\ \par
+	    		\subitem{readonly：题目是否可编辑}
+	    		\subitem{creation：是否处在创建题目模式}
+	    \paragraph{QuestionList}
+	    	\subparagraph{描述}
+	    		题库下所有题目的列表组件
+	    	\subparagraph{调用}
+	    		QuestionListItem, TreeView, Question
+	    	\subparagraph{属性}\ \par
+	    		\subitem{editable：是否可编辑}
+	    		\subitem{id：对应的题库ID}
+	    		\subitem{select：是否可以多选}
+	    		\subitem{dialog：是否以对话框的形式出现}
+	   	\paragraph{QuestionListItem}
+	   		\subparagraph{描述}
+	   			题目列表中一项的组件
+	   		\subparagraph{调用}
+	   			Question, RichTextEditor
+	   		\subparagraph{属性}\ \par
+	   			\subitem{question：题目的数据}
+	   			\subitem{dialog：是否以对话框的形式出现}
+	   	\paragraph{QuestionMultipleChoice}
+		   	\subparagraph{描述}
+		   		多选题的编辑或者创建或者查看详细的组件
+		   	\subparagraph{调用}
+		   		RichTextEditor
+		   	\subparagraph{属性}\ \par
+			   	\subitem{readonly：题目是否可编辑}
+			   	\subitem{creation：是否处在创建题目模式}
     \subsection{后端}
     
 \section{数据库设计}
