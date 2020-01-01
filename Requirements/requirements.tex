@@ -1,3 +1,4 @@
+% !TEX program = xelatex
 \documentclass{article}
 \usepackage{ctex}
 \usepackage{graphicx}
@@ -267,7 +268,95 @@
 	    		\subitem{img：上传的图片的数组}
 	    		\subitem{tool：是否作为其他组件的工具并且不显示}
 	    		\subitem{width：组件宽度}
-	    		\subitem{height：组件高度}
+                \subitem{height：组件高度}
+        \paragraph{404Error}
+            \subparagraph{描述}
+                用户访问的页面不存在时渲染的页面。
+        \paragraph{Account}
+            \subparagraph{描述}
+                用户的个人主页，可以修改密码。
+        \paragraph{Activate}
+            \subparagraph{描述}
+                用户创建账号后点击邮箱中的链接转到的界面，会向后端发送post请求验证邮箱是否正确。
+        \paragraph{Home}
+            \subparagraph{描述}
+                用户的主页界面。
+        \paragraph{Question}
+            \subparagraph{描述}
+                题目详情界面，展示题目的题面、答案、解析、所属知识点等信息，支持查看与编辑。
+            \subparagraph{属性}\ \par
+                \subitem{root\_id：题目所属的题库的ID}
+                \subitem{editable：题目是否可编辑}
+                \subitem{creation：当前是否处于创建题目模式}
+                \subitem{questionID：题目的ID}
+            \subparagraph{调用}
+                QuestionMultipleChoice, QuestionSingleChoice, QuestionBriefAnswer, QuestionFillInBlank, TreeView
+        \paragraph{QuestionBank}
+            \subparagraph{属性}
+                题库详情界面，展示题库的名称、简介、题目数量、最后修改时间等信息。
+            \subparagraph{调用}
+                QuestionList, ImageUploader, VueElementLoading, CreateAuthCodeCard
+        \paragraph{SignIn}
+            \subparagraph{描述}
+                用户登录的界面。
+            \subparagraph{调用}
+                SignInBox
+        \paragraph{SignUp}
+            \subparagraph{描述}
+                用户注册的界面。
+            \subparagraph{调用}    
+                SignUpBox
+        \paragraph{Test}
+            \subparagraph{描述} 
+                学员做题页面。
+            \subparagraph{属性}\ \par
+                \subitem{id：试卷的ID}
+                \subitem{view：当前页面是否是查看试卷模式}
+            \subparagraph{调用}
+                PaperSolve, VueElementLoading
+        \paragraph{admin/Admin}
+            \subparagraph{描述}
+                管理员进入管理员模式后的主页。
+        \paragraph{admin/QuestionBanks}
+            \subparagraph{描述}
+                管理员模式下的题库管理界面。
+            \subparagraph{调用}
+                QuestionBanksList
+        \paragraph{admin/TestPaperMarking}
+            \subparagraph{描述}
+                管理员批卷的页面。
+            \subparagraph{调用}
+                PaperMarking, TestView
+        \paragraph{admin/TestPapers}
+            \subparagraph{描述}
+                试卷管理界面。
+            \subparagraph{调用}
+                TestPapersList, TestPaperMarkingList
+        \paragraph{admin/TestPaperView}
+            \subparagraph{描述}
+                试卷具体页面。
+            \subparagraph{调用}
+                TestPaper, VueElementLoading
+        \paragraph{admin/UserManageMent}
+            \subparagraph{描述}
+                用户管理界面。
+            \subparagraph{调用}
+                UserTable
+        \paragraph{student/Learn}
+            \subparagraph{描述}
+                学员的学习页面，包括考试、自主练习以及错题查看。
+            \subparagraph{调用}
+                TestPapersList, PaperSolve, TestPaperRecordList, VueElementLoading, PaperMarking, WrongQuestionsCollection
+        \paragraph{student/QuestionBanks}
+            \subparagraph{描述}
+                学员模式下的题库界面，包括“探索”以及“我的题库”两个板块。
+            \subparagraph{调用}
+                QuestionBanksList
+        \paragraph{student/TestPaperMarkingView}
+            \subparagraph{描述}
+                学员查看被批阅试卷的页面。
+            \subparagraph{调用}
+                PaperMarking, TestView
     \subsection{后端}
     
 \section{数据库设计}
