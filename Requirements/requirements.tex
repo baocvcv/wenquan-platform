@@ -230,9 +230,36 @@
 		
 \section{模块及接口}
     \subsection{前端}
-    	\paragraph{title}
-    		\subparagraph{title}
-    		\subparagraph{title}
+    	\paragraph{ActivationCard}
+    		\subparagraph{描述}
+    			用于输入激活码激活题库的组件。
+    	\paragraph{AppBar}
+    		\subparagraph{描述}
+    			网页顶端的工具栏组件，根据当前登陆状况与登陆用户的权限渲染用户可以访问的功能的对应按钮。
+    	\paragraph{CreateAuthCodeCard}
+    		\subparagraph{描述}
+    			用于创建题库激活码的组件。
+    		\subparagraph{属性}\ \par
+    			\subitem{bankID：被创建激活码的题库ID}
+    	\paragraph{CreateQuestionBank}
+    		\subparagraph{描述}
+    			用于创建题库的组件。
+    		\subparagraph{调用}
+    			ImageUploader
+    	\paragraph{ImageUploader}
+	    	\subparagraph{描述}
+	    		用于上传图片的组件。
+	    	\subparagraph{属性}\ \par
+	    		\subitem{label：组件的标题}
+	    		\subitem{placeholder：未选择图片时的占位符}
+	    		\subitem{icon：组件的图标}
+	    		\subitem{readonly：组件是否只读}
+	    		\subitem{multiple：组件能否上传多张图片}
+	    		\subitem{aspectRatio：压缩图片的长宽比}
+	    		\subitem{img：上传的图片的数组}
+	    		\subitem{tool：是否作为其他组件的工具并且不显示}
+	    		\subitem{width：组件宽度}
+	    		\subitem{height：组件高度}
     \subsection{后端}
     
 \section{数据库设计}
