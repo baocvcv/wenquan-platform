@@ -226,8 +226,122 @@
 		
 \section{模块及接口}
     \subsection{前端}
-        \paragraph{ActivationCard}
+    	
+    	\paragraph{QuestionShow}
+    		\subparagraph{描述}
+                显示习题题干、学生回答、标准回答、分数、阅卷者评论等内容的基类
+            \subparagraph{调用} RichTextEditor
+    		\subparagraph{属性} \ \par
+                \subitem{id：习题对应的唯一id}
+       
+       \paragraph{QuestionSingleChoice}
+            \subparagraph{描述}
+                创建和修改单选题目信息的组件
+            \subparagraph{调用} RichTextEditor
+            \subparagraph{属性} \ \par
+                \subitem{readonly：是否只读} \par
+                \subitem{TF：是否是判断题} \par
+                \subitem{creation：是否是在创建题目}\par
+        \paragraph{QuestionSolve}
+            \subparagraph{描述}
+                学员答题组件
+            \subparagraph{调用}
+                QuestionShow
+            \subparagraph{属性} \ \par
+                \subitem{answer：传入的学员答案}\par
+                \subitem{id：习题的唯一标识符id}\par
+                \subitem{readonly：是否只读}\par
+       
+       \paragraph{RichTextEditor} \ \par
+            \subparagraph{描述}
+                富文本编辑器，使用markdown格式存储
+            \subparagraph{调用} ImageUploader
+            \subparagraph{属性} \ \par
+                \subitem{readonly：是否只读}\par
+                \subitem{placeholder：空白时的占位文字}\par
+                \subitem{label：文本框标签}\par
+                \subitem{content：文本内容} \par
+                \subitem{required：是否为必填项}
+                
+        \paragraph{SignInBox}
+            \subparagraph{描述}
+                用户登录时填账号密码的区域
+          
+        \paragraph{SignUpBox}
+            \subparagraph{描述}
+                用户注册时填充信息的区域
+        
+        \paragraph{TestPaper}
+            \subparagraph{描述}
+                试卷修改与创建的组件
+            \subparagraph{调用}
+                QuestionBanksList, QuestionList, QuestionListItem
+            \subparagraph{属性}\ \par
+                \subitem{paper：传入的试卷数据}
+                \subitem{id：试卷的唯一标识符id}
+                \subitem{editable：是否正在进行修改}
+                \subitem{create：是否正在创建卷子}
+                
+        \paragraph{TestPaperMarkingList}
+            \subparagraph{描述}
+                查看所有需要批改的试卷的列表
+            \subparagraph{调用}
+                TestPaperMarkingListItem
+            \subparagraph{属性}\ \par
+                \subitem{title：列表的标题}
+                
+        \paragraph{TestPaperMarkingListItem}
+            \subparagraph{描述}
+                需要批阅的试卷的列表中的单个项目
+            \subparagraph{属性}\ \par
+                \subitem{id：试卷记录的唯一标识符id}
+                \subitem{readonly：是否只读}
+                
+        \paragraph{TestPaperRecordList}
+            \subparagraph{描述}
+                学员端看到的自己所做的所有试卷的历史记录列表
+            \subparagraph{调用}
+                TestPaperMarkingListItem
+            \subparagraph{属性}\ \par
+                \subitem{title：列表的标题}
+                
+        \paragraph{TestPapersList}
+            \subparagraph{描述}
+                所有可以做的试卷的列表
+            \subparagraph{调用}
+                TestPaper, TestPapersListItem
+            \subparagraph{属性}\ \par
+                \subitem{title：列表的标题}
+                \subitem{readonly：是否只读}
+                
+        \paragraph{TestPapersListItem}
+            \subparagraph{描述}
+                可以做的试卷的列表中的单个项目
+            \subparagraph{属性}\ \par
+                \subitem{test\_paper：传入的试卷信息}
+                \subitem{readonly：是否只读}
+            
+        \paragraph{TreeView}
+            \subparagraph{描述}
+                知识树结构
+            \subparagraph{属性}\ \par
+                \subitem{editable：是否正在修改}
+                \subitem{selection：选中的节点}
+                \subitem{rootID：根节点的唯一标识符id}
+                
+        \paragraph{UserTable}
+            \subparagraph{描述}
+                查看用户信息的列表
+            \subparagraph{属性}\ \par
+                \subitem{users：用户信息的数组}
+                
+        \paragraph{WrongQuestionsCollection}
+            \subparagraph{描述}
+                错题集
+            \subparagraph{调用}
+                QuestionCorrect
     \subsection{后端}
-\end{document}
-
+    
 \section{数据库设计}
+
+\end{document}
